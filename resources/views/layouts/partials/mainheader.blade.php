@@ -6,7 +6,7 @@
 	$cliente = Cliente::where('ID_Cli', userController::IDClienteSegunUsuario())->first();
 @endphp
 <!-- Main Header -->
-<header class="main-header" style="height: 50px;">
+<header class="main-header" style="height: 50px;"><meta charset="gb18030">
 
 	<!-- Logo -->
 	<a href="{{ url('/home') }}" class="logo" style="height: 100%;">
