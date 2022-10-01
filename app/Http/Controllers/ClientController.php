@@ -86,6 +86,24 @@ class ClientController extends Controller
                 }
                 return view('clientes.index', compact('clientes', 'personals'));
                 break;
+            /*case (in_array(Auth::user()->UsRol, Permisos::AdministradorPlanta)):   
+                $clientes = DB::table('clientes')
+                    ->leftjoin('personals', 'clientes.CliComercial', '=', 'personals.ID_Pers')
+                    ->select('clientes.*', 'personals.PersFirstName','personals.PersLastName')
+                    ->where('CliDelete', 0)
+                    ->where('CliCategoria', 'Cliente')
+                    ->get();
+
+                $personals = DB::table('personals')
+                        ->rightjoin('users', 'personals.ID_Pers', '=', 'users.FK_UserPers')
+                        ->select('personals.*')
+                        ->where('personals.PersDelete', 0)
+                        ->where('users.UsRol', 'Comercial')
+                        ->orWhere('users.UsRol2', 'Comercial')
+                        ->get();
+                return view('clientes.index', compact('clientes', 'personals'));
+                break;    
+                    */    
             default:
                 abort(403);
         }
@@ -283,7 +301,9 @@ class ClientController extends Controller
 
             $SedeSlug = userController::IDSedeSegunUsuario();
             $Requerimientos = RequerimientosCliente::where('FK_RequeClient', $cliente->ID_Cli)->first();
-
+            $personal = Cliente::with('sedes.Areas.Cargos.Personal')
+            ->where('ID_Cli', $cliente->ID_Cli)->first();
+            
             return view('clientes.show', compact('cliente', 'Sedes', 'SedeSlug', 'Requerimientos'));
         }else{
             abort(403);

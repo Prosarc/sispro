@@ -250,10 +250,14 @@
 
                             @endswitch
                         @endif
+					<li><a href="#personal_cliente" data-toggle="tab">Personal</a></li>
 					<li class="navbar-right">
 						<button><a href="{{route('clientetarifas.create', ['cliente' => $cliente->CliSlug])}}" class="btn btn-primary" target="_blank" rel="noopener noreferrer"><b><i class="fas fa-plus"></i> Tarifa</b></a></button>
 					</li>
+					
 				</ul>
+
+
 				<div class="tab-content">
 					{{-- sedes --}}
 					<div class="active tab-pane" id="sedes" style='overflow-y:auto; max-height:305px;'>
@@ -427,6 +431,48 @@
 									@endforeach
 								@endforeach
                                 @endif
+							</tbody>
+						</table>
+					</div>
+					{{-- Personal del cliente --}}
+					<div class="tab-pane" id="personal_cliente" style='overflow-y:auto; max-height:305px;'>
+						<table id="PersonalClienteTable" class="table table-compact table-bordered table-striped">
+							<thead>
+								<tr>
+									<th>Documento</th>
+									<th>Nombre</th>
+									<th>Correo</th>
+									<th>Celular</th>
+									<th>Cargo</th>
+									<th>Area</th>
+									<th>Admin</th> 
+									<th>Ver</th>
+								</tr>
+							</thead>
+							<tbody>
+                                @foreach ($cliente->sedes as $sede)
+									@foreach($sede->Areas as $area)
+										@foreach($area->Cargos as $cargo)
+											@foreach($cargo->Personal as $persona)
+												<tr>
+													<td>{{$persona->PersDocNumber}}</td>
+													<td>{{$persona->PersFirstName}} {{$persona->PersLastName}} </td>
+													<td>{{$persona->PersEmail}}</td>
+													<td>{{$persona->PersCellphone}}</td>
+													<td>{{$cargo->CargName}}</td>
+													<td>{{$area->AreaName}}</td>
+														@if($persona->PersAdmin==1)
+														<td><center><b>Si</b></center></td>
+														@else
+														<td><center>No</center></td>
+														@endif
+
+													<td><a href="/personal/{{$persona->PersSlug}}" class="btn btn-primary ">Ver</a></td>
+												</tr>
+											@endforeach
+										@endforeach	
+									@endforeach
+								@endforeach
 							</tbody>
 						</table>
 					</div>
@@ -726,4 +772,5 @@
 		$(document).ready(SwitchAuto());
 		$(document).ready(SwitchMain());
 	</script>
+
 @endsection
