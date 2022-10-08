@@ -301,10 +301,24 @@ class ClientController extends Controller
 
             $SedeSlug = userController::IDSedeSegunUsuario();
             $Requerimientos = RequerimientosCliente::where('FK_RequeClient', $cliente->ID_Cli)->first();
-            $personal = Cliente::with('sedes.Areas.Cargos.Personal')
-            ->where('ID_Cli', $cliente->ID_Cli)->first();
+          /*  $personal = Cliente::with('sedes.Areas.Cargos.Personal')
+            ->where('ID_Cli', $cliente->ID_Cli)
+            /*->where('Personal.PersDelete', 0)
+            ->first();*/
+
+            $personal_Cliente = DB::table('personals')
+				->join('cargos', 'personals.FK_PersCargo', '=', 'cargos.ID_Carg')
+				->join('areas', 'cargos.CargArea', '=', 'areas.ID_Area')
+				->join('sedes', 'areas.FK_AreaSede', '=', 'sedes.ID_Sede')
+				->join('clientes', 'sedes.FK_SedeCli', '=', 'clientes.ID_Cli')
+				->select('personals.*', 'cargos.*', 'areas.*', 'sedes.*' , 'clientes.*')
+				->where('clientes.ID_Cli', $cliente->ID_Cli)
+				->where('personals.PersDelete', 0)
+				->get();
+
+            /*return $personal;*/
             
-            return view('clientes.show', compact('cliente', 'Sedes', 'SedeSlug', 'Requerimientos'));
+            return view('clientes.show', compact('personal_Cliente','cliente', 'Sedes', 'SedeSlug', 'Requerimientos'));
         }else{
             abort(403);
         }

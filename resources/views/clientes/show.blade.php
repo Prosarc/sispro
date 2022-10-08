@@ -450,28 +450,21 @@
 								</tr>
 							</thead>
 							<tbody>
-                                @foreach ($cliente->sedes as $sede)
-									@foreach($sede->Areas as $area)
-										@foreach($area->Cargos as $cargo)
-											@foreach($cargo->Personal as $persona)
-												<tr>
-													<td>{{$persona->PersDocNumber}}</td>
-													<td>{{$persona->PersFirstName}} {{$persona->PersLastName}} </td>
-													<td>{{$persona->PersEmail}}</td>
-													<td>{{$persona->PersCellphone}}</td>
-													<td>{{$cargo->CargName}}</td>
-													<td>{{$area->AreaName}}</td>
-														@if($persona->PersAdmin==1)
-														<td><center><b>Si</b></center></td>
-														@else
-														<td><center>No</center></td>
-														@endif
-
-													<td><a href="/personal/{{$persona->PersSlug}}" class="btn btn-primary ">Ver</a></td>
-												</tr>
-											@endforeach
-										@endforeach	
-									@endforeach
+                				@foreach($personal_Cliente as $persona)
+									<tr>
+										<td>{{$persona->PersDocNumber}}</td>
+										<td>{{$persona->PersFirstName}} {{$persona->PersLastName}} </td>
+										<td>{{$persona->PersEmail}}</td>
+										<td>{{$persona->PersCellphone}}</td>
+										<td>{{$persona->CargName}}</td>
+										<td>{{$persona->AreaName}}</td>
+											@if($persona->PersAdmin==1)
+												<td><center><b>Si</b></center></td>
+											@else
+												<td><center>No</center></td>
+											@endif
+										<td><a href="/personal/{{$persona->PersSlug}}" class="btn btn-primary ">Ver</a></td>
+									</tr>
 								@endforeach
 							</tbody>
 						</table>

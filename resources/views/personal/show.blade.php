@@ -49,9 +49,21 @@
 											@csrf
 											<button type="submit" class='btn btn-success btn-block'>{{ trans('adminlte_lang::message.add') }}</button>
 										  </form>
+
 										@endif
 									@endif
 								@endif
+								@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol, Permisos::ADMINPLANTA) )
+								 		 @if ($Persona->PersAdmin == 1)
+										  <button class='btn btn-default' disabled>ADMINISTRADOR</button>
+											@else
+											<form action='/personal/{{$Persona->PersSlug}}/asignaradministrador' method='POST' class="pull-left">
+												@method('POST')
+												@csrf
+												<button type="submit" class='btn btn-success btn-block'>ADMINISTRADOR</button>
+											  </form>
+										@endif
+								@endif		  
 							</div>
 							<h3 class="profile-username text-center">{{$Persona->PersFirstName."  ".$Persona->PersLastName}}</h3>
 							<p class="text-muted text-center">{{$Persona->SedeName}}</p>
@@ -73,7 +85,18 @@
 									<b>{{ trans('adminlte_lang::message.emailaddress') }}</b> <a title="Copiar" onclick="copiarAlPortapapeles('correocopy')"><i class="far fa-copy"></i></a>
 									<a href="#" class="pull-right textpopover" title="{{ trans('adminlte_lang::message.emailaddress') }}" data-toggle="popover" id="correocopy" data-trigger="focus" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$Persona->PersEmail}}</p>">{{$Persona->PersEmail}}</a>
 								</li>
+								<li class="list-group-item">
+									<b>{{ trans('adminlte_lang::message.User') }}</b>
+									<a href="#" class="pull-right" title="{{ trans('adminlte_lang::message.persadminCliente') }}" id="UserAdmin" >
+										@if ($Personas[0]->PersAdmin == 1)
+										<b>{{'Si'}}</b>
+											@else
+											<b>{{'No'}}</b>
+										@endif
+									</a>
+								</li>
 							</ul>
+
 						</div>
 						<!-- /.box-body -->
 					</div>
@@ -82,4 +105,5 @@
 		@endforeach
 		<!-- /.row -->
 	</div>
+
 @endsection

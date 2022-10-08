@@ -134,6 +134,7 @@ Route::middleware(['web', 'auth', 'verified', 'bindings'])->group(function () {
 	Route::resource('/cargos','CargoController');
 	Route::resource('/cargosInterno','CargoInternoController');
 	Route::resource('/personal', 'PersonalController');
+	Route::post('/personal/{slug}/asignaradministrador','PersonalController@changeAdminUser');
 	Route::resource('/personalInterno', 'PersonalInternoController');
 	Route::resource('/vehicle','VehicleController');
 	Route::resource('/programacion-express','ProgramacionExpressController');
