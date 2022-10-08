@@ -430,4 +430,60 @@ class PersonalController extends Controller
 
 		return redirect()->route('personal.index');
 	}
+
+	/**
+	 * Remove the specified resource from storage.
+	 *
+	 * @param  int  $id
+	 * @return \Illuminate\Http\Response
+	 */
+
+	public function changeAdminUser($slug){
+		
+		$Personas = DB::table('personals')
+				->join('cargos', 'personals.FK_PersCargo', '=', 'cargos.ID_Carg')
+				->join('areas', 'cargos.CargArea', '=', 'areas.ID_Area')
+				->join('sedes', 'areas.FK_AreaSede', '=', 'sedes.ID_Sede')
+				->join('clientes', 'sedes.FK_SedeCli', '=', 'clientes.ID_Cli')
+				->select('personals.*', 'cargos.*', 'areas.*', 'sedes.*' , 'clientes.*')
+				->where('personals.PersSlug', $slug)
+				->where('personals.PersDelete', 0)
+				->get();
+
+
+		$Personal_cliente = DB::table('personals')
+				->join('cargos', 'personals.FK_PersCargo', '=', 'cargos.ID_Carg')
+				->join('areas', 'cargos.CargArea', '=', 'areas.ID_Area')
+				->join('sedes', 'areas.FK_AreaSede', '=', 'sedes.ID_Sede')
+				->join('clientes', 'sedes.FK_SedeCli', '=', 'clientes.ID_Cli')
+				->select('personals.*', 'cargos.*', 'areas.*', 'sedes.*' , 'clientes.*')
+				->where('clientes.ID_Cli', $Personas[0]->ID_Cli)
+				->where('personals.PersDelete', 0)
+				->get();
+
+				/*return $Personal_cliente;
+
+		/* Quitar condicion de administrador a los registros de la lista "$Personas"*/ 
+		$Persona = Personal::where('PersSlug', $slug)->first();
+		
+		foreach ($Personal_cliente as $pers) {
+
+			DB::table('personals')
+            ->where('ID_Pers', $pers->ID_Pers)
+			->update(['personals.Persfactura' => 0,
+					'personals.PersAdmin' => 0]);
+		}
+	
+		if (!$Persona) {
+			abort(404);
+		} else {
+		
+			$Persona->Persfactura = 1;
+			$Persona->PersAdmin = 1;
+			$Persona->save();
+		} 
+		
+		return redirect()->route('personal.show',  ['PersSlug' => $slug]);
+	}	
+
 }

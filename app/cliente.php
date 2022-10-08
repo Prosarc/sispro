@@ -65,4 +65,8 @@ class Cliente extends Model
 	public function clientetarifa(){
 		return $this->hasMany('App\CTarifa','FK_Cliente', 'ID_Cli');
 	}
+
+	public function PersonalCliente(){
+		return $this->sedes()->with('Areas.Cargos.Personal'); //Pendiente completar 
+	}	
 }

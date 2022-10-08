@@ -86,6 +86,24 @@ class ClientController extends Controller
                 }
                 return view('clientes.index', compact('clientes', 'personals'));
                 break;
+            /*case (in_array(Auth::user()->UsRol, Permisos::AdministradorPlanta)):   
+                $clientes = DB::table('clientes')
+                    ->leftjoin('personals', 'clientes.CliComercial', '=', 'personals.ID_Pers')
+                    ->select('clientes.*', 'personals.PersFirstName','personals.PersLastName')
+                    ->where('CliDelete', 0)
+                    ->where('CliCategoria', 'Cliente')
+                    ->get();
+
+                $personals = DB::table('personals')
+                        ->rightjoin('users', 'personals.ID_Pers', '=', 'users.FK_UserPers')
+                        ->select('personals.*')
+                        ->where('personals.PersDelete', 0)
+                        ->where('users.UsRol', 'Comercial')
+                        ->orWhere('users.UsRol2', 'Comercial')
+                        ->get();
+                return view('clientes.index', compact('clientes', 'personals'));
+                break;    
+                    */    
             default:
                 abort(403);
         }
@@ -283,8 +301,24 @@ class ClientController extends Controller
 
             $SedeSlug = userController::IDSedeSegunUsuario();
             $Requerimientos = RequerimientosCliente::where('FK_RequeClient', $cliente->ID_Cli)->first();
+          /*  $personal = Cliente::with('sedes.Areas.Cargos.Personal')
+            ->where('ID_Cli', $cliente->ID_Cli)
+            /*->where('Personal.PersDelete', 0)
+            ->first();*/
 
-            return view('clientes.show', compact('cliente', 'Sedes', 'SedeSlug', 'Requerimientos'));
+            $personal_Cliente = DB::table('personals')
+				->join('cargos', 'personals.FK_PersCargo', '=', 'cargos.ID_Carg')
+				->join('areas', 'cargos.CargArea', '=', 'areas.ID_Area')
+				->join('sedes', 'areas.FK_AreaSede', '=', 'sedes.ID_Sede')
+				->join('clientes', 'sedes.FK_SedeCli', '=', 'clientes.ID_Cli')
+				->select('personals.*', 'cargos.*', 'areas.*', 'sedes.*' , 'clientes.*')
+				->where('clientes.ID_Cli', $cliente->ID_Cli)
+				->where('personals.PersDelete', 0)
+				->get();
+
+            /*return $personal;*/
+            
+            return view('clientes.show', compact('personal_Cliente','cliente', 'Sedes', 'SedeSlug', 'Requerimientos'));
         }else{
             abort(403);
         }

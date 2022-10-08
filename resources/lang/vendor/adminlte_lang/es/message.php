@@ -252,6 +252,7 @@ return [
     'persbankaccaunt'         => 'Número de Cuenta',
     'persingreso'             => 'Fecha de Entrada',
     'perssalida'              => 'Fecha de Salida',
+    'User'                    => 'Usuario Administrador',
     //info personal
     'persinfosede'            => 'Seleccione una de sus sedes la cual sera asignada a su personal.',
     'persinfoarea'            => 'Seleccione una de sus áreas la cual sera asignada al personal. <br> Puede crea una nueva área y sera asignada a la sede seleccionada.',
