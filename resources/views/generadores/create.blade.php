@@ -63,7 +63,7 @@
 												<div class="col-md-12 form-group">
 													<label for="GenerInputNit">{{ trans('adminlte_lang::message.clientNIT') }} </label>
 													<small class="help-block with-errors">*</small>
-													<input class="form-control nit" data-minlength="13" maxlength="13"  name="GenerNit" autofocus="true" type="text" id="GenerInputNit" placeholder="{{ trans('adminlte_lang::message.clientNITplacehoder') }}" value="{{ old('GenerNit') }}" required>
+													<input class="form-control nitlargo" data-minlength="13" maxlength="15"  name="GenerNit" autofocus="true" type="text" id="GenerInputNit" placeholder="{{ trans('adminlte_lang::message.clientNITplacehoder') }}" value="{{ old('GenerNit') }}" required>
 												</div>
 												<div class="col-md-12 form-group">
 													<label for="GenerInputRazon">{{ trans('adminlte_lang::message.clirazonsoc') }}</label>

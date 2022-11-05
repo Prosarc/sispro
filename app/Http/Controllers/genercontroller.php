@@ -283,7 +283,7 @@ class genercontroller extends Controller
     public function update(Request $request, $id)
     {
         $Validate = $request->validate([
-            'GenerNit'      => ['required', 'min:13', 'max:13', Rule::unique('generadors')->where(function ($query) use ($request, $id){
+            'GenerNit'      => ['required', 'min:13', 'max:15', Rule::unique('generadors')->where(function ($query) use ($request, $id){
                 $ID_Cli = userController::IDClienteSegunUsuario();
                 $Sede = DB::table('sedes')
                     ->join('clientes', 'clientes.ID_Cli', '=', 'sedes.FK_SedeCli')

@@ -589,7 +589,7 @@ color:#0D0D0D'>Para constancia se firma en Mosquera, el día {{$diafirma}} de {{
   <td style='padding:0cm 5.4pt 0cm 5.4pt;height:8.1pt'>
   <p class=MsoNormal style='text-align:justify'><span lang=ES><img width=125
   height=53 id="Imagen 6"
-  src="/img//JhonGonzales2.png"></span></p>
+  src="/img/DuvanCampos.png"></span></p>
   </td>
   <td style='padding:0cm 5.4pt 0cm 5.4pt;height:8.1pt'>
   <p class=MsoNormal style='text-align:justify'><b><span lang=ES
@@ -603,7 +603,7 @@ color:#0D0D0D'>Para constancia se firma en Mosquera, el día {{$diafirma}} de {{
  </tr>
  <tr>
   <td width=190 valign=top style='width:142.4pt;padding:0cm 5.4pt 0cm 5.4pt'>
-  <p class=MsoNormal><b><span lang=ES style='font-size:7.5pt;font-family:"Arial",sans-serif'>JOHN GONZALEZ
+  <p class=MsoNormal><b><span lang=ES style='font-size:7.5pt;font-family:"Arial",sans-serif'>DUVAN CAMPOS
   </span></b></p>
   <p class=MsoNormal style='text-align:justify'><b><span lang=ES
   style='font-size:7.5pt;font-family:"Arial",sans-serif'>Jefe de Logística</span></b></p>

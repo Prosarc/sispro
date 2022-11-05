@@ -15,7 +15,8 @@ class VerificationCodeController extends Controller
      */
     public function index()
     {
-        $codes = VerificationCode::with('grupo')->orderBy('created_at','desc')->get();
+       /* $codes = VerificationCode::with('grupo')->orderBy('created_at','desc')->get();*/
+       $codes = VerificationCode::with('grupo')->orderBy('created_at','desc')->paginate(10);
 
 		return view('verifycodes.index', compact('codes'));
     }
