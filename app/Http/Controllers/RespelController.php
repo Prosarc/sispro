@@ -243,6 +243,16 @@ class RespelController extends Controller
             $respel->ARespelClasf4741 = $request['ARespelClasf4741'][$x];
             $respel->RespelEstado = $request['RespelEstado'][$x];
 
+            // se verifica si el residuo esta marcada como aceite usado 
+            if(isset($request['AceiteUsado'][$x])&&($request['AceiteUsado'][$x]==1)){
+                $respel->AceiteUsado = $request['AceiteUsado'][$x];
+              
+            }else {
+                $respel->AceiteUsado = 0;
+            }       
+
+          
+            
             // se verifica si la sustancia esta marcada como controlada
             if (isset($request['SustanciaControlada'][$x])&&($request['SustanciaControlada'][$x]==1)) {
                 $respel->SustanciaControlada = $request['SustanciaControlada'][$x];
@@ -624,6 +634,7 @@ class RespelController extends Controller
         $respel->SustanciaControlada = $request['SustanciaControlada'];
         $respel->SustanciaControladaTipo = $request['SustanciaControladaTipo'];
         $respel->SustanciaControladaNombre = $request['SustanciaControladaNombre'];
+        $respel->AceiteUsado = $request['AceiteUsado'];
         $respel->RespelHojaSeguridad = $hoja;
         $respel->RespelTarj = $tarj;
         $respel->RespelFoto = $foto;

@@ -34,6 +34,10 @@ class SolicitudResiduo extends Model{
     	return $this->belongsTo('App\Requerimiento', 'FK_SolResRequerimiento', 'ID_Req');
     }
 
+    public function Vehiculo()
+    {
+        return $this->hasOne('App\ProgramacionVehiculo', 'FK_ProgVehiculo', 'ID_ProgVeh');
+    }    
     public function certdato()
     {
     	return $this->hasOne('App\Certdato', 'FK_DatoCertSolRes', 'ID_SolRes');

@@ -106,6 +106,19 @@
 		</div>
 		<div class="col-md-6 form-group has-feedback" id="sustanciaFormDoc0" hidden="">
 		</div>
+
+
+		<div class="col-md-6 form-group has-feedback">
+			<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 500}' title="{{ trans('adminlte_lang::LangRespel.AceiteUsado') }}">
+				{{ trans('adminlte_lang::LangRespel.AceiteUsado') }}
+			</label>
+			<small class="help-block with-errors">*</small>
+			<select id="ControlSelect0" name="AceiteUsado[]" class="form-control" required> 
+				<option value="">{{ trans('adminlte_lang::LangRespel.select') }}</option>
+				<option value="0" onclick="setNoAceiteUsado(0)">{{ trans('adminlte_lang::LangRespel.no') }}</option>
+				<option value="1" onclick="setAceiteUsado(0)">{{ trans('adminlte_lang::LangRespel.yes') }}</option>
+			</select>
+		</div>
 		<div class="col-md-6 form-group has-feedback">
 			<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 500}' title="<b>tratamiento<b>" data-content="Elija el tratamiento para su residuo según lo que se acordó con el representante comercial de PROSARC S.A. ESP">
 				<i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>Tratamiento
@@ -280,6 +293,46 @@ function AgregarMasivo(id) {
 function EliminarRes(id) {
 	$("#Residuo" + id).remove();
 	$("#myform").validator('update');
+}
+
+function setAceiteUsado(id){
+	AgregarBogota(id);
+	$("#Bogota" + id).removeClass("btn-default");
+	$("#Bogota" + id).addClass("btn-success");
+	$("#Otro" + id).removeClass("btn-success");
+	$("#Otro" + id).addClass("btn-default");
+	/*Se habilita los campos correspondientes*/
+	$("#AceitesFormType" + id).removeAttr('hidden');
+	$("#NoControl" + id).empty();
+	$("#myform").validator('update');
+	attachPopover();
+}
+
+function setNoAceiteUsado(id){
+	$("#AceitesFormType" + id).attr("hidden", true);
+	$("#Nocontrol" + id).append('<input hidden type="text" name="AceiteUsadoRecoleccion[]" value="">');
+	$("#myform").validator('destroy');
+	$("myform").validator('update');
+}
+
+function AgregarBogota(id){
+	$("#Bogota" + id).removeClass("btn-default");
+	$("#Bogota" + id).addClass("btn-success");
+	$("#Otro" + id).removeClass("btn-success");
+	$("#Otro" + id).addClass("btn-default");
+	$("#myform").validator('update');
+	attachPopover();
+	Selects();
+}
+
+function AgregarOtro(id){
+	$("#Otro" + id).removeClass("btn-default");
+	$("#Otro" + id).addClass("btn-success");
+	$("#Bogota" + id).removeClass("btn-success");
+	$("#Bogota" + id).addClass("btn-default");
+	$("#myform").validator('update');
+	attachPopover();
+	Selects();
 }
 
 </script>

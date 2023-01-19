@@ -16,6 +16,7 @@ use App\Mail\CancelSolServEmail;
 use App\Mail\SolSerEmail;
 use App\Mail\ProgramacionParafiscales;
 use App\Mail\SustanciaControladaProgramada;
+use App\Mail\AceiteUsadoProgramado;
 use App\Mail\ServicioTipoRecorrido;
 use App\audit;
 use App\ProgramacionVehiculo;
@@ -1185,6 +1186,21 @@ class VehicProgController extends Controller
 			}
 		}
 
+		$cantidadDeAceitesUsados = 0;
+
+		$programaciones = ProgramacionVehiculo::where('FK_ProgServi', $SolicitudServicio->ID_SolSer)
+		->where('ProgVehDelete', 0)
+		//->where('FK_ProgVehiculo', 8)
+		->first();
+		
+		foreach ($SolicitudServicio->SolicitudResiduo as $key => $value){
+			$respel = $value->requerimiento->respel;
+			
+			if($respel->AceiteUsado == 1 && $programaciones->FK_ProgVehiculo == 8){
+				$cantidadDeAceitesUsados++;
+				}
+			}	
+
 		// return $cantidadDeResiduosControlados;
 
 		$log = new audit();
@@ -1229,6 +1245,12 @@ class VehicProgController extends Controller
 			array_push($destinatarios, 'dirtecnica@prosarc.com.co');
 		}
 
+		if($cantidadDeAceitesUsados > 0){
+			//enviar notificacion de servicion con Aceite Usado
+			Mail::to('dirtecnica@prosarc.com.co')->cc(['sistemas@prosarc.com.co', 'logistica@prosarc.com.co', 'asistentelogistica@prosarc.com.co', 'auxiliarlogistico@prosarc.com.co', ])->send(new AceiteUsadoProgramado($email, $SolicitudServicio));
+		}else{
+			array_push($destinatarios, 'dirtecnica@prosarc.com.co');
+		}
 		if ($SolicitudServicio->SolServMailCopia == "null") {
 			if ($programacion->ProgVehExclusive == 0) {
 				Mail::to($email->PersEmail)->cc($destinatarios)->send(new ServicioTipoRecorrido($email));

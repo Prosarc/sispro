@@ -435,7 +435,7 @@
 						</table>
 					</div>
 					{{-- Personal del cliente --}}
-					<div class="tab-pane" id="personal_cliente" style='overflow-y:auto; max-height:305px;'>
+				{{--	<div class="tab-pane" id="personal_cliente" style='overflow-y:auto; max-height:305px;'>
 						<table id="PersonalClienteTable" class="table table-compact table-bordered table-striped">
 							<thead>
 								<tr>
@@ -468,7 +468,7 @@
 								@endforeach
 							</tbody>
 						</table>
-					</div>
+					</div> --}}	
 				</div>
 			</div>
 		</div>

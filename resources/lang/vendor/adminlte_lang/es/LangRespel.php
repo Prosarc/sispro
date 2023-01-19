@@ -73,6 +73,7 @@ return [
     'yes'                   => 'Si',
     'no'                    => 'No',
     'resolucion1'           => ' Resolución Número 1 del 2015 ',
+    'AceiteUsado'           => '¿Aceite Usado recogido en Bogotá?',
     'select'                => 'Seleccione...',
     'hojadeseguridad'       => 'Hoja de Seguridad ',
     'tarjetaemergencia'     => 'Tarjeta De Emergencia ',

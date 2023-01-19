@@ -316,9 +316,9 @@ class ClientController extends Controller
 				->where('personals.PersDelete', 0)
 				->get();
 
-            /*return $personal;*/
-            
-            return view('clientes.show', compact('personal_Cliente','cliente', 'Sedes', 'SedeSlug', 'Requerimientos'));
+            return $personal;
+          // return view('clientes.show', compact('cliente', 'Sedes', 'SedeSlug', 'Requerimientos'));
+          // return view('clientes.show', compact('personal_Cliente','cliente', 'Sedes', 'SedeSlug', 'Requerimientos'));
         }else{
             abort(403);
         }

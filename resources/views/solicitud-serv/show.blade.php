@@ -442,7 +442,10 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 													@if((in_array(Auth::user()->UsRol, Permisos::AREALOGISTICA))&&($Residuo->SustanciaControladaTipo == 0)&&($Residuo->SustanciaControlada != Null))
 														<a><i class="fas fa-flask" style="color: green"></i></a>
 													@endif
-													 {{$Residuo->RespelName}}</td>
+													@if((in_array(Auth::user()->UsRol, Permisos::AREALOGISTICA))&&($Residuo->AceiteUsado == 1)&&($Residuo->AceiteUsado !=Null))
+														<a><i class="fas fa-flask" style="color: #00c0ef"></i></a>
+													@endif
+														{{$Residuo->RespelName}}</td>
 												<td>
 													@if(in_array(Auth::user()->UsRol, Permisos::SolSer1) || in_array(Auth::user()->UsRol2, Permisos::SolSer1))
 														@switch($SolicitudServicio->SolSerStatus)

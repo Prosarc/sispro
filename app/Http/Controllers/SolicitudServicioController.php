@@ -131,11 +131,18 @@ class SolicitudServicioController extends Controller
 		}
 		if(in_array(Auth::user()->UsRol, Permisos::CLIENTE)){
 			return view('solicitud-serv.index', compact('Servicios', 'Cliente'));
+			//*return view('solicitud-serv.cartera');
 		}else{
 			return view('solicitud-serv.indexprosarc', compact('Servicios', 'Cliente'));
 		}
 	}
 
+	public function CarteraTemporal(){
+		$Boton1= "";
+		if($Boton1){
+		return view('solicitud-serv.index', compact('Servicios', 'Cliente'));
+		}
+	}
 
 	/**
 	 * Display a listing of the resource.

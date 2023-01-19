@@ -184,3 +184,22 @@
 
 	</div>
 @endif
+
+
+{{-- Aceite Usado --}}
+@if($Respels->AceiteUsado !== 0)
+	<div class="col-md-6 form-group">
+
+			<label>¿Aceite Usado?</label>
+			<input type="text" class="form-control" value="Si" disabled>
+
+	</div>
+			
+@else
+	<div class="col-md-6 form-group">
+
+			<label>¿Aceite Usado?</label>
+			<input type="text" class="form-control" value="No" disabled>
+
+	</div>
+@endif

@@ -46,6 +46,8 @@ class RespelStoreRequest extends FormRequest
                 'SustanciaControladaTipo.*'     => 'sometimes|boolean|nullable',
                 'SustanciaControladaNombre.*'   => 'sometimes|max:50|string|nullable',
                 'SustanciaControladaDocumento.*'=> 'sometimes|max:2048|mimes:pdf|required_unless:SustanciaControlada.*,0',
+                'AceiteUsado.*' =>  'required|boolean',
+                'AceiteUsadoRecoleccion.*' => 'sometimes|boolean|nullable',
             ];
 
             return $rules;
@@ -66,6 +68,8 @@ class RespelStoreRequest extends FormRequest
                 'SustanciaControladaTipo.*'     => 'Tipo de sustancia controlada',
                 'SustanciaControladaNombre.*'   => 'Nombre de la sustancia',
                 'SustanciaControladaDocumento.*'=> 'Certificado de Carencia/Certificado de Registro',
+                'AceiteUsado.*' =>  '¿Aceite Usado?',
+                'AceiteUsadoRecoleccion.*' => 'Tipo de recoleccion',
         ];
 
 
