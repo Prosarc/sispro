@@ -131,18 +131,11 @@ class SolicitudServicioController extends Controller
 		}
 		if(in_array(Auth::user()->UsRol, Permisos::CLIENTE)){
 			return view('solicitud-serv.index', compact('Servicios', 'Cliente'));
-			//*return view('solicitud-serv.cartera');
 		}else{
 			return view('solicitud-serv.indexprosarc', compact('Servicios', 'Cliente'));
 		}
 	}
 
-	public function CarteraTemporal(){
-		$Boton1= "";
-		if($Boton1){
-		return view('solicitud-serv.index', compact('Servicios', 'Cliente'));
-		}
-	}
 
 	/**
 	 * Display a listing of the resource.
@@ -848,21 +841,34 @@ class SolicitudServicioController extends Controller
 			$SolicitudServicio->recepcion = null;
 		}
 
+		//Buscar corrientes del residuo
+		
+			$PublicRespels = DB::table('solicitud_residuos')
+			->join('residuos_geners', 'residuos_geners.ID_SGenerRes', '=', 'solicitud_residuos.FK_SolResRg')
+			->join('respels' , 'respels.ID_Respel', '=', 'residuos_geners.FK_Respel')
+			->select('respels.ID_Respel', 'respels.YRespelClasf4741', 'respels.ARespelClasf4741')
+			->where('solicitud_residuos.FK_SolResSolSer', $SolicitudServicio->ID_SolSer)
+			->distinct()
+			->get();
+
         // adjuntar variables segun status del servicio
         switch ($SolicitudServicio->SolSerStatus) {
             case 'Residuo Faltante':
             case 'Notificado':
             case 'Programado':
-		        return view('solicitud-serv.show', compact('SolicitudServicio','Residuos', 'GenerResiduos', 'Cliente', 'SolSerCollectAddress', 'SolSerConductor', 'TextProgramacion', 'Municipio', 'Programaciones', 'ProgramacionesActivas', 'total', 'cantidadesXtratamiento', 'tratamientos', 'Observaciones'));
+				//return $PublicRespels;
+		       return view('solicitud-serv.show', compact('SolicitudServicio','Residuos', 'GenerResiduos', 'Cliente', 'SolSerCollectAddress', 'SolSerConductor', 'TextProgramacion', 'Municipio', 'Programaciones', 'ProgramacionesActivas', 'total', 'cantidadesXtratamiento', 'tratamientos', 'Observaciones', 'PublicRespels'));
                 break;
 
             case 'Corregido':
             case 'Completado':
-		        return view('solicitud-serv.show', compact('SolicitudServicio','Residuos', 'GenerResiduos', 'Cliente', 'SolSerCollectAddress', 'SolSerConductor', 'TextProgramacion', 'Municipio', 'Programaciones', 'total', 'cantidadesXtratamiento', 'tratamientos', 'Observaciones', 'ultimoRecordatorio'));
+				//return $PublicRespels;
+		       return view('solicitud-serv.show', compact('SolicitudServicio','Residuos', 'GenerResiduos', 'Cliente', 'SolSerCollectAddress', 'SolSerConductor', 'TextProgramacion', 'Municipio', 'Programaciones', 'total', 'cantidadesXtratamiento', 'tratamientos', 'Observaciones', 'ultimoRecordatorio', 'PublicRespels'));
                 break;
 
             default:
-                return view('solicitud-serv.show', compact('SolicitudServicio','Residuos', 'GenerResiduos', 'Cliente', 'SolSerCollectAddress', 'SolSerConductor', 'TextProgramacion', 'Municipio', 'Programaciones', 'total', 'cantidadesXtratamiento', 'tratamientos', 'Observaciones'));
+			//return $PublicRespels;
+       		return view('solicitud-serv.show', compact('SolicitudServicio','Residuos', 'GenerResiduos', 'Cliente', 'SolSerCollectAddress', 'SolSerConductor', 'TextProgramacion', 'Municipio', 'Programaciones', 'total', 'cantidadesXtratamiento', 'tratamientos', 'Observaciones', 'PublicRespels'));
                 break;
         }
 	}
@@ -875,7 +881,7 @@ class SolicitudServicioController extends Controller
 			abort(404);
 		}
 		if ($Solicitud->SolSerStatus <> 'Certificacion') {
-			if(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR)){
+			if(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol, Permisos::AREALOGISTICA)){
 				if ($Solicitud->SolSerStatus == 'Completado' || $Solicitud->SolSerStatus == 'Corregido') {
 					if($request->input('solserstatus') == 'No Deacuerdo'){
 						$Solicitud->SolSerStatus = 'No Conciliado';
@@ -2033,7 +2039,7 @@ class SolicitudServicioController extends Controller
 	 */
 	public function addRespel($id)
 	{
-		if(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR)){
+		if(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol, Permisos::JEFELOGISTICA)){
 			$Solicitud = SolicitudServicio::where('SolSerSlug', $id)->first();
 			if (!$Solicitud) {
 				abort(404);
@@ -2060,7 +2066,7 @@ class SolicitudServicioController extends Controller
 				->join('sedes', 'generadors.FK_GenerCli', '=', 'sedes.ID_Sede')
 				->join('clientes', 'sedes.FK_SedeCli', '=', 'clientes.ID_Cli')
 				->select('gener_sedes.GSedeSlug', 'gener_sedes.GSedeName', 'generadors.GenerName')
-				->where('clientes.ID_Cli', userController::IDClienteSegunUsuario())
+				->where('clientes.ID_Cli', $Solicitud->FK_SolSerCliente)
 				->get();
 			$Persona = Personal::where('ID_Pers', $Solicitud->FK_SolSerPersona)
 				->select('PersSlug','PersFirstName','PersLastName')
@@ -2082,7 +2088,9 @@ class SolicitudServicioController extends Controller
 			foreach ($KGenviados as $KGenviado) {
 				$totalenviado = $totalenviado + $KGenviado->SolResKgEnviado;
 			}
-            return view('solicitud-serv.addrespel', compact('Solicitud','Cliente','Persona','Personals','Departamentos','SGeneradors', 'Departamento','Municipios', 'Departamento2','Municipios2', 'Sedes', 'totalenviado', 'Requerimientos'));
+            //return view('solicitud-serv.addrespel', compact('Solicitud','Cliente','Persona','Personals','Departamentos','SGeneradors', 'Departamento','Municipios', 'Departamento2','Municipios2', 'Sedes', 'totalenviado', 'Requerimientos'));
+			return view('solicitud-serv.addrespel', compact('Solicitud','Cliente','Persona','Personals','Departamentos','SGeneradors', 'Departamento','Municipios', 'Sedes', 'totalenviado', 'Requerimientos'));
+			//return $SGeneradors;
 		}
 		else{
 			abort(403);
@@ -2232,7 +2240,8 @@ class SolicitudServicioController extends Controller
 
 		// return $Servicios;
 
-		return view('solicitud-serv.indexrecordatorios', compact('Servicios', 'Residuos', 'Cliente'));
+		//return view('solicitud-serv.indexrecordatorios', compact('Servicios', 'Residuos', 'Cliente'));
+		return view('solicitud-serv.indexrecordatorios', compact('Servicios', 'Cliente'));
 	}
 
 	public function reversarStatus(Request $request)

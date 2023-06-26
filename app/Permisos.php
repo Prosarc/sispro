@@ -46,7 +46,7 @@ class Permisos{
 		CargoInternoController::create,edit
 		partials/controlsidebar
 	*/
-	const SolSer1 = ['Programador','JefeOperaciones','Supervisor'];
+	const SolSer1 = ['Programador','JefeOperaciones','Supervisor','JefeLogistica', 'AdministradorPlanta'];
 	/*Using ->
 		solicitud-serv/show
 		recursos/show
@@ -56,7 +56,7 @@ class Permisos{
 		solicitud-serv/show
 		recursos/show
 	*/
-	const SolSer2 = ['Programador','JefeOperaciones','Supervisor','JefeLogistica','AsistenteLogistica'];
+	const SolSer2 = ['Programador','JefeOperaciones','Supervisor','JefeLogistica','AsistenteLogistica', 'AdministradorPlanta'];
 	/*Using ->
 		solicitud-serv/show
 	*/
@@ -91,7 +91,7 @@ class Permisos{
 		Menu.php
 	*/
 
-	const PROGRAMADOR = ['Programador'];
+	const PROGRAMADOR = ['Programador', 'AdministradorPlanta'];
 	/* Using ->
 		genercontroller:index
 		generadores/index
@@ -153,19 +153,25 @@ class Permisos{
 	/* Using ->
 		scliencontroller:create
 	*/
-	const AREALOGISTICA = ['AsistenteLogistica','JefeLogistica'];
+	const AREALOGISTICA = ['AsistenteLogistica','JefeLogistica', 'Programador', 'Supervisor' ];
 	/* Using ->
 		ProgramacionVehicle/edit
 	*/
-	const ASISTENTELOGISTICA = ['AsistenteLogistica'];
+	const ASISTENTELOGISTICA = ['Programador', 'AsistenteLogistica'];
 	/* Using ->
 		ProgramacionVehicle/edit
 	*/
-	const JEFELOGISTICA = ['JefeLogistica'];
+	const JEFELOGISTICA = ['JefeLogistica', 'Programador', 'AdministradorPlanta'];
 	/* Using ->
 		ProgramacionVehicle/edit
 	*/
-	const SolSerCertifi = ['Programador','Tesorería','AdministradorPlanta'];
+
+	const ADMINISTRADORPLANTA = ['AdministradorPlanta'];
+	/* Using ->
+		ProgramacionVehicle/edit
+	*/
+
+	const SolSerCertifi = ['Programador','Tesorería','AdministradorPlanta', 'AdministradorBogota'];
 	/* Using ->
 		solicitud-serv/index
 		vehicle-programacion/index

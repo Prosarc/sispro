@@ -22,9 +22,9 @@ class Respel extends Model
 	    return $this->belongsTo('App\Cotizacion', 'FK_RespelCoti', 'ID_Coti');
 	}
 
-    // public function SolicitudResiduo(){
-    //     return $this->hasMany('App\SolicitudResiduo', 'ID_SolRes', 'id');//como solicitud de servicio tiene muchas solicitud de residuos
-    // }
+     public function SolicitudResiduo(){
+         return $this->hasMany('App\SolicitudResiduo', 'ID_SolRes', 'id');//como solicitud de servicio tiene muchas solicitud de residuos
+    }
     
     public function ResiduosGener(){
 		return $this->hasMany('App\ResiduosGener', 'ID_SGenerRes', 'id');

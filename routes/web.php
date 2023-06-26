@@ -250,6 +250,17 @@ Route::middleware(['web', 'auth', 'verified', 'bindings'])->group(function () {
 	Route::put('/firmarCertificado/{slug}', 'AjaxController@firmarCertificado')->name('certificados.ajaxfirmar');
 	Route::get('/ClienteExpress-Residuos/{id}', 'AjaxController@clienteExpressResiduos');
 	Route::resource('/prefacturas', 'PrefacturaController');
+	
+	/*Rutas paa ver los certificados por año*/
+	//Route::get('/certificados/cert2020', 'CertificadoController@cert2020')->name('certificados.2020');
+	Route::get('certificados.2020', ['as' => 'certificados.2020', 'uses' => 'CertificadoController@cert2020']);
+	Route::get('certificados.2021', ['as' => 'certificados.2021', 'uses' => 'CertificadoController@cert2021']);
+	Route::get('certificados.2022', ['as' => 'certificados.2022', 'uses' => 'CertificadoController@cert2022']);
+	Route::get('certificados.2023', ['as' => 'certificados.2023', 'uses' => 'CertificadoController@cert2023']);
+
+	Route::get('/solicitud-serv.Createrespel', 'RespelController@createrespelcliente') ->name('solicitud-serv.Createrespel');	
+	Route::post('/respel', 'RespelController@storenewrespel')->name('respel'); 
+	
 
 	/*Rutas de generacion de PDF*/
 	Route::get('/PdfManiCarg/{id}','PdfController@PdfManiCarg');

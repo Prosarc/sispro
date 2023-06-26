@@ -1,0 +1,4 @@
+[2023-06-09 15:35:06] local.ERROR: Allowed memory size of 536870912 bytes exhausted (tried to allocate 174080000 bytes) {"userId":1,"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Allowed memory size of 536870912 bytes exhausted (tried to allocate 174080000 bytes) at C:\\laragon\\www\\lprosarc2\\storage\\framework\\views\\6127154cc02080300a5d4fd2766d02e6958c377f.php:67)
+[stacktrace]
+#0 {main}
+"} 

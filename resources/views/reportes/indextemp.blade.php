@@ -31,43 +31,49 @@
                     <table id="reporteTable" class=" table-compact table-bordered">
                         <thead>
                             <tr>
-                                <th>Fecha de Solicitud</th>
-                                <th># Solicitud</th>
+                                <th>Servicio</th>
+                                <th>Status</th>
+                                <th>Recepcion</th>
+                                <th>ID_SolRes</th>
                                 <th>RM</th>
-                                <th>Cliente</th>
-                                <th>Generador</th>
-                                <th>NIT</th>
-                                <th>Dirección de servicio</th>
-                                <th>Municipio</th>
-                                <th>Nombre de residuo</th>
-                                <th>Corriente</th>
+                                <th>Residuo</th>
+                                <th>Peligro</th>
+                                @if (Auth::user()->UsRol == 'AsistenteLogistica'||Auth::user()->UsRol == 'JefeLogistica')
+                                <th>GRETIP</th>
+                                @else
+                                <th>Clasf-4741</th>
+                                @endif
+                                <th>Controlada</th>
                                 <th>Tratamiento</th>
-                                <th>Cantidad Conciliada Kg</th>
-                                <th>No. Certificado</th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
+                                <th>Precio</th>
+                                <th>Cliente</th>
+                                <th>Cantidad Kg</th>
+                                <th>Cantidad Unid</th>
+                                <th>Generador/Sede</th>
+                                <th>Generador/NIT</th>
+                                <th>Generador/DIR</th>
+                                <th>Generador/MUN</th>
+                                <th>Transportador/Sede</th>
+                                <th>Transportador/DIR</th>
+                                <th>Transportador/MUN</th>
+                                <th># Certificado</th>
+                                <th>Comercial</th>
                             </tr>
                         </thead>
                         <tbody id="readyTable">
                             @foreach ($servicios as $servicio)
                                 @foreach ($servicio->SolicitudResiduo as $solres)
                                     <tr>
+                                        <td>{{$servicio->ID_SolSer}}</td>
+                                        <td>{{$servicio->SolSerStatus}}</td>
                                         <td>
-                                            @if (!is_null($servicio->programacionesrecibidas))
+                                        @if (!is_null($servicio->programacionesrecibidas))
                                             @foreach ($servicio->programacionesrecibidas as $programacion)
-                                                {{date('Y/m/d', strtotime($programacion->ProgVehEntrada))}}
+                                                {{date('d/m/Y', strtotime($programacion->ProgVehEntrada))}}
                                             @endforeach
                                         @endif
                                         </td>
-                                        <td>{{$servicio->ID_SolSer}}</td>
+                                        <td>{{$solres->ID_SolRes}}</td>
                                         <td>
                                             @if (isset($solres->SolResRM)&&is_array($solres->SolResRM))
                                                 @foreach ($solres->SolResRM as $rm)
@@ -75,12 +81,9 @@
                                                 @endforeach
                                             @endif
                                         </td>
-                                        <td>{{$servicio->cliente->CliName}}</td>
-                                        <td>{{$solres->generespel->gener_sedes->generadors->GenerName}} <br> ({{$solres->generespel->gener_sedes->GSedeName}})</td>
-                                        <td>{{$solres->generespel->gener_sedes->generadors->GenerNit}}</td>
-                                        <td>{{$solres->generespel->gener_sedes->GSedeAddress}}</td>
-                                        <td>{{$solres->generespel->gener_sedes->municipio->MunName}}</td>
-                                        <td>{{$solres->generespel->respels->RespelName}}</td>
+                                        <td>
+                                            {{$solres->generespel->respels->RespelName}}
+                                        </td>
                                         <td>
                                             @if($solres->generespel->respels->YRespelClasf4741 <> null)
                                                 {{$solres->generespel->respels->YRespelClasf4741}}
@@ -90,27 +93,52 @@
                                                 {{'N/A'}}
                                             @endif
                                         </td>
+                                        <td>{{$solres->generespel->respels->RespelIgrosidad}}</td>
+                                        <td>
+                                            @if($solres->generespel->respels->SustanciaControlada == 1)
+                                                @if ($solres->generespel->respels->SustanciaControladaTipo == 0)
+                                                    {{'Sustancia Controlada'}}
+                                                @endif
+                                                @if ($solres->generespel->respels->SustanciaControladaTipo == 1)
+                                                    {{'Sustancia de uso masivo'}}
+                                                @endif
+                                            @else
+                                                {{'N/A'}}
+                                            @endif
+                                        </td>
                                         <td>{{$solres->requerimiento->tratamiento->TratName}}</td>
+                                        <td>{{$solres->SolResPrecio}}</td>
+                                        <td>{{$servicio->cliente->CliName}}</td>
                                         <td>{{$solres->SolResKgConciliado}}</td>
-                                        @if ($solres->certdato)
-                                        @if($solres->certdato->certificado->CertType == 0)
-                                        <td>{{$solres->certdato->certificado->CertNumero}}</td>
+                                        <td>{{$solres->SolResCantiUnidadConciliada}}</td>
+                                        <td>{{$solres->generespel->gener_sedes->generadors->GenerName}} <br> ({{$solres->generespel->gener_sedes->GSedeName}})</td>
+                                        <td>{{$solres->generespel->gener_sedes->generadors->GenerNit}}</td>
+                                        <td>{{$solres->generespel->gener_sedes->GSedeAddress}}</td>
+                                        <td>{{$solres->generespel->gener_sedes->municipio->MunName}}</td>
+                                        @if ($servicio->ID_SolSer == 'Interno')
+                                            <td>Prosarc S.A. ESP.</td>
+                                            <td>KM 6 VÍA LA MESA SUB ESTACIÓN BALSILLAS</td>
+                                            <td>Mosquera</td>
                                         @else
-                                        <td>M{{$solres->certdato->certificado->CertManifNumero}}</td>
+                                            <td>{{$servicio->SolSerNameTrans}}</td>
+                                            <td>{{$servicio->SolSerAdressTrans}}</td>
+                                            <td>{{$servicio->municipio->MunName}}</td>
                                         @endif
-                                    @else
-                                        <td>Certificado no encontrado</td>
-                                    @endif
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
+                                       
+                                        @if ($solres->certdato)
+                                            @if($solres->certdato->certificado->CertType == 0)
+                                            <td>{{$solres->certdato->certificado->CertNumero}}</td>
+                                            @else
+                                            <td>M{{$solres->certdato->certificado->CertManifNumero}}</td>
+                                            @endif
+                                        @else
+                                            <td>Certificado no encontrado</td>
+                                        @endif
+                                        @if (isset($servicio->cliente->comercialAsignado) && (!is_null($servicio->cliente->comercialAsignado)))
+                                            <td>{{$servicio->cliente->comercialAsignado->PersEmail}}</td>
+                                        @else
+                                            <td>{{'sin comercial'}}</td>
+                                        @endif
                                     </tr>
                                 @endforeach
                             @endforeach

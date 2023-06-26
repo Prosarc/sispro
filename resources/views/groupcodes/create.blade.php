@@ -60,7 +60,7 @@ Crear Código
 
                                     <div class="col-md-3">
                                         <label for="VC_RM">Recibo de Materiales (RM)</label>
-                                        <input class="form-control" id="VC_RM" name="VC_RM[]" type="number" min="0" max="50000">
+                                        <input class="form-control" id="VC_RM" name="VC_RM[]" type="number" min="0" max="100000">
                                     </div>
                                 </div>
                                 <div class="box-footer">

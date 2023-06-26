@@ -382,8 +382,8 @@
 							<table>
 								<tr>
 									<td style="text-align: center; vertical-align: bottom; padding: 0px !important;">
-										<img src="{{asset('img/coordinadorSEv3.png')}}" style="width: 100px;"><br>
-										<b>Coordinador <br> Servicios Express</b>
+										<img src="{{asset('img/Mileidy_Vanegas.png')}}" style="width: 100px;"><br>
+										<b>Analísta Logística <br> Servicios Express</b>
 									</td>
 									<td style="text-align: center; vertical-align: bottom; dding: 0px !important;">
 										<img src="{{asset('img/DavidPizza2.png')}}" style="width: 100px;"><br>

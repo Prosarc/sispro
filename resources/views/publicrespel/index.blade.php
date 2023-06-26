@@ -30,7 +30,7 @@
 								<tr>
 									<th>Actualizado</th>
 									<th>Categoría</th>
-									<th>SubCategoría</th>
+									<th>Tratamiento</th>
 									<th>{{trans('adminlte_lang::LangRespel.RespelName')}}</th>
 									<th>{{trans('adminlte_lang::LangRespel.Respelclas')}}</th>
 									<th>{{trans('adminlte_lang::LangRespel.Respelhoja')}}</th>
@@ -80,7 +80,7 @@
 
 									@if($respel->FK_SubCategoryRP != null)
 									<td class="text-center">{{$respel->SubcategoryRespelpublic->CategoryRP->CategoryRpName}}</td>
-									<td class="text-center">{{$respel->SubcategoryRespelpublic->SubCategoryRpName}}</td>
+									<td class="text-center">{{$respel->TratName}}</td>
 									@else
 										<td class="text-center">Sin Categoria</td>
 										<td class="text-center">N/A</td>

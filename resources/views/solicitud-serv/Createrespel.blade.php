@@ -18,7 +18,7 @@
 					<h3 class="box-title">{{ trans('adminlte_lang::LangRespel.Respelcreate') }}</h3>
 				</div>
 					<div class="box box-info">
-						<form role="form" action="/respels" method="POST" id="myform" enctype="multipart/form-data" data-toggle="validator" >
+						<form role="form" action="{{ route('respel')}}" method="POST" id="myform" enctype="multipart/form-data" data-toggle="validator" >
 							@csrf
 							@if ($errors->any())
 							<div class="alert alert-danger" role="alert">
@@ -30,14 +30,14 @@
 							</div>
 							@endif
 							<div class="box-body">
-								@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol2, Permisos::PROGRAMADOR))
+								@if(in_array(Auth::user()->UsRol, Permisos::AREALOGISTICA) || in_array(Auth::user()->UsRol2, Permisos::AREALOGISTICA))
 									<div class="col-md-12 form-group">
 										<label for="Sede">{{ trans('adminlte_lang::LangRespel.createcliente') }}</label>
 										<small class="help-block with-errors">*</small>
 										<select name="Sede" id="Sede" class="form-control" required>
 											<option value="">{{ trans('adminlte_lang::LangRespel.selecthem') }}</option>
-											@foreach($Sedes as $Cliente)
-												<option value="{{$Cliente->ID_Sede}}">{{$Cliente->CliName}}</option>
+											@foreach($Sede as $Cliente)
+												<option value="{{$Cliente->ID_Sede}}">{{$Cliente->SedeName}}</option>
 											@endforeach
 										</select>
 									</div>
@@ -51,7 +51,7 @@
 									<select id="selectCategory" class="form-control" data-dependent="FK_SubCategoryRP">
 										<option disabled>seleccione una categoria...</option>
 										@foreach($categories as $category)
-										<option value="{{$category->ID_CategoryRP}}">{{$category->CategoryRpName}}</option>
+										<option value="{{$category->ID_CategoryRP}}">EXPRESS</option>
 										@endforeach
 									</select>
 								</div>
@@ -74,9 +74,9 @@
 							</div>
 						</form>
 					</div>
-				</div>
+			
+                </div>
 			</div>
 		</div>
-	</div>
-</div>
-@endsection
+    </div>
+    @endsection

@@ -108,7 +108,7 @@
 				</div>
 			</div>
 		</div>
-		@if (in_array(Auth::user()->UsRol, Permisos::CLIENTE) ||in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
+		@if (in_array(Auth::user()->UsRol, Permisos::CLIENTE) ||in_array(Auth::user()->UsRol, Permisos::AREALOGISTICA))
 		{{--  Modal Agregar un Residuo a una SedeGener--}}
 			<form role="form" action="/respelGener" method="POST" enctype="multipart/form-data" data-toggle="validator">
 				@csrf
@@ -170,7 +170,7 @@
 				</ul>
 				<div class="tab-content">
 					<div class="active tab-pane" id="residuos">
-						@if (in_array(Auth::user()->UsRol, Permisos::CLIENTE) ||in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
+						@if (in_array(Auth::user()->UsRol, Permisos::CLIENTE) ||in_array(Auth::user()->UsRol, Permisos::AREALOGISTICA))
 							{{-- BOTONES DE CREAR RESIDUOS Y ASIGNARLOS --}}
 							<a href="/respels/create" class="btn btn-primary mx-auto"><i class="fas fa-plus-square"></i> <b>{{ trans('adminlte_lang::message.respelscreate') }}</b></a>
 							<a method='get' href='#' data-toggle='modal' data-target='#add'  class="btn btn-success mx-auto pull-right"><i class="fas fa-plus-circle"></i><b> {{ trans('adminlte_lang::message.assignrespels') }}</b></a>
@@ -197,7 +197,7 @@
 					</div>
 					<div class="tab-pane" id="sedes">
 						<div class="text-center">
-							@if (in_array(Auth::user()->UsRol, Permisos::CLIENTE) ||in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
+							@if (in_array(Auth::user()->UsRol, Permisos::CLIENTE) ||in_array(Auth::user()->UsRol, Permisos::AREALOGISTICA))
 								<a href="/sgeneradores/create" class="btn btn-primary"><i class="fas fa-plus-square"></i><b> {{ trans('adminlte_lang::message.addsedegener') }}</b></a>
 							@endif
 						</div>

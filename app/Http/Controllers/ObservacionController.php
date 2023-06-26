@@ -100,7 +100,8 @@ class ObservacionController extends Controller
 
         $copy = ['asistentelogistica@prosarc.com.co',
                     'auxiliarlogistico@prosarc.com.co',
-                    'auxiliarpda@prosarc.com.co'
+                    'auxiliarpda@prosarc.com.co',
+                    'asistentepda@prosarc.com.co'
                     ];
 
         $recipient = ['conciliaciones@prosarc.com.co',

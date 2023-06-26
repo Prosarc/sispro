@@ -378,6 +378,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 											@endif
 											<th>{{trans('adminlte_lang::message.solserrespel')}}</th>
 											<th>Tratamiento</th>
+											<th>Corriente</th>
 											{{-- <th>Pretratamientos</th> --}}
 											<th>{{trans('adminlte_lang::message.solserembaja')}}</th> 
 											<th>{{trans('adminlte_lang::message.gener')}}</th>
@@ -476,6 +477,17 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 													@endforeach
 													</ul>
 												</td> --}}
+												@foreach($PublicRespels as $corriente)
+												@if ($corriente->ID_Respel == $Residuo->ID_Respel)
+													@if($corriente->YRespelClasf4741 <> null)
+														<td class="text-center">{{$corriente->YRespelClasf4741}}</td>
+													@elseif($corriente->ARespelClasf4741 <> null)
+														<td class="text-center">{{$corriente->ARespelClasf4741}}</td>
+													@else
+														<td class="text-center">N/D</td>
+													@endif
+												@endif	
+												@endforeach
 												<td>{{$Residuo->SolResEmbalaje}}</td>
 												<td><a title="Ver Generador" href="/sgeneradores/{{$GenerResiduo->GSedeSlug}}" target="_blank"><i class="fas fa-external-link-alt"></i></a> {{$GenerResiduo->GenerName.' ('.$GenerResiduo->GSedeName.')'}}</td>
 												@if(in_array(Auth::user()->UsRol, Permisos::COMERCIAL)||in_array(Auth::user()->UsRol2, Permisos::COMERCIAL))
@@ -1862,12 +1874,12 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 		@break
 		@case('Residuo Faltante')
 			$('#titulo').empty();
-			@if(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
+			@if(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol, Permisos::JEFELOGISTICA))
 				$('#titulo').append(`
 					<a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/add-respel" class="btn btn-primary pull-right"><i class="fas fa-plus"></i><b> Añadir Residuo</b></a>
 				`);
 			@endif
-			@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || Auth::user()->email == 'logistica@prosarc.com.co')
+			@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol, Permisos::ADMINISTRADORPLANTA)|| Auth::user()->email == 'logistica@prosarc.com.co')
 				$('#titulo').append(`
 					<div class="btn-group" style="float: left;">
 						<button type="button" style="margin-right:1em;" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -1900,7 +1912,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 		@case('Corregido')
 		@case('Completado')
 			$('#titulo').empty();
-			@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || Auth::user()->email == 'logistica@prosarc.com.co')
+			@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol, Permisos::ADMINISTRADORPLANTA) || Auth::user()->email == 'logistica@prosarc.com.co')
 			$('#titulo').append(`
 				<div class="btn-group" style="float: left;">
 					<button type="button" style="margin-right:1em;" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -1912,7 +1924,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 				</div>
 			`);
 			@endif
-			@if(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
+			@if(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol, Permisos::AREALOGISTICA))
 				$('#titulo').append(`
 					<a href='#' onclick="ModalStatus('{{$SolicitudServicio->SolSerSlug}}', 'Conciliada')" style="float: right;" class="btn btn-success"><i class="fas fa-clipboard-check"></i> {{trans('adminlte_lang::message.solserstatusconciliado')}}</a>
 					<a href='#' onclick="ModalStatus('{{$SolicitudServicio->SolSerSlug}}', 'No Deacuerdo')" class='btn btn-danger pull-left'> <i class="fas fa-calendar-times"></i> <b>{{trans('adminlte_lang::message.solserstatusnoconciliado')}}</b></a>
@@ -1930,7 +1942,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 		@break
 		@case('No Conciliado')
 			$('#titulo').empty();
-			@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || Auth::user()->email == 'logistica@prosarc.com.co')
+			@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol, Permisos::ADMINISTRADORPLANTA) || Auth::user()->email == 'logistica@prosarc.com.co')
 				$('#titulo').append(`
 					<div class="btn-group" style="float: left;">
 						<button type="button" style="margin-right:1em;" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -1958,7 +1970,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 		@break
 		@case('Conciliado')
 			$('#titulo').empty();
-			@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || Auth::user()->email == 'logistica@prosarc.com.co')
+			@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol, Permisos::ADMINISTRADORPLANTA) || Auth::user()->email == 'logistica@prosarc.com.co')
 				$('#titulo').append(`
 					<div class="btn-group" style="float: left;">
 						<button type="button" style="margin-right:1em;" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -1999,7 +2011,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 		@break
 		@case('Tratado')
 			$('#titulo').empty();
-			@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || Auth::user()->email == 'logistica@prosarc.com.co')
+			@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol, Permisos::ADMINISTRADORPLANTA) || Auth::user()->email == 'logistica@prosarc.com.co')
 			$('#titulo').append(`
 			<div class="btn-group" style="float: left;">
 				<button type="button" style="margin-right:1em;" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

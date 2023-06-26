@@ -74,6 +74,7 @@ return [
     'no'                    => 'No',
     'resolucion1'           => ' Resolución Número 1 del 2015 ',
     'AceiteUsado'           => '¿Aceite Usado recogido en Bogotá?',
+    'Crearnuevoresiduo'     => 'Seleccione la empresa a la cual desea crear un nuevo residuo',
     'select'                => 'Seleccione...',
     'hojadeseguridad'       => 'Hoja de Seguridad ',
     'tarjetaemergencia'     => 'Tarjeta De Emergencia ',

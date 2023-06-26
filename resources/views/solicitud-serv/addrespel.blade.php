@@ -15,6 +15,7 @@
 			<div class="box">
 				<div class="box-header with-border">
 					<h3 class="box-title">Añadir residuos adicionales</h3>
+					<a href="{{ route('solicitud-serv.Createrespel')}}" class="btn btn-primary pull-right"><i class="fas fa-plus-square"></i> <b>{{ trans('adminlte_lang::message.respelscreate') }}</b></a>
 				</div>
 				<div class="box box-info">
 					<form role="form" id="EditSolSer" action="/solicitud-servicio/{{$Solicitud->SolSerSlug}}/update-respel" method="POST" enctype="multipart/form-data" data-toggle="validator">
@@ -68,6 +69,7 @@ $(document).ready(function(){
 	@case('Notificado')
 	$("#requirimientos").remove();
 	$("#AddGenerador").remove();
+	$("#CrearResiduo").remove();
 	$('form[data-toggle="validator"]').validator('update');
 		@break
 	@default

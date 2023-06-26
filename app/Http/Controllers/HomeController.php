@@ -88,7 +88,7 @@ class HomeController extends Controller
                     ->limit(5)
                     ->get();
                 
-                return view('home', compact('Vehiculos', 'serviciosnoprocesados', 'Km', 'serviciosnoconciliados', 'Concialiadas', 'Recibidas', 'SolicitudServicios'));
+                return view('home', compact('Vehiculos', 'serviciosnoprocesados',  'serviciosnoconciliados', 'Concialiadas', 'Recibidas', 'SolicitudServicios'));
 
                 break;
 

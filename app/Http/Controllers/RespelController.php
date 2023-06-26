@@ -114,7 +114,7 @@ class RespelController extends Controller
                 }
 
             }
-            // return $Respels->pluck('TratName');
+           // return $Respels->pluck('RespelIgrosidad');
 
         return view('respels.index', compact('Respels'));
     }
@@ -1268,4 +1268,244 @@ class RespelController extends Controller
 
         return view('respels.indexExpress', compact('Respels'));
     }
-}
+  /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+
+     public function createrespelcliente()
+     {
+        
+         if(in_array(Auth::user()->UsRol, Permisos::CLIENTE)||in_array(Auth::user()->UsRol2, Permisos::AREALOGISTICA)){
+            $Sede = DB::table('clientes')
+            ->join('sedes', 'sedes.FK_SedeCli', '=', 'clientes.ID_Cli')
+            ->select('sedes.ID_Sede', 'sedes.SedeName','clientes.CliName')
+            ->where('clientes.ID_Cli', '<>', 1)
+            ->get();
+
+            $tratamientos = Tratamiento::where('FK_TratProv', 1)->get();
+            $categories = Categoryrespelpublic::all();
+
+            return view('solicitud-serv.Createrespel', compact('Sede', 'tratamientos', 'categories'));
+         }
+ }
+
+ 
+
+/**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+
+public function storenewrespel(RespelStoreRequest $request)
+    {
+
+
+        if (in_array(Auth::user()->UsRol, Permisos::CLIENTE)) {
+            $UserSedeID = DB::table('personals')
+                ->join('cargos', 'cargos.ID_Carg', 'personals.FK_PersCargo')
+                ->join('areas', 'areas.ID_Area', 'cargos.CargArea')
+                ->join('sedes', 'sedes.ID_Sede', 'areas.FK_AreaSede')
+                ->where('personals.ID_Pers', Auth::user()->FK_UserPers)
+                ->value('sedes.ID_Sede');
+
+        }else{
+            $UserSedeID = $request->input('Sede');
+        }
+        // return $request;
+        if ($request['FK_SubCategoryRP'] != 1) {
+            $subcategoria = Subcategoryrespelpublic::where('ID_SubCategoryRP',  $request['FK_SubCategoryRP'])->first();
+        }else{
+            $subcategoria->SubCategoryRpName = '0';
+        }
+
+     
+
+        if (in_array(Auth::user()->UsRol, Permisos::CLIENTE)|| in_array(Auth::user()->UsRol, Permisos::AREALOGISTICA)){
+            /*se crea un nueva cotizacion solo si el cliente no tiene cotizaciones pendientes*/
+            $Cotizacion = new Cotizacion();
+            $Cotizacion->CotiNumero = 7;
+            $Cotizacion->CotiFechaSolicitud = now();
+            $Cotizacion->CotiDelete = 0;
+            $Cotizacion->CotiStatus = "Aprobada";
+            $Cotizacion->FK_CotiSede = $UserSedeID;
+            $Cotizacion->save();
+        }
+
+
+        for ($x=0; $x < count($request['RespelName']); $x++) {
+            /*validar si el formulario incluye archivos de tarjeta de emergencia u hoja de seguridad*/
+            $respel = new Respel();
+
+            if (isset($request['RespelHojaSeguridad'][$x])) {
+                $file1 = $request['RespelHojaSeguridad'][$x];
+                $hoja = hash('sha256', rand().time().$file1->getClientOriginalName()).'.pdf';
+
+                $file1->move(public_path().'/img/HojaSeguridad/',$hoja);
+            }
+            else{
+                $hoja = 'RespelHojaDefault.pdf';
+            }
+
+             /*verificar si se cargo un documento en este campo*/
+            if (isset($request['RespelTarj'][$x])) {
+                $file2 = $request['RespelTarj'][$x];
+                $tarj = hash('sha256', rand().time().$file2->getClientOriginalName()).'.pdf';
+                $file2->move(public_path().'/img/TarjetaEmergencia/',$tarj);
+            }else{
+                $tarj = 'RespelTarjetaDefault.pdf';
+            }
+
+             /*verificar si se cargo un documento en este campo*/
+            if (isset($request['RespelFoto'][$x])) {
+                $file3 = $request['RespelFoto'][$x];
+                $foto = hash('sha256', rand().time().$file3->getClientOriginalName()).'.png';
+                $file3->move(public_path().'/img/fotoRespelCreate/',$foto);
+            }else{
+                $foto = 'RespelFotoDefault.png';
+            }
+
+            /*verificar si se cargo un documento en este campo*/
+            if (isset($request['SustanciaControladaDocumento'][$x])) {
+                $file4 = $request['SustanciaControladaDocumento'][$x];
+                $ctrlDoc = hash('sha256', rand().time().$file4->getClientOriginalName()).'.pdf';
+                $file4->move(public_path().'/img/SustanciaControlDoc/',$ctrlDoc);
+            }else{
+                $ctrlDoc = 'SustanciaControlDocDefault.pdf';
+            }
+
+            /*se verifica el rol de usuario para asignar un status al residuo*/
+            // FALTA antes: Programador y cliente
+
+            // if (in_array(Auth::user()->UsRol, Permisos::CLIENTEYADMINS)) {
+            //     $statusinicial="Pendiente";
+            // }
+            $respel->RespelName = $request['RespelName'][$x];
+            $respel->RespelDescrip = $request['RespelDescrip'][$x];
+            $respel->RespelIgrosidad = $request['RespelIgrosidad'][$x];
+            $respel->YRespelClasf4741 = $request['YRespelClasf4741'][$x];
+            $respel->ARespelClasf4741 = $request['ARespelClasf4741'][$x];
+            $respel->RespelEstado = $request['RespelEstado'][$x];
+
+            // se verifica si el residuo esta marcada como aceite usado 
+            if(isset($request['AceiteUsado'][$x])&&($request['AceiteUsado'][$x]==1)){
+                $respel->AceiteUsado = $request['AceiteUsado'][$x];
+              
+            }else {
+                $respel->AceiteUsado = 0;
+            }       
+
+          
+            
+            // se verifica si la sustancia esta marcada como controlada
+            if (isset($request['SustanciaControlada'][$x])&&($request['SustanciaControlada'][$x]==1)) {
+                $respel->SustanciaControlada = $request['SustanciaControlada'][$x];
+                $respel->SustanciaControladaTipo = $request['SustanciaControladaTipo'][$x];
+                $respel->SustanciaControladaNombre = $request['SustanciaControladaNombre'][$x];
+                $respel->SustanciaControladaDocumento = $ctrlDoc;
+            }else{
+                $respel->SustanciaControlada = 0;
+            }
+            if ($request['FK_SubCategoryRP'] == 'Agregado-Manual') {
+                $respel->RespelStatus = "Aprobado";
+            }else{
+                $respel->RespelStatus = "Aprobado";
+            }
+            // $respel->RespelStatus = $statusinicial;
+            $respel->RespelHojaSeguridad = $hoja;
+            $respel->RespelTarj = $tarj;
+            $respel->RespelFoto = $foto;
+            if (in_array(Auth::user()->UsRol, Permisos::CLIENTE)|| in_array(Auth::user()->UsRol, Permisos::AREALOGISTICA)){
+                $respel->FK_RespelCoti = $Cotizacion->ID_Coti;
+                $respel->RespelPublic = 0;
+            }else{
+                $respel->FK_RespelCoti = 1;
+                $respel->RespelPublic = 1;
+                $respel->FK_SubCategoryRP = $request['FK_SubCategoryRP'];
+            }
+            $respel->RespelSlug = hash('sha256', rand().time().$respel->RespelName);
+            $respel->RespelDelete = 0;
+            $respel->RespelDeclaracion = $request['RespelDeclaracion'][$x];
+            $respel->save();
+
+            $requerimiento = new Requerimiento();
+            $requerimiento->ofertado=1;
+            $requerimiento->FK_ReqRespel=$respel->ID_Respel;
+            $requerimiento->forevaluation=1;
+            $requerimiento->FK_ReqTrata=$request['RespelTratamiento'];
+            $requerimiento->ReqSlug= hash('md5', rand().time().$respel->ID_Respel);
+            $requerimiento->save();
+
+            $tratamiento = Tratamiento::where('ID_Trat', $request['RespelTratamiento'])->first();
+
+            $tarifa = new Tarifa();
+            $tarifa->TarifaFrecuencia='Servicio';
+            $tarifa->TarifaVencimiento='2025-11-15';
+            if ($tratamiento->TratName == 'Posconsumo luminarias') {
+                $tarifa->Tarifatipo='Unid';
+            }else{
+                $tarifa->Tarifatipo='Kg';
+            }
+            $tarifa->TarifaDelete=0;
+            $tarifa->FK_TarifaReq=$requerimiento->ID_Req;
+            $tarifa->save();
+
+            $rango = new Rango();
+            $rango->TarifaPrecio=1500;
+            $rango->TarifaDesde=1;
+            $rango->FK_RangoTarifa=$tarifa->ID_Tarifa;
+            $rango->save();
+
+            if($respel->RespelStatus === "Pendiente"){
+                /*se verifican los datos de las sede y y cliente segun el usuarios que registra el residuo*/
+                $respel['cliente'] = DB::table('personals')
+                    ->join('cargos', 'cargos.ID_Carg', 'personals.FK_PersCargo')
+                    ->join('areas', 'areas.ID_Area', 'cargos.CargArea')
+                    ->join('sedes', 'sedes.ID_Sede', 'areas.FK_AreaSede')
+                    ->join('clientes', 'clientes.ID_Cli', 'sedes.FK_SedeCli')
+                    ->where('personals.ID_Pers', Auth::user()->FK_UserPers)
+                    ->select(['sedes.SedeName', 'clientes.CliName', 'clientes.CliComercial'])
+                    ->first();
+
+                // se verifica si el cliente tiene comercial asignado
+                // se establece la lista de destinatarios
+                if ($respel['cliente']->CliComercial <> null) {
+                    $comercial = Personal::where('ID_Pers', $respel['cliente']->CliComercial)->first();
+                    $destinatarios = ['gerenteplanta@prosarc.com.co', 'dirtecnica@prosarc.com.co', $comercial->PersEmail];
+                }else{
+                    $comercial = "";
+                    $destinatarios = ['gerenteplanta@prosarc.com.co', 'dirtecnica@prosarc.com.co'];
+                }
+
+                $respel['comercial'] = $comercial;
+                $respel['personalcliente'] = Personal::where('ID_Pers', Auth::user()->FK_UserPers)->first();
+
+
+                // se envia un correo por cada residuo registrado
+               // Mail::to($destinatarios)->send(new ResiduoNuevo($respel));
+                // return new ResiduoNuevo($respel);
+            }
+        }
+
+        $log = new audit();
+        $log->AuditTabla="respels";
+        $log->AuditType="Nuevo respel";
+        $log->AuditRegistro=$respel->ID_Respel;
+        $log->AuditUser=Auth::user()->email;
+        $log->Auditlog=json_encode($request->all());
+        $log->save();
+
+        if (isset($subcategoria->SubCategoryRpName)) {
+            if ($subcategoria->SubCategoryRpName == 'Agregado-Manual') {
+                return redirect()->route('respels.index')->with('success', 'Residuo creado satisfactoriamente');
+            }else{
+                return redirect()->route('respels.index')->with('success', 'Residuo creado satisfactoriamente');
+            }
+        }else{
+            return redirect()->route('respels.index')->with('success', 'Residuo creado satisfactoriamente');
+        }
+    }
+    }
+

@@ -968,7 +968,7 @@ class VehicProgController extends Controller
 						// se establece la lista de destinatarios
 						if ($SolicitudServicio['cliente']->CliComercial <> null) {
 							$comercial = Personal::where('ID_Pers', $SolicitudServicio['cliente']->CliComercial)->first();
-							$destinatarios = ['dirtecnica@prosarc.com.co',
+							$destinatarios = [/*'dirtecnica@prosarc.com.co',*/
 												'asistentelogistica@prosarc.com.co',
 												'auxiliarlogistico@prosarc.com.co',
 												'recepcionpda@prosarc.com.co',
@@ -1236,11 +1236,12 @@ class VehicProgController extends Controller
 		$destinatarios = ['asistentelogistica@prosarc.com.co',
 							'auxiliarpda@prosarc.com.co',
 							'recepcionpda@prosarc.com.co',
+							'asistentepda@prosarc.com.co',
 							$comercial->PersEmail
 						];
 		if ($cantidadDeResiduosControlados > 0) {
 			//enviar notificacion de servicion con sustancia controladas
-			Mail::to('dirtecnica@prosarc.com.co')->cc(['sistemas@prosarc.com.co', 'logistica@prosarc.com.co', 'recepcionpda@prosarc.com.co', 'auxiliarpda@prosarc.com.co', 'jefedetratamiento@prosarc.com.co', 'asistentelogistica@prosarc.com.co', 'auxiliarlogistico@prosarc.com.co', 'conciliaciones@prosarc.com.co'])->send(new SustanciaControladaProgramada($email, $SolicitudServicio));
+			Mail::to('dirtecnica@prosarc.com.co')->cc(['sistemas@prosarc.com.co','asistentepda@prosarc.com.co', 'logistica@prosarc.com.co', 'recepcionpda@prosarc.com.co', 'auxiliarpda@prosarc.com.co', 'jefedetratamiento@prosarc.com.co', 'asistentelogistica@prosarc.com.co', 'auxiliarlogistico@prosarc.com.co', 'conciliaciones@prosarc.com.co'])->send(new SustanciaControladaProgramada($email, $SolicitudServicio));
 		}else{
 			array_push($destinatarios, 'dirtecnica@prosarc.com.co');
 		}

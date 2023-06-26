@@ -32,6 +32,7 @@
 						<table class="table table-bordered table-striped">
 							<thead>
 								<tr>
+									<th>Creado</th>
 									<th>Actualizado</th>
 									<th>{{trans('adminlte_lang::LangRespel.RespelName')}}</th>
 									<th>Tratamiento Ofertado</th>
@@ -79,6 +80,7 @@
 										<tr>
 									@endif
 									{{-- <td>{{ \Carbon\Carbon::parse($respel->updated_at)->diffForHumans() }}</td> --}}
+									<td>{{ $respel->created_at }}</td>
 									<td>{{ $respel->updated_at }}</td>
 									<td class="text-center">
 										@if($respel->SustanciaControlada == 1)

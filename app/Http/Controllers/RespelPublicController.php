@@ -36,20 +36,63 @@ class RespelPublicController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-         /*se accede a la lista de residuos comunes unicamente para prosarc*/
+    { 
+        /*se accede a la lista de residuos comunes unicamente para prosarc*/
         if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR)){
+
             $PublicRespels = Respel::with('SubcategoryRespelpublic.CategoryRP')
             ->where('RespelPublic', 1)
             ->get();
+
+            foreach ($PublicRespels as $key => $value) {
+                $requerimientos = Requerimiento::where('FK_ReqRespel', $PublicRespels[$key]->ID_Respel)
+                ->where('forevaluation', 1)
+                ->where('ofertado', 1)
+                ->first();
+
+                if (isset($requerimientos->FK_ReqTrata) && $requerimientos->ofertado == 1) {
+                    $tratamiento = Tratamiento::where('ID_Trat', $requerimientos->FK_ReqTrata)->first('TratName');
+                    if (isset($tratamiento->TratName)) {
+                        $PublicRespels[$key]->TratName = $tratamiento->TratName;
+                    }else{
+                        $PublicRespels[$key]->TratName = '';
+                    }
+                }else{
+                    $PublicRespels[$key]->TratName = '';
+                }
+
+            }
+
+    
         }else{
             $PublicRespels = Respel::with('SubcategoryRespelpublic.CategoryRP')
             ->where('RespelPublic', 1)
             ->where('RespelDelete', 0)
             ->get();
+
+            foreach ($PublicRespels as $key => $value) {
+                $requerimientos = Requerimiento::where('FK_ReqRespel', $PublicRespels[$key]->ID_Respel)
+                ->where('forevaluation', 1)
+                ->where('ofertado', 1)
+                ->first();
+
+                if (isset($requerimientos->FK_ReqTrata) && $requerimientos->ofertado == 1) {
+                    $tratamiento = Tratamiento::where('ID_Trat', $requerimientos->FK_ReqTrata)->first('TratName');
+                    if (isset($tratamiento->TratName)) {
+                        $PublicRespels[$key]->TratName = $tratamiento->TratName;
+                    }else{
+                        $PublicRespels[$key]->TratName = '';
+                    }
+                }else{
+                    $PublicRespels[$key]->TratName = '';
+                }
+
+            }
+            
+          
         }
-        // return $PublicRespels[0]->SubcategoryRespelpublic->CategoryRP->CategoryRpName;
-        // return $PublicRespels;
+        
+        // return $requerimiento
         return view('publicrespel.index', compact('PublicRespels')); 
         
     }
