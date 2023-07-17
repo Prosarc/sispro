@@ -415,7 +415,7 @@ class SolicitudServicioController extends Controller
 			$comercial = Personal::where('ID_Pers', $SolicitudServicio['cliente']->CliComercial)->first();
 			$destinatarios = ['logistica@prosarc.com.co',
 								'asistentelogistica@prosarc.com.co',
-								'subgerencia@prosarc.com.co',
+								'gestion@prosarc.com.co',
 								'recepcionpda@prosarc.com.co',
 								$comercial->PersEmail
 							 ];
@@ -423,7 +423,7 @@ class SolicitudServicioController extends Controller
 			$comercial = "";
 			$destinatarios = ['logistica@prosarc.com.co',
 								'asistentelogistica@prosarc.com.co',
-								'subgerencia@prosarc.com.co',
+								'gestion@prosarc.com.co',
 								'recepcionpda@prosarc.com.co'
 							 ];
 		}

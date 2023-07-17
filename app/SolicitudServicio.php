@@ -87,6 +87,11 @@ class SolicitudServicio extends Model
 		return $this->programaciones()->whereNotNull('ProgVehEntrada')->where('ProgVehDelete', 0);
 	}
 
+	public function programacionesrealizadas()
+	{
+		return $this->programaciones()->whereNotNull('ProgVehSalida')->where('ProgVehDelete', 0);
+	}
+
 	public function ultimorecordatorio()
 	{
 		return $this->Observaciones()->where('ObsStatus', 'Recordatorio+')->orderBy('ObsDate', 'desc')->first();

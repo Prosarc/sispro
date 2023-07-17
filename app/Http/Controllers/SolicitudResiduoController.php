@@ -646,12 +646,109 @@ class SolicitudResiduoController extends Controller
 					break;
 			}
 
-        	return view('reportes.index', compact('servicios'));
+        	return view('reportes.indextemp', compact('servicios'));
 		}else{
 			abort(503, "no tiene permisos para acceder a la pagina de reportes");
 		}
 	}
 
+	/**
+	 * Display a listing of the resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function reportesreg(Request $request)
+	{
+
+	return view('reportes.ReportRegular');
+
+	}
+	
+
+	/**
+	 * Display a listing of the resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function reportesRegulares(Request $request)
+	{
+	
+		$FechaInicial = $request->input('Fecha_Inicio');
+		$FechaFinal = $request->input('Fecha_Fin');	
+
+		if (in_array(Auth::user()->UsRol, Permisos::TODOPROSARC) || in_array(Auth::user()->UsRol, Permisos::TODOPROSARC)) {
+
+			switch (Auth::user()->UsRol) {
+				case ('Programador'):
+				case ('AdministradorBogota'):
+				case ('AdministradorPlanta'):
+				case ('AsistenteComercial'):
+				case ('JefeOperaciones'):
+				case ('Supervisor'):
+				case ('Tesorería'):
+				case ('AsistenteLogistica'):
+				case ('JefeLogistica'):
+					
+					$servicios = SolicitudServicio::with([
+						'SolicitudResiduo.generespel.respels',
+						'SolicitudResiduo.generespel.gener_sedes.generadors',
+						'SolicitudResiduo.certdato.certificado',
+						'cliente.comercialAsignado',
+						'SolicitudResiduo.requerimiento.tratamiento',
+						'programacionesrecibidas',
+						'programacionesrealizadas',
+					])
+					->join('progvehiculos', 'solicitud_servicios.ID_SolSer', '=', 'progvehiculos.FK_ProgServi')
+					//->select('progvehiculos.ProgVehSalida')
+					->whereBetween('progvehiculos.ProgVehSalida',[$FechaInicial, $FechaFinal])
+					->select('*')
+					->where('progvehiculos.ProgVehDelete', '=', 0)
+					->get();
+					break;	
+
+				case ('Comercial'):
+					$idcomercial = Auth::user()->persona->ID_Pers;
+					$servicios = SolicitudServicio::with([
+						'SolicitudResiduo.generespel.respels',
+						'SolicitudResiduo.generespel.gener_sedes.generadors',
+						'SolicitudResiduo.certdato.certificado',
+						'cliente.comercialAsignado',
+						'SolicitudResiduo.requerimiento.tratamiento',
+						'programacionesrecibidas',
+						'programacionesrealizadas',
+					])
+					->join('progvehiculos', 'solicitud_servicios.ID_SolSer', '=', 'progvehiculos.FK_ProgServi')
+					//->select('progvehiculos.ProgVehSalida')
+					->whereBetween('progvehiculos.ProgVehSalida',[$FechaInicial, $FechaFinal])
+					->get();
+					break;	
+					
+
+				default:
+				$servicios = SolicitudServicio::with([
+					'SolicitudResiduo.generespel.respels',
+					'SolicitudResiduo.generespel.gener_sedes.generadors',
+					'SolicitudResiduo.certdato.certificado',
+					'cliente.comercialAsignado',
+					'SolicitudResiduo.requerimiento.tratamiento',
+					'programacionesrecibidas',
+					'programacionesrealizadas',
+				])
+				->join('progvehiculos', 'solicitud_servicios.ID_SolSer', '=', 'progvehiculos.FK_ProgServi')
+				//->select('progvehiculos.ProgVehSalida')
+				->whereBetween('progvehiculos.ProgVehSalida',[$FechaInicial, $FechaFinal])
+				->get();
+				break;	
+			}
+
+			//return $FechaInicial;
+			//return $servicios;
+        	return view('reportes.Regular', compact('servicios'));
+		}else{
+			//return $FechaInicio;
+			abort(503, "no tiene permisos para acceder a la pagina de reportes");
+		}
+	}
     		/**
 	 * Update the specified resource in storage.
 	 *

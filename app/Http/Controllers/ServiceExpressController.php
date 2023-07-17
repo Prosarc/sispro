@@ -2319,7 +2319,9 @@ class ServiceExpressController extends Controller
 			// 		Mail::to('coordinadorse@prosarc.com.co')->send(new CertExpressSinSaldoEmail($email, $pdf, $certificado));
 			// 	}
 			// }
-            Mail::to('coordinadorse@prosarc.com.co')->send(new SolSerExpressEmail($email, $pdf, $certificado));
+
+			$destinatario = ['asesorse1@prosarc.com.co', 'asesorse2@prosarc.com.co'];
+            Mail::to('serviciosexpress@prosarc.com.co')->cc($destinatario)->send(new SolSerExpressEmail($email, $pdf, $certificado));
 		}
 
 		return redirect()->route('serviciosexpress.show', ['id' => $Solicitud->SolSerSlug]);
