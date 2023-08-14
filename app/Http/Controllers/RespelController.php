@@ -133,7 +133,7 @@ class RespelController extends Controller
                 ->select('sedes.ID_Sede')
                 ->where('personals.ID_Pers', Auth::user()->FK_UserPers)
                 ->get();
-            $tratamientos = Tratamiento::where('FK_TratProv', 1)->get();
+            $tratamientos = Tratamiento::select('*')->get();
 
             return view('respels.create', compact('Sede', 'tratamientos'));
         }elseif(in_array(Auth::user()->UsRol, Permisos::RESPELPUBLIC) || in_array(Auth::user()->UsRol2, Permisos::RESPELPUBLIC)){
@@ -142,7 +142,7 @@ class RespelController extends Controller
                 ->select('sedes.ID_Sede', 'clientes.CliName')
                 ->where('clientes.ID_Cli', '<>', 1)
                 ->get();
-            $tratamientos = Tratamiento::where('FK_TratProv', 1)->get();
+                $tratamientos = Tratamiento::select('*')->get();
             $categories = Categoryrespelpublic::all();
             return view('respels.create', compact('Sedes', 'categories', 'tratamientos'));
         }else{

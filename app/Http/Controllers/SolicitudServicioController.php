@@ -828,7 +828,7 @@ class SolicitudServicioController extends Controller
 			}
 		}
 		if (in_array(Auth::user()->UsRol, Permisos::SolSer1) || in_array(Auth::user()->UsRol, Permisos::SolSer1)) {
-			$tratamientos = Tratamiento::where('FK_TratProv', 1)->get();
+			$tratamientos = Tratamiento::select('*')->get();
 		}else{
 			$tratamientos = 'NoAutorizado';
 		}

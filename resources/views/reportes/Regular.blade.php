@@ -43,11 +43,11 @@
                                 <th>Nombre de residuo</th>
                                 <th>Corriente</th>
                                 <th>Tratamiento</th>
+                                <th>Gestor</th>
                                 <th>Cantidad Recibida</th>
                                 <th>Cantidad Conciliada Kg</th>
                                 <th>No. Certificado</th>
                                 <th>Empresa Transportadora</th>
-                                <th></th>
                                 <th></th>
                                 <th></th>
                                 <th></th>
@@ -89,6 +89,7 @@
                                             @endif
                                         </td>
                                         <td>{{$solres->requerimiento->tratamiento->TratName}}</td>
+                                        <td>{{$solres->requerimiento->tratamiento->gestor->clientes->CliShortname}}</td>
                                         <td>{{$solres->SolResKgRecibido}}</td>
                                         <td>{{$solres->SolResKgConciliado}}</td>
                                         @if ($solres->certdato)
@@ -101,7 +102,6 @@
                                         <td>Certificado no encontrado</td>
                                     @endif
                                         <td>{{$servicio->SolSerNameTrans}}</td>
-                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>

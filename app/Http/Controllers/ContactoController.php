@@ -57,7 +57,7 @@ class ContactoController extends Controller
             if (old('FK_SedeMun') !== null){
                 $Municipios = Municipio::select()->where('FK_MunCity', old('departamento'))->get();
             }
-            return view('contactos.create', compact('Departamentos', 'Municipios'));
+            return view('contactos.create', compact('Departamentos'));
         }else{
             abort(403);
         }

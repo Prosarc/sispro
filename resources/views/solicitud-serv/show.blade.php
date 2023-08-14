@@ -382,6 +382,9 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 											{{-- <th>Pretratamientos</th> --}}
 											<th>{{trans('adminlte_lang::message.solserembaja')}}</th> 
 											<th>{{trans('adminlte_lang::message.gener')}}</th>
+											@if(in_array(Auth::user()->UsRol, Permisos::TODOPROSARC)||in_array(Auth::user()->UsRol2, Permisos::TODOPROSARC))
+											<th>Gestor</th>
+											@endif
 											@if(in_array(Auth::user()->UsRol, Permisos::COMERCIAL)||in_array(Auth::user()->UsRol2, Permisos::COMERCIAL))
 												<th>Tarifa</th>
 											@endif
@@ -469,7 +472,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 														@endswitch
 														<i class="fas fa-marker"></i></a>
 													@endif
-													{{$Residuo->TratName}} {{in_array(Auth::user()->UsRol, Permisos::TODOPROSARC) ? '- '.$Residuo->CliShortName : ''}}</td>
+													{{$Residuo->TratName}} {{in_array(Auth::user()->UsRol, Permisos::TODOPROSARC) ? '-' .$Residuo->CliShortName : ''}}</td>
 												{{-- <td>
 													<ul>
 													@foreach($Residuo->pretratamientosSelected as $pretratamientoSelected)
@@ -490,6 +493,9 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 												@endforeach
 												<td>{{$Residuo->SolResEmbalaje}}</td>
 												<td><a title="Ver Generador" href="/sgeneradores/{{$GenerResiduo->GSedeSlug}}" target="_blank"><i class="fas fa-external-link-alt"></i></a> {{$GenerResiduo->GenerName.' ('.$GenerResiduo->GSedeName.')'}}</td>
+												@if(in_array(Auth::user()->UsRol, Permisos::TODOPROSARC)||in_array(Auth::user()->UsRol2, Permisos::TODOPROSARC))
+												<td>{{$Residuo->CliShortName}} </td>
+												@endif
 												@if(in_array(Auth::user()->UsRol, Permisos::COMERCIAL)||in_array(Auth::user()->UsRol2, Permisos::COMERCIAL))
 													<td style="text-align: center;">
 														@if($SolicitudServicio->SolSerStatus === 'Completado' || $SolicitudServicio->SolSerStatus === 'No Conciliado' || $SolicitudServicio->SolSerStatus === 'Conciliado' || $SolicitudServicio->SolSerStatus === 'Tratado' || $SolicitudServicio->SolSerStatus === 'Facturado' || $SolicitudServicio->SolSerStatus === 'Certificacion')

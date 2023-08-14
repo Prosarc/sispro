@@ -695,6 +695,7 @@ class SolicitudResiduoController extends Controller
 						'SolicitudResiduo.certdato.certificado',
 						'cliente.comercialAsignado',
 						'SolicitudResiduo.requerimiento.tratamiento',
+						'SolicitudResiduo.requerimiento.tratamiento.gestor.clientes',
 						'programacionesrecibidas',
 						'programacionesrealizadas',
 					])
@@ -714,12 +715,14 @@ class SolicitudResiduoController extends Controller
 						'SolicitudResiduo.certdato.certificado',
 						'cliente.comercialAsignado',
 						'SolicitudResiduo.requerimiento.tratamiento',
+						'SolicitudResiduo.requerimiento.tratamiento.gestor.clientes',
 						'programacionesrecibidas',
 						'programacionesrealizadas',
 					])
 					->join('progvehiculos', 'solicitud_servicios.ID_SolSer', '=', 'progvehiculos.FK_ProgServi')
 					//->select('progvehiculos.ProgVehSalida')
 					->whereBetween('progvehiculos.ProgVehSalida',[$FechaInicial, $FechaFinal])
+					->select('*')
 					->get();
 					break;	
 					
@@ -731,12 +734,14 @@ class SolicitudResiduoController extends Controller
 					'SolicitudResiduo.certdato.certificado',
 					'cliente.comercialAsignado',
 					'SolicitudResiduo.requerimiento.tratamiento',
+					'SolicitudResiduo.requerimiento.tratamiento.gestor.clientes',
 					'programacionesrecibidas',
 					'programacionesrealizadas',
 				])
 				->join('progvehiculos', 'solicitud_servicios.ID_SolSer', '=', 'progvehiculos.FK_ProgServi')
 				//->select('progvehiculos.ProgVehSalida')
 				->whereBetween('progvehiculos.ProgVehSalida',[$FechaInicial, $FechaFinal])
+				->select('*')
 				->get();
 				break;	
 			}
