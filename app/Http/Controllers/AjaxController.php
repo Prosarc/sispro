@@ -1143,6 +1143,7 @@ class AjaxController extends Controller
 
 					case 'AdministradorPlanta':
 						($certificado->CertAuthDp == 0) ? $certificado->CertAuthDp = 1 : $certificado->CertAuthDp = 0;
+						($certificado->CertAuthJl == 0) ? $certificado->CertAuthJl = 2 : $certificado->CertAuthJl = 0;
 						break;
 
 					case 'Supervisor':
