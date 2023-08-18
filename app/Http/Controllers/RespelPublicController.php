@@ -68,6 +68,7 @@ class RespelPublicController extends Controller
             $PublicRespels = Respel::with('SubcategoryRespelpublic.CategoryRP')
             ->where('RespelPublic', 1)
             ->where('RespelDelete', 0)
+            ->where('FK_SubCategoryRP', 1)
             ->get();
 
             foreach ($PublicRespels as $key => $value) {
@@ -513,7 +514,7 @@ class RespelPublicController extends Controller
         $newRespel = $PublicRespel->replicate();
         $newRespel->RespelSlug = hash('sha256', rand().time().$PublicRespel->RespelName);
         $newRespel->RespelPublic = 0;
-        $newRespel->RespelStatus = 'Evaluado';
+        $newRespel->RespelStatus ='Aprobado';
         $newRespel->FK_RespelCoti = $Cotizacion->ID_Coti;
         $newRespel->save();
 
