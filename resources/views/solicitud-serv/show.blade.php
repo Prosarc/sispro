@@ -458,11 +458,11 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 															@case('Notificado')
 															@case('Completado')
 															@case('No Conciliado')
-																<a onclick="changeTratamiento(`{{$Residuo->SolResSlug}}`, `{{$Residuo->ID_Trat}}`, `{{$Residuo->TratName}}`, `{{$Residuo->FK_SolResRequerimiento}}`, `{{$SolicitudServicio->SolSerSlug}}`)">
-																@break
 															@case('Conciliado')
 															@case('Certificacion')
 															@case('Certificado')
+																<a onclick="changeTratamiento(`{{$Residuo->SolResSlug}}`, `{{$Residuo->ID_Trat}}`, `{{$Residuo->TratName}}`, `{{$Residuo->FK_SolResRequerimiento}}`, `{{$SolicitudServicio->SolSerSlug}}`)">
+																@break															
 															@case('Tratado')
 															@case('Facturado')
 																<a style="color: black">

@@ -18,7 +18,7 @@
                         <h1><center>Servicios Regulares</center></h1></center>     
                      </div>
                     <div>
-                        <center><a href=""><img src="img/EXPRESS.jpg" class="img-circle" alt="Cinque Terre" width="240" height="236"></a>
+                        <center><a href="{{ route('reportes.ReporteExpress')}}"><img src="img/EXPRESS.jpg" class="img-circle" alt="Cinque Terre" width="240" height="236"></a>
                          <br>
                         <h1><center>Servicios Express</center></h1></center>          
                     </div>

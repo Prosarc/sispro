@@ -166,9 +166,12 @@ Route::middleware(['web', 'auth', 'verified', 'bindings'])->group(function () {
 	Route::put('/solicitud-residuo/{id}/corregirSolResExpress', 'SolicitudResiduoController@corregirSolResExpress');
 	Route::put('/solicitud-residuo/{id}/UpdatePrice', 'SolicitudResiduoController@updateSolResPrice');
 	//Rutas para reportes
-	Route::get('/reportes', 'SolicitudResiduoController@reportes')->name('solicitud-residuos.reportes');
+	//Route::get('/reportes.indextemp', 'SolicitudResiduoController@reportes');
+	Route::get('/reportes.indextemp',  ['as'=> 'reportes.indextemp', 'uses' =>'SolicitudResiduoController@reportes']);	
 	Route::get('/reportes.ReporteRegular', ['as'=> 'reportes.ReporteRegular', 'uses' => 'SolicitudResiduoController@reportesreg']);
+	Route::get('/reportes.ReporteExpress', ['as'=> 'reportes.ReporteExpress', 'uses' => 'SolicitudResiduoController@reportesexpress']);
 	Route::post('/reportes/regular', 'SolicitudResiduoController@reportesRegulares');
+	Route::post('/reportes/express', 'SolicitudResiduoController@reportesExpr');
 	//Route::post('/guardar-datos', 'SolicitudResiduoController@GuardarDatosRegulares')->name('guardar.datos');	
 	Route::get('/reportes.ReporteDatos', ['as'=> 'reportes.ReporteDatos', 'uses' => 'SolicitudResiduoController@reportesRegularesDatos']);	
 	Route::resource('/solicitud-servicio', 'SolicitudServicioController');

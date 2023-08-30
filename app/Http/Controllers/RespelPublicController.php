@@ -525,7 +525,7 @@ class RespelPublicController extends Controller
                 $newrequerimiento = $requerimiento->replicate();
                 $newrequerimiento->ReqSlug = hash('md5', rand().time().$newRespel->ID_Respel);
                 $newrequerimiento->FK_ReqRespel = $newRespel->ID_Respel;
-                $newrequerimiento->ofertado = 0;
+                $newrequerimiento->ofertado = 1;
                 $newrequerimiento->save();
 
                 foreach($requerimiento->pretratamientosSelected as $pretratamientoSelected)

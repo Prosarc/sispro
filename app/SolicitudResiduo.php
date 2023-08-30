@@ -43,6 +43,11 @@ class SolicitudResiduo extends Model{
     	return $this->hasOne('App\Certdato', 'FK_DatoCertSolRes', 'ID_SolRes');
     }
 
+    public function certdatoexpress()
+    {
+    	return $this->hasOne('App\CertExpressdato', 'FK_DatoCertSolRes', 'ID_SolRes');
+    }
+
      /**
      * The attributes that should be cast to native types.
      *
