@@ -829,7 +829,10 @@ class SolicitudServicioController extends Controller
 			}
 		}
 		if (in_array(Auth::user()->UsRol, Permisos::SolSer1) || in_array(Auth::user()->UsRol, Permisos::SolSer1)) {
-			$tratamientos = Tratamiento::select('*')->get();
+			$tratamientos = Tratamiento::join('sedes', 'sedes.ID_Sede', '=', 'tratamientos.FK_TratProv')
+			->join('clientes', 'clientes.ID_Cli', '=', 'sedes.FK_SedeCli')
+			->select('*')
+			->get();
 		}else{
 			$tratamientos = 'NoAutorizado';
 		}
@@ -857,18 +860,18 @@ class SolicitudServicioController extends Controller
             case 'Residuo Faltante':
             case 'Notificado':
             case 'Programado':
-				//return $PublicRespels;
+				//return $tratamientos;
 		       return view('solicitud-serv.show', compact('SolicitudServicio','Residuos', 'GenerResiduos', 'Cliente', 'SolSerCollectAddress', 'SolSerConductor', 'TextProgramacion', 'Municipio', 'Programaciones', 'ProgramacionesActivas', 'total', 'cantidadesXtratamiento', 'tratamientos', 'Observaciones', 'PublicRespels'));
                 break;
 
             case 'Corregido':
             case 'Completado':
-				//return $PublicRespels;
+			//	return $tratamientos;
 		       return view('solicitud-serv.show', compact('SolicitudServicio','Residuos', 'GenerResiduos', 'Cliente', 'SolSerCollectAddress', 'SolSerConductor', 'TextProgramacion', 'Municipio', 'Programaciones', 'total', 'cantidadesXtratamiento', 'tratamientos', 'Observaciones', 'ultimoRecordatorio', 'PublicRespels'));
                 break;
 
             default:
-			//return $PublicRespels;
+			//return $tratamientos;
        		return view('solicitud-serv.show', compact('SolicitudServicio','Residuos', 'GenerResiduos', 'Cliente', 'SolSerCollectAddress', 'SolSerConductor', 'TextProgramacion', 'Municipio', 'Programaciones', 'total', 'cantidadesXtratamiento', 'tratamientos', 'Observaciones', 'PublicRespels'));
                 break;
         }

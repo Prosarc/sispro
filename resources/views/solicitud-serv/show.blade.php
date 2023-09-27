@@ -1212,7 +1212,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 														<option value="`+idTrat+`">`+tratName+`</option>
 													@else
 														@foreach ($tratamientos as $tratamiento)
-															<option value="{{$tratamiento->ID_Trat}}">{{$tratamiento->TratName}}</option>
+															<option value="{{$tratamiento->ID_Trat}}">{{$tratamiento->TratName}} {{in_array(Auth::user()->UsRol, Permisos::TODOPROSARC) ? '-' .$tratamiento->CliShortname : ''}}</option>
 														@endforeach
 													@endif
 												</select>
