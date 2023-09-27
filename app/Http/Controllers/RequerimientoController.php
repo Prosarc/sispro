@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;   
 use App\Requerimiento;
+use App\Certificado;
 use App\Respel;
 use App\audit;
 use App\Tratamiento;
@@ -149,7 +150,7 @@ class RequerimientoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function updateTrat(Request $request, $id, $servicio)
+    public function updateTrat(Request $request, $id, $servicio, $ID_SolSer)
     {
         // return $request;
 
@@ -161,6 +162,10 @@ class RequerimientoController extends Controller
         $Requerimiento->FK_ReqTrata = $request->FK_ReqTrata;
         $Requerimiento->save();
 
+        $Certificado = Certificado::where('FK_CertSolser', $ID_SolSer)->first();
+        $Certificado->FK_CertTrat =  $request->FK_ReqTrata;
+        $Certificado->save();
+
         $log = new audit();
         $log->AuditTabla="requerimientos";
         $log->AuditType="Modificado";
@@ -168,6 +173,16 @@ class RequerimientoController extends Controller
         $log->AuditUser=Auth::user()->email;
         $log->Auditlog=$request->all();
         $log->save();
+
+        $log = new audit();
+        $log->AuditTabla="certificados";
+        $log->AuditType="Modificado";
+        $log->AuditRegistro=$Certificado->FK_CertSolser;
+        $log->AuditUser=Auth::user()->email;
+        $log->Auditlog=$request->all();
+        $log->save();
+        
+        //return $Certificado;
         // return redirect()->route('respels.index');
         return redirect()->route('solicitud-servicio.show', $servicio);
     }

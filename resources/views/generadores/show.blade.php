@@ -43,7 +43,7 @@
 								</form>
 							@endif
 						@else
-							@if (in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol2, Permisos::PROGRAMADOR))
+							@if (in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol2, Permisos::AREALOGISTICA))
 								<form action='/generadores/{{$Generador->GenerSlug}}' method='POST' class="pull-left">
 									@method('DELETE')
 									@csrf

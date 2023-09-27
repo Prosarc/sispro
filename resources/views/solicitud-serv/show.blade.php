@@ -461,7 +461,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 															@case('Conciliado')
 															@case('Certificacion')
 															@case('Certificado')
-																<a onclick="changeTratamiento(`{{$Residuo->SolResSlug}}`, `{{$Residuo->ID_Trat}}`, `{{$Residuo->TratName}}`, `{{$Residuo->FK_SolResRequerimiento}}`, `{{$SolicitudServicio->SolSerSlug}}`)">
+																<a onclick="changeTratamiento(`{{$Residuo->SolResSlug}}`, `{{$Residuo->ID_Trat}}`, `{{$Residuo->TratName}}`, `{{$Residuo->FK_SolResRequerimiento}}`, `{{$SolicitudServicio->SolSerSlug}}`, `{{$SolicitudServicio->ID_SolSer}}`)">
 																@break															
 															@case('Tratado')
 															@case('Facturado')
@@ -1167,10 +1167,10 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 {{-- funciones para el modal de cambio de trtamiento --}}
 @if(in_array(Auth::user()->UsRol, Permisos::SolSer1) || in_array(Auth::user()->UsRol2, Permisos::SolSer1))
 	<script>
-		function changeTratamiento(slug, idTrat, tratName, idReq, solServicio){
+		function changeTratamiento(slug, idTrat, tratName, idReq, solServicio, ID_SolSer){
 			$('#changetratmodal').empty();
 			$('#changetratmodal').append(`
-				<form role="form" action="../requerimientos/`+idReq+`/updateTrat/`+solServicio+`" method="POST" data-toggle="validator" id="FormChangeTrat">
+				<form role="form" action="../requerimientos/`+idReq+`/updateTrat/`+solServicio+`/`+ID_SolSer+`" method="POST" data-toggle="validator" id="FormChangeTrat">
 					@method('PUT')
 					@csrf
 					<div class="modal modal-default fade in" id="ChangeTrat" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

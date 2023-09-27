@@ -61,6 +61,7 @@ class VehicProgController extends Controller
 					}
 				})
 				->where('clientes.CliCategoria', 'Cliente')
+				->whereYear('progvehiculos.ProgVehFecha','2023')
 				->get();
 			$personals = DB::table('personals')
 				->select('ID_Pers', 'PersFirstName', 'PersLastName')

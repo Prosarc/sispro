@@ -111,6 +111,7 @@ class SolicitudServicioController extends Controller
 				}
 			})
 			->where('CliCategoria', 'Cliente')
+			->whereYear('solicitud_servicios.created_at','2022')
 			// ->where('ID_SolSer', 37455)
 			->orderBy('created_at', 'desc')
 			->get();

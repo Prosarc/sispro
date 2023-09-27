@@ -1244,6 +1244,7 @@ class RespelController extends Controller
                 }
             })
             ->where('clientes.CliCategoria', 'ClientePrepago')
+            ->whereYear('respels.created_at','2023')
             ->get();
 
             foreach ($Respels as $key => $value) {

@@ -226,7 +226,7 @@ Route::middleware(['web', 'auth', 'verified', 'bindings'])->group(function () {
 	// Route::resource('/asistencias', 'AsistenciaController');
 	Route::resource('/recurso', 'RecursoController');
 	Route::resource('/requerimientos', 'RequerimientoController');
-	Route::put('/requerimientos/{id}/updateTrat/{servicio}', 'RequerimientoController@updateTrat')->name('requerimientos.updateTrat');
+	Route::put('/requerimientos/{id}/updateTrat/{servicio}/{ID_SolSer}', 'RequerimientoController@updateTrat')->name('requerimientos.updateTrat');
 	Route::resource('/holidays', 'holidayController');
 	Route::resource('/cotizacion', 'CotizacionController');
 	Route::resource('/tarifas', 'TarifaController');

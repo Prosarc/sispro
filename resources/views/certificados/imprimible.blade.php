@@ -335,7 +335,7 @@ style='font-size:7.5pt;font-family:"Arial",sans-serif;color:#0D0D0D'>&nbsp;</spa
   </td>
  </tr>
  <tr style='height:8.05pt'>
-  <td width=368 colspan=3 style='width:276.05pt;border:solid gray 0.5pt;
+  <td width=368 colspan=2 style='width:276.05pt;border:solid gray 0.5pt;
   border-top:none;padding:0cm 5.4pt 0cm 5.4pt;height:8.05pt'>
   <p class=MsoNormal align=center style='text-align:center'><b><span lang=ES
   style='font-size:7.5pt;font-family:"Arial",sans-serif;color:#0D0D0D'>RESIDUO</span></b></p>
@@ -345,6 +345,12 @@ style='font-size:7.5pt;font-family:"Arial",sans-serif;color:#0D0D0D'>&nbsp;</spa
   height:8.05pt'>
   <p class=MsoNormal align=center style='text-align:center'><b><span lang=ES
   style='font-size:7.5pt;font-family:"Arial",sans-serif;color:#0D0D0D'>CORRIENTE</span></b></p>
+  </td>
+  <td width=76 style='width:56.65pt;border-top:none;border-left:none;
+  border-bottom:solid gray 0.5pt;border-right:solid gray 0.5pt;padding:0cm 5.4pt 0cm 5.4pt;
+  height:8.05pt'>
+  <p class=MsoNormal align=center style='text-align:center'><b><span lang=ES
+  style='font-size:7.5pt;font-family:"Arial",sans-serif;color:#0D0D0D'>ESTADO</span></b></p>
   </td>
   <td width=66 style='width:49.8pt;border-top:none;border-left:none;border-bottom:
   solid gray 0.5pt;border-right:solid gray 0.5pt;padding:0cm 5.4pt 0cm 5.4pt;
@@ -361,7 +367,7 @@ $totalKg = 0;
 @if($Residuo->ID_SolRes == $certdato->FK_DatoCertSolRes)
  </tr>
  <tr style='height:8.05pt'>
-  <td width=368 colspan=3 valign=top style='width:276.05pt;border:solid gray 0.5pt;
+  <td width=368 colspan=2 valign=top style='width:276.05pt;border:solid gray 0.5pt;
   border-top:none;padding:0cm 5.4pt 0cm 5.4pt;height:8.05pt'>
   <p class=MsoNormal><span lang=ES style='font-size:7.5pt;font-family:"Arial",sans-serif;
   color:#333333'>{{$Residuo->generespel->respels->RespelName}}</span></p>
@@ -376,6 +382,14 @@ $totalKg = 0;
   @else
   {{$Residuo->generespel->respels->YRespelClasf4741}}{{$Residuo->generespel->respels->ARespelClasf4741}}
   @endif
+  </span></p>
+  </td>
+  <td width=76 valign=top style='width:56.65pt;border-top:none;border-left:
+  none;border-bottom:solid gray 0.5pt;border-right:solid gray 0.5pt;
+  padding:0cm 5.4pt 0cm 5.4pt;height:8.05pt'>
+  <p class=MsoNormal align=center style='text-align:center'><span lang=ES
+  style='font-size:7.5pt;font-family:"Arial",sans-serif;color:#333333'>
+  {{$Residuo->generespel->respels->RespelEstado}}
   </span></p>
   </td>
   <td width=66 valign=top style='width:49.8pt;border-top:none;border-left:none;

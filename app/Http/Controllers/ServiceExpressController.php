@@ -119,6 +119,7 @@ class ServiceExpressController extends Controller
                 }
 			})
 			->where('CliCategoria', 'ClientePrepago')
+			->whereYear('solicitud_servicios.created_at','2022')
 			->orderBy('created_at', 'desc')
 			->get();
 		foreach ($Servicios as $servicio) {
