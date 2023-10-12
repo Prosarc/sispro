@@ -31,8 +31,7 @@ class EmailController extends Controller
                             ->first();
 
                         $comercial = Personal::where('ID_Pers', $email->CliComercial)->first();
-                        $destinatarios = ['asistentelogistica@prosarc.com.co',
-                                            'recepcionpda@prosarc.com.co',
+                        $destinatarios = ['logistica@prosarc.com.co',
                                             'conciliaciones@prosarc.com.co',
                                             'ingtratamiento1@prosarc.com.co',
                                             'ingtratamiento2@prosarc.com.co',
@@ -40,7 +39,9 @@ class EmailController extends Controller
                                             'jefedetratamiento@prosarc.com.co',
                                             $comercial->PersEmail
                                         ];
-                        $destinatarioscc = ['auxiliarpda@prosarc.com.co'];
+                        $destinatarioscc = ['auxiliarpda@prosarc.com.co',
+                                            'asistentepda@prosarc.com.co'
+                                            ];
                         Mail::to($destinatarios)
                         ->cc($destinatarioscc)
                         ->send(new SolSerEmailClient($email));
@@ -66,7 +67,6 @@ class EmailController extends Controller
                                             'ingtratamiento3@prosarc.com.co',
                                             'dirtecnica@prosarc.com.co',
                                             'conciliaciones@prosarc.com.co',
-                                            'recepcionpda@prosarc.com.co',
                                             'asistentedplanta@prosarc.com.co',
                                             'jefedetratamiento@prosarc.com.co'
                                         ];
@@ -91,7 +91,6 @@ class EmailController extends Controller
                                                 'ingtratamiento2@prosarc.com.co',
                                                 'ingtratamiento3@prosarc.com.co',
                                                 'conciliaciones@prosarc.com.co',
-                                                'recepcionpda@prosarc.com.co',
                                                 'asistentedplanta@prosarc.com.co',
                                                 'jefedetratamiento@prosarc.com.co'
                                             ];
@@ -145,7 +144,6 @@ class EmailController extends Controller
                     $destinatarios = ['dirtecnica@prosarc.com.co',
                                         'auxiliarlogistico@prosarc.com.co',
                                         'auxiliarpda@prosarc.com.co',
-                                        'recepcionpda@prosarc.com.co',
                                         'conciliaciones@prosarc.com.co',
                                         $comercial->PersEmail
                                     ];
@@ -173,8 +171,7 @@ class EmailController extends Controller
                         ->where('solicitud_servicios.SolSerSlug', '=', $SolSer->SolSerSlug)
                         ->first();
 
-                    $destinatarios = ['recepcionpda@prosarc.com.co',
-                                    'conciliaciones@prosarc.com.co',
+                    $destinatarios = ['conciliaciones@prosarc.com.co',
                                     'asistentepda@prosarc.com.co',
                                     $email->PersEmail];
 
@@ -198,7 +195,6 @@ class EmailController extends Controller
                         ->first();
                     $comercial = Personal::where('ID_Pers', $email->CliComercial)->first();
                     $destinatarios = ['asistentedplanta@prosarc.com.co',
-                                        'recepcionpda@prosarc.com.co',
                                         'dirtecnica@prosarc.com.co',
                                         'conciliaciones@prosarc.com.co',
                                         $comercial->PersEmail
@@ -221,8 +217,7 @@ class EmailController extends Controller
 
                     $comercial = Personal::where('ID_Pers', $email->CliComercial)->first();
 
-                    $destinatarios = ['recepcionpda@prosarc.com.co',
-                                    'conciliaciones@prosarc.com.co',
+                    $destinatarios = ['conciliaciones@prosarc.com.co',
                                     $comercial->PersEmail];
 
                     if ($SolSer->SolServMailCopia !== "null") {
