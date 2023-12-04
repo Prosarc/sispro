@@ -15,6 +15,7 @@ class AddColumnsSolicitudServiciosTable extends Migration
     {
         Schema::table('solicitud_servicios', function (Blueprint $table) {
             $table->string('SolResAuditoriaTipo', 16)->nullable();
+            $table->date('SolSerFecha')->nullable();
             $table->string('SolSerNameTrans')->nullable();
             $table->string('SolSerNitTrans')->nullable();
             $table->string('SolSerAdressTrans')->nullable();
@@ -35,6 +36,7 @@ class AddColumnsSolicitudServiciosTable extends Migration
             $table->foreign('FK_SolSerCliente')->references('ID_Cli')->on('clientes');
             $table->foreign('FK_SolSerCollectMun')->references('ID_Mun')->on('municipios')->onDelete('set null');
             $table->foreign('SolSerCityTrans')->references('ID_Mun')->on('municipios')->onDelete('set null');
+            $table->string('SolNumeroFactura', 20)->nullable();
             $table->engine = 'InnoDB';
             $table->charset = 'utf8';
             $table->collation = 'utf8_unicode_ci';

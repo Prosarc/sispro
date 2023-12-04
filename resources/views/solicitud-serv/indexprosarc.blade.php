@@ -28,6 +28,7 @@
                                     <th>{{trans('adminlte_lang::message.solsershowdateRPDA')}}</th>
                                     <th>N°</th>
                                     <th nowrap>Status</th>
+                                    <th>Factura</th>
                                     <th>{{trans('adminlte_lang::message.clientcliente')}}</th>
                                     <th>Contacto</th>
                                     <th>Comercial Asignado</th>
@@ -111,6 +112,7 @@
                                     @default
                                     <td class="text-center"><a class='btn fixed_widthbtn btn-primary'><i class='fas fa-lg fa-ban'></i></a><br>{{$Servicio->SolSerStatus}}</td>
                                     @endswitch
+                                    <td>{{$Servicio->SolNumeroFactura}}</td>
                                     <td>{{$Servicio->CliName}}</td>
                                     <td>
                                         <ul>

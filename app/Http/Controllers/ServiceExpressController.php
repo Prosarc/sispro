@@ -1777,7 +1777,7 @@ class ServiceExpressController extends Controller
 	 */
 	public function addRespel($id)
 	{
-		if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR)){
+		if(in_array(Auth::user()->UsRol, Permisos::CONDUCTOREXPRESS) || in_array(Auth::user()->UsRol, Permisos::CONDUCTOREXPRESS)){
 			$Solicitud = SolicitudServicio::where('SolSerSlug', $id)->first();
 			if (!$Solicitud) {
 				abort(404);

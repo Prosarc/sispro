@@ -43,14 +43,14 @@
                                 <th>Nombre de residuo</th>
                                 <th>Corriente</th>
                                 <th>Tratamiento</th>
+                                <th>Estado</th>
                                 <th>Gestor</th>
                                 <th>Cantidad Recibida</th>
                                 <th>Cantidad Conciliada Kg</th>
                                 <th>No. Certificado</th>
                                 <th>Empresa Transportadora</th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
+                                <th>Dirección Empresa Transportadora</th>
+                                <th>Municipio Empresa Transportadora</th>
                                 <th></th>
                                 <th></th>
                                 <th></th>
@@ -79,6 +79,7 @@
                                         <td>{{$solres->generespel->gener_sedes->GSedeAddress}}</td>
                                         <td>{{$solres->generespel->gener_sedes->municipio->MunName}}</td>
                                         <td>{{$solres->generespel->respels->RespelName}}</td>
+                                        <td>{{$solres->generespel->respels->RespelEstado}}</td>   
                                         <td>
                                             @if($solres->generespel->respels->YRespelClasf4741 <> null)
                                                 {{$solres->generespel->respels->YRespelClasf4741}}
@@ -102,9 +103,8 @@
                                         <td>Certificado no encontrado</td>
                                     @endif
                                         <td>{{$servicio->SolSerNameTrans}}</td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td>{{$servicio->SolSerAdressTrans}}</td>
+                                        <td>{{$servicio->Municipio->MunName}}</td>
                                         <td></td>
                                         <td></td>
                                         <td></td>

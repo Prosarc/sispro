@@ -87,6 +87,10 @@ class SolServStoreRequest extends FormRequest
                             'AddressCollect'           => 'required|max:255',
                             'municipio2'               => ['required',Rule::exists('municipios', 'ID_Mun')],
                         ];
+                    } if($request->input('SolSerTypeCollect') == null){
+                        $rules = [
+                            'SolSerFecha'      => 'required',
+                            ];
                     }
                 }
                 break;

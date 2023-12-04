@@ -173,6 +173,10 @@ Route::middleware(['web', 'auth', 'verified', 'bindings'])->group(function () {
 	Route::post('/reportes/regular', 'SolicitudResiduoController@reportesRegulares');
 	Route::post('/reportes/express', 'SolicitudResiduoController@reportesExpr');
 	//Route::post('/guardar-datos', 'SolicitudResiduoController@GuardarDatosRegulares')->name('guardar.datos');	
+	
+	//Route::post('/solicitud-servicio/{id}/NumFactura', [SolicitudServicioController::class, 'NumFactura'])->name('NumFactura.dato');
+	Route::put('/solicitud-servicio/{id}/NumFactura', 'SolicitudServicioController@NumFactura');
+	
 	Route::get('/reportes.ReporteDatos', ['as'=> 'reportes.ReporteDatos', 'uses' => 'SolicitudResiduoController@reportesRegularesDatos']);	
 	Route::resource('/solicitud-servicio', 'SolicitudServicioController');
 	Route::post('/solicitud-servicio/changestatus', 'SolicitudServicioController@changestatus');

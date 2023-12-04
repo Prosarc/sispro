@@ -130,6 +130,11 @@ Solicitud de servicio N° {{$Solicitud->ID_SolSer}}
 										<label for="SolSerVehiculo">{{ trans('adminlte_lang::message.solservehic') }}</label>
 										<input type="text" class="form-control placa" id="SolSerVehiculo" name="SolSerVehiculo" value="">
 									</div>
+									<div id="Fecha" class="form-group col-md-6" hidden="true">
+										<small class="help-block with-errors">*</small>
+										<label for="SolSerFecha">Fecha llegada a Planta</label>
+										<input type="date" class="form-control fecha" id="SolSerFecha" name="SolSerFecha" value="{{old('SolSerFecha')}}" required="">
+									</div>
 									<div id="typeaditable" class="form-group col-md-12">
 										<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.solserpersonal') }}</b>" data-content="{{ trans('adminlte_lang::message.solserpersonaldescript') }}"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{ trans('adminlte_lang::message.solseraudi') }}</label>
 										<small class="help-block with-errors">*</small>

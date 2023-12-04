@@ -1194,7 +1194,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 				`);
 			@endif
 
-            @if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR)||in_array(Auth::user()->UsRol2, Permisos::PROGRAMADOR))
+            @if(in_array(Auth::user()->UsRol, Permisos::CONDUCTOREXPRESS)||in_array(Auth::user()->UsRol2, Permisos::CONDUCTOREXPRESS))
 				$('#titulo').append(`
                     <a href='/serviciosexpress/{{$SolicitudServicio->SolSerSlug}}/add-respel ' style="margin-right:1em;" class="btn btn-warning pull-right"><i class="fas fa-exclamation-triangle"></i> Añadir Residuo </a>
                 `);
@@ -1221,7 +1221,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 						<h4><b>{{trans('adminlte_lang::message.solsertitle')}}</b></h4>
 				`);
 			@endif
-			@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || Auth::user()->email == 'logistica@prosarc.com.co')
+			@if(in_array(Auth::user()->UsRol, Permisos::CONDUCTOREXPRESS) || Auth::user()->email == 'logistica@prosarc.com.co')
 				$('#titulo').append(`
 				<div class="btn-group" style="float: left;">
 					<button type="button" style="margin-right:1em;" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -1297,7 +1297,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 		@break
 		@case('Residuo Faltante')
 			$('#titulo').empty();
-			@if(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
+			@if(in_array(Auth::user()->UsRol, Permisos::CONDUCTOREXPRESS) || in_array(Auth::user()->UsRol, Permisos::CONDUCTOREXPRESS))
 				$('#titulo').append(`
 					<a href="/serviciosexpress/{{$SolicitudServicio->SolSerSlug}}/add-respel" class="btn btn-primary pull-right"><i class="fas fa-plus"></i><b> Añadir Residuo</b></a>
 				`);
@@ -1405,7 +1405,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 					</div>
 				`);
 			@endif
-			@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol2, Permisos::PROGRAMADOR))
+			@if(in_array(Auth::user()->UsRol, Permisos::CONDUCTOREXPRESS) || in_array(Auth::user()->UsRol2, Permisos::CONDUCTOREXPRESS))
 				$('#titulo').append(`
 					<a href='#' onclick="ModalCertificar('{{$SolicitudServicio->SolSerSlug}}', 'Certificacion')" style="float: right;" class="btn btn-success"><i class="fas fa-clipboard-check"></i> Certificar</a>
 				`);
@@ -1484,7 +1484,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 			$('#titulo').append(`
 				<b>{{trans('adminlte_lang::message.solsershowcertifica')}}</b>
 			`);
-			@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol2, Permisos::PROGRAMADOR))
+			@if(in_array(Auth::user()->UsRol, Permisos::CONDUCTOREXPRESS) || in_array(Auth::user()->UsRol2, Permisos::CONDUCTOREXPRESS))
 				$('#titulo').append(`
 					<a href='#' onclick="ModalCertificar('{{$SolicitudServicio->SolSerSlug}}', 'Certificacion')" style="float: right;" class="btn btn-success"><i class="fas fa-clipboard-check"></i> Certificar</a>
 				`);

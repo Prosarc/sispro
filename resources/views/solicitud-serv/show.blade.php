@@ -161,6 +161,10 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 										<label>{{ trans('adminlte_lang::message.solservehic') }}:</label><br>
 										<a>{{$SolicitudServicio->SolSerVehiculo == null ? 'N/A' : $SolicitudServicio->SolSerVehiculo}}</a>
 									</div>
+									<div class="col-md-6">
+										<label>Fecha llegada a Planta:</label><br>
+										<a>{{$SolicitudServicio->SolSerFecha}}</a>
+									</div>
 									@endif
 								</div>
 							</div>
@@ -203,6 +207,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 								@endswitch
 								
 							@endif
+							@if (in_array(Auth::user()->UsRol, Permisos::SolSer2) || in_array(Auth::user()->UsRol2, Permisos::SolSer2))							
 							@php
 							$alertaRequerimientos = 0;
 							foreach ($Residuos as $key => $Residuo) {
@@ -269,7 +274,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 								style="margin: 10px 10px;" class='btn btn-default pull-right'><i class="fas fa-file-pdf"></i>
 								<b>Certificaciones/Manifiestos</b></a>
 							@endswitch
-							@endif
+							@endif					
 							
 							<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 200}' title="<b>Cantidades Totales</b>" data-content="Haga click para visualizar los totales por tratamiento de la solicitud de servicio"><a style="margin: 10px 10px;" href='#' data-toggle='modal' data-target='#ModalTotales' class='btn btn-info pull-right'><i class="fas fa-list-ol"></i> <b>Totales</b></a></label>
 							<label>
@@ -298,12 +303,14 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 								</div>
 							</label>
 							<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 200}' title="<b>RMs</b>" data-content="Haga click para visualizar los Números de Recibo de Materiales (<b>RM</b>) relacionados con esta Solicitud de Servicio"><a onclick="updateRMs(`{{$SolicitudServicio->SolSerSlug}}`)" style="margin: 10px 10px;" class='btn btn-info pull-right'><i class="fas fa-list-ol"></i><b> RMs</b></a></label>
-
+							@if(in_array(Auth::user()->UsRol, Permisos::ADMINISTRADORBOGOTA) || in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
+							<label data-placement="auto" data-trigger="hover"  data-html="true" data-toggle="popover" data-delay='{"show": 200}' title="<b>Factura</b>" style="float: right;" data-content="Haga click para ingresar el número de factura relacionada con esta Solicitud de Servicio"><a onclick="updateFVE(`{{$SolicitudServicio->SolSerSlug}}`)" style="margin: 10px 10px;" class='btn btn-info pull-right'><i class="fas fa-list-ol"></i><b>Factura</b></a></label>
+							@endif
 							<div class="col-md-12" style="margin: 10px 0;">
 								<center>
 								<label {{($SolicitudServicio->SolSerBascula == 1 || $SolicitudServicio->SolSerCapacitacion == 1 || $SolicitudServicio->SolSerMasPerson == 1 || $SolicitudServicio->SolSerVehicExclusive == 1 || $SolicitudServicio->SolSerPlatform == 1) ? 'style=color:red;' : ''}}>Requerimientos de la solicitud</label>
 									<button type="button" class="btn btn-box-tool boton" style="color: black;" data-toggle="collapse" data-target=".Requerimientos" onclick="AnimationMenusForm('.Requerimientos')" title="Reducir/Ampliar"><i class="fa fa-plus"></i></button>
-								</center>
+								
 								<div class="col-md-12 collapse Requerimientos" style="border: 2px dashed #00c0ef">
 									<div class="col-md-4" style="text-align: center;">
 										<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.solserticket') }}</b>" data-content="<p style='width: 50%'> {{ trans('adminlte_lang::message.solserticketdescrit') }} </p>">
@@ -361,6 +368,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 										</label>
 									</div> --}}
 								</div>
+								
 							</div>
 							<div class="col-md-12" style="border-top:#00a65a solid 3px; padding-top: 20px; margin-top: 20px;">
 								<table id="SolserGenerTable" class="table table-compact table-bordered table-striped">
@@ -881,7 +889,12 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 								</div>
 							{{-- END Modal --}}
 							{{--  Modal --}}
-								<div id="addRMsmodal"></div>
+							<!-- Vista con el formulario -->
+							<div id="addRMsmodal"></div>
+							{{-- END Modal --}}
+							{{--  Modal --}}
+							<div id="addFVEmodal"></div>
+							<!-- Vista con el no FVE -->
 							{{-- END Modal --}}
 							{{--  Modal --}}
 							<div class="modal modal-default fade in" id="ModalObservaciones" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -973,6 +986,61 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 		});
 	})
 </script>
+
+{{--Funcion para ingreso de Numero de Factura--}}
+@if(in_array(Auth::user()->UsRol, Permisos::ADMINISTRADORBOGOTA) || in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR)){
+<script>
+	function updateFVE(slug){	
+			$('#addFVEmodal').empty();
+			$('#addFVEmodal').append(`
+			
+				<form role="form" action="/solicitud-servicio/`+slug+`/NumFactura" method="POST" data-toggle="validator" id="FormsFVE">
+					@method('PUT')
+					@csrf
+					<div class="modal modal-default fade in" id="FVE" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+									<div style="font-size: 5em; color: lightblue; text-align: center; margin: auto;">
+										<i class="fas fa-clipboard-list"></i>
+										<span style="font-size: 0.3em; color: black;"><p>
+											Número de Factura
+										</p></span>
+									</div>
+								</div>
+								<div class="modal-header">
+									@if ($errors->any())
+										<div class="alert alert-danger" role="alert">
+											<ul>
+												@foreach ($errors->all() as $error)
+													<p>{{$error}}</p>
+												@endforeach
+											</ul>
+										</div>
+									@endif
+										<div class="form-group col-md-3">
+											<label for="SolNumeroFactura"># Factura</label>
+											<small class="help-block with-errors">*</small>
+											<input type="number" class="form-control" id="FormsFVE" name="numero_factura" min="0" max="99999">
+										</div>										
+										<input type="number" hidden name="SolServ" value="`+slug+`">
+								</div>
+								<div class="modal-footer">
+									<button type="submit" class="btn btn-primary pull-right">{{trans('adminlte_lang::message.save')}}</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			
+			`);
+			$('#FVE').modal();
+			$('#FormsFVE').validator('update');
+		};
+	</script>
+	}
+	@endif
 
 {{-- funciones para el modal de RMs --}}
 @if(in_array(Auth::user()->UsRol, Permisos::SolSer2) || in_array(Auth::user()->UsRol2, Permisos::SolSer2))

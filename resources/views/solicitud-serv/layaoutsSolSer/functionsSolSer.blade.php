@@ -26,6 +26,7 @@ function TransportadorProsarc() {
 	// HiddenTypeCollect();
 	hideconductorInputs();
 	hideTransportExternalInputs();
+	hidedateInput();
 	$("#transportadorContainer").css("background-color", "#d9edf7");
 }
 function checkSolServRequirements() {
@@ -180,6 +181,7 @@ function TransportadorCliente() {
 	$("#departamento").val(null).trigger("change");
 	disableSolServRequirements();
 	hideconductorInputs();
+	hidedateInput();
 	inputsize('typeaditable', '12');
 	$("#typecollect").attr('hidden', true);
 	$("#SolSerTypeCollect").attr('required', false);
@@ -225,6 +227,7 @@ function TransportadorGeneradores() {
 	$(".addresscollect").attr('hidden', true);
 	disableSolServRequirements();
 	hideconductorInputs();
+	hidedateInput();
 	$("#transportadorContainer").css("background-color", "#dff0d8");
 }
 
@@ -233,6 +236,7 @@ function OtraTransportadora() {
 	$("#SolSerTransportador").attr('required', false);
 	showTransportExternalInputs();
 	showconductorInputs();
+	showdateInput();
 	$("#SolSerTypeCollect").attr('required', false);
 	inputsize('typeaditable', '12');
 	$("#typecollect").attr('hidden', true);
@@ -244,6 +248,7 @@ function OtraTransportadora() {
 function selectSede() {
 	hideTransportExternalInputs();
 	showconductorInputs();
+	showdateInput();
 }
 
 function selectGenerSede() {
@@ -602,6 +607,14 @@ function RemoveGenerador(id) {
 function showconductorInputs() {
 	$("#Conductor").attr('hidden', false);
 	$("#Vehiculo").attr('hidden', false);
+}
+
+function hidedateInput(){
+	$("#Fecha").attr('hidden', true);
+}
+
+function showdateInput(){
+	$("#Fecha").attr('hidden', false);
 }
 
 function hideconductorInputs() {

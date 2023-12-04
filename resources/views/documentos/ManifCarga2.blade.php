@@ -46,51 +46,62 @@ div.WordSection1
 <table class=MsoNormalTable border=1 cellspacing=0 cellpadding=0 width=100%
  style='width:100%;margin-left:-.25pt;border-collapse:collapse;border:none'>
  <tr width=100% style='height:19.5pt'>
-  <th rowspan=2 width=24% valign=top style='width:24%;border:solid windowtext 1.0pt;
+  <th rowspan=3 width=30%; style='width:30%;border:solid windowtext 1.0pt;
   ;padding:0cm 3.5pt 0cm 3.5pt;height:19.5pt'>
   <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
-  line-height:normal'><span style='position:absolute;z-index:251659264;
-  left:0px;margin-left:5px;margin-top:2px;width:172px;height:52px'><img
-  width=172 height=52 src="/img/logosinborde.png"></span></p>
+  line-height:normal'><span style='position:relative;z-index:251659264;
+  left:0px;margin-left:20px;margin-top:2px;width:178px;height:58px'><img
+  width=178 height=58 src="/img/logosinborde.png"></span></p>
   </th>
-  <td width=52% nowrap style='width:52%;border:solid windowtext 1.0pt;
+  <td width=50% nowrap style='width:50%;border:solid windowtext 1.0pt;
   border-left:none;padding:0cm 3.5pt 0cm 3.5pt;height:19.5pt'>
   <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
-  line-height:normal'><b><span style='font-size:10.0pt;font-family:"Arial",sans-serif'>DECLARACION
-  DE RESIDUOS</span></b></p>
+  line-height:normal'><b><span style='font-size:10.0pt;font-family:"Arial",sans-serif'>DECLARACIÓN DE RESIDUOS, RECOLECCIÓN Y TRANSPORTE</span></b></p>
   </td>
-  <td width=24% nowrap colspan=3 style='width:148.8pt;border:solid windowtext 1.0pt;
+  <td width=10% nowrap colspan=1 style='width:10pt;border:solid windowtext 1.0pt;
   border-left:none;padding:0cm 3.5pt 0cm 3.5pt;height:19.5pt'>
   <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
-  line-height:normal'><b><span style='font-size:8.0pt;font-family:"Arial",sans-serif'>FORMATO</span></b></p>
+  line-height:normal'><b><span style='font-size:8.0pt;font-family:"Arial",sans-serif'>CÓDIGO</span></b></p>
+  </td>
+  <td width=10% nowrap colspan=1 style='width:10pt;border:solid windowtext 1.0pt;
+  border-left:none;padding:0cm 3.5pt 0cm 3.5pt;height:19.5pt'>
+  <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
+  line-height:normal'><b><span style='font-size:8.0pt;font-family:"Arial",sans-serif'>FR-LG-010</span></b></p>
   </td>
  </tr>
  <tr width=100% style='height:19.5pt'>
-  <td width=52% nowrap style='width:52%;border-top:none;border-left:none;
+  <td width=52% rowspan=2 style='width:52%;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   padding:0cm 3.5pt 0cm 3.5pt;height:19.5pt'>
   <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
-  line-height:normal'><b><span style='font-size:10.0pt;font-family:"Arial",sans-serif'>TRANSPORTE
-  Y RECOLECCION</span></b></p>
+  line-height:normal'><b><span style='font-size:10.0pt;font-family:"Arial",sans-serif'></span>SISTEMA INTEGRADO DE GESTIÓN</b></p>
   </td>
   <td width=8% nowrap style='width:8%;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   padding:0cm 3.5pt 0cm 3.5pt;height:19.5pt'>
   <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
-  line-height:normal'><b><span style='font-size:8.0pt;font-family:"Arial",sans-serif'>FR-10</span></b></p>
+  line-height:normal'><b><span style='font-size:8.0pt;font-family:"Arial",sans-serif'>FECHA</span></b></p>
   </td>
   <td width=8% nowrap style='width:8%;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   padding:0cm 3.5pt 0cm 3.5pt;height:19.5pt'>
   <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
-  line-height:normal'><b><span style='font-size:8.0pt;font-family:"Arial",sans-serif'>REV.
+  line-height:normal'><b><span style='font-size:8.0pt;font-family:"Arial",sans-serif'>01-12-2023
   3</span></b></p>
   </td>
+ </tr>
+ <tr width=100% style='height:19.5pt'>
   <td width=8% nowrap style='width:8%;border-top:none;border-left:none;
+    border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+    padding:0cm 3.5pt 0cm 3.5pt;height:19.5pt'>
+    <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
+    line-height:normal'><b><span style='font-size:8.0pt;font-family:"Arial",sans-serif'>VERSIÓN</span></b></p>
+    </td>
+    <td width=8% nowrap style='width:8%;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   padding:0cm 3.5pt 0cm 3.5pt;height:19.5pt'>
   <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
-  line-height:normal'><b><span style='font-size:8.0pt;font-family:"Arial",sans-serif'>ene.-14</span></b></p>
+  line-height:normal'><b><span style='font-size:8.0pt;font-family:"Arial",sans-serif'>4</span></b></p>
   </td>
  </tr>
 </table>
@@ -170,7 +181,7 @@ line-height:normal'><b><span style='font-size:10.0pt;font-family:"Arial",sans-se
   <p class=MsoNormal style='margin-bottom:0cm;line-height:normal'><b><span
   style='color:black'>CARGO:</span></b></p>
   </td>
-  <td width=340 style='width:255.05pt;border:none;border-right:solid windowtext 1.0pt;
+  <td width=340  style='width:255.05pt;border:none;border-right:solid windowtext 1.0pt;
   background:#EDEDED;padding:0cm 5.4pt 0cm 5.4pt;height:26.85pt'>
   <p class=MsoNormal style='margin-bottom:0cm;line-height:normal'><span
   style='color:black'>{{$SolicitudServicio->CargName}} / {{$SolicitudServicio->AreaName}}</span></p>
@@ -207,15 +218,21 @@ line-height:normal'><b><span style='font-size:10.0pt;font-family:"Arial",sans-se
   <p class=MsoNormal style='margin-bottom:0cm;line-height:normal'><span
   style='color:black'>{{$SolSerCollectAddress}}</span></p>
   </td>
-  <td width=340 style='width:255.05pt;border:none;border-bottom:solid windowtext 1.0pt;
-  background:#EDEDED;padding:0cm 5.4pt 0cm 5.4pt;height:26.85pt'>
-  <p class=MsoNormal style='margin-bottom:0cm;line-height:normal'><b>&nbsp;</b></p>
+
+  <td width=340 style='width:255.05pt;border-top:none;border-left:none windowtext 1.0pt;
+  border-bottom:solid windowtext 1.0pt;border-right:none;background:#EDEDED;
+  padding:0cm 5.4pt 0cm 5.4pt;height:26.85pt'>
+  <p class=MsoNormal style='margin-bottom:0cm;line-height:normal'><b><span
+  style='color:black'>HORA DE INICIO:</span></b></p><br>
+  <p class=MsoNormal style='margin-bottom:0cm;line-height:normal'><b><span
+  style='color:black'>HORA DE SALIDA:</span></b></p>
   </td>
-  <td width=340 style='width:255.05pt;border-top:none;border-left:none;
-  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  <td width=340 style='width:255.05pt;border:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   background:#EDEDED;padding:0cm 5.4pt 0cm 5.4pt;height:26.85pt'>
-  <p class=MsoNormal style='margin-bottom:0cm;line-height:normal'>&nbsp;</p>
+  <p class=MsoNormal style='margin-bottom:0cm;line-height:normal'><span
+  style='color:black'></span></p>
   </td>
+
  </tr>
 </table>
 </div>
@@ -243,7 +260,7 @@ line-height:normal'><b><span style='font-size:10.0pt;font-family:"Arial",sans-se
   <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
   line-height:normal'><span style='font-size:8.0pt;font-family:"Arial",sans-serif'>a.
   El formato se debe diligenciar con todos los residuos a disponer, en caso de
-  que algún residuo no está declarado NO podrá ser transportado o recibido en
+  que algún residuo no este declarado NO podrá ser transportado o recibido en
   planta.</span></p>
   </td>
  </tr>
@@ -279,11 +296,37 @@ line-height:normal'><b><span style='font-size:10.0pt;font-family:"Arial",sans-se
   </td>
  </tr>
 </table>
+
 <table class=MsoNormalTable border=1 cellspacing=0 cellpadding=0 
 style='width:100.0%;border-collapse:collapse;border:none'>
  <tr width="100%" style='width:100.0%;height:19.4pt'>
-  <td width="100%" nowrap colspan=5 style='width:100.0%;border:solid windowtext 1.0pt;
+  <td width="100%"     colspan=5 style='width:100.0%;border:solid windowtext 1.0pt;
   border-top:none;background:#D6DCE4;padding:0cm 1.4pt 0cm 1.4pt;height:19.4pt'>
+  <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
+  line-height:normal'><b><span style='font-size:10.0pt;font-family:"Arial",sans-serif;
+  color:black'>OBSERVACIONES</span></b></p>
+  </td>
+ </tr>
+</table>
+<table  class=MsoNormalTable border=1 cellspacing=0 cellpadding=0 
+ style='width:100.0%;border-collapse:collapse;border:none'>
+ <tr style='height:36.05pt'>
+  <td width="100%" colspan=14 style='width:100.0%;border-top:none;border-left:
+  solid windowtext 1.0pt;border-bottom:none;border-right:solid windowtext 1.0pt;
+  padding:0cm 1.4pt 0cm 1.4pt;height:36.05pt'>
+  <center>
+  <p class=MsoNormal style='margin-bottom:0cm;line-height:normal'><span
+    style='font-size:8.0pt;font-family:"Arial",sans-serif'>{{$SolicitudServicio->SolSerDescript}}</span></p>
+  </center>
+    </td>
+ </tr>
+</table>
+
+<table class=MsoNormalTable border=1 cellspacing=0 cellpadding=0 
+style='width:100.0%;border-collapse:collapse;border:none'>
+ <tr width="100%"  style='width:100.0%;height:19.4pt'>
+  <td width="100%" nowrap colspan=5 style='width:100.0%;border:solid windowtext 1.0pt;
+  background:#D6DCE4;padding:0cm 1.4pt 0cm 1.4pt;height:19.4pt'>
   <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
   line-height:normal'><b><span style='font-size:10.0pt;font-family:"Arial",sans-serif;
   color:black'>REQUERIMIENTOS</span></b></p>
@@ -398,16 +441,16 @@ style='width:100.0%;border-collapse:collapse;border:none'>
 </table>
 <table class=MsoNormalTable border=1 cellspacing=0 cellpadding=0 
 style='width:100.0%;border-collapse:collapse;border:none'>
- <tr style='height:19.4pt'>
-  <td width="100%" nowrap colspan=14 style='width:100.0%;border:solid windowtext 1.0pt;
+ <tr width=100% style='height:19.5pt'>
+  <td width="100%" colspan=14 style='width:100.0%;border:solid windowtext 1.0pt;
   border-top:none;background:#D6DCE4;padding:0cm 1.4pt 0cm 1.4pt;height:19.4pt'>
   <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
   line-height:normal'><b><span style='font-size:10.0pt;font-family:"Arial",sans-serif;
-  color:black'>RESIDUOS A ENTREGAR</span></b></p>
+  color:black'>RESIDUOS A ENTREGAR Y TRANSPORTAR</span></b></p>
   </td>
  </tr>
- <tr style='height:22.8pt'>
-  <td width="11%" nowrap style='width:11.78%;border:solid windowtext 1.0pt;
+ <tr width=100% style='height:19.5pt' >
+  <td width="11%" style='width:11.78%;border:solid windowtext 1.0pt;
   border-top:none;padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
   <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
   line-height:normal'><b><span style='font-size:7.0pt;font-family:"Arial",sans-serif'>RESIDUO</span></b></p>
@@ -420,7 +463,7 @@ style='width:100.0%;border-collapse:collapse;border:none'>
   <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
   line-height:normal'><b><span style='font-size:7.0pt;font-family:"Arial",sans-serif'>4741</span></b></p>
   </td>
-  <td width="6%" colspan=2 style='width:6.56%;border-top:none;border-left:none;
+  <td width="6%" style='width:6.56%;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
   <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
@@ -428,14 +471,21 @@ style='width:100.0%;border-collapse:collapse;border:none'>
   <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
   line-height:normal'><b><span style='font-size:7.0pt;font-family:"Arial",sans-serif'>KG</span></b></p>
   </td>
+  <td width="6%" style='width:6.56%;border:solid windowtext 1.0pt;
+  border-top:none;padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
+  <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
+  line-height:normal'><b><span style='font-size:7.0pt;font-family:"Arial",sans-serif'>KG</span></b></p>
+  <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
+  line-height:normal'><b><span style='font-size:7.0pt;font-family:"Arial",sans-serif'>RECIBIDOS</span></b></p>
+  </td>
   <td width="7%" style='width:7.88%;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
   <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
-  line-height:normal'><b><span style='font-size:7.0pt;font-family:"Arial",sans-serif'>ESTADO
+  line-height:normal'><b><span style='font-size:7.0pt;font-family:"Arial",sans-serif'>ESTADO 
   FÍSICO</span></b></p>
   </td>
-  <td width="7%" colspan=2 style='width:7.88%;border-top:none;border-left:none;
+  <td width="7%" style='width:7.88%;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
   <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
@@ -453,24 +503,18 @@ style='width:100.0%;border-collapse:collapse;border:none'>
   <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
   line-height:normal'><b><span style='font-size:7.0pt;font-family:"Arial",sans-serif'>TRATAMIENTO</span></b></p>
   </td>
-  <td width="5%" style='width:5.24%;border:none;border-bottom:solid windowtext 1.0pt;
+  <td width="10%" style='width:10.5%;border:none;border-bottom:solid windowtext 1.0pt;
   padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
   <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
-  line-height:normal'><b><span style='font-size:7.0pt;font-family:"Arial",sans-serif'>TARJ</span></b></p>
+  line-height:normal'><b><span style='font-size:7.0pt;font-family:"Arial",sans-serif'>GESTOR</span></b></p>
   </td>
-  <td width="5%" style='width:5.26%;border-top:none;border-left:solid windowtext 1.0pt;
-  border-bottom:solid windowtext 1.0pt;border-right:none;padding:0cm 1.4pt 0cm 1.4pt;
-  height:22.8pt'>
-  <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
-  line-height:normal'><b><span style='font-size:7.0pt;font-family:"Arial",sans-serif'>HOJA</span></b></p>
-  </td>
-  <td width="10%" colspan=2 style='width:10.5%;border-top:none;border-left:
+  <td width="10%" style='width:10.5%;border-top:none;border-left:
   solid windowtext 1.0pt;border-bottom:solid windowtext 1.0pt;border-right:
   none;padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
   <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
   line-height:normal'><b><span style='font-size:7.0pt;font-family:"Arial",sans-serif'>GENERADOR</span></b></p>
   </td>
-  <td width="15%" style='width:15.96%;border:solid windowtext 1.0pt;border-top:
+  <td width="15%" colspan=1 style='width:15%;border:solid windowtext 1.0pt;border-top:
   none;padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
   <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
   line-height:normal'><b><span style='font-size:7.0pt;font-family:"Arial",sans-serif'>DIRECCIÓN</span></b></p>
@@ -492,8 +536,8 @@ style='width:100.0%;border-collapse:collapse;border:none'>
             break;
     }
 @endphp
- <tr style='height:22.8pt'>
-  <td width="11%" nowrap style='width:11.78%;border:solid windowtext 1.0pt;
+<tr style='height:22.8pt' colspan=13 >
+  <td width="11%" style='width:11.78%;border:solid windowtext 1.0pt;
   border-top:none;padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
   <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
   line-height:normal'><span style='font-size:7.0pt;font-family:"Arial",sans-serif'>
@@ -511,7 +555,7 @@ style='width:100.0%;border-collapse:collapse;border:none'>
   @endif
   </span></p>
   </td>
-  <td width="6%" colspan=2 style='width:6.56%;border-top:none;border-left:none;
+  <td width="6%" style='width:6.56%;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
   <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
@@ -519,6 +563,13 @@ style='width:100.0%;border-collapse:collapse;border:none'>
   {{number_format($Residuo->SolResKgEnviado, $decimals = 2, $dec_point = ",", $thousands_sep = "." )}} Kilogramos
   </span></p>
   </td>
+
+  <td width="6%" style='width:6.56%;border:solid windowtext 1.0pt;
+  border-top:none;padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
+  <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
+  line-height:normal'><span style='font-size:7.0pt;font-family:"Arial",sans-serif'></span></p>
+  </td>
+
   <td width="7%" style='width:7.88%;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
@@ -527,7 +578,7 @@ style='width:100.0%;border-collapse:collapse;border:none'>
   {{$Residuo->RespelEstado}}
   </span></p>
   </td>
-  <td width="7%" colspan=2 style='width:7.88%;border-top:none;border-left:none;
+  <td width="7%" style='width:7.88%;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
   <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
@@ -535,7 +586,7 @@ style='width:100.0%;border-collapse:collapse;border:none'>
   {{$Residuo->RespelIgrosidad}}
   </span></p>
   </td>
-  <td width="9%" style='width:9.2%;border-top:none;border-left:none;border-bottom:
+  <td width="9%" nowrap colspan=1 style='width:9.2%;border-top:none;border-left:none;border-bottom:
   solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 1.4pt 0cm 1.4pt;
   height:22.8pt'>
   <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
@@ -551,30 +602,15 @@ style='width:100.0%;border-collapse:collapse;border:none'>
   {{$Residuo->TratName}}
   </span></p>
   </td>
-  <td width="5%" style='width:5.24%;border:none;border-bottom:solid windowtext 1.0pt;
-  padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
-  <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
-  line-height:normal'><span style='font-size:7.0pt;font-family:"Arial",sans-serif'>
-  @if($Residuo->RespelTarj == 'RespelTarjetaDefault.pdf')
-    No
-  @else
-    Si
-  @endif
-  </span></p>
-  </td>
+  
   <td width="5%" style='width:5.26%;border-top:none;border-left:solid windowtext 1.0pt;
   border-bottom:solid windowtext 1.0pt;border-right:none;padding:0cm 1.4pt 0cm 1.4pt;
   height:22.8pt'>
   <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
   line-height:normal'><span style='font-size:7.0pt;font-family:"Arial",sans-serif'>
-  @if($Residuo->RespelTarj == 'RespelHojaDefault.pdf')
-    No
-  @else
-    Si
-  @endif
   </span></p>
   </td>
-  <td width="10%" colspan=2 style='width:10.5%;border-top:none;border-left:
+  <td width="10%" style='width:10.5%;border-top:none;border-left:
   solid windowtext 1.0pt;border-bottom:solid windowtext 1.0pt;border-right:
   none;padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
   <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
@@ -582,7 +618,7 @@ style='width:100.0%;border-collapse:collapse;border:none'>
   {{$GenerResiduo->GenerName}} ({{$GenerResiduo->GSedeName}})
   </span></p>
   </td>
-  <td width="15%" style='width:15.96%;border:solid windowtext 1.0pt;border-top:
+  <td width="15%" colspan=1 style='width:15.96%;border:solid windowtext 1.0pt;border-top:
   none;padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
   <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
   line-height:normal'><span style='font-size:7.0pt;font-family:"Arial",sans-serif'>
@@ -592,6 +628,249 @@ style='width:100.0%;border-collapse:collapse;border:none'>
 @endif
 @endforeach
 @endforeach
+
+<tr width=100% style='height:19.5pt' >
+  <td width="11%" style='width:11.78%;border:solid windowtext 1.0pt;
+  border-top:none;padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
+  </td>
+  <td width="6%" style='width:6.58%;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
+  </td>
+  <td width="6%" style='width:6.56%;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
+  </td>
+  <td width="6%" style='width:6.56%;border:solid windowtext 1.0pt;
+  border-top:none;padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
+  </td>
+  <td width="7%" style='width:7.88%;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
+  </td>
+  <td width="7%" style='width:7.88%;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
+  </td>
+  <td width="9%" style='width:9.2%;border-top:none;border-left:none;border-bottom:
+  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 1.4pt 0cm 1.4pt;
+  height:22.8pt'>
+  </td>
+  <td width="13%" style='width:13.14%;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
+  </td>
+  <td width="5%" style='width:5.26%;border-top:none;border-left:solid windowtext 1.0pt;
+  border-bottom:solid windowtext 1.0pt;border-right:none;padding:0cm 1.4pt 0cm 1.4pt;
+  height:22.8pt'>
+  </td>
+  <td width="10%" style='width:10.5%;border-top:none;border-left:
+  solid windowtext 1.0pt;border-bottom:solid windowtext 1.0pt;border-right:
+  none;padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
+  </td>
+  <td width="15%" colspan=1 style='width:15.96%;border:solid windowtext 1.0pt;border-top:
+  none;padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
+  </td>
+</tr> 
+<tr width=100% style='height:19.5pt'>
+  <td width="11%" style='width:11.78%;border:solid windowtext 1.0pt;
+  border-top:none;padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
+  </td>
+  <td width="6%" style='width:6.58%;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
+  </td>
+  <td width="6%" style='width:6.56%;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
+  </td>
+  <td width="6%" style='width:6.56%;border:solid windowtext 1.0pt;
+  border-top:none;padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
+  </td>
+  <td width="7%" style='width:7.88%;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
+  </td>
+  <td width="7%" style='width:7.88%;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
+  </td>
+  <td width="9%" style='width:9.2%;border-top:none;border-left:none;border-bottom:
+  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 1.4pt 0cm 1.4pt;
+  height:22.8pt'>
+  </td>
+  <td width="13%" style='width:13.14%;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
+  </td>
+  <td width="5%" style='width:5.26%;border-top:none;border-left:solid windowtext 1.0pt;
+  border-bottom:solid windowtext 1.0pt;border-right:none;padding:0cm 1.4pt 0cm 1.4pt;
+  height:22.8pt'>
+  </td>
+  <td width="10%" style='width:10.5%;border-top:none;border-left:
+  solid windowtext 1.0pt;border-bottom:solid windowtext 1.0pt;border-right:
+  none;padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
+  </td>
+  <td width="15%" colspan=1 style='width:15.96%;border:solid windowtext 1.0pt;border-top:
+  none;padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
+  </td>
+</tr> 
+<tr width=100% style='height:19.5pt' >
+  <td width="11%" style='width:11.78%;border:solid windowtext 1.0pt;
+  border-top:none;padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
+  </td>
+  <td width="6%" style='width:6.58%;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
+  </td>
+  <td width="6%" style='width:6.56%;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
+  </td>
+  <td width="6%" style='width:6.56%;border:solid windowtext 1.0pt;
+  border-top:none;padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
+  </td>
+  <td width="7%" style='width:7.88%;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
+  </td>
+  <td width="7%" style='width:7.88%;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
+  </td>
+  <td width="9%" style='width:9.2%;border-top:none;border-left:none;border-bottom:
+  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 1.4pt 0cm 1.4pt;
+  height:22.8pt'>
+  </td>
+  <td width="13%" style='width:13.14%;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
+  </td>
+  <td width="5%" style='width:5.26%;border-top:none;border-left:solid windowtext 1.0pt;
+  border-bottom:solid windowtext 1.0pt;border-right:none;padding:0cm 1.4pt 0cm 1.4pt;
+  height:22.8pt'>
+  </td>
+  <td width="10%" style='width:10.5%;border-top:none;border-left:
+  solid windowtext 1.0pt;border-bottom:solid windowtext 1.0pt;border-right:
+  none;padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
+  </td>
+  <td width="15%" colspan=1 style='width:15.96%;border:solid windowtext 1.0pt;border-top:
+  none;padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
+  </td>
+</tr> 
+
+
+  </table>
+  <table class=MsoNormalTable border=1 cellspacing=0 cellpadding=0 
+  style='width:100.0%;border-collapse:collapse;border:none'><br>
+  <tr>
+  <td width="10%" nowrap colspan=3 style='width:10.78%;border:solid windowtext 1.0pt;background:#D6DCE4;padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
+  <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
+  line-height:normal'><b><span style='font-size:10.0pt;font-family:"Arial",sans-serif;
+  color:black'>ENTREGADO POR:</span></b></p>
+  </td>
+
+  <td width="10%" nowrap colspan=3 style='width:10.78%;border:solid windowtext 1.0pt;background:#D6DCE4;padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
+  <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
+  line-height:normal'><b><span style='font-size:10.0pt;font-family:"Arial",sans-serif;
+  color:black'>TRANSPORTADO POR:</span></b></p>
+  </td>
+  
+  <td width="10%" nowrap colspan=3 style='width:10.78%;border:solid windowtext 1.0pt;background:#D6DCE4;padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
+  <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
+  line-height:normal'><b><span style='font-size:10.0pt;font-family:"Arial",sans-serif;
+  color:black'>RECEPCIÓN:</span></b></p>
+  </td>
+  </tr>
+
+  <tr style='height:22.8pt'>
+  <td width="10%" nowrap colspan=3 style='width:10.78%;border:solid windowtext 1.0pt;padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
+  <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
+  line-height:normal'><b><span style='font-size:10.0pt;font-family:"Arial",sans-serif'>FUNCIONARIO COMPAÑIA USUARIA</span></b></p>
+  </td>
+  
+  <td td width="10%" nowrap colspan=3 style='width:10.78%;border:solid windowtext 1.0pt;
+  border-top:none;padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
+  <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
+  line-height:normal'><b><span style='font-size:10.0pt;font-family:"Arial",sans-serif'>PROSARC S.A. E.S.P</span></b></p>
+  </td>
+
+  <td td width="10%" nowrap colspan=3 style='width:10.78%;border:solid windowtext 1.0pt;
+  border-top:none;padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
+  <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
+  line-height:normal'><b><span style='font-size:10.0pt;font-family:"Arial",sans-serif'>PROSARC S.A. E.S.P</span></b></p>
+  </td>
+  </tr>
+
+  <tr style='height:22.8pt'>
+  <td width="10%" nowrap colspan=3 style='width:10.78%;border:solid windowtext 1.0pt;
+  border-top:none;padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'><br>
+  <p class=MsoNormal align=left style='margin-bottom:0cm;text-align:left;
+  line-height:normal'><b><span style='font-size:10.0pt;font-family:"Arial",sans-serif'>Nombre:</span></b></p><br>
+  <p class=MsoNormal align=left style='margin-bottom:0cm;text-align:left;
+  line-height:normal'><b><span style='font-size:10.0pt;font-family:"Arial",sans-serif'>Identidicación:</span></b></p><br>
+  <p class=MsoNormal align=left style='margin-bottom:0cm;text-align:left;
+  line-height:normal'><b><span style='font-size:10.0pt;font-family:"Arial",sans-serif'>Firma:</span></b></p><br>
+  <p class=MsoNormal align=left style='margin-bottom:0cm;text-align:left;
+  line-height:normal'><b><span style='font-size:10.0pt;font-family:"Arial",sans-serif'>Cargo:</span></b></p><br>
+  </td>
+  
+  <td td width="10%" nowrap colspan=3 style='width:10.78%;border:solid windowtext 1.0pt;
+  border-top:none;padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
+  <p class=MsoNormal align=left style='margin-bottom:0cm;text-align:left;
+  line-height:normal'><b><span style='font-size:10.0pt;font-family:"Arial",sans-serif'>Conductor:</span></b></p><br>
+  <p class=MsoNormal align=left style='margin-bottom:0cm;text-align:left;
+  line-height:normal'><b><span style='font-size:10.0pt;font-family:"Arial",sans-serif'>Identificación:</span></b></p><br>
+  <p class=MsoNormal align=left style='margin-bottom:0cm;text-align:left;
+  line-height:normal'><b><span style='font-size:10.0pt;font-family:"Arial",sans-serif'>Firma:</span></b></p><br>
+  </td>
+
+  <td td width="10%" nowrap colspan=3 style='width:10.78%;border:solid windowtext 1.0pt;
+  border-top:none;padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'><br>
+  <p class=MsoNormal align=left style='margin-bottom:0cm;text-align:left;
+  line-height:normal'><b><span style='font-size:10.0pt;font-family:"Arial",sans-serif'>Nombre:</span></b></p><br>
+  <p class=MsoNormal align=left style='margin-bottom:0cm;text-align:left;
+  line-height:normal'><b><span style='font-size:10.0pt;font-family:"Arial",sans-serif'>Identidicación:</span></b></p><br>
+  <p class=MsoNormal align=left style='margin-bottom:0cm;text-align:left;
+  line-height:normal'><b><span style='font-size:10.0pt;font-family:"Arial",sans-serif'>Firma:</span></b></p><br>
+  <p class=MsoNormal align=left style='margin-bottom:0cm;text-align:left;
+  line-height:normal'><b><span style='font-size:10.0pt;font-family:"Arial",sans-serif'>Cargo:</span></b></p><br>
+  </td>
+  </tr>
+
+  <tr style='height:22.8pt'>
+  <td width="10%" nowrap colspan=3 style='width:10.78%;border:solid windowtext 1.0pt;
+  border-top:none;padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'><br>
+  <p class=MsoNormal align=left style='margin-bottom:0cm;text-align:left;
+  line-height:normal'><b><span style='font-size:10.0pt;font-family:"Arial",sans-serif'></span>Tipo de vehiculo:</b></p><br>
+  <p class=MsoNormal align=left style='margin-bottom:0cm;text-align:left;
+  line-height:normal'><b><span style='font-size:10.0pt;font-family:"Arial",sans-serif'>Placa:</span></b></p><br>
+  <p class=MsoNormal align=left style='margin-bottom:0cm;text-align:left;
+  line-height:normal'><b><span style='font-size:10.0pt;font-family:"Arial",sans-serif'>Hoja de seguridad:  SI__  NO__</span></b></p><br>
+  <p class=MsoNormal align=left style='margin-bottom:0cm;text-align:left;
+  line-height:normal'><b><span style='font-size:10.0pt;font-family:"Arial",sans-serif'>Tarjeta de emergencia: SI__  NO__</span></b></p><br>
+  </td>
+  
+  <td td width="10%" nowrap colspan=3 style='width:10.78%;border:solid windowtext 1.0pt;
+  border-top:none;padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'><br>
+  <p class=MsoNormal align=left style='margin-bottom:0cm;text-align:left;
+  line-height:normal'><b><span style='font-size:10.0pt;font-family:"Arial",sans-serif'>Auxiliar:</span></b></p><br>
+  <p class=MsoNormal align=left style='margin-bottom:0cm;text-align:left;
+  line-height:normal'><b><span style='font-size:10.0pt;font-family:"Arial",sans-serif'>Identidicación:</span></b></p><br>
+  <p class=MsoNormal align=left style='margin-bottom:0cm;text-align:left;
+  line-height:normal'><b><span style='font-size:10.0pt;font-family:"Arial",sans-serif'>Firma:</span></b></p><br>
+  </td>
+  <td td width="10%" nowrap colspan=2 style='width:10.78%;border:solid windowtext 1.0pt;
+  border-top:none;padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
+  <p class=MsoNormal align=left style='margin-bottom:0cm;text-align:left;
+  line-height:normal'><b><span style='font-size:10.0pt;font-family:"Arial",sans-serif'>Número de certificado:</span></b></p><br><br>
+  <p class=MsoNormal align=left style='margin-bottom:0cm;text-align:left;
+  line-height:normal'><b><span style='font-size:10.0pt;font-family:"Arial",sans-serif'>Número de manifiesto:</span></b></p>
+
+  </td>
+  </tr>  
+</table>
+
  </tr>
  <tr height=0>
   <td width=133 style='border:none'></td>

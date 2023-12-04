@@ -78,6 +78,7 @@ class SolicitudServicioController extends Controller
 			'solicitud_servicios.SolSerTypeCollect',
 			'solicitud_servicios.SolSerCollectAddress',
 			'solicitud_servicios.SolServCertStatus',
+			'solicitud_servicios.SolNumeroFactura',
 			'clientes.CliName',
 			'clientes.CliSlug',
 			'clientes.CliStatus',
@@ -111,7 +112,7 @@ class SolicitudServicioController extends Controller
 				}
 			})
 			->where('CliCategoria', 'Cliente')
-			->whereYear('solicitud_servicios.created_at','2022')
+			//->whereYear('solicitud_servicios.created_at','2023')
 			// ->where('ID_SolSer', 37455)
 			->orderBy('created_at', 'desc')
 			->get();
@@ -217,6 +218,7 @@ class SolicitudServicioController extends Controller
 				->where('clientes.ID_Cli', userController::IDClienteSegunUsuario())
 				->where('personals.PersDelete', 0)
 				->get();
+			
             $Requerimientos = RequerimientosCliente::where('FK_RequeClient', $Cliente->ID_Cli)->get();
             // return $Requerimientos;
 			// if ($Cliente->CliStatus=="Bloqueado") {
@@ -277,6 +279,7 @@ class SolicitudServicioController extends Controller
 				$tipo = "Externo";
 				$conductor = $request->input('SolSerConductor');
 				$vehiculo = $request->input('SolSerVehiculo');
+				$FechaLlegada = $request->input('SolSerFecha');
 				break;
 
 			case '97':
@@ -309,6 +312,7 @@ class SolicitudServicioController extends Controller
 				$tipo = "Cliente";
 				$conductor = $request->input('SolSerConductor');
 				$vehiculo = $request->input('SolSerVehiculo');
+				$FechaLlegada = $request->input('SolSerFecha');
 				break;
 
 			case '99':
@@ -338,6 +342,9 @@ class SolicitudServicioController extends Controller
 						$direccioncollect = $request->input('AddressCollect');
 						$SolicitudServicio->FK_SolSerCollectMun = $request->input('FK_SolSerCollectMun');
 						break;
+					case null:
+						$FechaLlegada = $request->input('SolSerFecha');
+						break;
 				}
 				break;
 
@@ -359,6 +366,7 @@ class SolicitudServicioController extends Controller
 		$SolicitudServicio->SolSerCityTrans = $transportadorcity;
 		$SolicitudServicio->SolSerConductor = $conductor;
 		$SolicitudServicio->SolSerVehiculo = $vehiculo;
+		$SolicitudServicio->SolSerFecha = $FechaLlegada;
 		$SolicitudServicio->SolSerDescript = $request->input('SolSerDescript');
 		$SolicitudServicio->SolSerTypeCollect = $request->input('SolSerTypeCollect');
 		$SolicitudServicio->SolSerCollectAddress = $direccioncollect;
@@ -436,6 +444,8 @@ class SolicitudServicioController extends Controller
 		// se envia un correo por cada residuo registrado
 		Mail::to($destinatarios)->send(new NewSolServEmail($SolicitudServicio));
 		return redirect()->route('solicitud-servicio.show', ['id' => $SolicitudServicio->SolSerSlug]);
+		
+ 
 	}
 
 
@@ -1383,7 +1393,7 @@ class SolicitudServicioController extends Controller
 			foreach ($KGenviados as $KGenviado) {
 				$totalenviado = $totalenviado + $KGenviado->SolResKgEnviado;
 			}
-			return view('solicitud-serv.edit', compact('Solicitud','Cliente','Persona','Personals','Departamentos','SGeneradors', 'Departamento','Municipios', 'Departamento2','Municipios2', 'Sedes', 'totalenviado', 'Requerimientos', 'tipo'));
+			return view('solicitud-serv.edit', compact('Solicitud','Cliente','Persona','Personals','Departamentos','SGeneradors', 'Departamento','Municipios',  'Sedes', 'totalenviado', 'Requerimientos'));
 		}
 		else{
 			abort(403);
@@ -1432,6 +1442,7 @@ class SolicitudServicioController extends Controller
 					$tipo = "Externo";
 					$conductor = $request->input('SolSerConductor');
 					$vehiculo = $request->input('SolSerVehiculo');
+					$FechaLlegada = $request->input('SolSerFecha');
 					break;
 
 				case '97':
@@ -1464,6 +1475,7 @@ class SolicitudServicioController extends Controller
 					$tipo = "Cliente";
 					$conductor = $request->input('SolSerConductor');
 					$vehiculo = $request->input('SolSerVehiculo');
+					$FechaLlegada = $request->input('SolSerFecha');
 					break;
 
 				case '99':
@@ -1494,6 +1506,9 @@ class SolicitudServicioController extends Controller
 							$direccioncollect = $request->input('AddressCollect');
 							$SolicitudServicio->FK_SolSerCollectMun = $request->input('FK_SolSerCollectMun');
 							break;
+						case null:
+								$FechaLlegada = $request->input('SolSerFecha');
+								break;	
 					}
 					$collect = $request->input('SolSerTypeCollect');
 					break;
@@ -1519,6 +1534,7 @@ class SolicitudServicioController extends Controller
 			$SolicitudServicio->SolSerCityTrans = $transportadorcity;
 			$SolicitudServicio->SolSerConductor = $conductor;
 			$SolicitudServicio->SolSerVehiculo = $vehiculo;
+			$SolicitudServicio->SolSerFecha = $FechaLlegada;
 			$SolicitudServicio->SolSerTypeCollect = $collect;
 			$SolicitudServicio->SolSerCollectAddress = $direccioncollect;
 			if($request->input('SolSerBascula')){
@@ -2439,4 +2455,38 @@ class SolicitudServicioController extends Controller
 		$Observacion->save();
 		return redirect()->route('solicitud-servicio.index');
 	}
+
+	/**
+	 * ingresa el numero de factura a la base de datos.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @param  int  $id
+	 * @return \Illuminate\Http\Response
+	 */
+
+	public function NumFactura(Request $request, $id)
+	{
+
+		$Solicitud = SolicitudServicio::where('SolSerSlug', $id)->first();
+		if (!$Solicitud) {
+			abort(404);
+		}
+
+		$Solicitud->SolNumeroFactura=$request->input('numero_factura');
+		$Solicitud->save();
+
+		$log = new audit();
+		$log->AuditTabla="solicitud_servicios";
+		$log->AuditType="actualizado la FVE";
+		$log->AuditRegistro=$Solicitud->ID_SolSer;
+		$log->AuditUser=Auth::user()->email;
+		$log->Auditlog=$request;
+		$log->save();
+
+		//return $Solicitud;
+
+		return redirect()->route('solicitud-servicio.show', ['id' => $id]);
+		
+	}
+
 }

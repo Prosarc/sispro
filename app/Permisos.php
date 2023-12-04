@@ -171,6 +171,11 @@ class Permisos{
 		ProgramacionVehicle/edit
 	*/
 
+	const ADMINISTRADORBOGOTA = ['AdministradorBogota','Programador', 'AdministradorPlanta'];
+	/* Using ->
+		ProgramacionVehicle/edit
+	*/
+
 	const SolSerCertifi = ['Programador','Tesorería','AdministradorPlanta', 'AdministradorBogota'];
 	/* Using ->
 		solicitud-serv/index
