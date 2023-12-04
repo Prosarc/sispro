@@ -203,7 +203,6 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 								@endswitch
 								
 							@endif
-							@if (in_array(Auth::user()->UsRol, Permisos::SolSer2) || in_array(Auth::user()->UsRol2, Permisos::SolSer2))
 							@php
 							$alertaRequerimientos = 0;
 							foreach ($Residuos as $key => $Residuo) {
