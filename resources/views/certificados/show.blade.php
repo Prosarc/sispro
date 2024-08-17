@@ -33,7 +33,7 @@
 							<li class="list-group-item">
 								<b>Servicio #</b> <a class="pull-right">{{$certificado->FK_CertSolser}}</a>
 							</li>
-							@if (in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) ||in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
+							@if (in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) ||in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol, Permisos::TODOPROSARC))
 								<li class="list-group-item">
 									<b>certificado #</b> <a class="pull-right">{{$certificado->ID_Cert}}</a>
 								</li>
@@ -137,14 +137,21 @@
 					<div class="box-header with-border">
 						<h3 class="box-title">Información para generar Certificado</h3>
 						<div class="box-tools pull-right">
-							@if (in_array(Auth::user()->UsRol, Permisos::EDITMANIFCERT) ||in_array(Auth::user()->UsRol, Permisos::EDITMANIFCERT))
-								<a href="/certificados/{{$certificado->CertSlug}}/edit" class="btn btn-warning pull-right"> <i class="fas fa-edit"></i> <b>{{ trans('adminlte_lang::message.edit') }}</b></a>
+							@if (in_array(Auth::user()->UsRol, Permisos::EDITMANIFCERT) ||in_array(Auth::user()->UsRol, Permisos::EDITMANIFCERT) || in_array(Auth::user()->UsRol, Permisos::TODOPROSARC)
+							|| in_array(Auth::user()->UsRol, Permisos::INGDETURNO)
+							)
+								<a href="/certificados/{{$certificado->CertSlug}}/edit" class="btn btn-warning pull-right"> <i class="fas fa-edit"></i> <b>{{ __('adminlte::message.edit') }}</b></a>
 							@endif
-							@if (in_array(Auth::user()->UsRol, Permisos::EDITMANIFCERT) ||in_array(Auth::user()->UsRol, Permisos::EDITMANIFCERT))
+							@if (in_array(Auth::user()->UsRol, Permisos::EDITMANIFCERT) ||in_array(Auth::user()->UsRol, Permisos::EDITMANIFCERT) || in_array(Auth::user()->UsRol, Permisos::TODOPROSARC)
+							|| in_array(Auth::user()->UsRol, Permisos::INGDETURNO)
+							)
 								<a target="_blank" href="/certificados/{{$certificado->CertSlug}}/wordtemplate" class="btn btn-primary pull-right" style="margin-right: 1em"> <i class="fas fa-file-word"></i> <b>Plantilla</b></a>
 							@endif
-							@if (in_array(Auth::user()->UsRol, Permisos::EDITMANIFCERT) ||in_array(Auth::user()->UsRol, Permisos::EDITMANIFCERT))
-								@if ($certificado->SolicitudServicio->SolSerStatus == 'Conciliado' || $certificado->SolicitudServicio->SolSerStatus == 'Tratado')
+							@if (in_array(Auth::user()->UsRol, Permisos::EDITMANIFCERT) ||in_array(Auth::user()->UsRol, Permisos::EDITMANIFCERT)
+							)
+								@if ($certificado->SolicitudServicio->SolSerStatus == 'Conciliado' || $certificado->SolicitudServicio->SolSerStatus == 'Tratado'
+								|| in_array(Auth::user()->UsRol, Permisos::INGDETURNO)
+								 )
 									<a data-toggle='modal' data-target='#ModalIndependiente' class="btn btn-success pull-right" style="margin-right: 1em"><i class="fas fa-file-import"></i><b>Independiente</b></a>
 								@endif
 							@endif

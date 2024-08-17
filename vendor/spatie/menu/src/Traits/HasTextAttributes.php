@@ -2,16 +2,18 @@
 
 namespace Spatie\Menu\Traits;
 
+use Spatie\Menu\Item;
+
 trait HasTextAttributes
 {
     /**
      * Prepend the anchor with a string of html on render.
      *
-     * @param string $prepend
+     * @param string|Item $prepend
      *
      * @return $this
      */
-    public function prepend(string $prepend)
+    public function prepend(string | Item $prepend): self
     {
         $this->prepend = $prepend;
 
@@ -23,11 +25,11 @@ trait HasTextAttributes
      * met.
      *
      * @param mixed $condition
-     * @param string $prepend
+     * @param string|Item $prepend
      *
      * @return $this
      */
-    public function prependIf($condition, string $prepend)
+    public function prependIf(mixed $condition, string | Item $prepend): self
     {
         if ($this->resolveCondition($condition)) {
             return $this->prepend($prepend);
@@ -39,11 +41,11 @@ trait HasTextAttributes
     /**
      * Append a text of html to the menu on render.
      *
-     * @param string $append
+     * @param string|Item $append
      *
      * @return $this
      */
-    public function append(string $append)
+    public function append(string | Item $append): self
     {
         $this->append = $append;
 
@@ -54,17 +56,31 @@ trait HasTextAttributes
      * Append the text with a string of html on render if a certain condition is
      * met.
      *
-     * @param bool $condition
-     * @param string $append
+     * @param bool|callable $condition
+     * @param string|Item $append
      *
-     * @return static
+     * @return $this
      */
-    public function appendIf($condition, string $append)
+    public function appendIf(bool | callable $condition, string | Item $append): self
     {
         if ($this->resolveCondition($condition)) {
             return $this->append($append);
         }
 
         return $this;
+    }
+
+    protected function renderPrepend(): string
+    {
+        return $this->prepend instanceof Item
+            ? $this->prepend->render()
+            : $this->prepend;
+    }
+
+    protected function renderAppend(): string
+    {
+        return $this->append instanceof Item
+            ? $this->append->render()
+            : $this->append;
     }
 }

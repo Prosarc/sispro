@@ -165,6 +165,8 @@ class Permisos{
 	/* Using ->
 		ProgramacionVehicle/edit
 	*/
+	
+	const INGDETURNO = ['IngDeTurno'];
 
 	const ADMINISTRADORPLANTA = ['AdministradorPlanta'];
 	/* Using ->
@@ -306,7 +308,7 @@ class Permisos{
 	/*CONJUNTO DE ARRAY PARA EL MENU.PHP PARA PERSONAL DE PROSARC*/
 	const AREAS = ['Programador','AdministradorPlanta','AdministradorBogota'];
 	const CARGOS = ['Programador','AdministradorPlanta','AdministradorBogota'];
-	const PERSONAL = ['Programador','AdministradorPlanta','JefeLogistica','JefeOperaciones','AdministradorBogota','Conductor'];
+	const PERSONAL = ['Programador','AdministradorPlanta','JefeLogistica','JefeOperaciones','AdministradorBogota','Conductor','IngDeTurno'];
 	const PROGRAMACIONES = ['Programador','AdministradorPlanta','JefeLogistica','AsistenteLogistica','Conductor','JefeOperaciones','Supervisor','AdministradorBogota','Tesorería','Comercial','JefeComercial'];
 	const VEHICULOS = ['Programador','AdministradorPlanta','JefeLogistica','AsistenteLogistica','AdministradorBogota','JefeComercial'];
 	const CONTACTOS = ['Programador','AdministradorPlanta','JefeLogistica','AdministradorBogota','JefeOperaciones','JefeComercial','Conductor'];

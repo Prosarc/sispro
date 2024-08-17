@@ -172,7 +172,7 @@ class VehicManteController extends Controller
 		$log->Auditlog=$request->all();
 		$log->save();
 
-		return redirect()->route('vehicle-mantenimiento.index',['id' => $id])->with('Mensaje', trans('adminlte_lang::message.updatetrue'));
+		return redirect()->route('vehicle-mantenimiento.index',['id' => $id])->with('Mensaje', __('adminlte::message.updatetrue'));
 	}
 
 	/**

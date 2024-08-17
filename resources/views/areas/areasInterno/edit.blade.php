@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
 @section('htmlheader_title')
-{{ trans('adminlte_lang::message.areatitle') }}
+{{ __('adminlte::message.areatitle') }}
 @endsection
 
 @section('contentheader_title')
 <span style="background-image: linear-gradient(40deg, #FFFFFF, #A3A2AE); padding-right:30vw; position:relative; overflow:hidden;">
-	{{ trans('adminlte_lang::message.areatitle') }}
+	{{ __('adminlte::message.areatitle') }}
   <div style="background-color:#ecf0f5; position:absolute; height:145%; width:40vw; transform:rotate(30deg); right:-20vw; top:-45%;"></div>
 </span>
 @endsection
@@ -25,10 +25,10 @@
 								el área de <b>{{$Areas->AreaName}}</b>
 							@endslot
 						@endcomponent
-						<h3 class="box-title">{{ trans('adminlte_lang::message.editarea') }}</h3>
+						<h3 class="box-title">{{ __('adminlte::message.editarea') }}</h3>
 						@if($Areas->ID_Area <> $AreaOne->ID_Area)
 							@if($Areas->AreaDelete == 0)
-								<a method='get' href='#' data-toggle='modal' data-target='#myModal{{$Areas->AreaSlug}}' class='btn btn-danger pull-right'><i class="fas fa-trash-alt"></i><b> {{ trans('adminlte_lang::message.delete') }}</b></a>
+								<a method='get' href='#' data-toggle='modal' data-target='#myModal{{$Areas->AreaSlug}}' class='btn btn-danger pull-right'><i class="fas fa-trash-alt"></i><b> {{ __('adminlte::message.delete') }}</b></a>
 								<form action='/areasInterno/{{$Areas->AreaSlug}}' method='POST'>
 									@method('DELETE')
 									@csrf
@@ -38,7 +38,7 @@
 								<form action='/areasInterno/{{$Areas->AreaSlug}}' method='POST' class="pull-right">
 									@method('DELETE')
 									@csrf
-									<button type="submit" class='btn btn-success btn-block'>{{ trans('adminlte_lang::message.add') }}</button>
+									<button type="submit" class='btn btn-success btn-block'>{{ __('adminlte::message.add') }}</button>
 								</form>
 							@endif
 						@endif
@@ -58,7 +58,7 @@
 							@endif
 							<div class="box-body">
 								<div class="form-group col-xs-12 col-md-12">
-									<label for="SedeSelect">{{ trans('adminlte_lang::message.sclientsede') }}</label><small class="help-block with-errors">*</small>
+									<label for="SedeSelect">{{ __('adminlte::message.sclientsede') }}</label><small class="help-block with-errors">*</small>
 									<select name="FK_AreaSede" id="SedeSelect" class="form-control select" required>
 										@foreach($Sedes as $Sede)
 											<option value="{{$Sede->SedeSlug}}" {{$Areas->FK_AreaSede == $Sede->ID_Sede ? 'selected' : ''}}>{{$Sede->SedeName}}</option>
@@ -66,13 +66,13 @@
 									</select>
 								</div>
 								<div class="form-group col-xs-12 col-md-12">
-									<label for="NombreArea">{{ trans('adminlte_lang::message.areaname') }}</label><small class="help-block with-errors">*</small>
+									<label for="NombreArea">{{ __('adminlte::message.areaname') }}</label><small class="help-block with-errors">*</small>
 									<input data-minlength="5" required="true" name="AreaName" autofocus="true" type="text" class="form-control inputText" id="NombreArea" value="{{$Areas->AreaName}}">
 								</div>
 							</div>
 							<div class="box box-info">
 								<div class="box-footer">
-									<button type="submit" class="btn btn-success pull-right">{{ trans('adminlte_lang::message.update') }}</button>
+									<button type="submit" class="btn btn-success pull-right">{{ __('adminlte::message.update') }}</button>
 								</div>
 							</div>
 						</form>

@@ -1,10 +1,10 @@
 @extends('layouts.app')
 @section('htmlheader_title')
-{{ trans('adminlte_lang::message.solsertitle') }}
+{{ __('adminlte::message.solsertitle') }}
 @endsection
 @section('contentheader_title')
 <span style="background-image: linear-gradient(40deg, #fbc2eb, #aa66cc); padding-right:30vw; position:relative; overflow:hidden;">
-    Servicios-Solicitudes
+    Servicios-Solicitudes 
     <div style="background-color:#ecf0f5; position:absolute; height:145%; width:40vw; transform:rotate(30deg); right:-20vw; top:-45%;">
     </div>
 </span>
@@ -15,8 +15,11 @@
         <div class="col-md-16 col-md-offset-0">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">{{ trans('adminlte_lang::message.solsertitleindex') }}</h3>
-                </div>
+					<h3 class="box-title">{{ __('adminlte::message.solsertitleindex') }}</h3>
+					@if(in_array(Auth::user()->UsRol, Permisos::INGDETURNO) || in_array(Auth::user()->UsRol, Permisos::INGDETURNO))
+							<a href="solicitud-servicio/createit" class="btn btn-primary pull-right">{{ __('adminlte::message.create') }}</a>
+					@endif
+				</div>
                 <div class="box box-info">
                     <div class="box-body">
                         <div id="ModalStatus"></div>
@@ -24,19 +27,19 @@
                         <table id="SolicitudservicioTable" class="table table-compact table-bordered table-striped d-none">
                             <thead>
                                 <tr>
-                                    <th>{{trans('adminlte_lang::message.solsershowdate')}}</th>
-                                    <th>{{trans('adminlte_lang::message.solsershowdateRPDA')}}</th>
+                                    <th>{{__('adminlte::message.solsershowdate')}}</th>
+                                    <th>{{__('adminlte::message.solsershowdateRPDA')}}</th>
                                     <th>N°</th>
                                     <th nowrap>Status</th>
                                     <th>Factura</th>
-                                    <th>{{trans('adminlte_lang::message.clientcliente')}}</th>
+                                    <th>{{__('adminlte::message.clientcliente')}}</th>
                                     <th>Contacto</th>
                                     <th>Comercial Asignado</th>
-                                    <th>{{trans('adminlte_lang::message.solserindextrans')}}</th>
-                                    <th>{{trans('adminlte_lang::message.solseraddrescollect')}}</th>
-                                    <th>{{trans('adminlte_lang::message.seemore')}}</th>
+                                    <th>{{__('adminlte::message.solserindextrans')}}</th>
+                                    <th>{{__('adminlte::message.solseraddrescollect')}}</th>
+                                    <th>{{__('adminlte::message.seemore')}}</th>
                                     @if(in_array(Auth::user()->UsRol, Permisos::SolSerCertifi) || in_array(Auth::user()->UsRol2, Permisos::SolSerCertifi))
-                                    <th>{{trans('adminlte_lang::message.solserstatuscertifi')}}</th>
+                                    <th>{{__('adminlte::message.solserstatuscertifi')}}</th>
                                     @endif
                                     @if(in_array(Auth::user()->UsRol, Permisos::COMERCIALES) || in_array(Auth::user()->UsRol2, Permisos::COMERCIALES))
                                     <th>{{'Facturar'}}</th>
@@ -125,7 +128,7 @@
                                     <td>{{$Servicio->SolSerNameTrans}}</td>
                                     <td>{{$Servicio->SolSerCollectAddress == null ? 'N/A' : $Servicio->SolSerCollectAddress}}
                                     </td>
-                                    <td style="text-align: center;"><a href='/solicitud-servicio/{{$Servicio->SolSerSlug}}' class="btn btn-info" title="{{ trans('adminlte_lang::message.seemoredetails')}}"><i class="fas fa-search"></i></a>
+                                    <td style="text-align: center;"><a href='/solicitud-servicio/{{$Servicio->SolSerSlug}}' class="btn btn-info" title="{{ __('adminlte::message.seemoredetails')}}"><i class="fas fa-search"></i></a>
                                     </td>
                                     @if(in_array(Auth::user()->UsRol, Permisos::COMERCIALES) || in_array(Auth::user()->UsRol2, Permisos::COMERCIALES))
                                     @php
@@ -142,7 +145,7 @@
                                     @endphp
                                     <td>
                                         <button id="{{'buttonCertStatus'.$Servicio->SolSerSlug}}" onclick="ModalCertificacion('{{$Servicio->SolSerSlug}}', '{{$Servicio->ID_SolSer}}', '{{in_array($Servicio->SolSerStatus, $Status)}}', 'Certificada', 'certificar')" {{in_array($Servicio->SolSerStatus, $Status) ? '' :  'disabled'}} style="text-align: center;" class="{{'classCertStatus'.$Servicio->SolSerSlug}} btn btn-{{$Servicio->SolSerStatus == 'Certificacion' ? 'default' : 'success'}}"><i class="fas fa-certificate"></i>
-                                            {{trans('adminlte_lang::message.solserstatuscertifi')}}</button>
+                                            {{__('adminlte::message.solserstatuscertifi')}}</button>
                                     </td>
                                     @endif
                                 </tr>

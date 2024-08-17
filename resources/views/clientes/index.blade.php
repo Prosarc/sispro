@@ -1,10 +1,10 @@
 @extends('layouts.app')
 @section('htmlheader_title')
-{{ trans('adminlte_lang::message.clientmenu') }}
+{{ __('adminlte::message.clientmenu') }}
 @endsection
 @section('contentheader_title')
 <span style="background-image: linear-gradient(40deg, rgb(255, 216, 111), rgb(252, 98, 98)); padding-right:30vw; position:relative; overflow:hidden;">
-	{{ trans('adminlte_lang::message.clientmenu') }}
+	{{ __('adminlte::message.clientmenu') }}
   <div style="background-color:#ecf0f5; position:absolute; height:145%; width:40vw; transform:rotate(30deg); right:-20vw; top:-45%;"></div>
 </span>
 @endsection
@@ -14,23 +14,23 @@
 		<div class="col-md-16 col-md-offset-0">
 			<div class="box">
 				<div class="box-header">
-					<h3 class="box-title">{{ trans('adminlte_lang::message.clientindexboxtitle') }}</h3>
+					<h3 class="box-title">{{ __('adminlte::message.clientindexboxtitle') }}</h3>
 				</div>
 				<div class="box box-info">
 					<div class="box-body">
 						<table id="clientesTable" class="table table-compact table-bordered table-striped">
 							<thead>
 							<tr>
-								<th>{{ trans('adminlte_lang::message.clientNIT') }}</th>
-								<th>{{ trans('adminlte_lang::message.clirazonsoc') }}</th>
-								<th>{{ trans('adminlte_lang::message.clientnombrecorto') }}</th>
+								<th>{{ __('adminlte::message.clientNIT') }}</th>
+								<th>{{ __('adminlte::message.clirazonsoc') }}</th>
+								<th>{{ __('adminlte::message.clientnombrecorto') }}</th>
                                 @if(in_array(Auth::user()->UsRol, Permisos::TODOPROSARC))
                                 <th>Status</th>
                                 @endif
 								@if(in_array(Auth::user()->UsRol, Permisos::TODOPROSARCMenosComercial))
 								<th>Comercial Asignado</th>
 								@endif
-								<th>{{ trans('adminlte_lang::message.seemore') }}</th>
+								<th>{{ __('adminlte::message.seemore') }}</th>
 							</tr>
 							</thead>
 							<tbody onload="renderTable()" id="readyTable">
@@ -52,7 +52,7 @@
 								</td>
 								@endif
 								<td>
-									<a method='get' href='/clientes/{{$cliente->CliSlug}}' class='btn btn-info btn-block' title="{{ trans('adminlte_lang::message.seemoredetails')}}"><i class="fas fa-search"></i></a>
+									<a method='get' href='/clientes/{{$cliente->CliSlug}}' class='btn btn-info btn-block' title="{{ __('adminlte::message.seemoredetails')}}"><i class="fas fa-search"></i></a>
 								</td>
 							</tr>
 							@endforeach
@@ -101,7 +101,7 @@
 									</div>
 								</div>
 								<div class="modal-footer">
-									<button type="submit" class="btn btn-success pull-right">{{trans('adminlte_lang::message.save')}}</button>
+									<button type="submit" class="btn btn-success pull-right">{{__('adminlte::message.save')}}</button>
 								</div>
 							</div>
 						</div>

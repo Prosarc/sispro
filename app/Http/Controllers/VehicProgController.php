@@ -61,7 +61,7 @@ class VehicProgController extends Controller
 					}
 				})
 				->where('clientes.CliCategoria', 'Cliente')
-				->whereYear('progvehiculos.ProgVehFecha','2023')
+				->whereYear('progvehiculos.ProgVehFecha','2024')
 				->get();
 			$personals = DB::table('personals')
 				->select('ID_Pers', 'PersFirstName', 'PersLastName')
@@ -558,7 +558,8 @@ class VehicProgController extends Controller
 		$SolicitudServicio->save();
 
 		// return redirect()->route('vehicle-programacion.create');
-		return redirect()->route('vehicle-programacion.edit' , ['id' => $programacion->ID_ProgVeh]);
+		//return redirect()->route('vehicle-programacion.edit' , ['id' => $programacion->ID_ProgVeh]);
+		return redirect()->route('vehicle-programacion.edit', ['vehicle_programacion' => $programacion->ID_ProgVeh]);
 	}
 
 	/**
@@ -671,7 +672,8 @@ class VehicProgController extends Controller
 			// ->where('requerimientos.ofertado', 1)
 	        // ->where('forevaluation', 0)
 			->get();
-
+		$Observaciones = Observacion::where('FK_ObsSolSer', $SolicitudServicio->ID_SolSer)
+			->first();	
 		$Residuos = $Residuosoriginal->map(function ($item) {
 		  $requerimientos = Requerimiento::with(['pretratamientosSelected'])
 	        ->where('ID_Req', $item->FK_SolResRequerimiento)
@@ -681,7 +683,7 @@ class VehicProgController extends Controller
 	        $item->pretratamientosSelected = $requerimientos->pretratamientosSelected;
 		  	return $item;
 		});
-		return view('documentos.ManifCarga2', compact('SolicitudServicio', 'Residuos', 'GenerResiduos', 'Cliente', 'SolSerCollectAddress', 'SolSerConductor', 'TextProgramacion', 'Programacion', 'Municipio'));
+		return view('documentos.ManifCarga2', compact('SolicitudServicio','Observaciones', 'Residuos', 'GenerResiduos', 'Cliente', 'SolSerCollectAddress', 'SolSerConductor', 'TextProgramacion', 'Programacion', 'Municipio'));
 	}
 
 	/**
@@ -915,7 +917,7 @@ class VehicProgController extends Controller
 		$log->AuditUser=Auth::user()->email;
 		$log->Auditlog=$request->all();
 		$log->save();
-		return redirect()->route('vehicle-programacion.edit',['id' => $id])->with('mensaje', trans('adminlte_lang::message.progvehceditsuccess'));
+		return redirect()->route('vehicle-programacion.edit',['id' => $id])->with('mensaje', __('adminlte::message.progvehceditsuccess'));
 	}
 
 	/**
@@ -1010,7 +1012,7 @@ class VehicProgController extends Controller
 					$log->AuditUser = Auth::user()->email;
 					$log->Auditlog = $programacion->ProgVehDelete;
 					$log->save();
-					return redirect()->route('vehicle-programacion.create')->with('Delete', trans('adminlte_lang::message.progvehcdeletesuccess'));
+					return redirect()->route('vehicle-programacion.create')->with('Delete', __('adminlte::message.progvehcdeletesuccess'));
 				}
 				else{
 					$programacion->ProgVehDelete = 0;
@@ -1031,7 +1033,7 @@ class VehicProgController extends Controller
 					$log->Auditlog = $programacion->ProgVehDelete;
 					$log->save();
 					$programacion->save();
-					return redirect()->route('vehicle-programacion.edit',['id' => $id])->with('mensaje', trans('adminlte_lang::message.progvehcdelete2success'));
+					return redirect()->route('vehicle-programacion.edit',['id' => $id])->with('mensaje', __('adminlte::message.progvehcdelete2success'));
 				}
 			break;
 
@@ -1124,7 +1126,7 @@ class VehicProgController extends Controller
 					$Observacion->FK_ObsSolSer = $SolicitudServicio->ID_SolSer;
 					$Observacion->save();
 
-					return redirect()->route('vehicle-programacion.create')->with('Delete', trans('adminlte_lang::message.progvehcdeletesuccess'));
+					return redirect()->route('vehicle-programacion.create')->with('Delete', __('adminlte::message.progvehcdeletesuccess'));
 				}
 				else{
 					$programacion->ProgVehDelete = 0;
@@ -1144,7 +1146,7 @@ class VehicProgController extends Controller
 					$log->Auditlog = $programacion->ProgVehDelete;
 					$log->save();
 
-					return redirect()->route('vehicle-programacion.edit',['id' => $id])->with('mensaje', trans('adminlte_lang::message.progvehcdelete2success'));
+					return redirect()->route('vehicle-programacion.edit',['id' => $id])->with('mensaje', __('adminlte::message.progvehcdelete2success'));
 				}
 			break;
 
@@ -1272,7 +1274,8 @@ class VehicProgController extends Controller
 		}
 
 		if($request->input('destino') == 'vehiprog-edit'){
-			return redirect()->route('vehicle-programacion.edit', ['id' => $id]);
+			return redirect()->route('vehicle-programacion.edit', ['vehicle_programacion' => $id]);
+			//return redirect()->route('vehicle-programacion.edit', ['id' => $id]);
 		}else{
 			return redirect()->route('vehicle-programacion.index');
 		}

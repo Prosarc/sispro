@@ -177,8 +177,8 @@
 						<table>
 							<tr>
 								<td style="text-align: left; font-size: 8px;">
-									{{-- <img src="{{asset('img/QrCode.png')}}" style="width: 120px;"><br> --}}
-									<img src="{{$qrCode->writeDataUri()}}"style="width: 120px;"  alt="" id="inputQrImg"><br>
+									 <img src="{{asset('img/QrCode.png')}}" style="width: 120px;"><br> 
+									{{--<img src="{{$qrCode->writeDataUri()}}"style="width: 120px;"  alt="" id="inputQrImg"><br>--}}
 								</td>
 							</tr>
 						</table>

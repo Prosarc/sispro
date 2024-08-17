@@ -3,8 +3,8 @@
 namespace Illuminate\Auth\Middleware;
 
 use Closure;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Auth\Access\Gate;
+use Illuminate\Database\Eloquent\Model;
 
 class Authorize
 {
@@ -24,6 +24,18 @@ class Authorize
     public function __construct(Gate $gate)
     {
         $this->gate = $gate;
+    }
+
+    /**
+     * Specify the ability and models for the middleware.
+     *
+     * @param  string  $ability
+     * @param  string  ...$models
+     * @return string
+     */
+    public static function using($ability, ...$models)
+    {
+        return static::class.':'.implode(',', [$ability, ...$models]);
     }
 
     /**
@@ -50,7 +62,7 @@ class Authorize
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  array|null  $models
-     * @return array|string|\Illuminate\Database\Eloquent\Model
+     * @return array
      */
     protected function getGateArguments($request, $models)
     {
@@ -74,10 +86,10 @@ class Authorize
     {
         if ($this->isClassName($model)) {
             return trim($model);
-        } else {
-            return $request->route($model, null) ?:
-                ((preg_match("/^['\"](.*)['\"]$/", trim($model), $matches)) ? $matches[1] : null);
         }
+
+        return $request->route($model, null) ??
+            ((preg_match("/^['\"](.*)['\"]$/", trim($model), $matches)) ? $matches[1] : null);
     }
 
     /**
@@ -88,6 +100,6 @@ class Authorize
      */
     protected function isClassName($value)
     {
-        return strpos($value, '\\') !== false;
+        return str_contains($value, '\\');
     }
 }

@@ -22,7 +22,7 @@ class EmailController extends Controller
             switch ($SolSer->SolSerStatus) {
 
                 case 'No Conciliado':
-                    if (Auth::user()->UsRol === trans('adminlte_lang::message.Cliente') || Auth::user()->UsRol === trans('adminlte_lang::message.Programador')) {
+                    if (Auth::user()->UsRol === __('adminlte::message.Cliente') || Auth::user()->UsRol === __('adminlte::message.Programador')) {
                         $email = DB::table('solicitud_servicios')
                             ->join('clientes', 'clientes.ID_Cli', '=', 'solicitud_servicios.FK_SolSerCliente')
                             ->join('personals', 'personals.ID_Pers', '=', 'solicitud_servicios.FK_SolSerPersona')
@@ -49,7 +49,7 @@ class EmailController extends Controller
                     break;
 
                 case 'Conciliado':
-                    if (Auth::user()->UsRol === trans('adminlte_lang::message.Cliente') || Auth::user()->UsRol === trans('adminlte_lang::message.Programador')) {
+                    if (Auth::user()->UsRol === __('adminlte::message.Cliente') || Auth::user()->UsRol === __('adminlte::message.Programador')) {
                         $email = DB::table('solicitud_servicios')
                             ->join('clientes', 'clientes.ID_Cli', '=', 'solicitud_servicios.FK_SolSerCliente')
                             ->join('personals', 'personals.ID_Pers', '=', 'solicitud_servicios.FK_SolSerPersona')
@@ -160,7 +160,7 @@ class EmailController extends Controller
                         ->cc($destinatarios)
                         ->send(new SolSerEmail($email));
                     }
-                    return redirect()->route('vehicle-programacion.index')->with('mensaje', trans('servicio notificado correctamente'));
+                    return redirect()->route('vehicle-programacion.index')->with('mensaje', __('servicio notificado correctamente'));
                     break;
 
                 case 'Completado':

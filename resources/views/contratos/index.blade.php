@@ -1,10 +1,10 @@
 @extends('layouts.app')
 @section('htmlheader_title')
-{{ trans('adminlte_lang::message.contracttitle') }}
+{{ __('adminlte::message.contracttitle') }}
 @endsection
 @section('contentheader_title')
 <span style="background-image: linear-gradient(40deg, #FFFFFF, #A3A2AE); padding-right:30vw; position:relative; overflow:hidden;">
-	{{ trans('adminlte_lang::message.contracttitle') }}
+	{{ __('adminlte::message.contracttitle') }}
   <div style="background-color:#ecf0f5; position:absolute; height:145%; width:40vw; transform:rotate(30deg); right:-20vw; top:-45%;"></div>
 </span>
 @endsection
@@ -14,9 +14,9 @@
 		<div class="col-md-16">
 			<div class="box">
 				<div class="box-header">
-					<h3 class="box-title">{{trans('adminlte_lang::message.contractindex')}} </h3>
+					<h3 class="box-title">{{__('adminlte::message.contractindex')}} </h3>
 					@if(in_array(Auth::user()->UsRol, Permisos::CONTRATOSCRUD) || in_array(Auth::user()->UsRol2, Permisos::CONTRATOSCRUD))
-					<a href="/contratos/create" class="btn btn-primary pull-right">{{trans('adminlte_lang::message.create')}}</a>
+					<a href="/contratos/create" class="btn btn-primary pull-right">{{__('adminlte::message.create')}}</a>
 					@endif
 				</div>
 				<div class="box box-info">
@@ -24,12 +24,12 @@
 						<table id="ContratosTable" class="table table-compact table-bordered table-striped">
 							<thead>
 								<tr>
-									<th>{{trans('adminlte_lang::message.contractclien')}}</th>
-									<th>{{trans('adminlte_lang::message.contractpdf')}}</th>
-									<th>{{trans('adminlte_lang::message.contractvigencia')}}</th>
-									<th>{{trans('adminlte_lang::message.contractvigencia2')}}</th>
+									<th>{{__('adminlte::message.contractclien')}}</th>
+									<th>{{__('adminlte::message.contractpdf')}}</th>
+									<th>{{__('adminlte::message.contractvigencia')}}</th>
+									<th>{{__('adminlte::message.contractvigencia2')}}</th>
 									@if(in_array(Auth::user()->UsRol, Permisos::CONTRATOSCRUD) || in_array(Auth::user()->UsRol2, Permisos::CONTRATOSCRUD))
-									<th>{{trans('adminlte_lang::message.edit')}}</th>
+									<th>{{__('adminlte::message.edit')}}</th>
 									@endif
 								</tr>
 							</thead>
@@ -41,7 +41,7 @@
 									<td style="text-align: center;">{{$Contrato->ContraVigencia}}</td>
 									<td>{{$Contrato->ContraVigencia < now() ? 'Vencida' : ($Contrato->ContraNotifiVigencia <= now() ? 'Pronto a Vencer' : 'Vigente')}}</td>
 									@if(in_array(Auth::user()->UsRol, Permisos::CONTRATOSCRUD) || in_array(Auth::user()->UsRol2, Permisos::CONTRATOSCRUD))
-									<td><a href='/contratos/{{$Contrato->ContraSlug}}/edit' class='btn btn-warning btn-block'><i class="fas fa-edit"></i> <b>{{trans('adminlte_lang::message.edit')}}</b></a></td>
+									<td><a href='/contratos/{{$Contrato->ContraSlug}}/edit' class='btn btn-warning btn-block'><i class="fas fa-edit"></i> <b>{{__('adminlte::message.edit')}}</b></a></td>
 									@endif
 								</tr>
 								@endforeach

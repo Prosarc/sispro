@@ -20,26 +20,39 @@ use Symfony\Component\Routing\RouteCollection;
 class CollectionConfigurator
 {
     use Traits\AddTrait;
+    use Traits\HostTrait;
     use Traits\RouteTrait;
 
-    private $parent;
-    private $parentConfigurator;
-    private $parentPrefixes;
+    private string|array|null $host = null;
 
-    public function __construct(RouteCollection $parent, string $name, self $parentConfigurator = null, array $parentPrefixes = null)
-    {
-        $this->parent = $parent;
+    public function __construct(
+        private RouteCollection $parent,
+        string $name,
+        private ?self $parentConfigurator = null, // for GC control
+        private ?array $parentPrefixes = null,
+    ) {
         $this->name = $name;
         $this->collection = new RouteCollection();
         $this->route = new Route('');
-        $this->parentConfigurator = $parentConfigurator; // for GC control
-        $this->parentPrefixes = $parentPrefixes;
+    }
+
+    public function __sleep(): array
+    {
+        throw new \BadMethodCallException('Cannot serialize '.__CLASS__);
+    }
+
+    public function __wakeup(): void
+    {
+        throw new \BadMethodCallException('Cannot unserialize '.__CLASS__);
     }
 
     public function __destruct()
     {
         if (null === $this->prefixes) {
             $this->collection->addPrefix($this->route->getPath());
+        }
+        if (null !== $this->host) {
+            $this->addHost($this->collection, $this->host);
         }
 
         $this->parent->addCollection($this->collection);
@@ -60,7 +73,7 @@ class CollectionConfigurator
      *
      * @return $this
      */
-    final public function prefix($prefix): self
+    final public function prefix(string|array $prefix): static
     {
         if (\is_array($prefix)) {
             if (null === $this->parentPrefixes) {
@@ -86,6 +99,23 @@ class CollectionConfigurator
         return $this;
     }
 
+    /**
+     * Sets the host to use for all child routes.
+     *
+     * @param string|array $host the host, or the localized hosts
+     *
+     * @return $this
+     */
+    final public function host(string|array $host): static
+    {
+        $this->host = $host;
+
+        return $this;
+    }
+
+    /**
+     * This method overrides the one from LocalizedRouteTrait.
+     */
     private function createRoute(string $path): Route
     {
         return (clone $this->route)->setPath($path);

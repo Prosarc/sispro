@@ -11,10 +11,10 @@
 	    </select>
 	</div>
 {{-- 	<div class="col-md-6" id="pretratdescription`+contador+`">
-		<label for="inputdescript[]">{{ trans('adminlte_lang::LangTratamiento.pretratdescript') }} </label>
+		<label for="inputdescript[]">{{ __('adminlte::LangTratamiento.pretratdescript') }} </label>
 		<div class="input-group">
 			<input maxlength="250" id="inputdescript[]" class="form-control" type="text" name="PreTratDescription[]">
-			<a class="input-group-addon" data-toggle="popover" title="{{ trans('adminlte_lang::LangTratamiento.popovertittle2') }}" data-content="<p style='width: 50%'>{{ trans('adminlte_lang::LangTratamiento.popoverdescript2') }}</p>"><i class="fas fa-info-circle"></i></a>
+			<a class="input-group-addon" data-toggle="popover" title="{{ __('adminlte::LangTratamiento.popovertittle2') }}" data-content="<p style='width: 50%'>{{ __('adminlte::LangTratamiento.popoverdescript2') }}</p>"><i class="fas fa-info-circle"></i></a>
 		</div>
 	</div> --}}
 </div>

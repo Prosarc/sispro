@@ -1,10 +1,10 @@
 @extends('layouts.app')
 @section('htmlheader_title')
-{{trans('adminlte_lang::message.vehicletitle')}}
+{{__('adminlte::message.vehicletitle')}}
 @endsection
 @section('contentheader_title')
 <span style="background-image: linear-gradient(40deg, rgb(69, 202, 252), rgb(48, 63, 159)); padding-right:30vw; position:relative; overflow:hidden;">
-	{{ trans('adminlte_lang::message.vehicletitle') }}
+	{{ __('adminlte::message.vehicletitle') }}
   <div style="background-color:#ecf0f5; position:absolute; height:145%; width:40vw; transform:rotate(30deg); right:-20vw; top:-45%;"></div>
 </span>
 @endsection
@@ -14,9 +14,9 @@
 		<div class="col-md-16 col-md-offset-0">
 			<div class="box">
 				<div class="box-header">
-					<h3 class="box-title">{{trans('adminlte_lang::message.vehiclelist')}}</h3>
+					<h3 class="box-title">{{__('adminlte::message.vehiclelist')}}</h3>
 					@if(in_array(Auth::user()->UsRol, Permisos::ProgVehic1) || in_array(Auth::user()->UsRol2, Permisos::ProgVehic1))
-					<a href="/vehicle/create" class="btn btn-primary pull-right">{{trans('adminlte_lang::message.create')}}</a>
+					<a href="/vehicle/create" class="btn btn-primary pull-right">{{__('adminlte::message.create')}}</a>
 					@endif
 				</div>
 				<!-- /.box-header -->
@@ -25,13 +25,13 @@
 						<table id="VehicleTable" class="table table-compact table-bordered table-striped">
 							<thead>
 								<tr>
-									<th>{{trans('adminlte_lang::message.vehicplaca')}}</th>
-									<th>{{trans('adminlte_lang::message.vehictipo')}}</th>
-									<th>{{trans('adminlte_lang::message.vehiccapacidad')}}</th>
-									<th>{{trans('adminlte_lang::message.vehickm')}}</th>
-									<th>{{trans('adminlte_lang::message.vehicsedes')}}</th>
+									<th>{{__('adminlte::message.vehicplaca')}}</th>
+									<th>{{__('adminlte::message.vehictipo')}}</th>
+									<th>{{__('adminlte::message.vehiccapacidad')}}</th>
+									<th>{{__('adminlte::message.vehickm')}}</th>
+									<th>{{__('adminlte::message.vehicsedes')}}</th>
 									@if(in_array(Auth::user()->UsRol, Permisos::ProgVehic1) || in_array(Auth::user()->UsRol2, Permisos::ProgVehic1))
-									<th>{{trans('adminlte_lang::message.edit')}}</th>
+									<th>{{__('adminlte::message.edit')}}</th>
 									@endif
 								</tr>
 							</thead>
@@ -44,7 +44,7 @@
 										<td>{{$Vehicle->VehicKmActual}}</td>
 										<td>{{$Vehicle->SedeName}}</td>
 										@if(in_array(Auth::user()->UsRol, Permisos::ProgVehic1) || in_array(Auth::user()->UsRol2, Permisos::ProgVehic1))
-										<td><a href='/vehicle/{{$Vehicle->VehicPlaca}}/edit' class='btn btn-warning btn-block'><i class="fas fa-edit"></i> <b>{{trans('adminlte_lang::message.edit')}}</b></a></td>
+										<td><a href='/vehicle/{{$Vehicle->VehicPlaca}}/edit' class='btn btn-warning btn-block'><i class="fas fa-edit"></i> <b>{{__('adminlte::message.edit')}}</b></a></td>
 										@endif
 									</tr>
 								@endforeach

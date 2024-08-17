@@ -35,7 +35,7 @@
 		</div>
 
 		<div class="col-md-6 form-group has-feedback">
-			<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 200}' title="<b>Pdf del Manifiesto</b>" data-content="{{ trans('adminlte_lang::LangRespel.tarjetapopoverinfo') }}"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>Pdf del Manifiesto</label>
+			<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 200}' title="<b>Pdf del Manifiesto</b>" data-content="{{ __('adminlte::LangRespel.tarjetapopoverinfo') }}"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>Pdf del Manifiesto</label>
 			<small class="help-block with-errors">*</small>
 			<div class="input-group">
 				<input name="ManifSrc" type="file" data-filesize="5120" class="form-control" data-accept="pdf" accept=".pdf">
@@ -50,7 +50,7 @@
 		</div>
 
 		<div class="col-md-6 form-group has-feedback">
-			<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 500}' title="<b>CertAnexo</b>" data-content="{{ trans('adminlte_lang::LangRespel.tarjetapopoverinfo') }}"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>Anexos del manifiesto</label>
+			<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 500}' title="<b>CertAnexo</b>" data-content="{{ __('adminlte::LangRespel.tarjetapopoverinfo') }}"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>Anexos del manifiesto</label>
 			<small class="help-block with-errors">*</small>
 			<div class="input-group">
 				<input  type="file" data-filesize="5120" class="form-control" data-accept="pdf" accept=".pdf">

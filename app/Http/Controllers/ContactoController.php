@@ -259,7 +259,7 @@ class ContactoController extends Controller
         $log->save();
 
         $id = $Cliente->CliSlug;
-        return redirect()->route('contactos.show', compact('id'));
+        return redirect()->route('contactos.show', ['contacto' => $id]);
     }
 
     /**

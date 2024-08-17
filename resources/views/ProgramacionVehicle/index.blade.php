@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('htmlheader_title')
-{{ trans('adminlte_lang::message.progvehictitle') }}
+{{ __('adminlte::message.progvehictitle') }}
 @endsection
 @section('contentheader_title')
 <span style="background-image: linear-gradient(40deg, #fbc2eb, #aa66cc); padding-right:30vw; position:relative; overflow:hidden;">
@@ -14,9 +14,9 @@
 		<div class="col-md-16 col-md-offset-0">
 			<div class="box">
 				<div class="box-header">
-					<h3 class="box-title">{{ trans('adminlte_lang::message.progvehiclist') }}</h3>
+					<h3 class="box-title">{{ __('adminlte::message.progvehiclist') }}</h3>
 					@if(in_array(Auth::user()->UsRol, Permisos::TODOPROSARC) || in_array(Auth::user()->UsRol2, Permisos::TODOPROSARC))
-						<a href="/vehicle-programacion/create" class="btn btn-info pull-right"><i class="fas fa-calendar-alt"></i> {{ trans('adminlte_lang::message.progvehiccreatetext') }}</a>
+						<a href="/vehicle-programacion/create" class="btn btn-info pull-right"><i class="fas fa-calendar-alt"></i> {{ __('adminlte::message.progvehiccreatetext') }}</a>
 					@endif
 				</div>
 				<div class="box box-info">
@@ -24,27 +24,27 @@
 						<table id="ProgVehicleTable" class="table table-compact table-bordered table-striped" data-order='[[ 1, "desc"]]'>
 							<thead>
 								<tr>
-									<th>{{ trans('adminlte_lang::message.progvehicclient') }}</th>
-									<th>{{ trans('adminlte_lang::message.progvehicfech') }}</th>
-									<th>{{ trans('adminlte_lang::message.progvehicvehic') }}</th>
-									<th>{{ trans('adminlte_lang::message.progvehicsalida') }}</th>
-									<th>{{ trans('adminlte_lang::message.progvehicayudan') }}</th>
-									{{-- @if(Auth::user()->UsRol <> trans('adminlte_lang::message.Conductor') || Auth::user()->UsRol2 <> trans('adminlte_lang::message.Conductor')) --}}
-									<th>{{ trans('adminlte_lang::message.progvehicconduc') }}</th>
+									<th>{{ __('adminlte::message.progvehicclient') }}</th>
+									<th>{{ __('adminlte::message.progvehicfech') }}</th>
+									<th>{{ __('adminlte::message.progvehicvehic') }}</th>
+									<th>{{ __('adminlte::message.progvehicsalida') }}</th>
+									<th>{{ __('adminlte::message.progvehicayudan') }}</th>
+									{{-- @if(Auth::user()->UsRol <> __('adminlte::message.Conductor') || Auth::user()->UsRol2 <> __('adminlte::message.Conductor')) --}}
+									<th>{{ __('adminlte::message.progvehicconduc') }}</th>
 									<th>Puntos de recolección</th>
-									<th>{{ trans('adminlte_lang::message.progvehicllegada') }}</th>
-									<th>{{ trans('adminlte_lang::message.progvehictype') }}</th>
+									<th>{{ __('adminlte::message.progvehicllegada') }}</th>
+									<th>{{ __('adminlte::message.progvehictype') }}</th>
 									<th>Autorización</th>
 									{{-- @endif --}}
 									@if(in_array(Auth::user()->UsRol, Permisos::CONDUCTOR) || in_array(Auth::user()->UsRol2, Permisos::CONDUCTOR))
 									<th>ver programación</th>
 									@endif
-									<th>{{ trans('adminlte_lang::message.progvehicservi2') }}</th>
+									<th>{{ __('adminlte::message.progvehicservi2') }}</th>
 									@if(in_array(Auth::user()->UsRol, Permisos::ProgVehic2) || in_array(Auth::user()->UsRol2, Permisos::ProgVehic2))
-									<th>{{ trans('adminlte_lang::message.edit') }}</th>
+									<th>{{ __('adminlte::message.edit') }}</th>
 									@endif
 									@if(in_array(Auth::user()->UsRol, Permisos::ProgVehic2) || in_array(Auth::user()->UsRol2, Permisos::SolSerCertifi))
-									<th>{{ trans('adminlte_lang::message.progvehicserauth') }}</th>
+									<th>{{ __('adminlte::message.progvehicserauth') }}</th>
 									@endif
 								</tr>
 							</thead>
@@ -99,7 +99,7 @@
 									<td>{{$vehiculoPlaca}}</td>
 									<td>{{date('h:i A', strtotime($programacion->ProgVehSalida))}}</td>
 									<td>{{$ayudante}}</td>
-									{{-- @if(Auth::user()->UsRol <> trans('adminlte_lang::message.Conductor')) --}}
+									{{-- @if(Auth::user()->UsRol <> __('adminlte::message.Conductor')) --}}
 										<td>{{$conductor}}</td>
 										<td><ul class="list-group">
 											@foreach($programacion->puntosderecoleccion as $Punto)
@@ -131,9 +131,9 @@
 									@if(in_array(Auth::user()->UsRol, Permisos::CONDUCTOR) || in_array(Auth::user()->UsRol2, Permisos::CONDUCTOR))
 										<td><a method='get' href='/vehicle-programacion/{{$programacion->ID_ProgVeh}}' class='btn btn-info btn-block'><i class="fas fa-search"></i> <b>Datos</b></a></td>
 									@endif
-									<td><a href="/solicitud-servicio/{{$programacion->SolSerSlug}}"class='btn btn-info btn-block' title="{{ trans('adminlte_lang::message.seemoredetails')}}"><i class="fas fa-search"></i> #{{$programacion->ID_SolSer}}</a></td>
+									<td><a href="/solicitud-servicio/{{$programacion->SolSerSlug}}"class='btn btn-info btn-block' title="{{ __('adminlte::message.seemoredetails')}}"><i class="fas fa-search"></i> #{{$programacion->ID_SolSer}}</a></td>
 									@if(in_array(Auth::user()->UsRol, Permisos::ProgVehic2) || in_array(Auth::user()->UsRol2, Permisos::ProgVehic2))
-										<td><a method='get' href='/vehicle-programacion/{{$programacion->ID_ProgVeh}}/edit' class='btn btn-warning btn-block'><i class="fas fa-edit"></i> <b>{{trans('adminlte_lang::message.edit')}}</b></a></td>
+										<td><a method='get' href='/vehicle-programacion/{{$programacion->ID_ProgVeh}}/edit' class='btn btn-warning btn-block'><i class="fas fa-edit"></i> <b>{{__('adminlte::message.edit')}}</b></a></td>
 									@endif
 
 									@if(in_array(Auth::user()->UsRol, Permisos::ProgVehic2) || in_array(Auth::user()->UsRol2, Permisos::SolSerCertifi))
@@ -141,7 +141,7 @@
 										$Status = ['Aprobado', 'Programado', 'Notificado'];
 									@endphp
 									<td>
-										<a onclick="ModalStatus('{{$programacion->ID_ProgVeh}}', '{{$programacion->ID_SolSer}}', '{{in_array($programacion->SolSerStatus, $Status)}}', 'Programado', 'Notificar')" style="text-align: center;" class="btn btn-{{$programacion->SolSerStatus == 'Programado' ? 'success' : ($programacion->SolSerStatus == 'Notificado' ? 'info' : 'default')}}"><i class="fas fa-sign-out-alt"></i> {{ trans('adminlte_lang::message.progvehicserauth')}}</a>
+										<a onclick="ModalStatus('{{$programacion->ID_ProgVeh}}', '{{$programacion->ID_SolSer}}', '{{in_array($programacion->SolSerStatus, $Status)}}', 'Programado', 'Notificar')" style="text-align: center;" class="btn btn-{{$programacion->SolSerStatus == 'Programado' ? 'success' : ($programacion->SolSerStatus == 'Notificado' ? 'info' : 'default')}}"><i class="fas fa-sign-out-alt"></i> {{ __('adminlte::message.progvehicserauth')}}</a>
 									</td>
 									@endif
 								</tr>

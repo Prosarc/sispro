@@ -2,44 +2,88 @@
 
 namespace Illuminate\Foundation\Support\Providers;
 
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
+use Illuminate\Foundation\Events\DiscoverEvents;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Foundation\Events\DiscoverEvents;
 
 class EventServiceProvider extends ServiceProvider
 {
     /**
      * The event handler mappings for the application.
      *
-     * @var array
+     * @var array<string, array<int, string>>
      */
     protected $listen = [];
 
     /**
-     * The subscriber classes to register.
+     * The subscribers to register.
      *
      * @var array
      */
     protected $subscribe = [];
 
     /**
+     * The model observers to register.
+     *
+     * @var array<string, string|object|array<int, string|object>>
+     */
+    protected $observers = [];
+
+    /**
+     * Indicates if events should be discovered.
+     *
+     * @var bool
+     */
+    protected static $shouldDiscoverEvents = true;
+
+    /**
+     * The configured event discovery paths.
+     *
+     * @var array|null
+     */
+    protected static $eventDiscoveryPaths;
+
+    /**
      * Register the application's event listeners.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        $this->booting(function () {
+            $events = $this->getEvents();
+
+            foreach ($events as $event => $listeners) {
+                foreach (array_unique($listeners, SORT_REGULAR) as $listener) {
+                    Event::listen($event, $listener);
+                }
+            }
+
+            foreach ($this->subscribe as $subscriber) {
+                Event::subscribe($subscriber);
+            }
+
+            foreach ($this->observers as $model => $observers) {
+                $model::observe($observers);
+            }
+        });
+
+        $this->booted(function () {
+            $this->configureEmailVerification();
+        });
+    }
+
+    /**
+     * Boot any application services.
      *
      * @return void
      */
     public function boot()
     {
-        $events = $this->getEvents();
-
-        foreach ($events as $event => $listeners) {
-            foreach (array_unique($listeners) as $listener) {
-                Event::listen($event, $listener);
-            }
-        }
-
-        foreach ($this->subscribe as $subscriber) {
-            Event::subscribe($subscriber);
-        }
+        //
     }
 
     /**
@@ -90,7 +134,7 @@ class EventServiceProvider extends ServiceProvider
      */
     public function shouldDiscoverEvents()
     {
-        return false;
+        return get_class($this) === __CLASS__ && static::$shouldDiscoverEvents === true;
     }
 
     /**
@@ -107,7 +151,7 @@ class EventServiceProvider extends ServiceProvider
                     ->reduce(function ($discovered, $directory) {
                         return array_merge_recursive(
                             $discovered,
-                            DiscoverEvents::within($directory, base_path())
+                            DiscoverEvents::within($directory, $this->eventDiscoveryBasePath())
                         );
                     }, []);
     }
@@ -119,8 +163,65 @@ class EventServiceProvider extends ServiceProvider
      */
     protected function discoverEventsWithin()
     {
-        return [
+        return static::$eventDiscoveryPaths ?: [
             $this->app->path('Listeners'),
         ];
+    }
+
+    /**
+     * Add the given event discovery paths to the application's event discovery paths.
+     *
+     * @param  string|array  $paths
+     * @return void
+     */
+    public static function addEventDiscoveryPaths(array|string $paths)
+    {
+        static::$eventDiscoveryPaths = array_values(array_unique(
+            array_merge(static::$eventDiscoveryPaths, Arr::wrap($paths))
+        ));
+    }
+
+    /**
+     * Set the globally configured event discovery paths.
+     *
+     * @param  array  $paths
+     * @return void
+     */
+    public static function setEventDiscoveryPaths(array $paths)
+    {
+        static::$eventDiscoveryPaths = $paths;
+    }
+
+    /**
+     * Get the base path to be used during event discovery.
+     *
+     * @return string
+     */
+    protected function eventDiscoveryBasePath()
+    {
+        return base_path();
+    }
+
+    /**
+     * Disable event discovery for the application.
+     *
+     * @return void
+     */
+    public static function disableEventDiscovery()
+    {
+        static::$shouldDiscoverEvents = false;
+    }
+
+    /**
+     * Configure the proper event listeners for email verification.
+     *
+     * @return void
+     */
+    protected function configureEmailVerification()
+    {
+        if (! isset($this->listen[Registered::class]) ||
+            ! in_array(SendEmailVerificationNotification::class, Arr::wrap($this->listen[Registered::class]))) {
+            Event::listen(Registered::class, SendEmailVerificationNotification::class);
+        }
     }
 }

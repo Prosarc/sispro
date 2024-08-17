@@ -55,7 +55,7 @@ Residuos Almacenados en Planta
 							@foreach ($SolicitudServicio->SolicitudResiduo as $Residuo)
 							@if($Residuo->SolResKgConciliado != $Residuo->SolResKgTratado)
 							<tr>
-								<td><a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}"class='btn btn-info btn-block' title="{{ trans('adminlte_lang::message.seemoredetails')}}"><i class="fas fa-search"></i> #{{$SolicitudServicio->ID_SolSer}}</td>
+								<td><a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}"class='btn btn-info btn-block' title="{{ __('adminlte::message.seemoredetails')}}"><i class="fas fa-search"></i> #{{$SolicitudServicio->ID_SolSer}}</td>
 								<td><a data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 200}' title="<b>Persona de Contacto</b>" data-content="<p>Datos de la persona de Contacto para esta Solicitud de Servicio</p><ul><li>{{$SolicitudServicio->Personal->PersFirstName}} {{$SolicitudServicio->Personal->PersLastName}}</li><li>{{$SolicitudServicio->Personal->PersEmail}}</li><li>{{$SolicitudServicio->Personal->PersCellphone}}</li></ul><p>Haga click para ver detalles adicionales de este cliente..." href="/clientes/{{$SolicitudServicio->cliente->CliSlug}}" target="_blank"><i class="fas fa-user"></i></a>{{$SolicitudServicio->cliente->CliName}}</td>
 								<td>{{$Residuo->requerimiento->respel->RespelName}}</td>
 								<td>{{$Residuo->requerimiento->tratamiento->TratName}} - {{$Residuo->requerimiento->tratamiento->gestor->clientes->CliName}}</td>
@@ -86,7 +86,7 @@ Residuos Almacenados en Planta
 							</tr>
 							@endforeach
 							<tr>
-								<th colspan="5">{{trans('adminlte_lang::message.solsershowcantitotal')}}</th>
+								<th colspan="5">{{__('adminlte::message.solsershowcantitotal')}}</th>
 								<th style="text-align: right; white-space: nowrap;"> {{$total['recibido']}} kg</th>
 								<th style="text-align: right; white-space: nowrap;"> {{$total['conciliado']}} kg</th>
 								<th style="text-align: right; white-space: nowrap;"> {{$total['tratado']}} kg</th>

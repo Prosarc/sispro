@@ -2,7 +2,10 @@
 
 namespace Illuminate\Validation\Rules;
 
-class RequiredIf
+use InvalidArgumentException;
+use Stringable;
+
+class RequiredIf implements Stringable
 {
     /**
      * The condition that validates the attribute.
@@ -19,7 +22,11 @@ class RequiredIf
      */
     public function __construct($condition)
     {
-        $this->condition = $condition;
+        if (! is_string($condition)) {
+            $this->condition = $condition;
+        } else {
+            throw new InvalidArgumentException('The provided condition must be a callable or boolean.');
+        }
     }
 
     /**

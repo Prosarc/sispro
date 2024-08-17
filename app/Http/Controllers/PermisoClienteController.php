@@ -174,9 +174,9 @@ class PermisoClienteController extends Controller
         if($request->input('FK_UserPers') !== null){
             $Personal = Personal::where('PersSlug', $request->input('FK_UserPers'))->first();
             $User->FK_UserPers = $Personal->ID_Pers;
-            $User->UsStatus = trans('adminlte_lang::message.userstatusactive');
+            $User->UsStatus = __('adminlte::message.userstatusactive');
         }else{
-            $User->UsStatus = trans('adminlte_lang::message.userstatusinactive');
+            $User->UsStatus = __('adminlte::message.userstatusinactive');
         }
 
         $User->save();
@@ -328,10 +328,10 @@ class PermisoClienteController extends Controller
         if($request->input('FK_UserPers') !== null){
             $Personal = Personal::where('PersSlug', $request->input('FK_UserPers'))->first();
             $User->FK_UserPers = $Personal->ID_Pers;
-            $User->UsStatus = trans('adminlte_lang::message.userstatusactive');
+            $User->UsStatus = __('adminlte::message.userstatusactive');
         }else{
             $User->FK_UserPers = null;
-            $User->UsStatus = trans('adminlte_lang::message.userstatusinactive');
+            $User->UsStatus = __('adminlte::message.userstatusinactive');
         }
 
         if ($request->hasfile('UsAvatar')){

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('htmlheader_title')
-{{ trans('adminlte_lang::message.progvehictitle') }}
+{{ __('adminlte::message.progvehictitle') }}
 @endsection
 @section('contentheader_title')
 <span style="background-image: linear-gradient(40deg, #fbc2eb, #aa66cc); padding-right:30vw; position:relative; overflow:hidden;">
@@ -44,39 +44,39 @@
 						<div class="box box-info">
 							<div class="col-md-12" style="text-align: center; margin-top: 20px; border-bottom:#f4f4f4 solid 2px;">
 								<div class="col-md-4">
-									<label>{{trans('adminlte_lang::message.solsershowdate')}}:</label>
+									<label>{{__('adminlte::message.solsershowdate')}}:</label>
 									<span>{{date('Y-m-d',strtotime($SolicitudServicio->created_at))}}</span>
 								</div>
 								<div class="col-md-4">
-									<label>{{trans('adminlte_lang::message.solserindexnumber')}}: {{$SolicitudServicio->ID_SolSer}}</label>
+									<label>{{__('adminlte::message.solserindexnumber')}}: {{$SolicitudServicio->ID_SolSer}}</label>
 								</div>
 								<div class="col-md-4">
-									<label>{{trans('adminlte_lang::message.solsershowaudita')}}</label>
+									<label>{{__('adminlte::message.solsershowaudita')}}</label>
 									<span>{{$SolicitudServicio->SolResAuditoriaTipo}}</span>
 								</div>
 								<hr>
 							</div>
 							<div class="col-md-12 border-gray">
 								<div class="col-md-4">
-									<label>{{ trans('adminlte_lang::message.solsershowempre') }}</label><br>
+									<label>{{ __('adminlte::message.solsershowempre') }}</label><br>
 									<a>{{$Cliente->CliName}}</a>
 								</div>
 								<div class="col-md-4">
-									<label>{{ trans('adminlte_lang::message.solsershowemprenit') }}</label><br>
+									<label>{{ __('adminlte::message.solsershowemprenit') }}</label><br>
 									<a>{{$Cliente->CliNit}}</a>
 								</div>
 								<div class="col-md-4">
-									<label>{{ trans('adminlte_lang::message.solsershowempreaddress') }}</label><br>
-									<a href="#" class="textpopover popover-left" title="{{ trans('adminlte_lang::message.solsershowempreaddress') }}" data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$Cliente->SedeAddress}}</p>">{{$Cliente->SedeAddress}}</a>
+									<label>{{ __('adminlte::message.solsershowempreaddress') }}</label><br>
+									<a href="#" class="textpopover popover-left" title="{{ __('adminlte::message.solsershowempreaddress') }}" data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$Cliente->SedeAddress}}</p>">{{$Cliente->SedeAddress}}</a>
 								</div>
 							</div>
 							<div class="col-md-12 border-gray">
 								<div class="col-md-4">
-									<label>{{ trans('adminlte_lang::message.solsershowemprecity') }}</label><br>
+									<label>{{ __('adminlte::message.solsershowemprecity') }}</label><br>
 									<a>{{$Cliente->MunName}}</a>
 								</div>
 								<div class="col-md-4">
-									<label>{{ trans('adminlte_lang::message.solserpersonal') }}:</label><br>
+									<label>{{ __('adminlte::message.solserpersonal') }}:</label><br>
 									<a>{{$SolicitudServicio->PersFirstName.' '.$SolicitudServicio->PersLastName}}</a>
 								</div>
 								<div class="col-md-4">
@@ -92,8 +92,8 @@
 							</div> --}}
 							<div class="col-md-12 border-gray">
 								<div class="col-md-4">
-									<label>{{ trans('adminlte_lang::message.emailaddress') }}:</label><br>
-									<a href="#" class="textpopover popover-left" title="{{ trans('adminlte_lang::message.emailaddress') }}" data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$SolicitudServicio->PersEmail}}</p>">{{$SolicitudServicio->PersEmail}}</a>
+									<label>{{ __('adminlte::message.emailaddress') }}:</label><br>
+									<a href="#" class="textpopover popover-left" title="{{ __('adminlte::message.emailaddress') }}" data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$SolicitudServicio->PersEmail}}</p>">{{$SolicitudServicio->PersEmail}}</a>
 								</div>
 								<div class="col-md-4">
 									<label>Celular</label><br>
@@ -105,52 +105,52 @@
 							</div>
 							<div class="col-md-12 border-gray collapse Transportadora">
 								<div class="col-md-4">
-									<label>{{ trans('adminlte_lang::message.solsershowtransempre') }}</label><br>
+									<label>{{ __('adminlte::message.solsershowtransempre') }}</label><br>
 									<a>{{$SolicitudServicio->SolSerNameTrans}}</a>
 								</div>
 								<div class="col-md-4">
-									<label>{{ trans('adminlte_lang::message.solsertransnit') }}:</label><br>
+									<label>{{ __('adminlte::message.solsertransnit') }}:</label><br>
 									<a>{{$SolicitudServicio->SolSerNitTrans}}</a>
 								</div>
 								<div class="col-md-4">
-									<label>{{ trans('adminlte_lang::message.solsertransaddress') }}:</label><br>
-									<a href="#" class="textpopover popover-left" title="{{ trans('adminlte_lang::message.solsertransaddress') }}" data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$SolicitudServicio->SolSerAdressTrans}}</p>">{{$SolicitudServicio->SolSerAdressTrans}}</a>
+									<label>{{ __('adminlte::message.solsertransaddress') }}:</label><br>
+									<a href="#" class="textpopover popover-left" title="{{ __('adminlte::message.solsertransaddress') }}" data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$SolicitudServicio->SolSerAdressTrans}}</p>">{{$SolicitudServicio->SolSerAdressTrans}}</a>
 								</div>
 								
 							</div>
 							<div class="col-md-12 border-gray collapse Transportadora">
 								<div class="col-md-4">
-									<label>{{ trans('adminlte_lang::message.solsershowtranscity') }}</label><br>
+									<label>{{ __('adminlte::message.solsershowtranscity') }}</label><br>
 									<a>{{$Municipio}}</a>
 								</div>
 								@if($SolicitudServicio->SolSerTipo == 'Interno')
 									<div class="col-md-4">
-										<label>{{ trans('adminlte_lang::message.solserconduc') }}:</label><br>
-										<a>{{$SolicitudServicio->SolSerConductor == null ? trans('adminlte_lang::message.solsernullprogram') : $SolicitudServicio->SolSerConductor}}</a>
+										<label>{{ __('adminlte::message.solserconduc') }}:</label><br>
+										<a>{{$SolicitudServicio->SolSerConductor == null ? __('adminlte::message.solsernullprogram') : $SolicitudServicio->SolSerConductor}}</a>
 									</div>
 									<div class="col-md-4">
-										<label>{{ trans('adminlte_lang::message.solservehic') }}:</label><br>
-										<a>{{$SolicitudServicio->SolSerVehiculo == null ? trans('adminlte_lang::message.solsernullprogram') : $SolicitudServicio->SolSerVehiculo}}</a>
+										<label>{{ __('adminlte::message.solservehic') }}:</label><br>
+										<a>{{$SolicitudServicio->SolSerVehiculo == null ? __('adminlte::message.solsernullprogram') : $SolicitudServicio->SolSerVehiculo}}</a>
 									</div>
 								@else
 								<div class="col-md-4">
-									<label>{{ trans('adminlte_lang::message.solserconduc') }}:</label><br>
+									<label>{{ __('adminlte::message.solserconduc') }}:</label><br>
 									<a>{{$SolSerConductor == null ? 'N/A' : $SolSerConductor}}</a>
 								</div>
 								<div class="col-md-4">
-									<label>{{ trans('adminlte_lang::message.solservehic') }}:</label><br>
+									<label>{{ __('adminlte::message.solservehic') }}:</label><br>
 									<a>{{$SolicitudServicio->SolSerVehiculo == null ? 'N/A' : $SolicitudServicio->SolSerVehiculo}}</a>
 								</div>
 								@endif
 							</div>
 							<div class="col-md-12 border-gray">
 								<div class="col-md-4" {{$SolicitudServicio->SolSerDescript == null ? 'hidden' : ''}}>
-									<label>{{ trans('adminlte_lang::message.solserstatusdescrip') }}:</label><br>
-									<a href="#" class="textpopover popover-left" title="{{ trans('adminlte_lang::message.solserstatusdescrip') }}" data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$SolicitudServicio->SolSerDescript}}</p>">{{$SolicitudServicio->SolSerDescript}}</a>
+									<label>{{ __('adminlte::message.solserstatusdescrip') }}:</label><br>
+									<a href="#" class="textpopover popover-left" title="{{ __('adminlte::message.solserstatusdescrip') }}" data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$SolicitudServicio->SolSerDescript}}</p>">{{$SolicitudServicio->SolSerDescript}}</a>
 								</div>
 								<div class="col-md-4" {{$SolicitudServicio->SolSerTipo == "Externo" ? 'hidden' : ''}}>
-									<label>{{ trans('adminlte_lang::message.solseraddrescollect') }}:</label><br>
-									<a href="#" class="textpopover popover-left" title="{{ trans('adminlte_lang::message.solseraddrescollect') }}" data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$SolSerCollectAddress}}</p>">{{$SolSerCollectAddress}}</a>
+									<label>{{ __('adminlte::message.solseraddrescollect') }}:</label><br>
+									<a href="#" class="textpopover popover-left" title="{{ __('adminlte::message.solseraddrescollect') }}" data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$SolSerCollectAddress}}</p>">{{$SolSerCollectAddress}}</a>
 								</div>
 								<div class="col-md-4">
 
@@ -171,40 +171,40 @@
 								</center>
 								<div class="col-md-12 collapse Requerimientos" style="border: 2px dashed #00c0ef">
 									<div class="col-md-4" style="text-align: center;">
-										<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.solserticket') }}</b>" data-content="<p style='width: 50%'> {{ trans('adminlte_lang::message.solserticketdescrit') }} </p>">
-											<label for="SolSerBascula">{{ trans('adminlte_lang::message.solserticket') }}</label>
+										<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.solserticket') }}</b>" data-content="<p style='width: 50%'> {{ __('adminlte::message.solserticketdescrit') }} </p>">
+											<label for="SolSerBascula">{{ __('adminlte::message.solserticket') }}</label>
 											<div style="width: 100%; height: 34px;">
 												<input type="checkbox" class="testswitch" id="SolSerBascula" name="SolSerBascula" {{ $SolicitudServicio->SolSerBascula <> null ? 'checked' : '' }}>
 											</div>
 										</label>
 									</div>
 									<div class="col-md-4" style="text-align: center;">
-										<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.solserperscapa') }}</b>" data-content="<p style='width: 50%'> {{ trans('adminlte_lang::message.solserperscapadescrit') }} </p>">
-											<label for="SolSerCapacitacion">{{ trans('adminlte_lang::message.solserperscapa') }}</label>
+										<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.solserperscapa') }}</b>" data-content="<p style='width: 50%'> {{ __('adminlte::message.solserperscapadescrit') }} </p>">
+											<label for="SolSerCapacitacion">{{ __('adminlte::message.solserperscapa') }}</label>
 											<div style="width: 100%; height: 34px;">
 												<input type="checkbox" class="testswitch" id="SolSerCapacitacion" name="SolSerCapacitacion" {{ $SolicitudServicio->SolSerCapacitacion <> null ? 'checked' : '' }}>
 											</div>
 										</label>
 									</div>
 									<div class="col-md-4" style="text-align: center;">
-										<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.solsermaspers') }}</b>" data-content="<p style='width: 50%'> {{ trans('adminlte_lang::message.solsermaspersdescrit') }} </p>">
-											<label for="SolSerMasPerson">{{ trans('adminlte_lang::message.solsermaspers') }}</label>
+										<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.solsermaspers') }}</b>" data-content="<p style='width: 50%'> {{ __('adminlte::message.solsermaspersdescrit') }} </p>">
+											<label for="SolSerMasPerson">{{ __('adminlte::message.solsermaspers') }}</label>
 											<div style="width: 100%; height: 34px;">
 												<input type="checkbox" class="testswitch" id="SolSerMasPerson" name="SolSerMasPerson" {{ $SolicitudServicio->SolSerMasPerson <> null ? 'checked' : '' }}>
 											</div>
 										</label>
 									</div>
 									<div class="col-md-4" style="text-align: center;">
-										<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.solservehicexclusi') }}</b>" data-content="<p style='width: 50%'> {{ trans('adminlte_lang::message.solservehicexclusidescrit') }} </p>">
-											<label for="SolSerVehicExclusive">{{ trans('adminlte_lang::message.solservehicexclusi') }}</label>
+										<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.solservehicexclusi') }}</b>" data-content="<p style='width: 50%'> {{ __('adminlte::message.solservehicexclusidescrit') }} </p>">
+											<label for="SolSerVehicExclusive">{{ __('adminlte::message.solservehicexclusi') }}</label>
 											<div style="width: 100%; height: 34px;">
 												<input type="checkbox" class="testswitch" id="SolSerVehicExclusive" name="SolSerVehicExclusive" {{ $SolicitudServicio->SolSerVehicExclusive <> null ? 'checked' : '' }}>
 											</div>
 										</label>
 									</div>
 									<div class="col-md-4" style="text-align: center;">
-										<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.solservehicplata') }}</b>" data-content="<p style='width: 50%'> {{ trans('adminlte_lang::message.solservehicplatadescrit') }} </p>">
-											<label for="SolSerPlatform">{{ trans('adminlte_lang::message.solservehicplata') }}</label>
+										<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.solservehicplata') }}</b>" data-content="<p style='width: 50%'> {{ __('adminlte::message.solservehicplatadescrit') }} </p>">
+											<label for="SolSerPlatform">{{ __('adminlte::message.solservehicplata') }}</label>
 											<div style="width: 100%; height: 34px;">
 												<input type="checkbox" class="testswitch" id="SolSerPlatform" name="SolSerPlatform" {{ $SolicitudServicio->SolSerPlatform <> null ? 'checked' : '' }}>
 											</div>
@@ -222,15 +222,15 @@
 									@endphp
 									<thead>
 										<tr>
-											<th>{{trans('adminlte_lang::message.solserrespel')}}</th>
+											<th>{{__('adminlte::message.solserrespel')}}</th>
 											<th>Tratamiento</th>
 											<th>Clasificación <br>4741</th>
 											<th>Estado Físico</th>
 											<th>Peligrosidad</th>
-											<th>{{trans('adminlte_lang::message.solserembaja')}}</th> 
-											<th>{{trans('adminlte_lang::message.gener')}}</th>
-											<th>{{trans('adminlte_lang::message.address')}}</th>
-											<th>{{trans('adminlte_lang::message.solsercantidad')}} <br> {{trans('adminlte_lang::message.solsercantienv')}}</th>
+											<th>{{__('adminlte::message.solserembaja')}}</th> 
+											<th>{{__('adminlte::message.gener')}}</th>
+											<th>{{__('adminlte::message.address')}}</th>
+											<th>{{__('adminlte::message.solsercantidad')}} <br> {{__('adminlte::message.solsercantienv')}}</th>
 											
 										</tr>
 									</thead>
@@ -287,11 +287,11 @@
 									</tbody>
 									{{-- <tfoot>
 										<tr>
-											<th colspan="3">{{trans('adminlte_lang::message.solsershowcantitotal')}}</th>
+											<th colspan="3">{{__('adminlte::message.solsershowcantitotal')}}</th>
 											<th style="text-align: right;">{{$TotalEnv}} kg</th>
 											<th style="text-align: right;">{{$TotalRec}} kg</th>
 											<th style="text-align: right;">{{$TotalCons}} kg</th>
-											@if(Auth::user()->UsRol <> trans('adminlte_lang::message.Cliente'))
+											@if(Auth::user()->UsRol <> __('adminlte::message.Cliente'))
 												<th style="text-align: right;">{{$TotalTrat}} kg</th>
 											@endif
 											@if($SolicitudServicio->SolSerStatus == 'Pendiente' || $SolicitudServicio->SolSerStatus == 'Aprobado' || $SolicitudServicio->SolSerStatus == 'Aceptado' || $SolicitudServicio->SolSerStatus == 'Certificacion')
@@ -325,7 +325,7 @@
 																	</div>
 																</div>
 																<div class="col-md-4 col-xs-4" style="border-bottom: 2px solid black; border-left: 1px solid black;border-right: 1px solid black;">
-																	<label style="text-align: center;">{{trans('adminlte_lang::message.requeretratamiento')}}</label>
+																	<label style="text-align: center;">{{__('adminlte::message.requeretratamiento')}}</label>
 																	<div style="width: 100%;">
 																		<input type="checkbox" class="fotoswitch" data-size="small" {{ $Residuo->SolResFotoTratamiento == 1 ? 'checked' : '' }}/>
 																		<input type="checkbox" class="videoswitch" data-size="small" {{ $Residuo->SolResVideoTratamiento == 1 ? 'checked' : '' }}/>

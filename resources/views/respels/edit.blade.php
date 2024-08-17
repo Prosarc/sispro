@@ -2,12 +2,12 @@
 {{-- vista de edición para el cliente --}}
 @if(in_array(Auth::user()->UsRol, Permisos::CLIENTE))
 	@section('htmlheader_title')
-	{{ trans('adminlte_lang::LangRespel.Respeledittag') }}
+	{{ __('adminlte::LangRespel.Respeledittag') }}
 	@endsection
 	
 	@section('contentheader_title')
 	  <span style="background-image: linear-gradient(40deg, #FF856D, #CC0000); padding-right:30vw; position:relative; overflow:hidden;">
-	  	{{ trans('adminlte_lang::LangRespel.Respeleditmenu') }}
+	  	{{ __('adminlte::LangRespel.Respeleditmenu') }}
 	    <div style="background-color:#ecf0f5; position:absolute; height:145%; width:40vw; transform:rotate(30deg); right:-20vw; top:-45%;"></div>
 	  </span>
 	@endsection
@@ -30,7 +30,7 @@
 							@method('PUT')
 							@csrf
 							<div class="box-header">
-								<h3 class="box-title">{{ trans('adminlte_lang::LangRespel.Respeleditmenu') }}</h3>
+								<h3 class="box-title">{{ __('adminlte::LangRespel.Respeleditmenu') }}</h3>
 							</div>
 								<!-- left column -->
 								<!-- general form elements -->
@@ -51,7 +51,7 @@
 								</div>
 								<div class="box box-info">
 									<div class="box-footer">
-										<button type="submit" class="btn btn-success pull-right"><i class="fa fa-check"></i>{{ trans('adminlte_lang::LangRespel.updaterespelButton') }}</button>
+										<button type="submit" class="btn btn-success pull-right"><i class="fa fa-check"></i>{{ __('adminlte::LangRespel.updaterespelButton') }}</button>
 									</div>
 								</div>
 							</div>
@@ -64,11 +64,11 @@
 @else
 {{-- VISTA PARA PROSARC --}}
 @section('htmlheader_title')
-	{{ trans('adminlte_lang::LangRespel.Respelevaluatetag') }}
+	{{ __('adminlte::LangRespel.Respelevaluatetag') }}
 @endsection
 @section('contentheader_title')
 	<span style="background-image: linear-gradient(40deg, #FF856D, #CC0000); padding-right:30vw; position:relative; overflow:hidden;">
-		{{ trans('adminlte_lang::LangRespel.Respelevaluetemenu') }}
+		{{ __('adminlte::LangRespel.Respelevaluetemenu') }}
 	  <div style="background-color:#ecf0f5; position:absolute; height:145%; width:40vw; transform:rotate(30deg); right:-20vw; top:-45%;"></div>
 	</span>
 @endsection
@@ -117,17 +117,17 @@
 							<li class="list-group-item">
 								<b>Estado de aprobación</b>
 								<select name="RespelStatus" class="form-control">
-									<option {{(in_array(Auth::user()->UsRol, Permisos::JefeOperaciones)||in_array(Auth::user()->UsRol2, Permisos::JefeOperaciones))||($Respels->RespelStatus == 'Pendiente') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'Pendiente' ? 'selected' : '' }}>{{ trans('adminlte_lang::LangRespel.respelstatuspendiente') }}</option>
-									<option {{(in_array(Auth::user()->UsRol, Permisos::JefeOperaciones)||in_array(Auth::user()->UsRol2, Permisos::JefeOperaciones))||($Respels->RespelStatus == 'Evaluado') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'Evaluado' ? 'selected' : '' }}>{{ trans('adminlte_lang::LangRespel.respelstatusevaluated') }}</option>
-									<option {{(in_array(Auth::user()->UsRol, Permisos::COMERCIAL)||in_array(Auth::user()->UsRol2, Permisos::COMERCIAL))||($Respels->RespelStatus == 'Cotizado') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'Cotizado' ? 'selected' : '' }}>{{ trans('adminlte_lang::LangRespel.respelstatuscotizado') }}</option>
-									<option {{(in_array(Auth::user()->UsRol, Permisos::JefeOperaciones)||in_array(Auth::user()->UsRol2, Permisos::JefeOperaciones))||($Respels->RespelStatus == 'Aprobado') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'Aprobado' ? 'selected' : '' }}>{{ trans('adminlte_lang::LangRespel.respelstatusaprovado') }}</option>
-									{{-- <option {{(in_array(Auth::user()->UsRol, Permisos::JefeOperaciones)||in_array(Auth::user()->UsRol2, Permisos::JefeOperaciones))||($Respels->RespelStatus == 'Aceptado') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'Aceptado' ? 'selected' : '' }}>{{ trans('adminlte_lang::LangRespel.respelstatusaceptado') }}</option> --}}
-									<option {{(in_array(Auth::user()->UsRol, Permisos::AREALOGISTICA)||in_array(Auth::user()->UsRol2, Permisos::AREALOGISTICA))||($Respels->RespelStatus == 'Revisado') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'Revisado' ? 'selected' : '' }}>{{ trans('adminlte_lang::LangRespel.respelstatusrevisado') }}</option>
-									<option {{(in_array(Auth::user()->UsRol, Permisos::JefeOperaciones)||in_array(Auth::user()->UsRol2, Permisos::JefeOperaciones))||($Respels->RespelStatus == 'Rechazado') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'Rechazado' ? 'selected' : '' }}>{{ trans('adminlte_lang::LangRespel.respelstatusrechazado') }}</option>
-									<option {{(in_array(Auth::user()->UsRol, Permisos::AREALOGISTICA)||in_array(Auth::user()->UsRol2, Permisos::AREALOGISTICA))||($Respels->RespelStatus == 'Falta TDE') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'Falta TDE' ? 'selected' : '' }}>{{ trans('adminlte_lang::LangRespel.respelstatusfaltatde') }}</option>
-									<option {{(in_array(Auth::user()->UsRol, Permisos::JefeOperaciones)||in_array(Auth::user()->UsRol2, Permisos::JefeOperaciones))||($Respels->RespelStatus == 'Incompleto') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'Incompleto' ? 'selected' : '' }}>{{ trans('adminlte_lang::LangRespel.respelstatusincompleto') }}</option>
-									<option {{(in_array(Auth::user()->UsRol, Permisos::COMERCIAL)||in_array(Auth::user()->UsRol2, Permisos::COMERCIAL))||($Respels->RespelStatus == 'Vencido') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'Vencido' ? 'selected' : '' }}>{{ trans('adminlte_lang::LangRespel.respelstatusvencido') }}</option>
-									<option {{(in_array(Auth::user()->UsRol, Permisos::AREALOGISTICA)||in_array(Auth::user()->UsRol2, Permisos::AREALOGISTICA))||($Respels->RespelStatus == 'TDE actualizada') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'TDE actualizada' ? 'selected' : '' }}>{{ trans('adminlte_lang::LangRespel.respelstatustdeupdated') }}</option>
+									<option {{(in_array(Auth::user()->UsRol, Permisos::JefeOperaciones)||in_array(Auth::user()->UsRol2, Permisos::JefeOperaciones))||($Respels->RespelStatus == 'Pendiente') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'Pendiente' ? 'selected' : '' }}>{{ __('adminlte::LangRespel.respelstatuspendiente') }}</option>
+									<option {{(in_array(Auth::user()->UsRol, Permisos::JefeOperaciones)||in_array(Auth::user()->UsRol2, Permisos::JefeOperaciones))||($Respels->RespelStatus == 'Evaluado') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'Evaluado' ? 'selected' : '' }}>{{ __('adminlte::LangRespel.respelstatusevaluated') }}</option>
+									<option {{(in_array(Auth::user()->UsRol, Permisos::COMERCIAL)||in_array(Auth::user()->UsRol2, Permisos::COMERCIAL))||($Respels->RespelStatus == 'Cotizado') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'Cotizado' ? 'selected' : '' }}>{{ __('adminlte::LangRespel.respelstatuscotizado') }}</option>
+									<option {{(in_array(Auth::user()->UsRol, Permisos::JefeOperaciones)||in_array(Auth::user()->UsRol2, Permisos::JefeOperaciones))||($Respels->RespelStatus == 'Aprobado') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'Aprobado' ? 'selected' : '' }}>{{ __('adminlte::LangRespel.respelstatusaprovado') }}</option>
+									{{-- <option {{(in_array(Auth::user()->UsRol, Permisos::JefeOperaciones)||in_array(Auth::user()->UsRol2, Permisos::JefeOperaciones))||($Respels->RespelStatus == 'Aceptado') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'Aceptado' ? 'selected' : '' }}>{{ __('adminlte::LangRespel.respelstatusaceptado') }}</option> --}}
+									<option {{(in_array(Auth::user()->UsRol, Permisos::AREALOGISTICA)||in_array(Auth::user()->UsRol2, Permisos::AREALOGISTICA))||($Respels->RespelStatus == 'Revisado') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'Revisado' ? 'selected' : '' }}>{{ __('adminlte::LangRespel.respelstatusrevisado') }}</option>
+									<option {{(in_array(Auth::user()->UsRol, Permisos::JefeOperaciones)||in_array(Auth::user()->UsRol2, Permisos::JefeOperaciones))||($Respels->RespelStatus == 'Rechazado') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'Rechazado' ? 'selected' : '' }}>{{ __('adminlte::LangRespel.respelstatusrechazado') }}</option>
+									<option {{(in_array(Auth::user()->UsRol, Permisos::AREALOGISTICA)||in_array(Auth::user()->UsRol2, Permisos::AREALOGISTICA))||($Respels->RespelStatus == 'Falta TDE') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'Falta TDE' ? 'selected' : '' }}>{{ __('adminlte::LangRespel.respelstatusfaltatde') }}</option>
+									<option {{(in_array(Auth::user()->UsRol, Permisos::JefeOperaciones)||in_array(Auth::user()->UsRol2, Permisos::JefeOperaciones))||($Respels->RespelStatus == 'Incompleto') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'Incompleto' ? 'selected' : '' }}>{{ __('adminlte::LangRespel.respelstatusincompleto') }}</option>
+									<option {{(in_array(Auth::user()->UsRol, Permisos::COMERCIAL)||in_array(Auth::user()->UsRol2, Permisos::COMERCIAL))||($Respels->RespelStatus == 'Vencido') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'Vencido' ? 'selected' : '' }}>{{ __('adminlte::LangRespel.respelstatusvencido') }}</option>
+									<option {{(in_array(Auth::user()->UsRol, Permisos::AREALOGISTICA)||in_array(Auth::user()->UsRol2, Permisos::AREALOGISTICA))||($Respels->RespelStatus == 'TDE actualizada') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'TDE actualizada' ? 'selected' : '' }}>{{ __('adminlte::LangRespel.respelstatustdeupdated') }}</option>
 								</select>
 							</li>
 							<li class="list-group-item">
@@ -138,7 +138,7 @@
 								{{-- hoja de seguridad --}}
 								@if($Respels->RespelHojaSeguridad!=='RespelHojaDefault.pdf')
 									<div class="col-md-12 form-group">
-										<label>{{ trans('adminlte_lang::LangRespel.hojadeseguridad') }}</label>
+										<label>{{ __('adminlte::LangRespel.hojadeseguridad') }}</label>
 										<div class="input-group">
 											<input type="text" class="form-control" value="Ver Documento" disabled>
 											<div class="input-group-btn">
@@ -148,7 +148,7 @@
 									</div>
 								@else
 									<div class="col-md-12 form-group">
-										<label>{{ trans('adminlte_lang::LangRespel.hojadeseguridad') }}</label>
+										<label>{{ __('adminlte::LangRespel.hojadeseguridad') }}</label>
 										<div class="input-group">
 											<input type="text" class="form-control" value="No Adjuntado" disabled>
 											<div class="input-group-btn">
@@ -160,7 +160,7 @@
 								{{-- tarjeta de emergencia --}}
 								@if($Respels->RespelTarj!=='RespelTarjetaDefault.pdf')
 									<div class="col-md-12 form-group">
-										<label>{{ trans('adminlte_lang::LangRespel.tarjetaemergencia') }}</label>
+										<label>{{ __('adminlte::LangRespel.tarjetaemergencia') }}</label>
 										<div class="input-group">
 											<input type="text" class="form-control" value="Ver Documento" disabled>
 											<div class="input-group-btn">
@@ -170,7 +170,7 @@
 									</div>
 								@else
 									<div class="col-md-12 form-group">
-										<label>{{ trans('adminlte_lang::LangRespel.tarjetaemergencia') }}</label>
+										<label>{{ __('adminlte::LangRespel.tarjetaemergencia') }}</label>
 										<div class="input-group">
 											<input type="text" class="form-control" value="No Adjuntado" disabled>
 											<div class="input-group-btn">
@@ -182,7 +182,7 @@
 								{{-- fotografia del residuo --}}
 								@if($Respels->RespelFoto!=='RespelFotoDefault.png')
 									<div class="col-md-12 form-group">
-										<label>{{ trans('adminlte_lang::LangRespel.foto') }}</label>
+										<label>{{ __('adminlte::LangRespel.foto') }}</label>
 										<div class="input-group">
 											<input type="text" class="form-control" value="Ver Documento" disabled>
 											<div class="input-group-btn">
@@ -192,7 +192,7 @@
 									</div>
 								@else
 									<div class="col-md-12 form-group">
-										<label>{{ trans('adminlte_lang::LangRespel.foto') }}</label>
+										<label>{{ __('adminlte::LangRespel.foto') }}</label>
 										<div class="input-group">
 											<input type="text" class="form-control" value="No Adjuntado" disabled>
 											<div class="input-group-btn">
@@ -215,10 +215,10 @@
 				<div class="box">
 					<!-- box header -->
 					<div class="box-header with-border">
-						<h3 class="box-title">{{ trans('adminlte_lang::LangRespel.Respelevaluetemenu') }}</h3>
+						<h3 class="box-title">{{ __('adminlte::LangRespel.Respelevaluetemenu') }}</h3>
 						<div class="box-tools pull-right">
 							@if(in_array(Auth::user()->UsRol, Permisos::JefeOperaciones)||in_array(Auth::user()->UsRol2, Permisos::JefeOperaciones))
-							<button onclick="AgregarOption()" class="btn btn-primary pull-right" id="addOptionButton"> <i class="fa fa-plus"></i> {{ trans('adminlte_lang::LangTratamiento.optionadd') }}</button> 
+							<button onclick="AgregarOption()" class="btn btn-primary pull-right" id="addOptionButton"> <i class="fa fa-plus"></i> {{ __('adminlte::LangTratamiento.optionadd') }}</button> 
 							@endif
 							@if(in_array(Auth::user()->UsRol, Permisos::JefeOperaciones)||in_array(Auth::user()->UsRol2, Permisos::JefeOperaciones))
 								@switch($Respels->RespelStatus)
@@ -240,8 +240,10 @@
 								@endswitch
 							@endif
 						</div>
+						<div class="box-tools pull-right">					
+								<a href="/respels/{{$Respels->RespelSlug}}/editADP" class="btn btn-warning">{{ __('adminlte::message.edit') }}</a>
+						</div>
 					</div>
-
 					<!-- /.box header -->
 					<!-- box body -->
 					<div class="box-body">
@@ -249,20 +251,20 @@
 						<div class="nav-tabs-custom" style="box-shadow:3px 3px 5px grey; margin-bottom: 0px;">
 							<ul class="nav nav-tabs">
 								<li class="nav-item active">
-									<a class="nav-link" href="#Residuopane" data-toggle="tab">{{ trans('adminlte_lang::LangRespel.respeltabtittle') }}</a>
+									<a class="nav-link" href="#Residuopane" data-toggle="tab">{{ __('adminlte::LangRespel.respeltabtittle') }}</a>
 								</li>
 								<li class="nav-item">
-									<a class="nav-link" href="#Tratamientospane" data-toggle="tab">{{ trans('adminlte_lang::LangRespel.trattabtittle') }}</a>
+									<a class="nav-link" href="#Tratamientospane" data-toggle="tab">{{ __('adminlte::LangRespel.trattabtittle') }}</a>
 								</li>
 								<li class="nav-item">
-									<a class="nav-link" href="#Pretratamientospane" data-toggle="tab">{{ trans('adminlte_lang::LangRespel.pretrattabtittle') }}</a>
+									<a class="nav-link" href="#Pretratamientospane" data-toggle="tab">{{ __('adminlte::LangRespel.pretrattabtittle') }}</a>
 								</li>
 								<li class="nav-item">
-									<a class="nav-link" href="#Requerimientospane" data-toggle="tab">{{ trans('adminlte_lang::LangRespel.requertabtittle') }}</a>
+									<a class="nav-link" href="#Requerimientospane" data-toggle="tab">{{ __('adminlte::LangRespel.requertabtittle') }}</a>
 								</li>
 								@if(in_array(Auth::user()->UsRol, Permisos::SEDECOMERCIAL) || in_array(Auth::user()->UsRol2, Permisos::SEDECOMERCIAL))
 								<li class="nav-item">
-									<a class="nav-link" href="#Tarifaspane" data-toggle="tab">{{ trans('adminlte_lang::LangRespel.tarifatabtittle') }}</a>
+									<a class="nav-link" href="#Tarifaspane" data-toggle="tab">{{ __('adminlte::LangRespel.tarifatabtittle') }}</a>
 								</li>
 								@endif
 							</ul>
@@ -346,8 +348,8 @@
 					</div>
 					<!-- /.box body -->
 					<div class="box-footer">
-						<button class="btn btn-success" type="submit" style="margin-right:5em"><i class="fa fa-check"></i>{{ trans('adminlte_lang::LangRespel.updaterespelButton') }}</button>
-						<a class="btn btn-danger btn-close pull-right" style="margin-right: 2rem;" href="{{ route('respels.index') }}"><i class="fas fa-times"></i> {{ trans('adminlte_lang::LangTratamiento.cancel') }}</a>
+						<button class="btn btn-success" type="submit" style="margin-right:5em"><i class="fa fa-check"></i>{{ __('adminlte::LangRespel.updaterespelButton') }}</button>
+						<a class="btn btn-danger btn-close pull-right" style="margin-right: 2rem;" href="{{ route('respels.index') }}"><i class="fas fa-times"></i> {{ __('adminlte::LangTratamiento.cancel') }}</a>
 					</div>
 					{{-- @php
 					foreach ($contadorRango as $key => $value) {

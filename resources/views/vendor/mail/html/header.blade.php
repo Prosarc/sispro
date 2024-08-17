@@ -1,8 +1,11 @@
 <tr>
-    <td class="header" style="background-image: linear-gradient(navy, cornflowerblue); width:100%;">
-        <a>
-            <img src="{{$logo}}" alt="" width="30px" height="30px" style="border-radius:50%;">
-            <br>{{ $slot }}
-        </a>
-    </td>
+<td class="header">
+<a href="{{ $url }}" style="display: inline-block;">
+@if (trim($slot) === 'Laravel')
+<img src="https://laravel.com/img/notification-logo.png" class="logo" alt="Laravel Logo">
+@else
+{{ $slot }}
+@endif
+</a>
+</td>
 </tr>

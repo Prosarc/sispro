@@ -17,7 +17,7 @@ Tarifas del cliente
                 <div class="box-header with-border">
                     <h3 class="box-title"><b>{{ $cliente->CliShortname }}</b></h3>
                     <div class="box-tools pull-right">
-                        {{-- <button onclick="AgregarPreTrat()" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> {{ trans('adminlte_lang::LangTratamiento.pretratadd') }}</button> --}}
+                        {{-- <button onclick="AgregarPreTrat()" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> {{ __('adminlte::LangTratamiento.pretratadd') }}</button> --}}
                         <a class="btn btn-default btn-close pull-right" style="margin-right: 1.7rem;" href="{{ route('clientes.index')}}"><b><i class="fas fa-backspace" color="red"></i> Volver a Lista de clientes</b></a>
                     </div>
                 </div>

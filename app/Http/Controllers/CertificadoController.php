@@ -368,9 +368,91 @@ class CertificadoController extends Controller
         return view ('certificados.2023', compact('certificados'));  
         
       }
+      
+            /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function cert2024(){
+        // validacion del status del cliente segun cartera
+        $clienteID = userController::IDClienteSegunUsuario();
+        $clienteStatus= Cliente::where('ID_Cli', $clienteID)->first('CliStatus');
+        if ($clienteStatus->CliStatus == 'Bloqueado') {
+            abort(403, "el acceso a la lista de certificados se encuentra bloqueado, comuniquese con su asesor comercial en PROSARC S.A. ESP");
+        }      
+   
+        $certificados = Certificado::where(function($query){
+          $years = DB :: table('certificados')
+              ->select(DB::raw('distinct year(created_at) as year'))
+              ->orderBy('year', 'desc')
+              ->get(); 
+
+              foreach ($years as $year) {
+                $registros = DB::table('certificados')
+                ->whereYear('created_at', $year='2024')
+                ->get();
+              }
   
-
-
+            switch (Auth::user()->UsRol) {
+                case 'Cliente':
+                    /*se define la sede del usuario actual*/
+                    $UserSedeID = DB::table('personals')
+                    ->join('cargos', 'cargos.ID_Carg', 'personals.FK_PersCargo')
+                    ->join('areas', 'areas.ID_Area', 'cargos.CargArea')
+                    ->join('sedes', 'sedes.ID_Sede', 'areas.FK_AreaSede')
+                    ->join('clientes', 'clientes.ID_Cli', 'sedes.FK_SedeCli')
+                    ->where('personals.ID_Pers', Auth::user()->FK_UserPers)
+                    ->where('clientes.CliStatus', 'Autorizado')
+                    ->value('clientes.ID_Cli');
+  
+                    $servicioscertificadosdelcliente = SolicitudServicio::where('FK_SolSerCliente',$UserSedeID)
+                    ->where('SolServCertStatus', 2)
+                    ->get('ID_SolSer');
+  
+                    //$query->whereYear('created_at', $year='2020')
+                    $query->where('FK_CertCliente', $UserSedeID);
+                    $query->where('CertAuthJo', '!=', 0);
+                    $query->where('CertAuthJl', '!=', 0);
+                    $query->where('CertAuthDp', '!=', 0);
+                    $query->whereIn('FK_CertSolser', $servicioscertificadosdelcliente);
+                    break;
+  
+                case 'Comercial':
+                    /*se define la sede del usuario actual*/
+                    $clientes = Cliente::where('CliDelete', 0)->where('CliCategoria', 'Cliente')->where('CliComercial', Auth::user()->FK_UserPers)->get('ID_Cli');
+  
+                    // return $clientes;
+                    $query->whereIn('FK_CertCliente', $clientes);
+                    break;
+  
+                default:
+                    // $query->where('ID_Cert', '>', 0);
+                    break;
+            }
+        })
+        ->with(['tratamiento'])
+        ->whereYear('created_at', $year='2024')
+        ->get();
+        $certificados->map(function ($certificado) {
+          
+            $fecharecepcionenplanta = $certificado->SolicitudServicio->programacionesrecibidas()->first('ProgVehSalida');
+            if ($fecharecepcionenplanta != null) {
+                $certificado->recepcion = $fecharecepcionenplanta->ProgVehSalida;
+            }else{
+                $certificado->recepcion = "";
+            }
+            $certificado->cliente = $certificado->SolicitudServicio->cliente()->first('CliName')->CliName;
+            $certificado->SolSerStatus = $certificado->SolicitudServicio()->first('SolSerStatus')->SolSerStatus;
+            return $certificado ;
+        
+      });
+           
+        // return $registros;
+        return view ('certificados.2024', compact('certificados'));  
+        
+      }
+  
     /**
      * Show the form for creating a new resource.
      *
@@ -482,15 +564,15 @@ class CertificadoController extends Controller
 
             switch ($certificado->CertType) {
                 case '0':
-                $qrCode = new QrCode('https://sispro.prosarc.com/img/Certificados/'.$certificado->CertSlug.'.pdf');
+                 $qrCode = new QrCode('https://sispro.prosarc.com/storage/certificadoRegular/'.$certificado->CertSlug.'.pdf');
                     break;
 
                 case '1':
-                $qrCode = new QrCode('https://sispro.prosarc.com/img/Manifiestos/'.$certificado->CertSlug.'.pdf');
+                $qrCode = new QrCode('https://sispro.prosarc.com/storage/manifiestosRegular/'.$certificado->CertSlug.'.pdf');
                     break;
 
                 default:
-                $qrCode = new QrCode('https://sispro.prosarc.com/img/Certificados/'.$certificado->CertSlug.'.pdf');
+                $qrCode = new QrCode('https://sispro.prosarc.com/storage/certificadoRegular/'.$certificado->CertSlug.'.pdf');
                     break;
             }
             // $qrCode = new QrCode(route('certificados.show', ['certificado' => $certificado->CertSlug]));
@@ -503,7 +585,7 @@ class CertificadoController extends Controller
                 // return $qrCode->writeDataUri();
             return view('certificados.edit', compact(['certificado', 'proximoCertificado', 'proximoManif', 'qrCode']))->withHeaders('Content-Type', $qrCode->getContentType());
         }else{
-            abort(404, "no posee permisos para la edición de certificados");
+            abort(404, "no posee permisos para la edici杌妌 de certificados");
         }
 
     }
@@ -532,16 +614,17 @@ class CertificadoController extends Controller
                 if (isset($request['CertSrc'])) {
                     if ($certificado->CertSrc == 'CertificadoDefault.pdf') {
                         $file1 = $request['CertSrc'];
-                        $hoja = $certificado->CertSlug.'.pdf';
-                        $file1->move(public_path().'/img/Certificados/',$hoja);
-                    }else{
-                        //se elimina el archivo anterior
-                        $hoja = $certificado->CertSlug.'.pdf';
-                        $fileanterior =  public_path().'/img/Certificados/'.$hoja;
+                        $hoja = $certificado->CertSlug . '.pdf';
+                        $file1->move(public_path() . '/storage/certificadoRegular/', $hoja);
+                    } else {
+                        // Se elimina el archivo anterior
+                        $hoja = $certificado->CertSlug . '.pdf';
+                        $fileanterior =public_path(). '/storage/certificadoRegular/'. $hoja;
                         unlink($fileanterior);
-                        //se carga el archivo nuevo que viene del formulario
+                
+                        // Se carga el archivo nuevo que viene del formulario
                         $file1 = $request['CertSrc'];
-                        $file1->move(public_path().'/img/Certificados/',$hoja);
+                        $file1->move(storage_path(). '/app/public/certificadoRegular/', $hoja);
                     }
                     $certificado->CertAuthHseq = 0;
                     $certificado->CertAuthJo = 0;
@@ -555,37 +638,39 @@ class CertificadoController extends Controller
                     }
                 }
                 $certificado->CertSrc = $hoja;
+                $certificado->save();
                 break;
 
             case 1:
                 $certificado->CertManifNumero = $request->input('CertNumero');
                 $certificado->CertNumero = 0;
                 if (isset($request['CertSrc'])) {
-                    if ($certificado->CertSrcManif == 'CertificadoDefault.pdf') {
+                    if ($certificado->CertSrc == 'CertificadoDefault.pdf') {
                         $file1 = $request['CertSrc'];
                         $hoja = $certificado->CertSlug.'.pdf';
-                        $file1->move(public_path().'/img/Manifiestos/',$hoja);
+                        $file1->move(public_path(). '/storage/manifiestosRegular/',$hoja);
                     }else{
                         //se elimina el archivo anterior
                         $hoja = $certificado->CertSlug.'.pdf';
-                        $fileanterior =  public_path().'/img/Manifiestos/'.$hoja;
+                         $fileanterior =  public_path(). '/storage/manifiestosRegular/'.$hoja;
                         unlink($fileanterior);
                         //se carga el archivo nuevo que viene del formulario
                         $file1 = $request['CertSrc'];
-                        $file1->move(public_path().'/img/Manifiestos/',$hoja);
+                        $file1->move(storage_path(). '/app/public/manifiestosRegular/',$hoja);
                     }
                     $certificado->CertAuthHseq = 0;
                     $certificado->CertAuthJo = 0;
                     $certificado->CertAuthJl = 0;
                     $certificado->CertAuthDp = 0;
                 }else{
-                    if ($certificado->CertSrcManif == 'CertificadoDefault.pdf') {
+                    if ($certificado->CertSrc == 'CertificadoDefault.pdf') {
                         $hoja = 'CertificadoDefault.pdf';
                     }else{
-                        $hoja = $certificado->CertSrcManif;
+                        $hoja = $certificado->CertSrc;
                     }
                 }
-                $certificado->CertSrcManif = $hoja;
+                $certificado->CertSrc = $hoja;
+                $certificado->save();
                 break;
 
             case 2:
@@ -594,49 +679,61 @@ class CertificadoController extends Controller
                     if ($certificado->CertSrcExt == 'CertificadoDefault.pdf') {
                         $file1 = $request['CertSrc'];
                         $hoja = $certificado->CertSlug.'.pdf';
-                        $file1->move(public_path().'/img/CertificadosEXT/',$hoja);
+                        $file1->move(public_path().'/storage/manifiestosRegular/',$hoja);
                     }else{
                         //se elimina el archivo anterior
                         $hoja = $certificado->CertSlug.'.pdf';
-                        $fileanterior =  public_path().'/img/CertificadosEXT/'.$hoja;
+                        $fileanterior =  public_path().'/storage/manifiestosRegular/'.$hoja;
                         unlink($fileanterior);
                         //se carga el archivo nuevo que viene del formulario
                         $file1 = $request['CertSrc'];
-                        $file1->move(public_path().'/img/CertificadosEXT/',$hoja);
+                        $file1->move(storage_path().'/app/public/manifiestosRegular/',$hoja);
                     }
+                    // Asignar el valor de $hoja a la columna CertSrcExt
+                    $certificado->CertSrcExt = $hoja;
+                    
+                    // Asignar otros valores de autenticaci��n
                     $certificado->CertAuthHseq = 0;
-                    $certificado->CertAuthJo = 0;
-                    $certificado->CertAuthJl = 0;
-                    $certificado->CertAuthDp = 0;
-                }else{
-                    if ($certificado->CertSrcExt == 'CertificadoDefault.pdf') {
-                        $hoja = 'CertificadoDefault.pdf';
-                    }else{
-                        $hoja = $certificado->CertSrcExt;
+                    $certificado->CertAuthJo = 3;
+                    $certificado->CertAuthJl = 2;
+                    $certificado->CertAuthDp = 1;
+                } else {
+                        if ($certificado->CertSrc == 'CertificadoDefault.pdf') {
+                            $hoja = 'CertificadoDefault.pdf';
+                        } else {
+                            $hoja = $certificado->CertSrc;
+                        }
                     }
-                }
-                $certificado->CertSrcExt = $hoja;
-                break;
-
-            default:
-                $certificado->CertNumero = $request->input('CertNumero');
-                break;
+                    // Asignar el valor de $hoja a la columna CertSrc
+                    $certificado->CertSrc = $hoja;
+                    $certificado->save();
+                    break;
+               
         }
-        $certificado->save();
+       // $certificado->save();
 
-        if (isset($request['CertSrc'])) {
-
+         if (isset($request['CertSrc'])) {
             $servicio = SolicitudServicio::where('ID_SolSer', $certificado->FK_CertSolser)->first();
-            $destinatarios = ['dirtecnica@prosarc.com.co',
-                                    'logistica@prosarc.com.co',
-                                    'gerenteplanta@prosarc.com.co'
-                                    ];
-
+            $destinatarios = [
+                'dirtecnica@prosarc.com.co',
+                'logistica@prosarc.com.co',
+                'gerenteplanta@prosarc.com.co'
+                
+            ];
             $cliente = Cliente::where('ID_Cli', $servicio->FK_SolSerCliente)->first();
-
+        
+            // Obtener el correo del cliente a trav��s del personal asociado al servicio
+            $personalCliente = Personal::where('ID_Pers', $servicio->FK_SolSerPersona)->first();
+            $correoCliente = $personalCliente ? $personalCliente->PersEmail : null;
+        
+            // Agregar el correo del cliente a los destinatarios si est�� disponible
+            if ($correoCliente) {
+                $destinatarios[] = $correoCliente;
+            }
+        
             Mail::to($destinatarios)->send(new CertUpdated($certificado, $servicio, $cliente));
-
         }
+
 
         $log = new audit();
         $log->AuditTabla="certificados";
@@ -651,6 +748,7 @@ class CertificadoController extends Controller
         return redirect()->route('certificados.index');
 
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -1157,7 +1255,7 @@ class CertificadoController extends Controller
 
         $fecharecepcionenplanta = $certificado->SolicitudServicio->programacionesrecibidas()->first('ProgVehSalida');
         if ($fecharecepcionenplanta != null) {
-            $certificado->recepcion = $fecharecepcionenplanta->ProgVehSalida;
+            $fechaLlegadaPlanta = $fecharecepcionenplanta->ProgVehSalida;
         }else{
             $certificado->recepcion = "";
         }
@@ -1165,13 +1263,13 @@ class CertificadoController extends Controller
         // return $certificado;
         switch ($certificado->tratamiento->TratName) {
             case 'TermoDestrucción':
-                return view('certificados.imprimible', compact('certificado'));
+                return view('certificados.topdf', compact('certificado', 'fechaLlegadaPlanta'));
                 break;
             case 'Posconsumo luminarias':
-                return view('certificados.luminarias', compact('certificado'));
+                return view('certificados.luminarias', compact('certificado', 'fechaLlegadaPlanta'));
                 break;
             default:
-                return view('certificados.manifiesto', compact('certificado'));
+                return view('certificados.manifiesto', compact('certificado', 'fechaLlegadaPlanta'));
                 break;
         }
     }

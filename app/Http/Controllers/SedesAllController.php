@@ -31,7 +31,8 @@ class SedesAllController extends Controller
             $Municipio = Municipio::where('ID_Mun', $Sede->FK_SedeMun)->first();
             $Municipios = Municipio::where('FK_MunCity', $Municipio->FK_MunCity)->get();
             $Departamentos = Departamento::all();
-            return view('sclientes.edit', compact('Sede', 'Clientes', 'Cliente', 'Departamentos', 'Municipios', 'Municipio'));
+            //return view('sclientes.edit', compact('Sede', 'Clientes', 'Cliente', 'Departamentos', 'Municipios', 'Municipio'));
+            return view('sclientes.edit', compact('Sede', 'Departamentos', 'Municipios', 'Municipio'));
         }else{
             abort(403);
         }

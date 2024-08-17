@@ -2,7 +2,8 @@
 
 namespace App\Notifications;
 
-use Illuminate\Support\Carbon;
+use Carbon\Carbon;
+//use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Notifications\Notification;
@@ -41,15 +42,15 @@ class VerifyEmail extends Notification
         }
 
         return (new MailMessage)
-            ->subject('Confirmación de correo electrónico')
-            ->greeting('¡Hola!, '.$notifiable->name)
-            ->line('Bienvenido(a), esperamos que tenga una excelente experiencia con nosotros, por favor, haga clic en el botón de abajo para verificar su dirección de correo electrónico.')
+            ->subject(Lang::get('Confirmación de correo electrónico'))
+            ->greeting(Lang::get('¡Hola!, '.$notifiable->name))
+            ->line(Lang::get('Bienvenido(a), esperamos que tenga una excelente experiencia con nosotros, por favor, haga clic en el botón de abajo para verificar su dirección de correo electrónico.'))
             ->action(
                 'Confirmar',
                 $this->verificationUrl($notifiable)
             )
-            ->line('Si no ha creado una cuenta, no se requiere ninguna acción adicional.')
-            ->salutation('Saludos, Prosarc S.A. ESP');
+            ->line(Lang::get('Si no ha creado una cuenta, no se requiere ninguna acción adicional.'))
+            ->salutation(Lang::get('Saludos, Prosarc S.A. ESP'));
     }
 
     /**
@@ -61,7 +62,7 @@ class VerifyEmail extends Notification
     protected function verificationUrl($notifiable)
     {
         return URL::temporarySignedRoute(
-            'verification.verify', Carbon::now()->addMinutes(60), ['id' => $notifiable->getKey()]
+            'verification.verify', Carbon::now()->addMinutes(60), ['id' => $notifiable->getKey(), 'hash' => sha1($notifiable->getEmailForVerification())]
         );
     }
 

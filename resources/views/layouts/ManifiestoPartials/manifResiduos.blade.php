@@ -8,14 +8,14 @@
 		@endphp
 		<thead>
 			<tr>
-				<th>{{trans('adminlte_lang::message.solserrespel')}}</th>
+				<th>{{__('adminlte::message.solserrespel')}}</th>
 				<th>Corriente</th>
-				<th>{{trans('adminlte_lang::message.solserembaja')}}</th> 
+				<th>{{__('adminlte::message.solserembaja')}}</th> 
 				@if(in_array(Auth::user()->UsRol, Permisos::COMERCIAL)||in_array(Auth::user()->UsRol2, Permisos::COMERCIAL))
 					<th>Tarifa</th>
 				@endif
-				<th>{{trans('adminlte_lang::message.solsercantidad')}} <br> {{trans('adminlte_lang::message.solsercanticonsi')}}</th>
-				<th>{{trans('adminlte_lang::message.solsercantidad')}} <br> {{trans('adminlte_lang::message.solsercantitrat')}}</th>		
+				<th>{{__('adminlte::message.solsercantidad')}} <br> {{__('adminlte::message.solsercanticonsi')}}</th>
+				<th>{{__('adminlte::message.solsercantidad')}} <br> {{__('adminlte::message.solsercantitrat')}}</th>		
 			</tr>
 		</thead>
 		<tbody>

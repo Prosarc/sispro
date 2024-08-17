@@ -16,8 +16,13 @@ trait RetrievesMultipleKeys
     {
         $return = [];
 
-        foreach ($keys as $key) {
-            $return[$key] = $this->get($key);
+        $keys = collect($keys)->mapWithKeys(function ($value, $key) {
+            return [is_string($key) ? $key : $value => is_string($key) ? $value : null];
+        })->all();
+
+        foreach ($keys as $key => $default) {
+            /** @phpstan-ignore arguments.count (some clients don't accept a default) */
+            $return[$key] = $this->get($key, $default);
         }
 
         return $return;

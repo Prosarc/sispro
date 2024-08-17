@@ -1,9 +1,9 @@
 @extends('layouts.app')
 @section('htmlheader_title')
-{{ trans('adminlte_lang::message.profile') }}
+{{ __('adminlte::message.profile') }}
 @endsection
 @section('contentheader_title')
-{{ trans('adminlte_lang::message.profile') }}
+{{ __('adminlte::message.profile') }}
 @endsection
 @section('main-content')
 	<div class="container-fluid spark-screen">
@@ -23,8 +23,8 @@
 									<p class="text-muted text-center">{{$user->email}}</p>
 								</div>
 								<div class="col-xs-12 col-md-12">
-									<a href="/profile/{{$user->UsSlug}}/edit" class="btn btn-success pull-right"><b>{{ trans('adminlte_lang::message.edit') }}</b></a>
-									<a href="/profile/{{$user->UsSlug}}/passwordreset" class="btn btn-primary"><b>{{ trans('adminlte_lang::message.changepassword') }}</b></a>
+									<a href="/profile/{{$user->UsSlug}}/edit" class="btn btn-success pull-right"><b>{{ __('adminlte::message.edit') }}</b></a>
+									<a href="/profile/{{$user->UsSlug}}/passwordreset" class="btn btn-primary"><b>{{ __('adminlte::message.changepassword') }}</b></a>
 								</div>
 							</div>
 							<!-- /.box-body -->

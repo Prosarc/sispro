@@ -32,7 +32,10 @@
                 </div>
                 <div class="box-footer">
                     <a class="pull-left btn btn-primary" href="/profile/{{Auth::user()->UsSlug}}/edit">Editar Correo</a>
-                    <a id="resendLinkButton" class="pull-right btn btn-success" onclick="disableResendButton()" href="{{ route('verification.resend') }}">reenviar</a>
+                    <form id="resendVerificationForm" method="POST" action="{{ route('verification.resend') }}" class="pull-right" style="display: inline;">
+                        @csrf
+                        <button type="submit" class="btn btn-success" onclick="disableResendButton()">reenviar</button>
+                    </form>
                 </div>
             </div>
         </div>

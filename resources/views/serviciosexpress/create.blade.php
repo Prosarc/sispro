@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('htmlheader_title')
-{{ trans('adminlte_lang::message.solsertitle') }}
+{{ __('adminlte::message.solsertitle') }}
 @endsection
 @section('contentheader_title')
 <span style="background-image: linear-gradient(40deg, #d4fc79, #00C851); padding-right:30vw; position:relative; overflow:hidden;">
@@ -14,7 +14,7 @@
         <div class="col-md-16 col-md-offset-0">
             <div class="box">
                 <div class="box-header with-border">
-                    <h3 class="box-title">{{ trans('adminlte_lang::message.solsertitlecreate') }}</h3>
+                    <h3 class="box-title">{{ __('adminlte::message.solsertitlecreate') }}</h3>
                 </div>
 
                 <form role="form" id="CreateSolSer" action="/serviciosexpress" method="POST" enctype="multipart/form-data">
@@ -34,7 +34,7 @@
                                 <label>Cliente</label>
                                 <small class="help-block with-errors">*</small>
                                 <select id="FK_SolSerCliente" name="FK_SolSerCliente" class="form-control" required data-validate="true">
-                                    <option value="">{{ trans('adminlte_lang::message.select') }}</option>
+                                    <option value="">{{ __('adminlte::message.select') }}</option>
                                     @foreach ($Clientes as $Cliente)
                                     <option value="{{$Cliente->CliSlug}}">{{$Cliente->CliName.' ('.$Cliente->CliNit}})</option>
                                     @endforeach
@@ -46,7 +46,7 @@
                             <small class="help-block with-errors">*</small>
                             <input type="file" class="form-control" id="pagoComprobante" name="pagoComprobante" type="file" data-validate="true" required data-filesize="2048" class="form-control" data-accept="jpg,jpe,png,jpeg,pdf" accept=".jpg,.jpe,.peg,.jpeg,.png,.pdf">
                         </div> --}}
-                        <div class="form-group col-md-6">
+                        {{--<div class="form-group col-md-6">
                             <!-- image-preview-filename input [CUT FROM HERE]-->
                             <label for="exampleInputEmail1">{{'comprobante de pago'}}</label>
                             <small class="help-blockwith-errors">*</small>
@@ -65,12 +65,12 @@
                                     </div>
                                 </span>
                             </div><!-- /input-group image-preview [TO HERE]-->
-                        </div>
+                        </div>--}}
                         <div class="form-group col-md-6">
                             <label>Sede</label>
                             <small class="help-block with-errors">*</small>
                             <select id="SedeSlug" name="SedeSlug" class="form-control" required data-validate="true">
-                                <option value="">{{ trans('adminlte_lang::message.select') }}</option>
+                                <option value="">{{ __('adminlte::message.select') }}</option>
                             </select>
                         </div>
                         <div class="form-group col-md-6">
@@ -155,7 +155,7 @@
                     </div>
                     <div class="col-md-12" style="text-align: center;">
                         <hr style="border-color: green; border-width:2px;">
-                        <b><a class="load"></a>{{ trans('adminlte_lang::message.solserrespelsend') }}<a class="load"></a></b>
+                        <b><a class="load"></a>{{ __('adminlte::message.solserrespelsend') }}<a class="load"></a></b>
                     </div>
                     <div id="Respels" class="col-md-12">
                         <input type="text" hidden name="SGenerador[0]" id="SGenerador">

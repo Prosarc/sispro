@@ -95,6 +95,26 @@ Menu::new()
 </div
 ```
 
+## Adding id to elements
+
+You can add id, so you can easily target some of these elements with CSS or JS.
+
+```php
+Menu::new()
+    ->id('navigation')
+    ->add(Link::to('/', 'Home')->id('home-link'))
+    ->add(Link::to('/about', 'About'))
+    ->add(Link::to('/contact', 'Contact'))
+```
+
+```html
+<ul id="navigation">
+    <li><a href="/" id="home-link">Home</a></li>
+    <li><a href="/about">About</a></li>
+    <li><a href="/contact">Contact</a></li>
+</ul>
+```
+
 ## Not Afraid of Depths
 
 The menu supports submenus, which in turn can be nested infinitely.
@@ -188,11 +208,11 @@ phpunit
 
 ## Contributing
 
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+Please see [CONTRIBUTING](https://github.com/spatie/.github/blob/main/CONTRIBUTING.md) for details.
 
 ## Security
 
-If you discover any security related issues, please email freek@spatie.be instead of using the issue tracker.
+If you've found a bug regarding security please mail [security@spatie.be](mailto:security@spatie.be) instead of using the issue tracker.
 
 ## Postcardware
 

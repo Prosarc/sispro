@@ -48,7 +48,7 @@ Lista de Certificados
 									<th>{{'Facturar'}}</th>
 								@endif
 								@if(in_array(Auth::user()->UsRol, Permisos::SolSerCertifi) || in_array(Auth::user()->UsRol2, Permisos::SolSerCertifi))
-									<th>{{trans('adminlte_lang::message.solserstatuscertifi')}}</th>
+									<th>{{__('adminlte::message.solserstatuscertifi')}}</th>
 								@endif
 								<th>Actualizado el:</th>
 							</thead>
@@ -97,7 +97,7 @@ Lista de Certificados
 											@break
 										@case(2)
 											@if($certificado->CertSrcExt!=="CertificadoDefault.pdf")
-												<td class="text-center"><a method='get' href='/img/CertificadosEXT/{{$certificado->CertSrcExt}}' target='_blank' class='btn btn-warning'><i class='far fa-file-alt fa-lg'></a></td>
+												<td class="text-center"><a method='get' href="{{ asset('storage/manifiestosRegular/'.$certificado->CertSrc.'') }}"  target='_blank' class='btn btn-warning'><i class='far fa-file-alt fa-lg'></a></td>
 											@else
 												<td class="text-center"><a disabled method='get' href='/img/CertificadoDefault.pdf' target='_blank' class='btn btn-default'><i class='far fa-file-alt fa-lg'></a></td>
 											@endif
@@ -271,7 +271,7 @@ Lista de Certificados
 									@endif
 									@if(in_array(Auth::user()->UsRol, Permisos::SolSerCertifi) || in_array(Auth::user()->UsRol2, Permisos::SolSerCertifi))
 										<td>
-											<button id="{{'buttonCertStatus'.$certificado->SolicitudServicio->SolSerSlug}}" onclick="ModalStatus('{{$certificado->SolicitudServicio->SolSerSlug}}', '{{$certificado->SolicitudServicio->ID_SolSer}}', '{{in_array($certificado->SolicitudServicio->SolSerStatus, $Status)}}', 'Certificada', 'certificar')" {{in_array($certificado->SolicitudServicio->SolSerStatus, $Status) ? '' :  'disabled'}} style="text-align: center;" class="{{'classCertStatus'.$certificado->SolicitudServicio->SolSerSlug}} btn btn-{{in_array($certificado->SolicitudServicio->SolSerStatus, $Status) ? 'success' : 'default'}}"><i class="fas fa-certificate"></i> {{trans('adminlte_lang::message.solserstatuscertifi')}}</button>
+											<button id="{{'buttonCertStatus'.$certificado->SolicitudServicio->SolSerSlug}}" onclick="ModalStatus('{{$certificado->SolicitudServicio->SolSerSlug}}', '{{$certificado->SolicitudServicio->ID_SolSer}}', '{{in_array($certificado->SolicitudServicio->SolSerStatus, $Status)}}', 'Certificada', 'certificar')" {{in_array($certificado->SolicitudServicio->SolSerStatus, $Status) ? '' :  'disabled'}} style="text-align: center;" class="{{'classCertStatus'.$certificado->SolicitudServicio->SolSerSlug}} btn btn-{{in_array($certificado->SolicitudServicio->SolSerStatus, $Status) ? 'success' : 'default'}}"><i class="fas fa-certificate"></i> {{__('adminlte::message.solserstatuscertifi')}}</button>
 										</td>
 									@endif
 

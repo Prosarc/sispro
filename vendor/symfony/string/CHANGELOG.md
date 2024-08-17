@@ -1,6 +1,31 @@
 CHANGELOG
 =========
 
+7.1
+---
+
+ * Add `localeLower()`, `localeUpper()`, `localeTitle()` methods to `AbstractUnicodeString`
+
+6.2
+---
+
+  * Add support for emoji in `AsciiSlugger`
+
+5.4
+---
+
+ * Add `trimSuffix()` and `trimPrefix()` methods
+
+5.3
+---
+
+ * Made `AsciiSlugger` fallback to parent locale's symbolsMap
+
+5.2.0
+-----
+
+ * added a `FrenchInflector` class
+
 5.1.0
 -----
 

@@ -7,8 +7,8 @@ use Facebook\WebDriver\Exception\TimeoutException;
 
 class URLChecker
 {
-    const POLL_INTERVAL_MS = 500;
-    const CONNECT_TIMEOUT_MS = 500;
+    public const POLL_INTERVAL_MS = 500;
+    public const CONNECT_TIMEOUT_MS = 500;
 
     public function waitUntilAvailable($timeout_in_ms, $url)
     {
@@ -59,6 +59,7 @@ class URLChecker
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT_MS, self::CONNECT_TIMEOUT_MS);
 
         $code = null;
+
         try {
             curl_exec($ch);
             $info = curl_getinfo($ch);

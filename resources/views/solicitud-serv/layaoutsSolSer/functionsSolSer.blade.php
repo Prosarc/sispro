@@ -344,11 +344,16 @@ function ResiduosGener(id_div, ID_Gener){
 			if(res != ''){
 				var residuos = new Array();
 				$("#FK_SolResRg"+id_div+contadorRespel[id_div]).empty();
-				$("#FK_SolResRg"+id_div+contadorRespel[id_div]).append(`<option onclick="HiddenRequeRespel(`+id_div+`,`+contadorRespel[id_div]+`)" value="">{{ trans('adminlte_lang::message.select') }}</option>`);
+				$("#FK_SolResRg"+id_div+contadorRespel[id_div]).append(`<option onclick="HiddenRequeRespel(`+id_div+`,`+contadorRespel[id_div]+`)" value="">{{ __('adminlte::message.select') }}</option>`);
 				for(var i = res.length -1; i >= 0; i--){
 					if ($.inArray(res[i].SlugSGenerRes, residuos) < 0) {
-						$("#FK_SolResRg"+id_div+contadorRespel[id_div]).append(`<option onclick="RequeRespel(`+id_div+`,`+contadorRespel[id_div]+`,'`+res[i].RespelSlug+`')" value="${res[i].SlugSGenerRes}">${res[i].RespelName} (${res[i].TratName})</option>`);
+						if (res[i].YRespelClasf4741 != null){
+						$("#FK_SolResRg"+id_div+contadorRespel[id_div]).append(`<option onclick="RequeRespel(`+id_div+`,`+contadorRespel[id_div]+`,'`+res[i].RespelSlug+`')" value="${res[i].SlugSGenerRes}">${res[i].RespelName} (${res[i].TratName}) ${res[i].YRespelClasf4741}</option>`);
 						residuos.push(res[i].SlugSGenerRes);
+						} else {
+						$("#FK_SolResRg"+id_div+contadorRespel[id_div]).append(`<option onclick="RequeRespel(`+id_div+`,`+contadorRespel[id_div]+`,'`+res[i].RespelSlug+`')" value="${res[i].SlugSGenerRes}">${res[i].RespelName} (${res[i].TratName}) ${res[i].ARespelClasf4741}</option>`);
+						residuos.push(res[i].SlugSGenerRes);	
+						}
 					}
 				}
 			}
@@ -366,6 +371,18 @@ function ResiduosGener(id_div, ID_Gener){
 		}
 	});
 }
+
+function SustanciaControlada(id_div) {
+    $("#Controlada" + id_div).append(
+        '<div id="controlada-' + id_div + '" class="form-group col-md-16">' +			
+            '<i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i><b> Certificado de Carencia<b>' +
+            '<small class="help-block with-errors">*</small>' +
+			'<p style="color: Red;">Por favor cargue el certificado de carencia de la sustancia seleccionada actualizado</p>'+
+            '<input name="SustanciaControlada[]" type="file" data-filesize="10240" class="form-control" accept=".pdf">' +
+        '</div>'
+    ).removeAttr('hidden'); 
+}
+
 function RequeRespel(id_div, contador, Id_Respel){
 	$.ajaxSetup({
 		headers: {
@@ -382,6 +399,11 @@ function RequeRespel(id_div, contador, Id_Respel){
 		success: function(res){
 			if(res != ''){
 				// console.log(res);
+				if (res.SustanciaControlada === 1) {
+					SustanciaControlada(id_div)
+				} else {
+					$("#controlada-" + id_div).remove();
+				}
 				if(res.ReqFotoDescargue === 1){
 					$('#SolResFotoDescargue_Pesaje'+id_div+contador).bootstrapSwitch('disabled',false);
 					if(res.auto_ReqFotoDescargue === 1){
@@ -569,7 +591,7 @@ function AgregarResPel(id_div,ID_Gener) {
 			if(res != ''){
 				var residuos = new Array();
 				$("#FK_SolResRg"+id_div+contadorRespel[id_div]).empty();
-				$("#FK_SolResRg"+id_div+contadorRespel[id_div]).append(`<option onclick="HiddenRequeRespel(`+id_div+`,`+contadorRespel[id_div]+`)" value="">{{ trans('adminlte_lang::message.select') }}</option>`);
+				$("#FK_SolResRg"+id_div+contadorRespel[id_div]).append(`<option onclick="HiddenRequeRespel(`+id_div+`,`+contadorRespel[id_div]+`)" value="">{{ __('adminlte::message.select') }}</option>`);
 				for(var i = res.length -1; i >= 0; i--){
 					if ($.inArray(res[i].SlugSGenerRes, residuos) < 0) {
 						$("#FK_SolResRg"+id_div+contadorRespel[id_div]).append(`<option onclick="RequeRespel(`+id_div+`,`+contadorRespel[id_div]+`,'`+res[i].RespelSlug+`')" value="${res[i].SlugSGenerRes}">${res[i].RespelName} (${res[i].TratName})</option>`);
@@ -597,6 +619,7 @@ function RemoveRespel(id_div, contador) {
 	$("#Repel"+id_div+contador).remove();
 	$('form[data-toggle="validator"]').validator('update');
 }
+
 
 function RemoveGenerador(id) {
 	$("#Generador"+id).prev().remove();

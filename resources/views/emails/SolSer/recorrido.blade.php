@@ -118,11 +118,11 @@ En estos momentos la Solicitud de Servicio N° {{$email->ID_SolSer}} {{$text}}.<
 
 @if ($email->SolSerStatus === 'No Conciliado')
 
-@lang("Puede comunicarse con:")<br>
+{{__("Puede comunicarse con:")}}<br>
 
-***@lang("Nombre: ")***{{$email->PersFirstName}} {{$email->PersLastName}}<br>
+***{{__("Nombre: ")}}***{{$email->PersFirstName}} {{$email->PersLastName}}<br>
 
-***@lang("E-mail: ")***{{$email->PersEmail}}<br>
+***{{__("E-mail: ")}}***{{$email->PersEmail}}<br>
 @endif
 
 @component('mail::button', ['url' => url('/solicitud-servicio', [$email->SolSerSlug])])

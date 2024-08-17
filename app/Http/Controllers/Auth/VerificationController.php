@@ -60,7 +60,7 @@ class VerificationController extends Controller
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function verify(Request $request)
+    public function verify(Request $request, $id, $hash)
     {
         if ($request->route('id') != $request->user()->getKey()) {
             throw new AuthorizationException;

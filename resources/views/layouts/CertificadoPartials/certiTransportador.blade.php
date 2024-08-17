@@ -18,42 +18,42 @@
 				</div>
 				<h3 class="profile-username text-center">{{$certificado->transportador->CliShortname}}</h3>
 				<li class="list-group-item">
-					<b>{{ trans('adminlte_lang::message.clientcategoría') }}</b> <a class="pull-right">{{$certificado->transportador->CliCategoria}}</a>
+					<b>{{ __('adminlte::message.clientcategoría') }}</b> <a class="pull-right">{{$certificado->transportador->CliCategoria}}</a>
 				</li>
 				<li class="list-group-item">
-					<b>{{ trans('adminlte_lang::message.clirazonsoc') }}</b> <a class="pull-right">{{$certificado->transportador->CliName}}</a>
+					<b>{{ __('adminlte::message.clirazonsoc') }}</b> <a class="pull-right">{{$certificado->transportador->CliName}}</a>
 				</li>
 				{{-- <li class="list-group-item">
-						<b>{{ trans('adminlte_lang::message.clientnombrecorto') }}</b> <a class="pull-right">{{$certificado->transportador->CliShortname}}</a>
+						<b>{{ __('adminlte::message.clientnombrecorto') }}</b> <a class="pull-right">{{$certificado->transportador->CliShortname}}</a>
 				</li> --}}
 				<li class="list-group-item">
-					<b>{{ trans('adminlte_lang::message.clientNIT') }}</b> <a class="pull-right">{{$certificado->transportador->CliNit}}</a>
+					<b>{{ __('adminlte::message.clientNIT') }}</b> <a class="pull-right">{{$certificado->transportador->CliNit}}</a>
 				</li>
 			</div>
 	
 			<div class="box-body box-profile">
-				<h3 class="profile-username text-center">{{ trans('adminlte_lang::message.sclientsede') }}</h3>
+				<h3 class="profile-username text-center">{{ __('adminlte::message.sclientsede') }}</h3>
 				<li class="list-group-item">
-					<b>{{ trans('adminlte_lang::message.sclientnamesede') }}</b> <a class="pull-right">{{$certificado->transportador->sedes[0]->SedeName}}</a>
+					<b>{{ __('adminlte::message.sclientnamesede') }}</b> <a class="pull-right">{{$certificado->transportador->sedes[0]->SedeName}}</a>
 				</li>
 				<li class="list-group-item">
-					<b>{{ trans('adminlte_lang::message.address') }}</b>
-					<a title="{{ trans('adminlte_lang::message.copy') }}" onclick="copiarAlPortapapeles('{{ trans('adminlte_lang::message.adddress') }}')"><i class="far fa-copy"></i></a>
-					<a href="#" class="pull-right textpopover" id="{{ trans('adminlte_lang::message.adddress') }}" title="{{ trans('adminlte_lang::message.address') }}" data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$certificado->transportador->sedes[0]->SedeAddress}} ({{$certificado->transportador->sedes[0]->Municipios->MunName}} - {{$certificado->transportador->sedes[0]->Municipios->Departamento->DepartName}})</p>">{{$certificado->transportador->sedes[0]->SedeAddress}} ({{$certificado->transportador->sedes[0]->Municipios->MunName}} - {{$certificado->transportador->sedes[0]->Municipios->Departamento->DepartName}})</a>
+					<b>{{ __('adminlte::message.address') }}</b>
+					<a title="{{ __('adminlte::message.copy') }}" onclick="copiarAlPortapapeles('{{ __('adminlte::message.adddress') }}')"><i class="far fa-copy"></i></a>
+					<a href="#" class="pull-right textpopover" id="{{ __('adminlte::message.adddress') }}" title="{{ __('adminlte::message.address') }}" data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$certificado->transportador->sedes[0]->SedeAddress}} ({{$certificado->transportador->sedes[0]->Municipios->MunName}} - {{$certificado->transportador->sedes[0]->Municipios->Departamento->DepartName}})</p>">{{$certificado->transportador->sedes[0]->SedeAddress}} ({{$certificado->transportador->sedes[0]->Municipios->MunName}} - {{$certificado->transportador->sedes[0]->Municipios->Departamento->DepartName}})</a>
 				</li>
 				<li class="list-group-item">
-					<b>{{ trans('adminlte_lang::message.phone') }}</b> <a class="pull-right">{{$certificado->transportador->sedes[0]->SedePhone1}} - {{$certificado->transportador->sedes[0]->SedeExt1}}</a>
+					<b>{{ __('adminlte::message.phone') }}</b> <a class="pull-right">{{$certificado->transportador->sedes[0]->SedePhone1}} - {{$certificado->transportador->sedes[0]->SedeExt1}}</a>
 				</li>
 				<li class="list-group-item">
-					<b>{{ trans('adminlte_lang::message.phone') }} 2</b> <a class="pull-right">{{$certificado->transportador->sedes[0]->SedePhone2}} - {{$certificado->transportador->sedes[0]->SedeExt2}}</a>
+					<b>{{ __('adminlte::message.phone') }} 2</b> <a class="pull-right">{{$certificado->transportador->sedes[0]->SedePhone2}} - {{$certificado->transportador->sedes[0]->SedeExt2}}</a>
 				</li>
 				<li class="list-group-item">
-					<b>{{ trans('adminlte_lang::message.email') }}</b>
-					<a title="{{ trans('adminlte_lang::message.copy') }}" onclick="copiarAlPortapapeles('{{ trans('adminlte_lang::message.emailaddress') }}')"><i class="far fa-copy"></i></a>
-					<a href="#" class="pull-right textpopover" id="{{ trans('adminlte_lang::message.emailaddress') }}" title="{{ trans('adminlte_lang::message.emailaddress') }}" data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$certificado->transportador->sedes[0]->SedeEmail}}</p>">{{$certificado->transportador->sedes[0]->SedeEmail}}</a>
+					<b>{{ __('adminlte::message.email') }}</b>
+					<a title="{{ __('adminlte::message.copy') }}" onclick="copiarAlPortapapeles('{{ __('adminlte::message.emailaddress') }}')"><i class="far fa-copy"></i></a>
+					<a href="#" class="pull-right textpopover" id="{{ __('adminlte::message.emailaddress') }}" title="{{ __('adminlte::message.emailaddress') }}" data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$certificado->transportador->sedes[0]->SedeEmail}}</p>">{{$certificado->transportador->sedes[0]->SedeEmail}}</a>
 				</li>
 				<li class="list-group-item">
-					<b>{{ trans('adminlte_lang::message.mobile') }}</b> <a class="pull-right">{{$certificado->transportador->sedes[0]->SedeCelular}}</a>
+					<b>{{ __('adminlte::message.mobile') }}</b> <a class="pull-right">{{$certificado->transportador->sedes[0]->SedeCelular}}</a>
 				</li>
 			</div>
 		</div>
@@ -78,25 +78,25 @@
 				</div>
 				<h3 class="profile-username text-center">{{$certificado->SolicitudServicio->SolSerNameTrans}}</h3>
 				<li class="list-group-item">
-					<b>{{ trans('adminlte_lang::message.clientcategoría') }}</b> <a class="pull-right">Transportador Externo / Generador</a>
+					<b>{{ __('adminlte::message.clientcategoría') }}</b> <a class="pull-right">Transportador Externo / Generador</a>
 				</li>
 				<li class="list-group-item">
-					<b>{{ trans('adminlte_lang::message.clirazonsoc') }}</b> <a class="pull-right">{{$certificado->SolicitudServicio->SolSerNameTrans}}</a>
+					<b>{{ __('adminlte::message.clirazonsoc') }}</b> <a class="pull-right">{{$certificado->SolicitudServicio->SolSerNameTrans}}</a>
 				</li>
 				{{-- <li class="list-group-item">
-						<b>{{ trans('adminlte_lang::message.clientnombrecorto') }}</b> <a class="pull-right">{{$certificado->transportador->CliShortname}}</a>
+						<b>{{ __('adminlte::message.clientnombrecorto') }}</b> <a class="pull-right">{{$certificado->transportador->CliShortname}}</a>
 				</li> --}}
 				<li class="list-group-item">
-					<b>{{ trans('adminlte_lang::message.clientNIT') }}</b> <a class="pull-right">{{$certificado->SolicitudServicio->SolSerNitTrans}}</a>
+					<b>{{ __('adminlte::message.clientNIT') }}</b> <a class="pull-right">{{$certificado->SolicitudServicio->SolSerNitTrans}}</a>
 				</li>
 			</div>
 	
 			<div class="box-body box-profile">
-				<h3 class="profile-username text-center">{{ trans('adminlte_lang::message.sclientsede') }}</h3>
+				<h3 class="profile-username text-center">{{ __('adminlte::message.sclientsede') }}</h3>
 				<li class="list-group-item">
-					<b>{{ trans('adminlte_lang::message.address') }}</b>
-					<a title="{{ trans('adminlte_lang::message.copy') }}" onclick="copiarAlPortapapeles('{{ trans('adminlte_lang::message.adddress') }}')"><i class="far fa-copy"></i></a>
-					<a href="#" class="pull-right textpopover" id="{{ trans('adminlte_lang::message.adddress') }}" title="{{ trans('adminlte_lang::message.address') }}" data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$certificado->SolicitudServicio->SolSerAdressTrans}} ({{$certificado->SolicitudServicio->municipio->MunName}} - {{$certificado->SolicitudServicio->municipio->Departamento->DepartName}})</p>">{{$certificado->SolicitudServicio->SolSerAdressTrans}} ({{$certificado->SolicitudServicio->municipio->MunName}} - {{$certificado->SolicitudServicio->municipio->Departamento->DepartName}})</a>
+					<b>{{ __('adminlte::message.address') }}</b>
+					<a title="{{ __('adminlte::message.copy') }}" onclick="copiarAlPortapapeles('{{ __('adminlte::message.adddress') }}')"><i class="far fa-copy"></i></a>
+					<a href="#" class="pull-right textpopover" id="{{ __('adminlte::message.adddress') }}" title="{{ __('adminlte::message.address') }}" data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$certificado->SolicitudServicio->SolSerAdressTrans}} ({{$certificado->SolicitudServicio->municipio->MunName}} - {{$certificado->SolicitudServicio->municipio->Departamento->DepartName}})</p>">{{$certificado->SolicitudServicio->SolSerAdressTrans}} ({{$certificado->SolicitudServicio->municipio->MunName}} - {{$certificado->SolicitudServicio->municipio->Departamento->DepartName}})</a>
 				</li>
 			</div>
 		</div>

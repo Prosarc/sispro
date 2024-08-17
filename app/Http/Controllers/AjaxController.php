@@ -110,7 +110,7 @@ class AjaxController extends Controller
 			$eventos->ProgVehFecha = $fecha;
 			$eventos->ProgVehSalida = $fecha." ".$hora;
 			$eventos->save();
-			return trans('adminlte_lang::message.progvehceditsuccess');
+			return __('adminlte::message.progvehceditsuccess');
 		}
 	}
 
@@ -170,7 +170,7 @@ class AjaxController extends Controller
 				->join('respels', 'respels.ID_Respel', '=', 'residuos_geners.FK_Respel')
 				->join('gener_sedes', 'gener_sedes.ID_GSede', '=', 'residuos_geners.FK_SGener')
 				->join('requerimientos', 'requerimientos.FK_ReqRespel', '=', 'respels.ID_Respel')
-				->select('residuos_geners.SlugSGenerRes', 'respels.RespelName', 'respels.RespelSlug', 'respels.ID_Respel', 'requerimientos.FK_ReqTrata', 'requerimientos.forevaluation', 'requerimientos.ofertado')
+				->select('residuos_geners.SlugSGenerRes', 'respels.RespelName', 'respels.RespelSlug', 'respels.ID_Respel', 'respels.SustanciaControlada', 'respels.YRespelClasf4741','ARespelClasf4741','requerimientos.FK_ReqTrata', 'requerimientos.forevaluation', 'requerimientos.ofertado')
 				->whereIn('respels.RespelStatus', ['Aprobado', 'Revisado', 'Falta TDE', 'TDE actualizada', 'Vencido'])
 				->where('respels.RespelDelete', 0)
 				->where('gener_sedes.GSedeSlug', $slug)
@@ -201,7 +201,7 @@ class AjaxController extends Controller
 			$Requerimientos = DB::table('requerimientos')
 				->join('respels', 'requerimientos.FK_ReqRespel', '=', 'respels.ID_Respel')
 				->join('tarifas', 'requerimientos.ID_Req', '=', 'tarifas.FK_TarifaReq')
-				->select('ReqFotoDescargue', 'ReqFotoDestruccion', 'ReqVideoDescargue', 'ReqVideoDestruccion', 'ReqDevolucion', 'ReqDevolucionTipo', 'tarifas.Tarifatipo', 'ReqAuditoria', 'auto_ReqFotoDescargue', 'auto_ReqFotoDestruccion', 'auto_ReqVideoDescargue', 'auto_ReqVideoDestruccion', 'auto_ReqDevolucion', 'auto_ReqAuditoria')
+				->select('ReqFotoDescargue', 'ReqFotoDestruccion', 'ReqVideoDescargue', 'ReqVideoDestruccion', 'ReqDevolucion', 'ReqDevolucionTipo', 'tarifas.Tarifatipo', 'ReqAuditoria', 'auto_ReqFotoDescargue', 'auto_ReqFotoDestruccion', 'auto_ReqVideoDescargue', 'auto_ReqVideoDestruccion', 'auto_ReqDevolucion', 'auto_ReqAuditoria', 'respels.SustanciaControlada')
 				->where('respels.RespelSlug', $slug)
 				->where('requerimientos.ofertado', 1)
 				->where('requerimientos.forevaluation', 1)
@@ -358,7 +358,7 @@ class AjaxController extends Controller
 					if ($Solicitud->SolServMailCopia == "null") {
                         Mail::to($email->PersEmail)
                         ->cc($destinatarios)
-                        ->send(new SolSerEmail($email));
+                        (new SolSerEmail($email));
                     }else{
                         foreach (json_decode($Solicitud->SolServMailCopia) as $key => $value) {
                             array_push($destinatarios, $value);

@@ -9,15 +9,15 @@
 	<div class="tab-content">
 		<!-- Home tab content -->
 		<div class="tab-pane active" id="control-sidebar-home-tab">
-			<h3 class="control-sidebar-heading">{{ trans('adminlte_lang::message.panel') }}</h3>
+			<h3 class="control-sidebar-heading">{{ __('adminlte::message.panel') }}</h3>
 			<ul class='control-sidebar-menu'>
 				@if (in_array(Auth::user()->UsRol, Permisos::Jefes) || in_array(Auth::user()->UsRol2, Permisos::Jefes))
 					<li>
 						<a href='/permisos'>
 							<i class="menu-icon fa fa-users bg-green"></i>
 							<div class="menu-info">
-								<h4 class="control-sidebar-subheading">{{ trans('adminlte_lang::message.Menuuser') }} Internos</h4>
-								<p>{{ trans('adminlte_lang::message.userdescription') }}</p>
+								<h4 class="control-sidebar-subheading">{{ __('adminlte::message.Menuuser') }} Internos</h4>
+								<p>{{ __('adminlte::message.userdescription') }}</p>
 							</div>
 						</a>
 					</li>
@@ -27,8 +27,8 @@
 						<a href='/UsuariosExternos'>
 							<i class="menu-icon fa fa-users bg-red"></i>
 							<div class="menu-info">
-								<h4 class="control-sidebar-subheading">{{ trans('adminlte_lang::message.Menuuser') }} Externos</h4>
-								<p>{{ trans('adminlte_lang::message.userdescription') }}</p>
+								<h4 class="control-sidebar-subheading">{{ __('adminlte::message.Menuuser') }} Externos</h4>
+								<p>{{ __('adminlte::message.userdescription') }}</p>
 							</div>
 						</a>
 					</li>
@@ -88,20 +88,20 @@
 						<a href='/audits'>
 							<i class="menu-icon fas fa-user-secret bg-green"></i>
 							<div class="menu-info">
-								<h4 class="control-sidebar-subheading">{{ trans('adminlte_lang::message.Menuaudit') }}</h4>
-								<p>{{ trans('adminlte_lang::message.auditdescription') }}</p>
+								<h4 class="control-sidebar-subheading">{{ __('adminlte::message.Menuaudit') }}</h4>
+								<p>{{ __('adminlte::message.auditdescription') }}</p>
 							</div>
 						</a>
 				@endif
 					</li> --}}
 			</ul>
 
-			{{-- <h3 class="control-sidebar-heading">{{ trans('adminlte_lang::message.progress') }}</h3>
+			{{-- <h3 class="control-sidebar-heading">{{ __('adminlte::message.progress') }}</h3>
 			<ul class='control-sidebar-menu'>
 				<li>
 					<a href='javascript::;'>
 						<h4 class="control-sidebar-subheading">
-							{{ trans('adminlte_lang::message.customtemplate') }}
+							{{ __('adminlte::message.customtemplate') }}
 							<span class="label label-danger pull-right">70%</span>
 						</h4>
 						<div class="progress progress-xxs">
@@ -113,18 +113,18 @@
 
 		</div>
 		{{-- Stats tab content
-		<div class="tab-pane" id="control-sidebar-stats-tab">{{ trans('adminlte_lang::message.statstab') }}</div>
+		<div class="tab-pane" id="control-sidebar-stats-tab">{{ __('adminlte::message.statstab') }}</div>
 		Settings tab content
 		<div class="tab-pane" id="control-sidebar-settings-tab">
 			<form method="post">
-				<h3 class="control-sidebar-heading">{{ trans('adminlte_lang::message.generalset') }}</h3>
+				<h3 class="control-sidebar-heading">{{ __('adminlte::message.generalset') }}</h3>
 				<div class="form-group">
 					<label class="control-sidebar-subheading">
-						{{ trans('adminlte_lang::message.reportpanel') }}
-						<input type="checkbox" class="pull-right" {{ trans('adminlte_lang::message.checked') }} />
+						{{ __('adminlte::message.reportpanel') }}
+						<input type="checkbox" class="pull-right" {{ __('adminlte::message.checked') }} />
 					</label>
 					<p>
-						{{ trans('adminlte_lang::message.informationsettings') }}
+						{{ __('adminlte::message.informationsettings') }}
 					</p>
 				</div>
 			</form>

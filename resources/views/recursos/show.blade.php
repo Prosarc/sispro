@@ -1,9 +1,9 @@
 @extends('layouts.app')
 @section('htmlheader_title')
-{{ trans('adminlte_lang::message.solser') }}
+{{ __('adminlte::message.solser') }}
 @endsection
 @section('contentheader_title')
-{{ trans('adminlte_lang::message.solser') }}
+{{ __('adminlte::message.solser') }}
 @endsection
 @section('main-content')
 <div class="container-fluid spark-screen">
@@ -13,31 +13,31 @@
 				<div class="box-header with-border">
 					<div class="col-md-12" >
 						@if(($SolSer->SolSerStatus <> 'Pendiente' && $SolSer->SolSerStatus <> 'Aprobado' && $SolSer->SolSerStatus <> 'Aceptado') && (in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol2, Permisos::CLIENTE)))
-							<h4 class="col-md-6">{{trans('adminlte_lang::message.solrestitleclientepart1')}} <b>{{trans('adminlte_lang::message.update')}}</b> {{trans('adminlte_lang::message.o')}} <b>{{trans('adminlte_lang::message.delete')}}</b> {{trans('adminlte_lang::message.solrestitleclientepart2')}}
+							<h4 class="col-md-6">{{__('adminlte::message.solrestitleclientepart1')}} <b>{{__('adminlte::message.update')}}</b> {{__('adminlte::message.o')}} <b>{{__('adminlte::message.delete')}}</b> {{__('adminlte::message.solrestitleclientepart2')}}
 								@switch($SolSer->SolSerStatus)
 									@case('Programado')
-										{{trans('adminlte_lang::message.solresProgramador')}}
+										{{__('adminlte::message.solresProgramador')}}
 										@break
 									@case('Completado')
-										{{trans('adminlte_lang::message.solresCompletado')}}
+										{{__('adminlte::message.solresCompletado')}}
 										@break
 									@case('No Conciliado')
-										{{trans('adminlte_lang::message.solresNoConciliadotext')}}
+										{{__('adminlte::message.solresNoConciliadotext')}}
 										@break
 									@case('Conciliado')
-										{{trans('adminlte_lang::message.solresConciliadotext')}}
+										{{__('adminlte::message.solresConciliadotext')}}
 										@break
 									@case('Tratado')
-										{{trans('adminlte_lang::message.solresTratado')}}
+										{{__('adminlte::message.solresTratado')}}
 										@break
 									@case('Certificacion')
-										{{trans('adminlte_lang::message.solresCertificado')}}
+										{{__('adminlte::message.solresCertificado')}}
 										@break
 								@endswitch
 							</h4>
 						@endif
 						@if(($SolSer->SolSerStatus === 'Pendiente' || $SolSer->SolSerStatus === 'Aprobado' || $SolSer->SolSerStatus === 'Aceptado') && (in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol2, Permisos::CLIENTE)))
-							<a href="/solicitud-residuo/{{$SolRes->SolResSlug}}/edit" class="btn btn-warning pull-right"><i class="fas fa-edit"></i><b> {{trans('adminlte_lang::message.edit')}}</b></a>
+							<a href="/solicitud-residuo/{{$SolRes->SolResSlug}}/edit" class="btn btn-warning pull-right"><i class="fas fa-edit"></i><b> {{__('adminlte::message.edit')}}</b></a>
 						@endif
 						@php
 							switch ($SolRes->SolResTypeUnidad) {
@@ -63,25 +63,25 @@
 								</div>
 								<div class="col-md-16">
 									<div class="col-md-4 border-gray">
-										<label>{{trans('adminlte_lang::message.solrestypeunity')}}</label><br>
+										<label>{{__('adminlte::message.solrestypeunity')}}</label><br>
 										<a>{{$SolRes->SolResTypeUnidad === Null ? 'N/A' : $SolRes->SolResTypeUnidad}}</a>
 									</div>
 									<div class="col-md-4 border-gray">
-										<label>{{trans('adminlte_lang::message.solrescantunity')}}</label><br>
+										<label>{{__('adminlte::message.solrescantunity')}}</label><br>
 										<a>{{$SolRes->SolResCantiUnidad === Null ? 'N/A' : $SolRes->SolResCantiUnidad}}</a>
 									</div>
 									<div class="col-md-4 border-gray">
-										<label>{{trans('adminlte_lang::message.solresembalaje')}}</label><br>
+										<label>{{__('adminlte::message.solresembalaje')}}</label><br>
 										<a>{{$SolRes->SolResEmbalaje}}</a>
 									</div>
 								</div>
 								<div class="col-md-4 border-gray" id="kgenviados">
-									<label>{{trans('adminlte_lang::message.solresenviado')}}</label><br>
+									<label>{{__('adminlte::message.solresenviado')}}</label><br>
 									<a>{{$SolRes->SolResKgEnviado}}</a>
 								</div>
 								
 								<div class="col-md-4 border-gray" id="kgresividos">
-									<label>{{trans('adminlte_lang::message.solresresivido')}}</label><br>
+									<label>{{__('adminlte::message.solresresivido')}}</label><br>
 									<a>{{$SolRes->SolResKgRecibido  === Null ? 'N/A' : $SolRes->SolResKgRecibido}}</a>
 								</div>
 
@@ -100,20 +100,20 @@
 									@endif
 								</div>
 								<div class="col-md-4 border-gray">
-									<label>{{trans('adminlte_lang::message.solresalto')}}</label><br>
+									<label>{{__('adminlte::message.solresalto')}}</label><br>
 									<a>{{$SolRes->SolResAlto === Null ? 'N/A' : $SolRes->SolResAlto}}</a>
 								</div>
 								<div class="col-md-4 border-gray">
-									<label>{{trans('adminlte_lang::message.solresancho')}}</label><br>
+									<label>{{__('adminlte::message.solresancho')}}</label><br>
 									<a>{{$SolRes->SolResAncho === Null ? 'N/A' : $SolRes->SolResAncho}}</a>
 								</div>
 								<div class="col-md-4 border-gray">
-									<label>{{trans('adminlte_lang::message.solresProfundo')}}</label><br>
+									<label>{{__('adminlte::message.solresProfundo')}}</label><br>
 									<a>{{$SolRes->SolResProfundo === Null ? 'N/A' : $SolRes->SolResProfundo}}</a>
 								</div>
 							</div>
 							<div class="col-md-12 border-gray">
-								<center><h4>{{trans('adminlte_lang::message.requirements')}}</h4><center>
+								<center><h4>{{__('adminlte::message.requirements')}}</h4><center>
 								<div class="col-md-2" style="text-align: center; margin-top: 20px;">
 									<label data-trigger="hover" data-toggle="popover" title="<b>Foto-Descargue</b>" data-content="<p> Se requiere registro fotografico del proceso de descargue de los residuos en las instalaciones de Prosarc S.A. ESP</p>" for="SolResFotoDescargue_Pesaje">Foto Descargue
 									<div style="width: 100%; height: 34px;">
@@ -193,7 +193,7 @@
 										</div>
 									</div>
 									<div class="modal-footer">
-										<button type="submit" class="btn btn-primary pull-right">{{trans('adminlte_lang::message.save')}}</button>
+										<button type="submit" class="btn btn-primary pull-right">{{__('adminlte::message.save')}}</button>
 									</div>
 								</div>
 							</div>
@@ -208,7 +208,7 @@
 					@if((($SolSer->SolSerStatus === 'Programado' || $SolSer->SolSerStatus === 'Completado' || $SolSer->SolSerStatus === 'Conciliado' || $SolSer->SolSerStatus === 'No Conciliado' || $SolSer->SolSerStatus === 'Tratado' || $SolSer->SolSerStatus === 'Notificado')) && ($SolRes->SolResFotoDescargue_Pesaje == 1 || $SolRes->SolResFotoDescargue_Pesaje == 0 || $SolRes->SolResFotoTratamiento == 1 ||  $SolRes->SolResVideoTratamiento == 1 ||  $SolRes->SolResVideoDescargue_Pesaje == 1 ))
 						<tbody hidden onload="renderTable()" id="readyTable">
 							<div class="col-md-12">
-								<center><h3>{{trans('adminlte_lang::message.recursos')}}</h3></center>
+								<center><h3>{{__('adminlte::message.recursos')}}</h3></center>
 								<div class="box box-warning">
 									@if ($errors->any())
 										<div class="alert alert-danger" role="alert">
@@ -221,9 +221,9 @@
 									@endif
 									<div class="col-md-6" style="margin-bottom:15px;">
 										<h4>
-											{{trans('adminlte_lang::message.recursoFoto')}}
+											{{__('adminlte::message.recursoFoto')}}
 											@if(((in_array(Auth::user()->UsRol, Permisos::SolSer1) || in_array(Auth::user()->UsRol2, Permisos::SolSer1)) && ($SolSer->SolSerStatus === 'Programado' || $SolSer->SolSerStatus === 'Completado' || $SolSer->SolSerStatus === 'Conciliado' || $SolSer->SolSerStatus === 'No Conciliado'|| $SolSer->SolSerStatus === 'Tratado'|| $SolSer->SolSerStatus === 'Notificado')) && ($SolRes->SolResFotoDescargue_Pesaje == 1 || $SolRes->SolResFotoDescargue_Pesaje == 0 || $SolRes->SolResFotoTratamiento == 1))
-												<a method='get' href='#' data-toggle='modal' data-target='#addRecurso' style="color:green" title="{{trans('adminlte_lang::message.recaddfoto')}}" id="addFoto"><i class="fas fa-plus-circle"></i></a>
+												<a method='get' href='#' data-toggle='modal' data-target='#addRecurso' style="color:green" title="{{__('adminlte::message.recaddfoto')}}" id="addFoto"><i class="fas fa-plus-circle"></i></a>
 											@endif
 										</h4>
 										@if (!isset($Fotos[0]->RecTipo))
@@ -237,11 +237,11 @@
 																<div class="container">
 																	<ul class="nav nav-pills" style="padding-top: 2px; max-width:500px" max-width="500px">
 																		<li role="presentation" class="navbar-brand" style="color:white;"><i>{{$Foto->RecTipo}}</i></li>
-																		<li role="presentation"><a href="../../../img/Recursos/{{$Foto->RecSrc}}/{{$Foto->RecRmSrc}}" target="_blank" title="{{trans('adminlte_lang::message.recampliarfoto')}}" style="color:orange;"><label style="cursor:pointer;"><i class="fas fa-expand-arrows-alt"></label></i></a></li>
+																		<li role="presentation"><a href="../../../img/Recursos/{{$Foto->RecSrc}}/{{$Foto->RecRmSrc}}" target="_blank" title="{{__('adminlte::message.recampliarfoto')}}" style="color:orange;"><label style="cursor:pointer;"><i class="fas fa-expand-arrows-alt"></label></i></a></li>
 																		@if(in_array(Auth::user()->UsRol, Permisos::SolSer1) || in_array(Auth::user()->UsRol2, Permisos::SolSer1))
-																			<li role="presentation"><a href="#" onclick="deleteRecursos(`{{$Foto->SolResSlug}}`, `{{$Foto->RecTipo}}`, `{{$Foto->RecCarte}}`, `{{$Foto->SlugRec}}`)" title="{{trans('adminlte_lang::message.recdeletefoto')}}"><label style="color:red; cursor:pointer;"><i class="fas fa-trash-alt"></i></label></a></li>
+																			<li role="presentation"><a href="#" onclick="deleteRecursos(`{{$Foto->SolResSlug}}`, `{{$Foto->RecTipo}}`, `{{$Foto->RecCarte}}`, `{{$Foto->SlugRec}}`)" title="{{__('adminlte::message.recdeletefoto')}}"><label style="color:red; cursor:pointer;"><i class="fas fa-trash-alt"></i></label></a></li>
 																		@endif
-																		<li role="presentation"><a href="../../../img/Recursos/{{$Foto->RecSrc}}/{{$Foto->RecRmSrc}}" download="{{now().'_'.$Respel->RespelName.'_'.$Foto->RecTipo}}" title="{{trans('adminlte_lang::message.recdowloadfoto')}}"><label style="color:pink; cursor:pointer;"><i class="fas fa-download"></i></label></a></li>
+																		<li role="presentation"><a href="../../../img/Recursos/{{$Foto->RecSrc}}/{{$Foto->RecRmSrc}}" download="{{now().'_'.$Respel->RespelName.'_'.$Foto->RecTipo}}" title="{{__('adminlte::message.recdowloadfoto')}}"><label style="color:pink; cursor:pointer;"><i class="fas fa-download"></i></label></a></li>
 																	</ul>
 																</div>
 															</nav>
@@ -253,9 +253,9 @@
 									</div>
 									<div class="col-md-6" style="margin-bottom:15px;">
 										<h4>
-											{{trans('adminlte_lang::message.recursoVideo')}}
+											{{__('adminlte::message.recursoVideo')}}
 											@if(((in_array(Auth::user()->UsRol, Permisos::SolSer1) || in_array(Auth::user()->UsRol2, Permisos::SolSer1)) && ($SolSer->SolSerStatus === 'Programado' || $SolSer->SolSerStatus === 'Completado' || $SolSer->SolSerStatus === 'Conciliado' || $SolSer->SolSerStatus === 'No Conciliado' || $SolSer->SolSerStatus === 'Tratado' || $SolSer->SolSerStatus === 'Notificado')) && ($SolRes->SolResVideoDescargue_Pesaje == 1 || $SolRes->SolResVideoTratamiento == 1))
-												<a method='get' href='#' data-toggle='modal' data-target='#addRecurso' style="color:green" title="{{trans('adminlte_lang::message.recdeletevideo')}}" id="addVideo"><i class="fas fa-plus-circle"></i></a>
+												<a method='get' href='#' data-toggle='modal' data-target='#addRecurso' style="color:green" title="{{__('adminlte::message.recdeletevideo')}}" id="addVideo"><i class="fas fa-plus-circle"></i></a>
 											@endif
 										</h4>
 										@if (!isset($Videos[0]->RecTipo))
@@ -269,9 +269,9 @@
 															<ul class="nav nav-pills">
 																<li role="presentation" class="navbar-brand" style="color:white"><i>{{$Video->RecTipo}}</i></li>
 																@if(in_array(Auth::user()->UsRol, Permisos::SolSer1) || in_array(Auth::user()->UsRol2, Permisos::SolSer1))
-																	<li role="presentation"><a href="#" onclick="deleteRecursos(`{{$Video->SolResSlug}}`, `{{$Video->RecTipo}}`, `{{$Video->RecCarte}}`, `{{$Video->SlugRec}}`)" title="{{trans('adminlte_lang::message.recdeletevideo')}}"><label style="color:red; cursor:pointer;"><i class="fas fa-trash-alt"></i></label></a></li>
+																	<li role="presentation"><a href="#" onclick="deleteRecursos(`{{$Video->SolResSlug}}`, `{{$Video->RecTipo}}`, `{{$Video->RecCarte}}`, `{{$Video->SlugRec}}`)" title="{{__('adminlte::message.recdeletevideo')}}"><label style="color:red; cursor:pointer;"><i class="fas fa-trash-alt"></i></label></a></li>
 																@endif
-																<li role="presentation"><a href="../../../img/Recursos/{{$Video->RecSrc}}/{{$Video->RecRmSrc}}" download="{{now().'_'.$Respel->RespelName.'_'.$Video->RecTipo}}" title="{{trans('adminlte_lang::message.recdowloadvideo')}}"><label style="color:pink; cursor:pointer;"><i class="fas fa-download"></i></label></a></li>
+																<li role="presentation"><a href="../../../img/Recursos/{{$Video->RecSrc}}/{{$Video->RecRmSrc}}" download="{{now().'_'.$Respel->RespelName.'_'.$Video->RecTipo}}" title="{{__('adminlte::message.recdowloadvideo')}}"><label style="color:pink; cursor:pointer;"><i class="fas fa-download"></i></label></a></li>
 															</ul>
 														</div>
 													</nav>
@@ -290,7 +290,7 @@
 						@if(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol2, Permisos::CLIENTE))
 							<div class="col-md-12">
 								<center>
-									<h3 data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{trans('adminlte_lang::message.recursos')}}</b>" data-content="{{trans('adminlte_lang::message.recursostratamiento')}}"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{trans('adminlte_lang::message.recursos')}}</h3>
+									<h3 data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{__('adminlte::message.recursos')}}</b>" data-content="{{__('adminlte::message.recursostratamiento')}}"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{__('adminlte::message.recursos')}}</h3>
 								</center>
 								<div class="box box-warning">
 									@if ($errors->any())
@@ -304,7 +304,7 @@
 									@endif
 									<div class="col-md-6" style="margin-bottom:15px;">
 										<h4>
-											{{trans('adminlte_lang::message.recursoFoto')}}
+											{{__('adminlte::message.recursoFoto')}}
 										</h4>
 										@if (!isset($Fotos[0]->RecTipo))
 											<img src="../../../img/defaultimage.png" height="300px" width="100%" max-width="1200px">
@@ -317,9 +317,9 @@
 																<div class="container">
 																	<ul class="nav nav-pills" style="padding-top: 2px; max-width:500px" max-width="500px">
 																		<li role="presentation" class="navbar-brand" style="color:white;"><i>{{$Foto->RecTipo}}</i></li>
-																		<li role="presentation"><a href="../../../img/Recursos/{{$Foto->RecSrc}}/{{$Foto->RecRmSrc}}" target="_blank" title="{{trans('adminlte_lang::message.recampliarfoto')}}" style="color:orange;"><label style="cursor:pointer;"><i class="fas fa-expand-arrows-alt"></label></i></a></li>
+																		<li role="presentation"><a href="../../../img/Recursos/{{$Foto->RecSrc}}/{{$Foto->RecRmSrc}}" target="_blank" title="{{__('adminlte::message.recampliarfoto')}}" style="color:orange;"><label style="cursor:pointer;"><i class="fas fa-expand-arrows-alt"></label></i></a></li>
 																		@if(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol2, Permisos::CLIENTE))
-																			<li role="presentation"><a href="../../../img/Recursos/{{$Foto->RecSrc}}/{{$Foto->RecRmSrc}}" download="{{now().'_'.$Respel->RespelName.'_'.$Foto->RecTipo}}" title="{{trans('adminlte_lang::message.recdowloadfoto')}}"><label style="color:pink; cursor:pointer;"><i class="fas fa-download"></i></label></a></li>
+																			<li role="presentation"><a href="../../../img/Recursos/{{$Foto->RecSrc}}/{{$Foto->RecRmSrc}}" download="{{now().'_'.$Respel->RespelName.'_'.$Foto->RecTipo}}" title="{{__('adminlte::message.recdowloadfoto')}}"><label style="color:pink; cursor:pointer;"><i class="fas fa-download"></i></label></a></li>
 																		@endif
 																	</ul>
 																</div>
@@ -332,7 +332,7 @@
 									</div>
 									<div class="col-md-6" style="margin-bottom:15px;">
 										<h4>
-											{{trans('adminlte_lang::message.recursoVideo')}}
+											{{__('adminlte::message.recursoVideo')}}
 										</h4>
 										@if (!isset($Videos[0]->RecTipo))
 											<img src="../../../img/defaultvideo.jpg" height="auto" width="100%" max-width="1200">
@@ -345,7 +345,7 @@
 															<ul class="nav nav-pills">
 																<li role="presentation" class="navbar-brand" style="color:white"><i>{{$Video->RecTipo}}</i></li>
 																@if(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol2, Permisos::CLIENTE))
-																	<li role="presentation"><a href="../../../img/Recursos/{{$Video->RecSrc}}/{{$Video->RecRmSrc}}" download="{{now().'_'.$Respel->RespelName.'_'.$Video->RecTipo}}" title="{{trans('adminlte_lang::message.recdowloadvideo')}}"><label style="color:pink; cursor:pointer;"><i class="fas fa-download"></i></label></a></li>
+																	<li role="presentation"><a href="../../../img/Recursos/{{$Video->RecSrc}}/{{$Video->RecRmSrc}}" download="{{now().'_'.$Respel->RespelName.'_'.$Video->RecTipo}}" title="{{__('adminlte::message.recdowloadvideo')}}"><label style="color:pink; cursor:pointer;"><i class="fas fa-download"></i></label></a></li>
 																@endif
 															</ul>
 														</div>

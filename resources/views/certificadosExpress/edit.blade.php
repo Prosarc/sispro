@@ -41,7 +41,7 @@ Certificado edición
 							</div>
 							<div class="box box-info">
 								<div class="box-footer">
-									<button type="submit" class="btn btn-success pull-right"><i class="fa fa-check"></i>{{ trans('adminlte_lang::LangRespel.updaterespelButton') }}</button>
+									<button type="submit" class="btn btn-success pull-right"><i class="fa fa-check"></i>{{ __('adminlte::LangRespel.updaterespelButton') }}</button>
 								</div>
 							</div>
 						</div>

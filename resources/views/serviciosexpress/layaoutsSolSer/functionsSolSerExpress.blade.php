@@ -38,7 +38,7 @@ $("#FK_SolSerCliente").change(function(e){
 
 			var residuos = new Array();
 			// $("#FK_SolResRg"+id_div+contadorRespel[id_div]).empty();
-			$("#FK_SolResRg"+id_div+contadorRespel[id_div]).append(`<option onclick="HiddenRequeRespel(`+id_div+`,`+contadorRespel[id_div]+`)" value="">{{ trans('adminlte_lang::message.select') }}</option>`);
+			$("#FK_SolResRg"+id_div+contadorRespel[id_div]).append(`<option onclick="HiddenRequeRespel(`+id_div+`,`+contadorRespel[id_div]+`)" value="">{{ __('adminlte::message.select') }}</option>`);
 			for(var i = res.respels.length -1; i >= 0; i--){
 				if ($.inArray(res.respels[i].SlugSGenerRes, residuos) < 0) {
 					$("#FK_SolResRg"+id_div+contadorRespel[id_div]).append(`<option onclick="RequeRespel(`+id_div+`,`+contadorRespel[id_div]+`,'`+res.respels[i].RespelSlug+`')" value="${res.respels[i].SlugSGenerRes}">${res.respels[i].RespelName} (${res.respels[i].TratName})</option>`);
@@ -49,7 +49,7 @@ $("#FK_SolSerCliente").change(function(e){
             var sedes = new Array();
 			// $("#FK_SolResRg"+id_div+contadorRespel[id_div]).empty();
             $("#SedeSlug").empty();
-			$("#SedeSlug").append(`<option value="">{{ trans('adminlte_lang::message.select') }}</option>`);
+			$("#SedeSlug").append(`<option value="">{{ __('adminlte::message.select') }}</option>`);
 			for(var i = res.sedes.length -1; i >= 0; i--){
 				if ($.inArray(res.sedes[i].SedeSlug, sedes) < 0) {
 					$("#SedeSlug").append(`<option value="${res.sedes[i].SedeSlug}">${res.sedes[i].SedeName} (${res.sedes[i].SedeAddress})</option>`);
@@ -108,7 +108,7 @@ function ResiduosGener(id_div, ID_Gener){
 			if(res != ''){
 				var residuos = new Array();
 				$("#FK_SolResRg"+id_div+contadorRespel[id_div]).empty();
-				$("#FK_SolResRg"+id_div+contadorRespel[id_div]).append(`<option onclick="HiddenRequeRespel(`+id_div+`,`+contadorRespel[id_div]+`)" value="">{{ trans('adminlte_lang::message.select') }}</option>`);
+				$("#FK_SolResRg"+id_div+contadorRespel[id_div]).append(`<option onclick="HiddenRequeRespel(`+id_div+`,`+contadorRespel[id_div]+`)" value="">{{ __('adminlte::message.select') }}</option>`);
 				for(var i = res.length -1; i >= 0; i--){
 					if ($.inArray(res[i].SlugSGenerRes, residuos) < 0) {
 						$("#FK_SolResRg"+id_div+contadorRespel[id_div]).append(`<option onclick="RequeRespel(`+id_div+`,`+contadorRespel[id_div]+`,'`+res[i].RespelSlug+`')" value="${res[i].SlugSGenerRes}">${res[i].RespelName} (${res[i].TratName})</option>`);
@@ -239,7 +239,7 @@ function AgregarResPel(id_div,ID_Gener) {
 			if(res != ''){
 				var residuos = new Array();
 				// $("#FK_SolResRg"+id_div+contadorRespel[id_div]).empty();
-				$("#FK_SolResRg"+id_div+contadorRespel[id_div]).append(`<option onclick="HiddenRequeRespel(`+id_div+`,`+contadorRespel[id_div]+`)" value="">{{ trans('adminlte_lang::message.select') }}</option>`);
+				$("#FK_SolResRg"+id_div+contadorRespel[id_div]).append(`<option onclick="HiddenRequeRespel(`+id_div+`,`+contadorRespel[id_div]+`)" value="">{{ __('adminlte::message.select') }}</option>`);
 				for(var i = res.length -1; i >= 0; i--){
 					if ($.inArray(res[i].SlugSGenerRes, residuos) < 0) {
 						$("#FK_SolResRg"+id_div+contadorRespel[id_div]).append(`<option onclick="RequeRespel(`+id_div+`,`+contadorRespel[id_div]+`,'`+res[i].RespelSlug+`')" value="${res[i].SlugSGenerRes}">${res[i].RespelName} (${res[i].TratName})</option>`);
@@ -350,7 +350,7 @@ $("#SolServTypeRecolection").change(function(e){
 
                 var residuos = new Array();
                 // $("#FK_SolResRg"+id_div+contadorRespel[id_div]).empty();
-                $("#FK_SolResRg"+id_div+contadorRespel[id_div]).append(`<option onclick="HiddenRequeRespel(`+id_div+`,`+contadorRespel[id_div]+`)" value="">{{ trans('adminlte_lang::message.select') }}</option>`);
+                $("#FK_SolResRg"+id_div+contadorRespel[id_div]).append(`<option onclick="HiddenRequeRespel(`+id_div+`,`+contadorRespel[id_div]+`)" value="">{{ __('adminlte::message.select') }}</option>`);
                 for(var i = res.respels.length -1; i >= 0; i--){
                     if ($.inArray(res.respels[i].SlugSGenerRes, residuos) < 0) {
                         $("#FK_SolResRg"+id_div+contadorRespel[id_div]).append(`<option onclick="RequeRespel(`+id_div+`,`+contadorRespel[id_div]+`,'`+res.respels[i].RespelSlug+`')" value="${res.respels[i].SlugSGenerRes}">${res.respels[i].RespelName} (${res.respels[i].TratName})</option>`);
@@ -361,7 +361,7 @@ $("#SolServTypeRecolection").change(function(e){
                 var sedes = new Array();
                 // $("#FK_SolResRg"+id_div+contadorRespel[id_div]).empty();
                 $("#SedeSlug").empty();
-                $("#SedeSlug").append(`<option value="">{{ trans('adminlte_lang::message.select') }}</option>`);
+                $("#SedeSlug").append(`<option value="">{{ __('adminlte::message.select') }}</option>`);
                 for(var i = res.sedes.length -1; i >= 0; i--){
                     if ($.inArray(res.sedes[i].SedeSlug, sedes) < 0) {
                         $("#SedeSlug").append(`<option value="${res.sedes[i].SedeSlug}">${res.sedes[i].SedeName} (${res.sedes[i].SedeAddress})</option>`);

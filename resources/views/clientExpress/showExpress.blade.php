@@ -44,19 +44,19 @@
                             <input type="submit" id="Eliminar{{$cliente->CliSlug}}" style="display: none;">
                         </form>
                         @if($cliente->CliDelete == 0 )
-                        <a method='get' href='#' data-toggle='modal' data-target='#myModalCliente{{$cliente->CliSlug}}' class='btn btn-danger pull-left'><i class="fas fa-trash-alt"></i> <b>{{ trans('adminlte_lang::message.delete') }}</b></a>
+                        <a method='get' href='#' data-toggle='modal' data-target='#myModalCliente{{$cliente->CliSlug}}' class='btn btn-danger pull-left'><i class="fas fa-trash-alt"></i> <b>{{ __('adminlte::message.delete') }}</b></a>
                         @else
                         <form action='/clientes/{{$cliente->CliSlug}}' method='POST' class="pull-left">
                             @method('DELETE')
                             @csrf
-                            <button type="submit" class='btn btn-success btn-block' title="{{ trans('adminlte_lang::message.add') }}">
+                            <button type="submit" class='btn btn-success btn-block' title="{{ __('adminlte::message.add') }}">
                                 <i class="fas fa-plus-square"></i>
                             </button>
                         </form>
                         @endif
                         @endif --}}
                         @if (in_array(Auth::user()->UsRol, Permisos::CLIENTE) || Auth::user()->email == 'sistemas@prosarc.com.co')
-                        <a href="/cliente/{{$cliente->CliSlug}}/edit" class="btn btn-warning pull-right"><i class="fas fa-edit"></i><b> {{ trans('adminlte_lang::message.edit') }}</b></a>
+                        <a href="/cliente/{{$cliente->CliSlug}}/edit" class="btn btn-warning pull-right"><i class="fas fa-edit"></i><b> {{ __('adminlte::message.edit') }}</b></a>
                         @endif
                         @if ($cliente->CliCategoria == 'ClientePrepago')
                         @switch(true)
@@ -64,13 +64,13 @@
                         @case(Auth::user()->email == 'asesorse1@prosarc.com.co')
                         @case(Auth::user()->email == 'coordinadorse@prosarc.com.co')
                         @case(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
-                        <a href="/clientexpress/{{$cliente->CliSlug}}/edit" class="btn btn-warning pull-right"><i class="fas fa-edit"></i><b> {{ trans('adminlte_lang::message.edit') }}</b></a>
+                        <a href="/clientexpress/{{$cliente->CliSlug}}/edit" class="btn btn-warning pull-right"><i class="fas fa-edit"></i><b> {{ __('adminlte::message.edit') }}</b></a>
                         @break
                         @default
 
                         @endswitch
                         @endif
-                        {{-- <label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 500}' title="{{ trans('adminlte_lang::LangRespel.respeldescriptittle') }}" data-content="{{ trans('adminlte_lang::LangRespel.respeldescriptinfo') }}"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{ trans('adminlte_lang::LangRespel.descripcion') }}</label> --}}
+                        {{-- <label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 500}' title="{{ __('adminlte::LangRespel.respeldescriptittle') }}" data-content="{{ __('adminlte::LangRespel.respeldescriptinfo') }}"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{ __('adminlte::LangRespel.descripcion') }}</label> --}}
                         @if(in_array(Auth::user()->UsRol, Permisos::SOLSERACEPTADO))
                         @if($cliente->CliStatus=='Autorizado')
                         <label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 500}' title="<b>Bloquear Solicitudes de Servicio</b>" data-content="Al presionar el boton el cliente quedara <b>Bloqueado</b> para realizar nuevas solicitudes de servicio"><a href="/cliente/{{$cliente->CliSlug}}/negarCliStatus" class="btn btn-danger pull-right"><i class="fas fa-ban"></i><b> Bloquear</b></a></label>
@@ -87,23 +87,23 @@
                     <h3 class="profile-username text-center textolargo">{{$cliente->CliName}}</h3>
                     <ul>
                         <li class="list-group-item">
-                            <b>{{ trans('adminlte_lang::message.clirazonsoc') }}</b>
-                            <a href="#" class="pull-right textpopover" title="{{ trans('adminlte_lang::message.clirazonsoc') }}" data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$cliente->CliName}}</p>">{{$cliente->CliName}}</a>
+                            <b>{{ __('adminlte::message.clirazonsoc') }}</b>
+                            <a href="#" class="pull-right textpopover" title="{{ __('adminlte::message.clirazonsoc') }}" data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$cliente->CliName}}</p>">{{$cliente->CliName}}</a>
                         </li>
                         @if(in_array(Auth::user()->UsRol, Permisos::TODOPROSARC))
                         <li class="list-group-item">
-                            <b>{{ trans('adminlte_lang::message.clientnombrecorto') }}</b>
-                            <a href="#" class="pull-right textpopover" title="{{ trans('adminlte_lang::message.clientcliente') }}" data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$cliente->CliShortname}}</p>">{{$cliente->CliShortname}}</a>
+                            <b>{{ __('adminlte::message.clientnombrecorto') }}</b>
+                            <a href="#" class="pull-right textpopover" title="{{ __('adminlte::message.clientcliente') }}" data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$cliente->CliShortname}}</p>">{{$cliente->CliShortname}}</a>
                         </li>
                         @endif
                         <li class="list-group-item">
-                            <b>{{ trans('adminlte_lang::message.clientNIT') }}</b> <a class="pull-right">{{$cliente->CliNit}}</a>
+                            <b>{{ __('adminlte::message.clientNIT') }}</b> <a class="pull-right">{{$cliente->CliNit}}</a>
                         </li>
                         {{-- <li class="list-group-item">
                             <div class="col-sm-16">
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        <b>{{ trans('adminlte_lang::message.clientcamaracomercio') }}</b>
+                                        <b>{{ __('adminlte::message.clientcamaracomercio') }}</b>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="input-group">
@@ -122,7 +122,7 @@
                             <div class="col-sm-16">
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        <b>{{ trans('adminlte_lang::message.clientrut') }}</b>
+                                        <b>{{ __('adminlte::message.clientrut') }}</b>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="input-group">
@@ -141,7 +141,7 @@
                             <div class="col-sm-16">
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        <b>{{ trans('adminlte_lang::message.clientlegalrepresentative') }}</b>
+                                        <b>{{ __('adminlte::message.clientlegalrepresentative') }}</b>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="input-group">
@@ -160,7 +160,7 @@
                             <div class="col-sm-16">
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        <b>{{ trans('adminlte_lang::message.clientbankcertification') }}</b>
+                                        <b>{{ __('adminlte::message.clientbankcertification') }}</b>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="input-group">
@@ -179,7 +179,7 @@
                             <div class="col-sm-16">
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        <b>{{ trans('adminlte_lang::message.clientcommercialcertification') }}</b>
+                                        <b>{{ __('adminlte::message.clientcommercialcertification') }}</b>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="input-group">
@@ -198,7 +198,7 @@
                             <div class="col-sm-16">
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        <b>{{ trans('adminlte_lang::message.clientcommercialcertification') }} 2</b>
+                                        <b>{{ __('adminlte::message.clientcommercialcertification') }} 2</b>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="input-group">
@@ -221,13 +221,13 @@
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
                     {{-- Barra de navegación --}}
-                    <li class="active box-info"><a href="#sedes" data-toggle="tab">{{ trans('adminlte_lang::message.sclientsedes') }}</a></li>
+                    <li class="active box-info"><a href="#sedes" data-toggle="tab">{{ __('adminlte::message.sclientsedes') }}</a></li>
                     @if(in_array(Auth::user()->UsRol, Permisos::TODOPROSARC))
                     <li><a href="#requerimientos" data-toggle="tab">Requerimientos</a></li>
                     @endif
                     <li><a href="#tarifas_cliente" data-toggle="tab">Tarifa</a></li>
                     @if ((Route::currentRouteName() === 'cliente-show')&&(in_array(Auth::user()->UsRol, Permisos::CLIENTE)))
-                    <a href="/sclientes/create" class="btn btn-primary pull-right" style="margin-top: 0.5em; margin-right: 0.5em;"><b>{{ trans('adminlte_lang::message.create') }} Sede</b></a>
+                    <a href="/sclientes/create" class="btn btn-primary pull-right" style="margin-top: 0.5em; margin-right: 0.5em;"><b>{{ __('adminlte::message.create') }} Sede</b></a>
                     @endif
                     @if ($cliente->CliCategoria == 'ClientePrepago')
                     @switch(true)
@@ -257,16 +257,16 @@
                                 @if(Route::currentRouteName() === 'cliente-show' || (in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) && Route::currentRouteName() === 'clientes.show'))
                                 @if($Sede->SedeDelete == 0 )
                                 {{-- Boton de edit --}}
-                                <a href="{{Route::currentRouteName() === 'cliente-show' ? '/sede' : '/sclientes'}}/{{$Sede->SedeSlug}}/edit" class="btn btn-warning pull-right" title="{{ trans('adminlte_lang::message.edit') }}"><i class="fas fa-edit"></i></a>
+                                <a href="{{Route::currentRouteName() === 'cliente-show' ? '/sede' : '/sclientes'}}/{{$Sede->SedeSlug}}/edit" class="btn btn-warning pull-right" title="{{ __('adminlte::message.edit') }}"><i class="fas fa-edit"></i></a>
                                 @if($SedeSlug !== $Sede->SedeSlug)
-                                <a method='get' href='#' data-toggle='modal' data-target='#myModal{{$Sede->SedeSlug}}' class='btn btn-danger pull-left' title="{{ trans('adminlte_lang::message.delete') }}" onclick="DeleteSede(`{{$Sede->SedeSlug}}`, `{{$Sede->SedeName}}`)"><i class="fas fa-trash-alt"></i></a>
+                                <a method='get' href='#' data-toggle='modal' data-target='#myModal{{$Sede->SedeSlug}}' class='btn btn-danger pull-left' title="{{ __('adminlte::message.delete') }}" onclick="DeleteSede(`{{$Sede->SedeSlug}}`, `{{$Sede->SedeName}}`)"><i class="fas fa-trash-alt"></i></a>
                                 <div id="deleteSede"></div>
                                 @endif
                                 @else
                                 <form action='{{Route::currentRouteName() === ' cliente-show' ? "/sedes/$Sede->SedeSlug/destroy" : "/sclientes/$Sede->SedeSlug" }}' method='POST' class="pull-left">
                                     @method('DELETE')
                                     @csrf
-                                    <button type="submit" class='btn btn-success btn-block' title="{{ trans('adminlte_lang::message.add') }}">
+                                    <button type="submit" class='btn btn-success btn-block' title="{{ __('adminlte::message.add') }}">
                                         <i class="fas fa-plus-square"></i>
                                     </button>
                                 </form>
@@ -275,23 +275,23 @@
                             </div>
                             <h3 class="profile-username text-center textolargo">{{$Sede->SedeName}}</h3>
                             <li class="list-group-item">
-                                <b>{{ trans('adminlte_lang::message.address') }}</b>
-                                <a title="{{ trans('adminlte_lang::message.copy') }}" onclick="copiarAlPortapapeles('{{ trans('adminlte_lang::message.address') }}')"><i class="far fa-copy"></i></a>
-                                <p href="#" class="pull-right textpopoveraddress" id="{{ trans('adminlte_lang::message.address') }}" title="{{ trans('adminlte_lang::message.address') }}" data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$Sede->SedeAddress}} - {{$Sede->MunName}}, {{$Sede->DepartName}}</p>">{{$Sede->SedeAddress}} - {{$Sede->MunName}}, {{$Sede->DepartName}}</p>
+                                <b>{{ __('adminlte::message.address') }}</b>
+                                <a title="{{ __('adminlte::message.copy') }}" onclick="copiarAlPortapapeles('{{ __('adminlte::message.address') }}')"><i class="far fa-copy"></i></a>
+                                <p href="#" class="pull-right textpopoveraddress" id="{{ __('adminlte::message.address') }}" title="{{ __('adminlte::message.address') }}" data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$Sede->SedeAddress}} - {{$Sede->MunName}}, {{$Sede->DepartName}}</p>">{{$Sede->SedeAddress}} - {{$Sede->MunName}}, {{$Sede->DepartName}}</p>
                             </li>
                             <li class="list-group-item">
-                                <b>{{ trans('adminlte_lang::message.mobile') }}</b> <a class="pull-right">{{$Sede->SedeCelular}}</a>
+                                <b>{{ __('adminlte::message.mobile') }}</b> <a class="pull-right">{{$Sede->SedeCelular}}</a>
                             </li>
                             <li class="list-group-item">
-                                <b>{{ trans('adminlte_lang::message.phone') }}</b> <a class="pull-right">{{$Sede->SedePhone1}} - {{$Sede->SedeExt1}}</a>
+                                <b>{{ __('adminlte::message.phone') }}</b> <a class="pull-right">{{$Sede->SedePhone1}} - {{$Sede->SedeExt1}}</a>
                             </li>
                             <li class="list-group-item">
-                                <b>{{ trans('adminlte_lang::message.phone') }} 2</b> <a class="pull-right">{{$Sede->SedePhone2}} - {{$Sede->SedeExt2}}</a>
+                                <b>{{ __('adminlte::message.phone') }} 2</b> <a class="pull-right">{{$Sede->SedePhone2}} - {{$Sede->SedeExt2}}</a>
                             </li>
                             <li class="list-group-item">
-                                <b>{{ trans('adminlte_lang::message.emailaddress') }}</b>
-                                <a title="{{ trans('adminlte_lang::message.copy') }}" onclick="copiarAlPortapapeles('{{ trans('adminlte_lang::message.emailaddress') }}')"><i class="far fa-copy"></i></a>
-                                <a href="#" class="pull-right textpopover" id="{{ trans('adminlte_lang::message.emailaddress') }}" title="{{ trans('adminlte_lang::message.emailaddress') }}" data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$Sede->SedeEmail}}</p>">{{$Sede->SedeEmail}}</a>
+                                <b>{{ __('adminlte::message.emailaddress') }}</b>
+                                <a title="{{ __('adminlte::message.copy') }}" onclick="copiarAlPortapapeles('{{ __('adminlte::message.emailaddress') }}')"><i class="far fa-copy"></i></a>
+                                <a href="#" class="pull-right textpopover" id="{{ __('adminlte::message.emailaddress') }}" title="{{ __('adminlte::message.emailaddress') }}" data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$Sede->SedeEmail}}</p>">{{$Sede->SedeEmail}}</a>
                             </li>
                         </div>
                         @endforeach
@@ -306,8 +306,8 @@
                         <div style='overflow-y:auto; max-height:503px;'>
                             @if(isset($Requerimientos))
                             <div class="col-md-6" style="text-align: center;">
-                                <label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.solserticket') }}</b>" data-content="<p style='width: 50%'> {{ trans('adminlte_lang::message.solserticketdescrit') }} </p>">
-                                    <label for="main_RequeCliBascula">{{ trans('adminlte_lang::message.solserticket') }}</label>
+                                <label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.solserticket') }}</b>" data-content="<p style='width: 50%'> {{ __('adminlte::message.solserticketdescrit') }} </p>">
+                                    <label for="main_RequeCliBascula">{{ __('adminlte::message.solserticket') }}</label>
                                     <div style="width: 100%; height: 34px;">
                                         <input type="checkbox" class="mainswitch" disabled {{$Requerimientos->RequeCliBascula == 1 ? 'checked' : ''}}>
                                     </div>
@@ -322,8 +322,8 @@
                                 </label>
                             </div>
                             <div class="col-md-6" style="text-align: center;">
-                                <label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.solserperscapa') }}</b>" data-content="<p style='width: 50%'> {{ trans('adminlte_lang::message.solserperscapadescrit') }} </p>">
-                                    <label for="RequeCliCapacitacion">{{ trans('adminlte_lang::message.solserperscapa') }}</label>
+                                <label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.solserperscapa') }}</b>" data-content="<p style='width: 50%'> {{ __('adminlte::message.solserperscapadescrit') }} </p>">
+                                    <label for="RequeCliCapacitacion">{{ __('adminlte::message.solserperscapa') }}</label>
                                     <div style="width: 100%; height: 34px;">
                                         <input type="checkbox" class="mainswitch" disabled {{$Requerimientos->RequeCliCapacitacion == 1 ? 'checked' : ''}}>
                                     </div>
@@ -338,8 +338,8 @@
                                 </label>
                             </div>
                             <div class="col-md-6" style="text-align: center;">
-                                <label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.solsermaspers') }}</b>" data-content="<p style='width: 50%'> {{ trans('adminlte_lang::message.solsermaspersdescrit') }} </p>">
-                                    <label for="RequeCliMasPerson">{{ trans('adminlte_lang::message.solsermaspers') }}</label>
+                                <label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.solsermaspers') }}</b>" data-content="<p style='width: 50%'> {{ __('adminlte::message.solsermaspersdescrit') }} </p>">
+                                    <label for="RequeCliMasPerson">{{ __('adminlte::message.solsermaspers') }}</label>
                                     <div style="width: 100%; height: 34px;">
                                         <input type="checkbox" class="mainswitch" disabled {{$Requerimientos->RequeCliMasPerson == 1 ? 'checked' : ''}}>
                                     </div>
@@ -354,8 +354,8 @@
                                 </label>
                             </div>
                             <div class="col-md-6" style="text-align: center;">
-                                <label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.solservehicexclusi') }}</b>" data-content="<p style='width: 50%'> {{ trans('adminlte_lang::message.solservehicexclusidescrit') }} </p>">
-                                    <label for="RequeCliVehicExclusive">{{ trans('adminlte_lang::message.solservehicexclusi') }}</label>
+                                <label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.solservehicexclusi') }}</b>" data-content="<p style='width: 50%'> {{ __('adminlte::message.solservehicexclusidescrit') }} </p>">
+                                    <label for="RequeCliVehicExclusive">{{ __('adminlte::message.solservehicexclusi') }}</label>
                                     <div style="width: 100%; height: 34px;">
                                         <input type="checkbox" class="mainswitch" disabled {{$Requerimientos->RequeCliVehicExclusive == 1 ? 'checked' : ''}}>
                                     </div>
@@ -370,8 +370,8 @@
                                 </label>
                             </div>
                             <div class="col-md-6" style="text-align: center;">
-                                <label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.solservehicplata') }}</b>" data-content="<p style='width: 50%'> {{ trans('adminlte_lang::message.solservehicplatadescrit') }} </p>">
-                                    <label for="RequeCliPlatform">{{ trans('adminlte_lang::message.solservehicplata') }}</label>
+                                <label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.solservehicplata') }}</b>" data-content="<p style='width: 50%'> {{ __('adminlte::message.solservehicplatadescrit') }} </p>">
+                                    <label for="RequeCliPlatform">{{ __('adminlte::message.solservehicplata') }}</label>
                                     <div style="width: 100%; height: 34px;">
                                         <input type="checkbox" class="mainswitch" disabled {{$Requerimientos->RequeCliPlatform == 1 ? 'checked' : ''}}>
                                     </div>
@@ -447,8 +447,8 @@
                 @csrf
                 <div class="modal-header">
                     <div class="col-md-6" style="text-align: center;">
-                        <label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.solserticket') }}</b>" data-content="<p style='width: 50%'> {{ trans('adminlte_lang::message.solserticketdescrit') }} </p>">
-                            <label for="main_RequeCliBascula">{{ trans('adminlte_lang::message.solserticket') }}</label>
+                        <label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.solserticket') }}</b>" data-content="<p style='width: 50%'> {{ __('adminlte::message.solserticketdescrit') }} </p>">
+                            <label for="main_RequeCliBascula">{{ __('adminlte::message.solserticket') }}</label>
                             <div style="width: 100%; height: 34px;">
                                 <input type="checkbox" class="mainswitch" id="main_RequeCliBascula" name="RequeCliBascula">
                             </div>
@@ -463,8 +463,8 @@
                         </label>
                     </div>
                     <div class="col-md-6" style="text-align: center;">
-                        <label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.solserperscapa') }}</b>" data-content="<p style='width: 50%'> {{ trans('adminlte_lang::message.solserperscapadescrit') }} </p>">
-                            <label for="RequeCliCapacitacion">{{ trans('adminlte_lang::message.solserperscapa') }}</label>
+                        <label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.solserperscapa') }}</b>" data-content="<p style='width: 50%'> {{ __('adminlte::message.solserperscapadescrit') }} </p>">
+                            <label for="RequeCliCapacitacion">{{ __('adminlte::message.solserperscapa') }}</label>
                             <div style="width: 100%; height: 34px;">
                                 <input type="checkbox" class="mainswitch" id="main_RequeCliCapacitacion" name="RequeCliCapacitacion">
                             </div>
@@ -479,8 +479,8 @@
                         </label>
                     </div>
                     <div class="col-md-6" style="text-align: center;">
-                        <label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.solsermaspers') }}</b>" data-content="<p style='width: 50%'> {{ trans('adminlte_lang::message.solsermaspersdescrit') }} </p>">
-                            <label for="RequeCliMasPerson">{{ trans('adminlte_lang::message.solsermaspers') }}</label>
+                        <label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.solsermaspers') }}</b>" data-content="<p style='width: 50%'> {{ __('adminlte::message.solsermaspersdescrit') }} </p>">
+                            <label for="RequeCliMasPerson">{{ __('adminlte::message.solsermaspers') }}</label>
                             <div style="width: 100%; height: 34px;">
                                 <input type="checkbox" class="mainswitch" id="main_RequeCliMasPerson" name="RequeCliMasPerson">
                             </div>
@@ -495,8 +495,8 @@
                         </label>
                     </div>
                     <div class="col-md-6" style="text-align: center;">
-                        <label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.solservehicexclusi') }}</b>" data-content="<p style='width: 50%'> {{ trans('adminlte_lang::message.solservehicexclusidescrit') }} </p>">
-                            <label for="RequeCliVehicExclusive">{{ trans('adminlte_lang::message.solservehicexclusi') }}</label>
+                        <label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.solservehicexclusi') }}</b>" data-content="<p style='width: 50%'> {{ __('adminlte::message.solservehicexclusidescrit') }} </p>">
+                            <label for="RequeCliVehicExclusive">{{ __('adminlte::message.solservehicexclusi') }}</label>
                             <div style="width: 100%; height: 34px;">
                                 <input type="checkbox" class="mainswitch" id="main_RequeCliVehicExclusive" name="RequeCliVehicExclusive">
                             </div>
@@ -511,8 +511,8 @@
                         </label>
                     </div>
                     <div class="col-md-6" style="text-align: center;">
-                        <label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.solservehicplata') }}</b>" data-content="<p style='width: 50%'> {{ trans('adminlte_lang::message.solservehicplatadescrit') }} </p>">
-                            <label for="RequeCliPlatform">{{ trans('adminlte_lang::message.solservehicplata') }}</label>
+                        <label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.solservehicplata') }}</b>" data-content="<p style='width: 50%'> {{ __('adminlte::message.solservehicplatadescrit') }} </p>">
+                            <label for="RequeCliPlatform">{{ __('adminlte::message.solservehicplata') }}</label>
                             <div style="width: 100%; height: 34px;">
                                 <input type="checkbox" class="mainswitch" id="main_RequeCliPlatform" name="RequeCliPlatform">
                             </div>
@@ -529,7 +529,7 @@
                 </div>
                 <input type="text" hidden value="{{$cliente->ID_Cli}}" name="FK_RequeClient">
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-success pull-right">{{ trans('adminlte_lang::message.add') }}</button>
+                    <button type="submit" class="btn btn-success pull-right">{{ __('adminlte::message.add') }}</button>
                 </div>
             </form>
         </div>
@@ -556,8 +556,8 @@
                 @method('PUT')
                 <div class="modal-header">
                     <div class="col-md-6" style="text-align: center;">
-                        <label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.solserticket') }}</b>" data-content="<p style='width: 50%'> {{ trans('adminlte_lang::message.solserticketdescrit') }} </p>">
-                            <label for="main_RequeCliBascula">{{ trans('adminlte_lang::message.solserticket') }}</label>
+                        <label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.solserticket') }}</b>" data-content="<p style='width: 50%'> {{ __('adminlte::message.solserticketdescrit') }} </p>">
+                            <label for="main_RequeCliBascula">{{ __('adminlte::message.solserticket') }}</label>
                             <div style="width: 100%; height: 34px;">
                                 <input type="checkbox" class="mainswitch" id="main_RequeCliBascula" name="RequeCliBascula" {{$Requerimientos->RequeCliBascula == 1 ? 'checked' : ''}}>
                             </div>
@@ -572,8 +572,8 @@
                         </label>
                     </div>
                     <div class="col-md-6" style="text-align: center;">
-                        <label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.solserperscapa') }}</b>" data-content="<p style='width: 50%'> {{ trans('adminlte_lang::message.solserperscapadescrit') }} </p>">
-                            <label for="RequeCliCapacitacion">{{ trans('adminlte_lang::message.solserperscapa') }}</label>
+                        <label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.solserperscapa') }}</b>" data-content="<p style='width: 50%'> {{ __('adminlte::message.solserperscapadescrit') }} </p>">
+                            <label for="RequeCliCapacitacion">{{ __('adminlte::message.solserperscapa') }}</label>
                             <div style="width: 100%; height: 34px;">
                                 <input type="checkbox" class="mainswitch" id="main_RequeCliCapacitacion" name="RequeCliCapacitacion" {{$Requerimientos->RequeCliCapacitacion == 1 ? 'checked' : ''}}>
                             </div>
@@ -588,8 +588,8 @@
                         </label>
                     </div>
                     <div class="col-md-6" style="text-align: center;">
-                        <label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.solsermaspers') }}</b>" data-content="<p style='width: 50%'> {{ trans('adminlte_lang::message.solsermaspersdescrit') }} </p>">
-                            <label for="RequeCliMasPerson">{{ trans('adminlte_lang::message.solsermaspers') }}</label>
+                        <label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.solsermaspers') }}</b>" data-content="<p style='width: 50%'> {{ __('adminlte::message.solsermaspersdescrit') }} </p>">
+                            <label for="RequeCliMasPerson">{{ __('adminlte::message.solsermaspers') }}</label>
                             <div style="width: 100%; height: 34px;">
                                 <input type="checkbox" class="mainswitch" id="main_RequeCliMasPerson" name="RequeCliMasPerson" {{$Requerimientos->RequeCliMasPerson == 1 ? 'checked' : ''}}>
                             </div>
@@ -604,8 +604,8 @@
                         </label>
                     </div>
                     <div class="col-md-6" style="text-align: center;">
-                        <label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.solservehicexclusi') }}</b>" data-content="<p style='width: 50%'> {{ trans('adminlte_lang::message.solservehicexclusidescrit') }} </p>">
-                            <label for="RequeCliVehicExclusive">{{ trans('adminlte_lang::message.solservehicexclusi') }}</label>
+                        <label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.solservehicexclusi') }}</b>" data-content="<p style='width: 50%'> {{ __('adminlte::message.solservehicexclusidescrit') }} </p>">
+                            <label for="RequeCliVehicExclusive">{{ __('adminlte::message.solservehicexclusi') }}</label>
                             <div style="width: 100%; height: 34px;">
                                 <input type="checkbox" class="mainswitch" id="main_RequeCliVehicExclusive" name="RequeCliVehicExclusive" {{$Requerimientos->RequeCliVehicExclusive == 1 ? 'checked' : ''}}>
                             </div>
@@ -620,8 +620,8 @@
                         </label>
                     </div>
                     <div class="col-md-6" style="text-align: center;">
-                        <label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.solservehicplata') }}</b>" data-content="<p style='width: 50%'> {{ trans('adminlte_lang::message.solservehicplatadescrit') }} </p>">
-                            <label for="RequeCliPlatform">{{ trans('adminlte_lang::message.solservehicplata') }}</label>
+                        <label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.solservehicplata') }}</b>" data-content="<p style='width: 50%'> {{ __('adminlte::message.solservehicplatadescrit') }} </p>">
+                            <label for="RequeCliPlatform">{{ __('adminlte::message.solservehicplata') }}</label>
                             <div style="width: 100%; height: 34px;">
                                 <input type="checkbox" class="mainswitch" id="main_RequeCliPlatform" name="RequeCliPlatform" {{$Requerimientos->RequeCliPlatform == 1 ? 'checked' : ''}}>
                             </div>
@@ -638,7 +638,7 @@
                 </div>
                 <input type="text" hidden value="{{$cliente->ID_Cli}}" name="FK_RequeClient">
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-success pull-right">{{ trans('adminlte_lang::message.add') }}</button>
+                    <button type="submit" class="btn btn-success pull-right">{{ __('adminlte::message.add') }}</button>
                 </div>
             </form>
             @endif

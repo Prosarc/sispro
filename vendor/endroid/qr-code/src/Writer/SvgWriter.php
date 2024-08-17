@@ -67,7 +67,6 @@ class SvgWriter extends AbstractWriter
 
         $logoPath = $qrCode->getLogoPath();
         if (is_string($logoPath)) {
-
             $forceXlinkHref = false;
             if (isset($options['force_xlink_href']) && $options['force_xlink_href']) {
                 $forceXlinkHref = true;
@@ -81,7 +80,6 @@ class SvgWriter extends AbstractWriter
         if (!is_string($xml)) {
             throw new GenerateImageException('Unable to save SVG XML');
         }
-
 
         if (isset($options['exclude_xml_declaration']) && $options['exclude_xml_declaration']) {
             $xml = str_replace("<?xml version=\"1.0\"?>\n", '', $xml);
@@ -106,14 +104,17 @@ class SvgWriter extends AbstractWriter
         if (null === $logoHeight || null === $logoWidth) {
             $logoImage = imagecreatefromstring(strval($imageData));
 
-            if (!is_resource($logoImage)) {
+            if (!$logoImage) {
                 throw new GenerateImageException('Unable to generate image: check your GD installation or logo path');
             }
 
+            /** @var mixed $logoImage */
             $logoSourceWidth = imagesx($logoImage);
             $logoSourceHeight = imagesy($logoImage);
 
-            imagedestroy($logoImage);
+            if (PHP_VERSION_ID < 80000) {
+                imagedestroy($logoImage);
+            }
 
             if (null === $logoWidth) {
                 $logoWidth = $logoSourceWidth;

@@ -1,10 +1,10 @@
 @extends('layouts.app')
 @section('htmlheader_title')
-{{ trans('adminlte_lang::message.mantvehititle') }}
+{{ __('adminlte::message.mantvehititle') }}
 @endsection
 @section('contentheader_title')
 <span style="background-image: linear-gradient(40deg, rgb(69, 202, 252), rgb(48, 63, 159)); padding-right:30vw; position:relative; overflow:hidden;">
-	{{ trans('adminlte_lang::message.vehicletitle') }}
+	{{ __('adminlte::message.vehicletitle') }}
   <div style="background-color:#ecf0f5; position:absolute; height:145%; width:40vw; transform:rotate(30deg); right:-20vw; top:-45%;"></div>
 </span>
 @endsection
@@ -14,9 +14,9 @@
 		<div class="col-md-16 col-md-offset-0">
 			<div class="box">
 				<div class="box-header">
-					<h3 class="box-title">{{ trans('adminlte_lang::message.mantvehititlelist') }}</h3>
+					<h3 class="box-title">{{ __('adminlte::message.mantvehititlelist') }}</h3>
 					@if(in_array(Auth::user()->UsRol, Permisos::ProgVehic1) || in_array(Auth::user()->UsRol2, Permisos::ProgVehic1))
-					<a href="/vehicle-programacion/create" class="btn btn-info pull-right"><i class="fas fa-calendar-alt"></i> {{ trans('adminlte_lang::message.progvehiccreatetext') }}</a>
+					<a href="/vehicle-programacion/create" class="btn btn-info pull-right"><i class="fas fa-calendar-alt"></i> {{ __('adminlte::message.progvehiccreatetext') }}</a>
 					@endif
 				</div>
 				<div class="box box-info">
@@ -24,16 +24,16 @@
 						<table id="MantVehicleTable" class="table table-compact table-bordered table-striped"  data-order='[[ 6, "desc"]]'>
 							<thead>
 								<tr>
-									<th>{{ trans('adminlte_lang::message.mantvehivehic') }}</th>
-									{{-- <th>{{ trans('adminlte_lang::message.mantvehikm') }}</th> --}}
-									<th>{{ trans('adminlte_lang::message.mantvehistatus') }}</th>
-									<th>{{ trans('adminlte_lang::message.mantvehitype') }}</th>
-									<th>{{ trans('adminlte_lang::message.mantvehiinicio1') }}</th>
-									<th>{{ trans('adminlte_lang::message.mantvehiinicio') }}</th>
-									<th>{{ trans('adminlte_lang::message.mantvehifin1') }}</th>
-									<th>{{ trans('adminlte_lang::message.mantvehifin') }}</th>
+									<th>{{ __('adminlte::message.mantvehivehic') }}</th>
+									{{-- <th>{{ __('adminlte::message.mantvehikm') }}</th> --}}
+									<th>{{ __('adminlte::message.mantvehistatus') }}</th>
+									<th>{{ __('adminlte::message.mantvehitype') }}</th>
+									<th>{{ __('adminlte::message.mantvehiinicio1') }}</th>
+									<th>{{ __('adminlte::message.mantvehiinicio') }}</th>
+									<th>{{ __('adminlte::message.mantvehifin1') }}</th>
+									<th>{{ __('adminlte::message.mantvehifin') }}</th>
 									@if(in_array(Auth::user()->UsRol, Permisos::ProgVehic1) || in_array(Auth::user()->UsRol2, Permisos::ProgVehic1))
-									<th>{{ trans('adminlte_lang::message.edit') }}</th>
+									<th>{{ __('adminlte::message.edit') }}</th>
 									@endif
 								</tr>
 							</thead>
@@ -43,9 +43,9 @@
 									<td>{{$MantVehicle->VehicPlaca}}</td>
 									{{-- <td>{{$MantVehicle->MvKm}}</td> --}}
 									@if($MantVehicle->HoraMavFin >= now())
-									<td>{{ trans('adminlte_lang::message.mantvehistatustrue') }}</td>
+									<td>{{ __('adminlte::message.mantvehistatustrue') }}</td>
 									@else
-									<td>{{ trans('adminlte_lang::message.mantvehistatusfalse') }}</td>
+									<td>{{ __('adminlte::message.mantvehistatusfalse') }}</td>
 									@endif
 									<td>{{$MantVehicle->MvType}}</td>
 									<td>{{date('Y/m/d', strtotime($MantVehicle->HoraMavInicio))}}</td>
@@ -53,7 +53,7 @@
 									<td>{{date('Y/m/d', strtotime($MantVehicle->HoraMavFin))}}</td>
 									<td>{{date('h:i A', strtotime($MantVehicle->HoraMavFin))}}</td>
 									@if(in_array(Auth::user()->UsRol, Permisos::ProgVehic1) || in_array(Auth::user()->UsRol2, Permisos::ProgVehic1))
-									<td><a href='/vehicle-mantenimiento/{{$MantVehicle->ID_Mv}}/edit' class='btn btn-block btn-warning'><i class="fas fa-edit"></i> <b>{{trans('adminlte_lang::message.edit')}}</b></a></td>
+									<td><a href='/vehicle-mantenimiento/{{$MantVehicle->ID_Mv}}/edit' class='btn btn-block btn-warning'><i class="fas fa-edit"></i> <b>{{__('adminlte::message.edit')}}</b></a></td>
 									@endif
 								</tr>
 								@endforeach

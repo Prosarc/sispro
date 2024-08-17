@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('htmlheader_title')
-{{ trans('adminlte_lang::LangRespel.Respelinfotag') }}
+{{ __('adminlte::LangRespel.Respelinfotag') }}
 @endsection
 @section('contentheader_title')
 <span style="background-image: linear-gradient(40deg, #d4fc79, #00C851); padding-right:30vw; position:relative; overflow:hidden;">
@@ -43,22 +43,22 @@
 							<li class="list-group-item">
 							<b>Estado de aprobación</b>
 							<select disabled name="RespelStatus" class="form-control">
-								<option {{$Respels->RespelStatus == 'Aprobado' ? 'selected' : '' }}>{{ trans('adminlte_lang::LangRespel.respelstatusaprovado') }}</option>
-								<option {{$Respels->RespelStatus == 'Rechazado' ? 'selected' : '' }}>{{ trans('adminlte_lang::LangRespel.respelstatusrechazado') }}</option>
-								<option {{$Respels->RespelStatus == 'Aceptado' ? 'selected' : '' }}>{{ trans('adminlte_lang::LangRespel.respelstatusrechazado') }}</option>
+								<option {{$Respels->RespelStatus == 'Aprobado' ? 'selected' : '' }}>{{ __('adminlte::LangRespel.respelstatusaprovado') }}</option>
+								<option {{$Respels->RespelStatus == 'Rechazado' ? 'selected' : '' }}>{{ __('adminlte::LangRespel.respelstatusrechazado') }}</option>
+								<option {{$Respels->RespelStatus == 'Aceptado' ? 'selected' : '' }}>{{ __('adminlte::LangRespel.respelstatusrechazado') }}</option>
 							</select>
 						</li>
 						@else
 						<li class="list-group-item">
 							<b>Estado de aprobación</b>
 							<select disabled name="RespelStatus" class="form-control">
-								<option {{$Respels->RespelStatus == 'Aprobado' ? 'selected' : '' }}>{{ trans('adminlte_lang::LangRespel.respelstatusaprovado') }}</option>
-								<option {{$Respels->RespelStatus == 'Evaluado' ? 'selected' : '' }}>{{ trans('adminlte_lang::LangRespel.respelstatusevaluated') }}</option>
-								<option {{$Respels->RespelStatus == 'Rechazado' ? 'selected' : '' }}>{{ trans('adminlte_lang::LangRespel.respelstatusrechazado') }}</option>
-								<option {{$Respels->RespelStatus == 'Pendiente' ? 'selected' : '' }}>{{ trans('adminlte_lang::LangRespel.respelstatuspendiente') }}</option>
-								<option {{$Respels->RespelStatus == 'Incompleto' ? 'selected' : '' }}>{{ trans('adminlte_lang::LangRespel.respelstatusincompleto') }}</option>
-								<option {{$Respels->RespelStatus == 'Vencido' ? 'selected' : '' }}>{{ trans('adminlte_lang::LangRespel.respelstatusvencido') }}</option>
-								<option {{$Respels->RespelStatus == 'Aceptado' ? 'selected' : '' }}>{{ trans('adminlte_lang::LangRespel.respelstatusrechazado') }}</option>
+								<option {{$Respels->RespelStatus == 'Aprobado' ? 'selected' : '' }}>{{ __('adminlte::LangRespel.respelstatusaprovado') }}</option>
+								<option {{$Respels->RespelStatus == 'Evaluado' ? 'selected' : '' }}>{{ __('adminlte::LangRespel.respelstatusevaluated') }}</option>
+								<option {{$Respels->RespelStatus == 'Rechazado' ? 'selected' : '' }}>{{ __('adminlte::LangRespel.respelstatusrechazado') }}</option>
+								<option {{$Respels->RespelStatus == 'Pendiente' ? 'selected' : '' }}>{{ __('adminlte::LangRespel.respelstatuspendiente') }}</option>
+								<option {{$Respels->RespelStatus == 'Incompleto' ? 'selected' : '' }}>{{ __('adminlte::LangRespel.respelstatusincompleto') }}</option>
+								<option {{$Respels->RespelStatus == 'Vencido' ? 'selected' : '' }}>{{ __('adminlte::LangRespel.respelstatusvencido') }}</option>
+								<option {{$Respels->RespelStatus == 'Aceptado' ? 'selected' : '' }}>{{ __('adminlte::LangRespel.respelstatusrechazado') }}</option>
 							</select>
 						</li>
 						@endif
@@ -70,7 +70,7 @@
 							{{-- hoja de seguridad --}}
 							@if($Respels->RespelHojaSeguridad!=='RespelHojaDefault.pdf')
 								<div class="col-md-12 form-group">
-									<label>{{ trans('adminlte_lang::LangRespel.Respelhoja') }}</label>
+									<label>{{ __('adminlte::LangRespel.Respelhoja') }}</label>
 									<div class="input-group">
 										<input type="text" class="form-control" value="Ver Documento" disabled>
 										<div class="input-group-btn">
@@ -80,7 +80,7 @@
 								</div>
 							@else
 								<div class="col-md-12 form-group">
-									<label>{{ trans('adminlte_lang::LangRespel.Respelhoja') }}</label>
+									<label>{{ __('adminlte::LangRespel.Respelhoja') }}</label>
 									<div class="input-group">
 										<input type="text" class="form-control" value="No Adjuntado" disabled>
 										<div class="input-group-btn">
@@ -92,7 +92,7 @@
 							{{-- tarjeta de emergencia --}}
 							@if($Respels->RespelTarj!=='RespelTarjetaDefault.pdf')
 								<div class="col-md-12 form-group">
-									<label>{{ trans('adminlte_lang::LangRespel.tarjetaemergencia') }}</label>
+									<label>{{ __('adminlte::LangRespel.tarjetaemergencia') }}</label>
 									<div class="input-group">
 										<input type="text" class="form-control" value="Ver Documento" disabled>
 										<div class="input-group-btn">
@@ -102,7 +102,7 @@
 								</div>
 							@else
 								<div class="col-md-12 form-group">
-									<label>{{ trans('adminlte_lang::LangRespel.tarjetaemergencia') }}</label>
+									<label>{{ __('adminlte::LangRespel.tarjetaemergencia') }}</label>
 									<div class="input-group">
 										<input type="text" class="form-control" value="No Adjuntado" disabled>
 										<div class="input-group-btn">
@@ -114,7 +114,7 @@
 							{{-- fotografia del residuo --}}
 							@if($Respels->RespelFoto!=='RespelFotoDefault.png')
 								<div class="col-md-12 form-group">
-									<label>{{ trans('adminlte_lang::LangRespel.foto') }}</label>
+									<label>{{ __('adminlte::LangRespel.foto') }}</label>
 									<div class="input-group">
 										<input type="text" class="form-control" value="Ver Documento" disabled>
 										<div class="input-group-btn">
@@ -124,7 +124,7 @@
 								</div>
 							@else
 								<div class="col-md-12 form-group">
-									<label>{{ trans('adminlte_lang::LangRespel.foto') }}</label>
+									<label>{{ __('adminlte::LangRespel.foto') }}</label>
 									<div class="input-group">
 										<input type="text" class="form-control" value="No Adjuntado" disabled>
 										<div class="input-group-btn">
@@ -147,16 +147,16 @@
 			<div class="box">
 				<!-- box header -->
 				<div class="box-header with-border">
-					<h3 class="box-title">{{ trans('adminlte_lang::LangRespel.Respelinfotag') }}</h3>
+					<h3 class="box-title">{{ __('adminlte::LangRespel.Respelinfotag') }}</h3>
 					@if(in_array(Auth::user()->UsRol, Permisos::RESPELPUBLIC)||in_array(Auth::user()->UsRol2, Permisos::RESPELPUBLIC))
 						<div class="btn-group-sm pull-right">
-							<a method='get' href='#' data-toggle='modal' data-target='#myModal{{$Respels->RespelSlug}}' class='btn btn-danger'>{{ trans('adminlte_lang::message.delete') }}</a>
-							<a href="/respelspublic/{{$Respels->RespelSlug}}/edit" class="btn btn-warning">{{ trans('adminlte_lang::message.edit') }}</a>
+							<a method='get' href='#' data-toggle='modal' data-target='#myModal{{$Respels->RespelSlug}}' class='btn btn-danger'>{{ __('adminlte::message.delete') }}</a>
+							<a href="/respelspublic/{{$Respels->RespelSlug}}/edit" class="btn btn-warning">{{ __('adminlte::message.edit') }}</a>
 							<form action='/respels/{{$Respels->RespelSlug}}' method='POST'>
 								@method('DELETE')
 								@csrf
 								<button type="submit" id="Eliminar{{$Respels->RespelSlug}}" style="display: none;">
-									{{ trans('adminlte_lang::message.delete') }}
+									{{ __('adminlte::message.delete') }}
 								</button>
 							</form>
 						</div>
@@ -175,20 +175,20 @@
 					<div class="nav-tabs-custom" style="box-shadow:3px 3px 5px grey; margin-bottom: 0px;">
 						<ul class="nav nav-tabs">
 							<li class="nav-item active">
-								<a class="nav-link" href="#Residuopane" data-toggle="tab">{{ trans('adminlte_lang::LangRespel.respeltabtittle') }}</a>
+								<a class="nav-link" href="#Residuopane" data-toggle="tab">{{ __('adminlte::LangRespel.respeltabtittle') }}</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="#Tratamientospane" data-toggle="tab">{{ trans('adminlte_lang::LangRespel.trattabtittle') }}</a>
+								<a class="nav-link" href="#Tratamientospane" data-toggle="tab">{{ __('adminlte::LangRespel.trattabtittle') }}</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="#Pretratamientospane" data-toggle="tab">{{ trans('adminlte_lang::LangRespel.pretrattabtittle') }}</a>
+								<a class="nav-link" href="#Pretratamientospane" data-toggle="tab">{{ __('adminlte::LangRespel.pretrattabtittle') }}</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="#Requerimientospane" data-toggle="tab">{{ trans('adminlte_lang::LangRespel.requertabtittle') }}</a>
+								<a class="nav-link" href="#Requerimientospane" data-toggle="tab">{{ __('adminlte::LangRespel.requertabtittle') }}</a>
 							</li>
 							@if(in_array(Auth::user()->UsRol, Permisos::SEDECOMERCIAL) || in_array(Auth::user()->UsRol2, Permisos::SEDECOMERCIAL))
 							<li class="nav-item">
-								<a class="nav-link" href="#Tarifaspane" data-toggle="tab">{{ trans('adminlte_lang::LangRespel.tarifatabtittle') }}</a>
+								<a class="nav-link" href="#Tarifaspane" data-toggle="tab">{{ __('adminlte::LangRespel.tarifatabtittle') }}</a>
 							</li>
 							@endif
 						</ul>

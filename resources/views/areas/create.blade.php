@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
 @section('htmlheader_title')
-{{ trans('adminlte_lang::message.areatitle') }}
+{{ __('adminlte::message.areatitle') }}
 @endsection
 
 @section('contentheader_title')
 <span style="background-image: linear-gradient(40deg, #FFFFFF, #A3A2AE); padding-right:30vw; position:relative; overflow:hidden;">
-	{{ trans('adminlte_lang::message.areatitle') }}
+	{{ __('adminlte::message.areatitle') }}
   <div style="background-color:#ecf0f5; position:absolute; height:145%; width:40vw; transform:rotate(30deg); right:-20vw; top:-45%;"></div>
 </span>
 @endsection
@@ -17,7 +17,7 @@
 			<div class="col-md-16 col-md-offset-0">
 				<div class="box">
 					<div class="box-header">
-						<h3 class="box-title">{{ trans('adminlte_lang::message.createarea') }}</h3>
+						<h3 class="box-title">{{ __('adminlte::message.createarea') }}</h3>
 					</div>
 					<div class="box box-info">
 						<form role="form" action="/areas" method="POST" enctype="multipart/form-data" data-toggle="validator">
@@ -33,23 +33,24 @@
 							@endif
 							<div class="box-body">
 								<div class="form-group col-xs-12 col-md-12">
-									<label for="SedeSelect">{{ trans('adminlte_lang::message.sclientsede') }}</label><small class="help-block with-errors">*</small>
+									<label for="SedeSelect">{{ __('adminlte::message.sclientsede') }}</label><small class="help-block with-errors">*</small>
 									<select name="FK_AreaSede" id="SedeSelect" class="form-control select" required>
-										<option value="">{{ trans('adminlte_lang::message.select') }}</option>
+										<option value="">{{ __('adminlte::message.select') }}</option>
 										@foreach($Sedes as $Sede)
 											<option value="{{$Sede->SedeSlug}}">{{$Sede->SedeName}}</option>
 										@endforeach
 									</select>
 								</div>
 								<div class="form-group col-xs-12 col-md-12">
-									<label for="AreaName" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.areaname') }}</b>" data-content="{{ trans('adminlte_lang::message.persinfonewarea') }}"><i style="font-size: 1.7rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{ trans('adminlte_lang::message.areaname') }}</label>
+									<label for="AreaName" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.areaname') }}</b>" data-content="{{ __
+									('adminlte::message.persinfonewarea') }}"><i style="font-size: 1.7rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{ __('adminlte::message.areaname') }}</label>
 									<small class="help-block with-errors">*</small>
 									<input data-minlength="5" required name="AreaName" autofocus="true" type="text" class="form-control inputText" id="AreaName" value="{{old('AreaName')}}">
 								</div>
 							</div>	
 							<div class="box box-info">
 								<div class="box-footer">
-									<button type="submit" class="btn btn-success pull-right">{{ trans('adminlte_lang::message.register') }}</button>
+									<button type="submit" class="btn btn-success pull-right">{{ __('adminlte::message.register') }}</button>
 								</div>
 							</div>
 						</form>

@@ -22,10 +22,6 @@ class EventFiringWebElement implements WebDriverElement, WebDriverLocatable
      */
     protected $dispatcher;
 
-    /**
-     * @param WebDriverElement $element
-     * @param WebDriverDispatcher $dispatcher
-     */
     public function __construct(WebDriverElement $element, WebDriverDispatcher $dispatcher)
     {
         $this->element = $element;
@@ -56,6 +52,7 @@ class EventFiringWebElement implements WebDriverElement, WebDriverLocatable
     public function sendKeys($value)
     {
         $this->dispatch('beforeChangeValueOf', $this);
+
         try {
             $this->element->sendKeys($value);
         } catch (WebDriverException $exception) {
@@ -74,6 +71,7 @@ class EventFiringWebElement implements WebDriverElement, WebDriverLocatable
     public function click()
     {
         $this->dispatch('beforeClickOn', $this);
+
         try {
             $this->element->click();
         } catch (WebDriverException $exception) {
@@ -86,7 +84,6 @@ class EventFiringWebElement implements WebDriverElement, WebDriverLocatable
     }
 
     /**
-     * @param WebDriverBy $by
      * @throws WebDriverException
      * @return EventFiringWebElement
      */
@@ -117,7 +114,6 @@ class EventFiringWebElement implements WebDriverElement, WebDriverLocatable
     }
 
     /**
-     * @param WebDriverBy $by
      * @throws WebDriverException
      * @return array
      */
@@ -129,6 +125,7 @@ class EventFiringWebElement implements WebDriverElement, WebDriverLocatable
             $this,
             $this->dispatcher->getDefaultDriver()
         );
+
         try {
             $elements = [];
             foreach ($this->element->findElements($by) as $element) {
@@ -352,7 +349,6 @@ class EventFiringWebElement implements WebDriverElement, WebDriverLocatable
     /**
      * Test if two element IDs refer to the same DOM element.
      *
-     * @param WebDriverElement $other
      * @return bool
      */
     public function equals(WebDriverElement $other)
@@ -365,9 +361,26 @@ class EventFiringWebElement implements WebDriverElement, WebDriverLocatable
         }
     }
 
-    /**
-     * @param WebDriverException $exception
-     */
+    public function takeElementScreenshot($save_as = null)
+    {
+        try {
+            return $this->element->takeElementScreenshot($save_as);
+        } catch (WebDriverException $exception) {
+            $this->dispatchOnException($exception);
+            throw $exception;
+        }
+    }
+
+    public function getShadowRoot()
+    {
+        try {
+            return $this->element->getShadowRoot();
+        } catch (WebDriverException $exception) {
+            $this->dispatchOnException($exception);
+            throw $exception;
+        }
+    }
+
     protected function dispatchOnException(WebDriverException $exception)
     {
         $this->dispatch(
@@ -391,7 +404,6 @@ class EventFiringWebElement implements WebDriverElement, WebDriverLocatable
     }
 
     /**
-     * @param WebDriverElement $element
      * @return static
      */
     protected function newElement(WebDriverElement $element)

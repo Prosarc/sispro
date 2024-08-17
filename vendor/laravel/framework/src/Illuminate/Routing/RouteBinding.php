@@ -3,8 +3,9 @@
 namespace Illuminate\Routing;
 
 use Closure;
-use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class RouteBinding
 {
@@ -41,7 +42,7 @@ class RouteBinding
 
             $callable = [$container->make($class), $method];
 
-            return call_user_func($callable, $value, $route);
+            return $callable($value, $route);
         };
     }
 
@@ -52,10 +53,12 @@ class RouteBinding
      * @param  string  $class
      * @param  \Closure|null  $callback
      * @return \Closure
+     *
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException<\Illuminate\Database\Eloquent\Model>
      */
     public static function forModel($container, $class, $callback = null)
     {
-        return function ($value) use ($container, $class, $callback) {
+        return function ($value, $route = null) use ($container, $class, $callback) {
             if (is_null($value)) {
                 return;
             }
@@ -65,7 +68,11 @@ class RouteBinding
             // throw a not found exception otherwise we will return the instance.
             $instance = $container->make($class);
 
-            if ($model = $instance->resolveRouteBinding($value)) {
+            $routeBindingMethod = $route?->allowsTrashedBindings() && in_array(SoftDeletes::class, class_uses_recursive($instance))
+                        ? 'resolveSoftDeletableRouteBinding'
+                        : 'resolveRouteBinding';
+
+            if ($model = $instance->{$routeBindingMethod}($value)) {
                 return $model;
             }
 
@@ -73,7 +80,7 @@ class RouteBinding
             // what we should do when the model is not found. This just gives these
             // developer a little greater flexibility to decide what will happen.
             if ($callback instanceof Closure) {
-                return call_user_func($callback, $value);
+                return $callback($value);
             }
 
             throw (new ModelNotFoundException)->setModel($class);

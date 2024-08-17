@@ -34,14 +34,14 @@ Crear Categoria
 							<div class="box-body">
 								
 								<div class="form-group col-xs-12 col-md-12">
-									<label for="CategoryRpName" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.CategoryName') }}</b>" data-content="{{ trans('adminlte_lang::message.CategoryNameInfo') }}"><i style="font-size: 1.7rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{ trans('adminlte_lang::message.CategoryName') }}</label>
+									<label for="CategoryRpName" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.CategoryName') }}</b>" data-content="{{ __('adminlte::message.CategoryNameInfo') }}"><i style="font-size: 1.7rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{ __('adminlte::message.CategoryName') }}</label>
 									<small class="help-block with-errors">*</small>
 									<input data-minlength="5" required name="CategoryRpName" autofocus="true" type="text" class="form-control inputText" id="CategoryRpName" value="{{old('CategoryRpName')}}">
 								</div>
 							</div>	
 							<div class="box box-info">
 								<div class="box-footer">
-									<button type="submit" class="btn btn-success pull-right">{{ trans('adminlte_lang::message.register') }}</button>
+									<button type="submit" class="btn btn-success pull-right">{{ __('adminlte::message.register') }}</button>
 								</div>
 							</div>
 						</form>

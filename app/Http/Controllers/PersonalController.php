@@ -383,7 +383,7 @@ class PersonalController extends Controller
 		$log->Auditlog = $request->all();
 		$log->save();
 
-		return redirect()->route('personal.show',  ['id' => $id]);
+		return redirect()->route('personal.show',  ['personal' => $id]);
 	}
 
 	/**

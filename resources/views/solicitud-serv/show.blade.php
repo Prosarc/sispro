@@ -44,14 +44,14 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 						<div class="box box-info">
 							<div class="col-md-12" style="text-align: center; margin-top: 20px; border-bottom:#f4f4f4 solid 2px;">
 								<div class="col-md-2">
-									<label>{{trans('adminlte_lang::message.solsershowdate')}}:</label>
+									<label>{{__('adminlte::message.solsershowdate')}}:</label>
 									<span>{{date('Y-m-d',strtotime($SolicitudServicio->created_at))}}</span>
 								</div>
 								<div class="col-md-2">
-									<label>{{trans('adminlte_lang::message.solserindexnumber')}}: {{$SolicitudServicio->ID_SolSer}}</label>
+									<label>{{__('adminlte::message.solserindexnumber')}}: {{$SolicitudServicio->ID_SolSer}}</label>
 								</div>
 								<div class="col-md-2">
-									<label>{{trans('adminlte_lang::message.solsershowaudita')}}</label>
+									<label>{{__('adminlte::message.solsershowaudita')}}</label>
 									@if($SolicitudServicio->SolResAuditoriaTipo == null)
 									<span>No</span>
 									@else
@@ -88,77 +88,77 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 								</div>
 								<hr>
 							</div>
-							@if(Auth::user()->UsRol <> trans('adminlte_lang::message.Cliente'))
+							@if(Auth::user()->UsRol <> __('adminlte::message.Cliente'))
 								<div class="col-md-12 border-gray">
 									<div class="col-md-6">
-										<label>{{ trans('adminlte_lang::message.solsershowempre') }}</label><br>
+										<label>{{ __('adminlte::message.solsershowempre') }}</label><br>
 										<a>{{$Cliente->CliName}}</a>
 									</div>
 									<div class="col-md-6">
-										<label>{{ trans('adminlte_lang::message.solsershowemprenit') }}</label><br>
+										<label>{{ __('adminlte::message.solsershowemprenit') }}</label><br>
 										<a>{{$Cliente->CliNit}}</a>
 									</div>
 								</div>
 								<div class="col-md-12 border-gray">
 									<div class="col-md-6">
-										<label>{{ trans('adminlte_lang::message.solsershowempreaddress') }}</label><br>
-										<a href="#" class="textpopover popover-left" title="{{ trans('adminlte_lang::message.solsershowempreaddress') }}" data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$Cliente->SedeAddress}}</p>">{{$Cliente->SedeAddress}}</a>
+										<label>{{ __('adminlte::message.solsershowempreaddress') }}</label><br>
+										<a href="#" class="textpopover popover-left" title="{{ __('adminlte::message.solsershowempreaddress') }}" data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$Cliente->SedeAddress}}</p>">{{$Cliente->SedeAddress}}</a>
 									</div>
 									<div class="col-md-6">
-										<label>{{ trans('adminlte_lang::message.solsershowemprecity') }}</label><br>
+										<label>{{ __('adminlte::message.solsershowemprecity') }}</label><br>
 										<a>{{$Cliente->MunName}}</a>
 									</div>
 								</div>
 							@endif
 							<div class="col-md-12 border-gray">
 								<div class="col-md-6">
-									<label>{{ trans('adminlte_lang::message.solserpersonal') }}:</label><br>
+									<label>{{ __('adminlte::message.solserpersonal') }}:</label><br>
 									<a>{{$SolicitudServicio->PersFirstName.' '.$SolicitudServicio->PersLastName}}</a>
 								</div>
 								<div class="col-md-6">
-									<label>{{ trans('adminlte_lang::message.emailaddress') }}:</label><br>
-									<a href="#" class="textpopover popover-left" title="{{ trans('adminlte_lang::message.emailaddress') }}" data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$SolicitudServicio->PersEmail}}</p>">{{$SolicitudServicio->PersEmail}}</a>
+									<label>{{ __('adminlte::message.emailaddress') }}:</label><br>
+									<a href="#" class="textpopover popover-left" title="{{ __('adminlte::message.emailaddress') }}" data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$SolicitudServicio->PersEmail}}</p>">{{$SolicitudServicio->PersEmail}}</a>
 								</div>
 							</div>
 							<div class="col-md-12 border-gray">
 								<div class="col-md-6">
-									<label>{{ trans('adminlte_lang::message.solsershowtransempre') }}</label><br>
+									<label>{{ __('adminlte::message.solsershowtransempre') }}</label><br>
 									<a>{{$SolicitudServicio->SolSerNameTrans}}</a>
 								</div>
 								<div class="col-md-6">
 									<button type="button" class="btn btn-box-tool boton" style="color: black; float: right;" data-toggle="collapse" data-target=".Transportadora" onclick="AnimationMenusForm('.Transportadora')" title="Reducir/Ampliar"><i class="fa fa-plus"></i></button>
-									<label>{{ trans('adminlte_lang::message.solsertransnit') }}:</label><br>
+									<label>{{ __('adminlte::message.solsertransnit') }}:</label><br>
 									<a>{{$SolicitudServicio->SolSerNitTrans}}</a>
 								</div>
 							</div>
 							<div class="col-md-16">
 								<div class="col-md-12 border-gray collapse Transportadora">
 									<div class="col-md-6">
-										<label>{{ trans('adminlte_lang::message.solsertransaddress') }}:</label><br>
-										<a href="#" class="textpopover popover-left" title="{{ trans('adminlte_lang::message.solsertransaddress') }}" data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$SolicitudServicio->SolSerAdressTrans}}</p>">{{$SolicitudServicio->SolSerAdressTrans}}</a>
+										<label>{{ __('adminlte::message.solsertransaddress') }}:</label><br>
+										<a href="#" class="textpopover popover-left" title="{{ __('adminlte::message.solsertransaddress') }}" data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$SolicitudServicio->SolSerAdressTrans}}</p>">{{$SolicitudServicio->SolSerAdressTrans}}</a>
 									</div>
 									<div class="col-md-6">
-										<label>{{ trans('adminlte_lang::message.solsershowtranscity') }}</label><br>
+										<label>{{ __('adminlte::message.solsershowtranscity') }}</label><br>
 										<a>{{$Municipio}}</a>
 									</div>
 								</div>
 								<div class="col-md-12 border-gray collapse Transportadora">
 									@if($SolicitudServicio->SolSerTipo == 'Interno')
 										<div class="col-md-6">
-											<label>{{ trans('adminlte_lang::message.solserconduc') }}:</label><br>
-											<a>{{$SolSerConductor == null ? trans('adminlte_lang::message.solsernullprogram') : $SolSerConductor->PersFirstName." ".$SolSerConductor->PersLastName}}</a>
+											<label>{{ __('adminlte::message.solserconduc') }}:</label><br>
+											<a>{{$SolSerConductor == null ? __('adminlte::message.solsernullprogram') : $SolSerConductor->PersFirstName." ".$SolSerConductor->PersLastName}}</a>
 										</div>
 										<div class="col-md-6">
-											<label>{{ trans('adminlte_lang::message.solservehic') }}:</label><br>
-											<a>{{$SolicitudServicio->SolSerVehiculo == null ? trans('adminlte_lang::message.solsernullprogram') : $SolicitudServicio->SolSerVehiculo}}</a>
+											<label>{{ __('adminlte::message.solservehic') }}:</label><br>
+											<a>{{$SolicitudServicio->SolSerVehiculo == null ? __('adminlte::message.solsernullprogram') : $SolicitudServicio->SolSerVehiculo}}</a>
 										</div>
 									@else
 									<div class="col-md-6">
-										<label>{{ trans('adminlte_lang::message.solserconduc') }}:</label><br>
+										<label>{{ __('adminlte::message.solserconduc') }}:</label><br>
 										<a>{{$SolSerConductor == null ? 'N/A' : $SolSerConductor}}</a>
 									</div>
 									<div class="col-md-6">
-										<label>{{ trans('adminlte_lang::message.solservehic') }}:</label><br>
+										<label>{{ __('adminlte::message.solservehic') }}:</label><br>
 										<a>{{$SolicitudServicio->SolSerVehiculo == null ? 'N/A' : $SolicitudServicio->SolSerVehiculo}}</a>
 									</div>
 									<div class="col-md-6">
@@ -178,8 +178,8 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 									max-width: 100%;" title="Observaciones" data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{!!nl2br($SolicitudServicio->SolSerDescript)!!}</p>">{{$SolicitudServicio->SolSerDescript}}</a>
 								</div>
 								<div class="col-md-6" {{$SolicitudServicio->SolSerTipo == "Externo" ? 'hidden' : ''}}>
-									<label>{{ trans('adminlte_lang::message.solseraddrescollect') }}:</label><br>
-									<a href="#" class="textpopover popover-left" title="{{ trans('adminlte_lang::message.solseraddrescollect') }}" data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$SolSerCollectAddress}}</p>">{{$SolSerCollectAddress}}</a>
+									<label>{{ __('adminlte::message.solseraddrescollect') }}:</label><br>
+									<a href="#" class="textpopover popover-left" title="{{ __('adminlte::message.solseraddrescollect') }}" data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$SolSerCollectAddress}}</p>">{{$SolSerCollectAddress}}</a>
 								</div>
 							</div>
 							@if (in_array(Auth::user()->UsRol, Permisos::SolSer2) || in_array(Auth::user()->UsRol2, Permisos::SolSer2))
@@ -207,7 +207,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 								@endswitch
 								
 							@endif
-							@if (in_array(Auth::user()->UsRol, Permisos::SolSer2) || in_array(Auth::user()->UsRol2, Permisos::SolSer2))							
+							@if (in_array(Auth::user()->UsRol, Permisos::SolSer2) || in_array(Auth::user()->UsRol2, Permisos::SolSer2))
 							@php
 							$alertaRequerimientos = 0;
 							foreach ($Residuos as $key => $Residuo) {
@@ -218,7 +218,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 							@endphp
 								<a style="margin: 10px 10px;" href='#' data-toggle='modal' data-target='#ModalRequerimientos' class='btn {{$alertaRequerimientos > 0 ? 'btn-warning' : 'btn-default'}} pull-right'><i class="fas fa-list-ol"></i> <b>Requerimientos de Residuos</b></a>
 							@endif
-							@if(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol, Permisos::SEDECOMERCIAL))
+						      @if(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol, Permisos::SEDECOMERCIAL)|| in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
 								@if($SolicitudServicio->SolSerSupport <> null)
 									<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 200}' title="<b>Soporte de Pago</b>" data-content="{{in_array(Auth::user()->UsRol, Permisos::CLIENTE) ? 'Haga click para visualizar el PDF del soporte de pago, que adjuntó, para esta solicitud de servicio' : 'Haga click para visualizar el PDF del soporte de pago, adjuntado por el cliente, para esta solicitud de servicio'}}"><a href="/img/SupportPay/{{$SolicitudServicio->SolSerSupport}}" class="btn btn-info pull-left" target="_blank" style="margin: 10px 30px;">Soporte <i class="fas fa-file-pdf fa-lg"></i></a></label>
 									
@@ -227,7 +227,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 								@endif
 								
 							@endif
-							@if(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol, Permisos::ProgVehic1))
+						  @if(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol, Permisos::ProgVehic1)|| in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
 							@if ($SolicitudServicio->Repetible == 0)
 							<label class="pull-right" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover"
 								data-delay='{"show": 200}' title="<b>Repetir Solicitud de Servicio</b>"
@@ -274,7 +274,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 								style="margin: 10px 10px;" class='btn btn-default pull-right'><i class="fas fa-file-pdf"></i>
 								<b>Certificaciones/Manifiestos</b></a>
 							@endswitch
-							@endif					
+							@endif
 							
 							<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 200}' title="<b>Cantidades Totales</b>" data-content="Haga click para visualizar los totales por tratamiento de la solicitud de servicio"><a style="margin: 10px 10px;" href='#' data-toggle='modal' data-target='#ModalTotales' class='btn btn-info pull-right'><i class="fas fa-list-ol"></i> <b>Totales</b></a></label>
 							<label>
@@ -303,66 +303,68 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 								</div>
 							</label>
 							<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 200}' title="<b>RMs</b>" data-content="Haga click para visualizar los Números de Recibo de Materiales (<b>RM</b>) relacionados con esta Solicitud de Servicio"><a onclick="updateRMs(`{{$SolicitudServicio->SolSerSlug}}`)" style="margin: 10px 10px;" class='btn btn-info pull-right'><i class="fas fa-list-ol"></i><b> RMs</b></a></label>
-							@if(in_array(Auth::user()->UsRol, Permisos::ADMINISTRADORBOGOTA) || in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
+
+                            @if(in_array(Auth::user()->UsRol, Permisos::ADMINISTRADORBOGOTA) || in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
 							<label data-placement="auto" data-trigger="hover"  data-html="true" data-toggle="popover" data-delay='{"show": 200}' title="<b>Factura</b>" style="float: right;" data-content="Haga click para ingresar el número de factura relacionada con esta Solicitud de Servicio"><a onclick="updateFVE(`{{$SolicitudServicio->SolSerSlug}}`)" style="margin: 10px 10px;" class='btn btn-info pull-right'><i class="fas fa-list-ol"></i><b>Factura</b></a></label>
 							@endif
+                            
 							<div class="col-md-12" style="margin: 10px 0;">
 								<center>
 								<label {{($SolicitudServicio->SolSerBascula == 1 || $SolicitudServicio->SolSerCapacitacion == 1 || $SolicitudServicio->SolSerMasPerson == 1 || $SolicitudServicio->SolSerVehicExclusive == 1 || $SolicitudServicio->SolSerPlatform == 1) ? 'style=color:red;' : ''}}>Requerimientos de la solicitud</label>
 									<button type="button" class="btn btn-box-tool boton" style="color: black;" data-toggle="collapse" data-target=".Requerimientos" onclick="AnimationMenusForm('.Requerimientos')" title="Reducir/Ampliar"><i class="fa fa-plus"></i></button>
-								
+								</center>
 								<div class="col-md-12 collapse Requerimientos" style="border: 2px dashed #00c0ef">
 									<div class="col-md-4" style="text-align: center;">
-										<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.solserticket') }}</b>" data-content="<p style='width: 50%'> {{ trans('adminlte_lang::message.solserticketdescrit') }} </p>">
-											<label for="SolSerBascula">{{ trans('adminlte_lang::message.solserticket') }}</label>
+										<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.solserticket') }}</b>" data-content="<p style='width: 50%'> {{ __('adminlte::message.solserticketdescrit') }} </p>">
+											<label for="SolSerBascula">{{ __('adminlte::message.solserticket') }}</label>
 											<div style="width: 100%; height: 34px;">
 												<input type="checkbox" class="testswitch" id="SolSerBascula" name="SolSerBascula" {{ $SolicitudServicio->SolSerBascula <> null ? 'checked' : '' }}>
 											</div>
 										</label>
 									</div>
 									<div class="col-md-4" style="text-align: center;">
-										<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.solserperscapa') }}</b>" data-content="<p style='width: 50%'> {{ trans('adminlte_lang::message.solserperscapadescrit') }} </p>">
-											<label for="SolSerCapacitacion">{{ trans('adminlte_lang::message.solserperscapa') }}</label>
+										<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.solserperscapa') }}</b>" data-content="<p style='width: 50%'> {{ __('adminlte::message.solserperscapadescrit') }} </p>">
+											<label for="SolSerCapacitacion">{{ __('adminlte::message.solserperscapa') }}</label>
 											<div style="width: 100%; height: 34px;">
 												<input type="checkbox" class="testswitch" id="SolSerCapacitacion" name="SolSerCapacitacion" {{ $SolicitudServicio->SolSerCapacitacion <> null ? 'checked' : '' }}>
 											</div>
 										</label>
 									</div>
 									<div class="col-md-4" style="text-align: center;">
-										<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.solsermaspers') }}</b>" data-content="<p style='width: 50%'> {{ trans('adminlte_lang::message.solsermaspersdescrit') }} </p>">
-											<label for="SolSerMasPerson">{{ trans('adminlte_lang::message.solsermaspers') }}</label>
+										<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.solsermaspers') }}</b>" data-content="<p style='width: 50%'> {{ __('adminlte::message.solsermaspersdescrit') }} </p>">
+											<label for="SolSerMasPerson">{{ __('adminlte::message.solsermaspers') }}</label>
 											<div style="width: 100%; height: 34px;">
 												<input type="checkbox" class="testswitch" id="SolSerMasPerson" name="SolSerMasPerson" {{ $SolicitudServicio->SolSerMasPerson <> null ? 'checked' : '' }}>
 											</div>
 										</label>
 									</div>
 									<div class="col-md-4" style="text-align: center;">
-										<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.solservehicexclusi') }}</b>" data-content="<p style='width: 50%'> {{ trans('adminlte_lang::message.solservehicexclusidescrit') }} </p>">
-											<label for="SolSerVehicExclusive">{{ trans('adminlte_lang::message.solservehicexclusi') }}</label>
+										<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.solservehicexclusi') }}</b>" data-content="<p style='width: 50%'> {{ __('adminlte::message.solservehicexclusidescrit') }} </p>">
+											<label for="SolSerVehicExclusive">{{ __('adminlte::message.solservehicexclusi') }}</label>
 											<div style="width: 100%; height: 34px;">
 												<input type="checkbox" class="testswitch" id="SolSerVehicExclusive" name="SolSerVehicExclusive" {{ $SolicitudServicio->SolSerVehicExclusive <> null ? 'checked' : '' }}>
 											</div>
 										</label>
 									</div>
 									<div class="col-md-4" style="text-align: center;">
-										<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.solservehicplata') }}</b>" data-content="<p style='width: 50%'> {{ trans('adminlte_lang::message.solservehicplatadescrit') }} </p>">
-											<label for="SolSerPlatform">{{ trans('adminlte_lang::message.solservehicplata') }}</label>
+										<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.solservehicplata') }}</b>" data-content="<p style='width: 50%'> {{ __('adminlte::message.solservehicplatadescrit') }} </p>">
+											<label for="SolSerPlatform">{{ __('adminlte::message.solservehicplata') }}</label>
 											<div style="width: 100%; height: 34px;">
 												<input type="checkbox" class="testswitch" id="SolSerPlatform" name="SolSerPlatform" {{ $SolicitudServicio->SolSerPlatform <> null ? 'checked' : '' }}>
 											</div>
 										</label>
 									</div>
 								{{-- 	<div class="col-md-4" style="text-align: center;">
-										<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.solserdevelem') }}</b>" data-content="<p style='width: 50%'> {{ trans('adminlte_lang::message.solserdevelemdescrit') }} </p>">
-											<label for="SolSerDevolucion">{{ trans('adminlte_lang::message.solserdevelem') }}</label>
+										<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.solserdevelem') }}</b>" data-content="<p style='width: 50%'> {{ __('adminlte::message.solserdevelemdescrit') }} </p>">
+											<label for="SolSerDevolucion">{{ __('adminlte::message.solserdevelem') }}</label>
 											<div style="width: 100%; height: 34px;">
 												<input type="checkbox" class="testswitch" id="SolSerDevolucion" name="SolSerDevolucion" {{ $SolicitudServicio->SolSerDevolucion <> null ? 'checked' : '' }}>
 											</div>
 										</label>
 									</div>
 									<div class="form-group col-md-6 col-md-offset-3" {{ $SolicitudServicio->SolSerDevolucion == null ? 'hidden' : '' }} style="text-align: center;">
-										<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.solsernameelem') }}</b>" data-content="<p style='width: 50%'> {{ trans('adminlte_lang::message.solsernameelemdescrit') }} </p>">
-											<label for="SolSerDevolucionTipo">{{ trans('adminlte_lang::message.solsernameelem') }}</label>
+										<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.solsernameelem') }}</b>" data-content="<p style='width: 50%'> {{ __('adminlte::message.solsernameelemdescrit') }} </p>">
+											<label for="SolSerDevolucionTipo">{{ __('adminlte::message.solsernameelem') }}</label>
 											<input maxlength="128" type="text" maxlength="64" class="form-control" id="SolSerDevolucionTipo" name="SolSerDevolucionTipo" value="{{ $SolicitudServicio->SolSerDevolucionTipo}}" disabled="">
 											<small class="help-block with-errors"></small>
 										</label>
@@ -383,32 +385,32 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 											@if(in_array(Auth::user()->UsRol, Permisos::TODOPROSARC)||in_array(Auth::user()->UsRol2, Permisos::TODOPROSARC))
 												<th>#RM</th>
 											@endif
-											<th>{{trans('adminlte_lang::message.solserrespel')}}</th>
+											<th>{{__('adminlte::message.solserrespel')}}</th>
 											<th>Tratamiento</th>
 											<th>Corriente</th>
 											{{-- <th>Pretratamientos</th> --}}
-											<th>{{trans('adminlte_lang::message.solserembaja')}}</th> 
-											<th>{{trans('adminlte_lang::message.gener')}}</th>
+											<th>{{__('adminlte::message.solserembaja')}}</th> 
+											<th>{{__('adminlte::message.gener')}}</th>
 											@if(in_array(Auth::user()->UsRol, Permisos::TODOPROSARC)||in_array(Auth::user()->UsRol2, Permisos::TODOPROSARC))
 											<th>Gestor</th>
 											@endif
 											@if(in_array(Auth::user()->UsRol, Permisos::COMERCIAL)||in_array(Auth::user()->UsRol2, Permisos::COMERCIAL))
 												<th>Tarifa</th>
 											@endif
-											<th>{{trans('adminlte_lang::message.solsercantidad')}} <br> {{trans('adminlte_lang::message.solsercantienv')}}</th>
+											<th>{{__('adminlte::message.solsercantidad')}} <br> {{__('adminlte::message.solsercantienv')}}</th>
 											@if(in_array(Auth::user()->UsRol, Permisos::CONDUCTOR))
-												<th>{{trans('adminlte_lang::message.address')}}</th>
+												<th>{{__('adminlte::message.address')}}</th>
 											@else
-												<th>{{trans('adminlte_lang::message.solsercantidad')}} <br> {{trans('adminlte_lang::message.solsercantiresi')}}</th>
-												<th>{{trans('adminlte_lang::message.solsercantidad')}} <br> {{trans('adminlte_lang::message.solsercanticonsi')}}</th>
+												<th>{{__('adminlte::message.solsercantidad')}} <br> {{__('adminlte::message.solsercantiresi')}}</th>
+												<th>{{__('adminlte::message.solsercantidad')}} <br> {{__('adminlte::message.solsercanticonsi')}}</th>
 												@if(in_array(Auth::user()->UsRol, Permisos::SolSer1) || in_array(Auth::user()->UsRol2, Permisos::SolSer1))
-													<th>{{trans('adminlte_lang::message.solsercantidad')}} <br> {{trans('adminlte_lang::message.solsercantitrat')}}</th>
+													<th>{{__('adminlte::message.solsercantidad')}} <br> {{__('adminlte::message.solsercantitrat')}}</th>
 												@endif
-												<th>{{trans('adminlte_lang::message.seedetails')}}</th>
+												<th>{{__('adminlte::message.seedetails')}}</th>
 											@endif
 											@if(($SolicitudServicio->SolSerStatus == 'Pendiente' || $SolicitudServicio->SolSerStatus == 'Aceptado' || $SolicitudServicio->SolSerStatus == 'Aprobado'|| $SolicitudServicio->SolSerStatus == 'Residuo Faltante') && (in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol2, Permisos::CLIENTE)))
-												<th>{{trans('adminlte_lang::message.delete')}}</th>
-											@elseif(($SolicitudServicio->SolSerStatus == 'Certificacion') && (in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol2, Permisos::CLIENTE)))
+												<th>{{__('adminlte::message.delete')}}</th>
+											@elseif(($SolicitudServicio->SolSerStatus == 'Certificacion') && (in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol2, Permisos::CLIENTE)|| in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR)))
 												<th>Certificado</th>
 											@endif
 											
@@ -618,9 +620,9 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 													@endif
 													<td style="text-align: center;"><a href='/recurso/{{$Residuo->SolResSlug}}' target="_blank" class='btn btn-info btn-block'> <i class="fas fa-search"></i> </a></td>
 												@endif
-												@if(($SolicitudServicio->SolSerStatus == 'Pendiente' || $SolicitudServicio->SolSerStatus == 'Aceptado' || $SolicitudServicio->SolSerStatus == 'Aprobado' || $SolicitudServicio->SolSerStatus == 'Residuo Faltante') && (in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol2, Permisos::CLIENTE)))
+												@if(($SolicitudServicio->SolSerStatus == 'Pendiente' || $SolicitudServicio->SolSerStatus == 'Aceptado' || $SolicitudServicio->SolSerStatus == 'Aprobado' || $SolicitudServicio->SolSerStatus == 'Residuo Faltante') && (in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol2, Permisos::CLIENTE)|| in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR)))
 													<td style="text-align: center;"><a href='#' onclick="ModalDeleteRespel(`{{$Residuo->SolResSlug}}`, `{{$Residuo->RespelName}}`, `{{$GenerResiduo->GenerName}}`)" class='btn btn-danger'><i class="fas fa-trash-alt"></i></a></td>
-												@elseif(($SolicitudServicio->SolSerStatus == 'Certificacion') && (in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol2, Permisos::CLIENTE)))
+												@elseif(($SolicitudServicio->SolSerStatus == 'Certificacion') && (in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol2, Permisos::CLIENTE)|| in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR)))
 													<td style="text-align: center;"><a href="#" class="btn btn-info"> <i class="fas fa-file-pdf fa-lg"></i></a></td>
 												@endif
 											</tr>
@@ -802,7 +804,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 																</div>
 															</div>
 															<div class="col-md-4 col-xs-4" style="border-bottom: 2px solid black; border-left: 1px solid black;border-right: 1px solid black;">
-																<label style="text-align: center;">{{trans('adminlte_lang::message.requeretratamiento')}}</label>
+																<label style="text-align: center;">{{__('adminlte::message.requeretratamiento')}}</label>
 																<div style="width: 100%;">
 																	<input type="checkbox" class="fotoswitch" data-size="small" {{ $Residuo->SolResFotoTratamiento == 1 ? 'checked' : '' }}/>
 																	<input type="checkbox" class="videoswitch" data-size="small" {{ $Residuo->SolResVideoTratamiento == 1 ? 'checked' : '' }}/>
@@ -869,7 +871,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 															</tbody>
 															<tfoot>
 																<tr>
-																	<th>{{trans('adminlte_lang::message.solsershowcantitotal')}}</th>
+																	<th>{{__('adminlte::message.solsershowcantitotal')}}</th>
 																	<th style="text-align: right; white-space: nowrap; padding: 10px;">{{number_format($total['estimado'], $decimals = 2, $dec_point = ',', $thousands_sep = '.')}} kg</th>
 																	<th style="text-align: right; white-space: nowrap; padding: 10px;">{{number_format($total['recibido'], $decimals = 2, $dec_point = ',', $thousands_sep = '.')}} kg</th>
 																	<th style="text-align: right; white-space: nowrap; padding: 10px;">{{number_format($total['conciliado'], $decimals = 2, $dec_point = ',', $thousands_sep = '.')}} kg</th>
@@ -896,6 +898,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 							<div id="addFVEmodal"></div>
 							<!-- Vista con el no FVE -->
 							{{-- END Modal --}}
+							{{--  Modal --}}
 							{{--  Modal --}}
 							<div class="modal modal-default fade in" id="ModalObservaciones" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 								<div class="modal-dialog" role="document">
@@ -1027,7 +1030,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 										<input type="number" hidden name="SolServ" value="`+slug+`">
 								</div>
 								<div class="modal-footer">
-									<button type="submit" class="btn btn-primary pull-right">{{trans('adminlte_lang::message.save')}}</button>
+									<button type="submit" class="btn btn-primary pull-right">{{__('adminlte::message.save')}}</button>
 								</div>
 							</div>
 						</div>
@@ -1118,7 +1121,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 										<input type="text" hidden name="SolServ" value="`+slug+`">
 								</div>
 								<div class="modal-footer">
-									<button type="submit" class="btn btn-primary pull-right">{{trans('adminlte_lang::message.save')}}</button>
+									<button type="submit" class="btn btn-primary pull-right">{{__('adminlte::message.save')}}</button>
 								</div>
 							</div>
 						</div>
@@ -1155,7 +1158,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 									</table>
 							</div>
 							<div class="modal-footer">
-								<button type="submit" class="btn btn-primary pull-right">{{trans('adminlte_lang::message.save')}}</button>
+								<button type="submit" class="btn btn-primary pull-right">{{__('adminlte::message.save')}}</button>
 							</div>
 						</div>
 					</div>
@@ -1211,7 +1214,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 									<input type="text" hidden name="SolRes" value="`+slug+`">
 								</div>
 								<div class="modal-footer">
-									<button type="submit" class="btn btn-primary pull-right">{{trans('adminlte_lang::message.save')}}</button>
+									<button type="submit" class="btn btn-primary pull-right">{{__('adminlte::message.save')}}</button>
 								</div>
 							</div>
 						</div>
@@ -1289,7 +1292,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 										<input type="text" hidden name="SolRes" value="`+slug+`">
 								</div>
 								<div class="modal-footer">
-									<button type="submit" class="btn btn-primary pull-right">{{trans('adminlte_lang::message.save')}}</button>
+									<button type="submit" class="btn btn-primary pull-right">{{__('adminlte::message.save')}}</button>
 								</div>
 							</div>
 						</div>
@@ -1417,7 +1420,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 										<input type="text" hidden name="SolRes" value="`+slug+`">
 								</div>
 								<div class="modal-footer">
-									<button type="submit" class="btn btn-primary pull-right">{{trans('adminlte_lang::message.save')}}</button>
+									<button type="submit" class="btn btn-primary pull-right">{{__('adminlte::message.save')}}</button>
 								</div>
 							</div>
 						</div>
@@ -1568,7 +1571,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 									<input type="text" hidden name="SolRes" value="`+slug+`">
 							</div>
 							<div class="modal-footer">
-								<button type="submit" class="btn btn-primary pull-right">{{trans('adminlte_lang::message.save')}}</button>
+								<button type="submit" class="btn btn-primary pull-right">{{__('adminlte::message.save')}}</button>
 							</div>
 						</div>
 					</div>
@@ -1707,7 +1710,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 							<div class="modal-header">
 								@csrf
 								<div class="form-group col-md-12">
-									<label  color: black; text-align: left;" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.solserstatusdescrip') }}</b>" data-content="{{ trans('adminlte_lang::message.solserstatusdescripdetaill') }}"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{trans('adminlte_lang::message.solserstatusdescrip')}}</label>
+									<label  color: black; text-align: left;" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.solserstatusdescrip') }}</b>" data-content="{{ __('adminlte::message.solserstatusdescripdetaill') }}"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{__('adminlte::message.solserstatusdescrip')}}</label>
 									<small id="caracteresrestantes" class="help-block with-errors">`+(status == 'No Deacuerdo' ? '*' : '')+`</small>
 									<textarea onchange="updatecaracteres()" id="textDescription" rows ="5" style="resize: vertical;" maxlength="4000" class="form-control col-xs-12" `+(status == 'No Deacuerdo' ? 'required' : '')+` name="solserdescript"></textarea>
 								</div>
@@ -1763,8 +1766,8 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 			$('#titulo').empty();
 			@if(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
 				$('#titulo').append(`
-					<a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/edit" class="btn btn-warning pull-right"><i class="fas fa-edit"></i><b> {{trans('adminlte_lang::message.edit')}}</b></a>
-					<a method='get' href='#' data-toggle='modal' data-target='#myModal{{$SolicitudServicio->SolSerSlug}}' class='btn btn-danger pull-left'><i class="fas fa-trash-alt"></i> <b>{{trans('adminlte_lang::message.delete')}}</b></a>
+					<a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/edit" class="btn btn-warning pull-right"><i class="fas fa-edit"></i><b> {{__('adminlte::message.edit')}}</b></a>
+					<a method='get' href='#' data-toggle='modal' data-target='#myModal{{$SolicitudServicio->SolSerSlug}}' class='btn btn-danger pull-left'><i class="fas fa-trash-alt"></i> <b>{{__('adminlte::message.delete')}}</b></a>
 				`);
 			@endif
 			@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || Auth::user()->email == 'logistica@prosarc.com.co')
@@ -1779,15 +1782,15 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 				</div>
 				`);
 			@endif
-			@if(Auth::user()->UsRol <> trans('adminlte_lang::message.Cliente'))
+			@if(Auth::user()->UsRol <> __('adminlte::message.Cliente'))
 				@if(in_array(Auth::user()->UsRol, Permisos::ProgVehic2) || in_array(Auth::user()->UsRol2, Permisos::ProgVehic2))
 					$('#titulo').append(`
-						<a href='#' data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>Status Pendiente</b>" data-content="<p style='width: 50%'>La Solicitud de servicio no podra ser gestionada hasta que sea aprobada por Tesoreria, sin embargo, puede adelantar la revisión de la información<br>Para mas detalles comuníquese con <b>Tesoreria</b> </p>" disabled class="btn btn-default pull-right"><i class="fas fa-clipboard-check"></i> {{trans('adminlte_lang::message.solserstatusaprobado')}}</a>
+						<a href='#' data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>Status Pendiente</b>" data-content="<p style='width: 50%'>La Solicitud de servicio no podra ser gestionada hasta que sea aprobada por Tesoreria, sin embargo, puede adelantar la revisión de la información<br>Para mas detalles comuníquese con <b>Tesoreria</b> </p>" disabled class="btn btn-default pull-right"><i class="fas fa-clipboard-check"></i> {{__('adminlte::message.solserstatusaprobado')}}</a>
 					`);
 				@endif
-				@if(Auth::user()->UsRol <> trans('adminlte_lang::message.Programador'))
+				@if(Auth::user()->UsRol <> __('adminlte::message.Programador'))
 					$('#titulo').append(`
-						<h4><b>{{trans('adminlte_lang::message.solsertitle')}}</b></h4>
+						<h4><b>{{__('adminlte::message.solsertitle')}}</b></h4>
 					`);
 				@endif
 			@endif
@@ -1796,8 +1799,8 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 			$('#titulo').empty();
 			@if(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
 				$('#titulo').append(`
-					<a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/edit" class="btn btn-warning pull-right"><i class="fas fa-edit"></i><b> {{trans('adminlte_lang::message.edit')}}</b></a>
-					<a method='get' href='#' data-toggle='modal' data-target='#myModal{{$SolicitudServicio->SolSerSlug}}' class='btn btn-danger pull-left'><i class="fas fa-trash-alt"></i> <b>{{trans('adminlte_lang::message.delete')}}</b></a>
+					<a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/edit" class="btn btn-warning pull-right"><i class="fas fa-edit"></i><b> {{__('adminlte::message.edit')}}</b></a>
+					<a method='get' href='#' data-toggle='modal' data-target='#myModal{{$SolicitudServicio->SolSerSlug}}' class='btn btn-danger pull-left'><i class="fas fa-trash-alt"></i> <b>{{__('adminlte::message.delete')}}</b></a>
 				`);
 			@endif
 			@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || Auth::user()->email == 'logistica@prosarc.com.co')
@@ -1812,15 +1815,15 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 				</div>
 				`);
 			@endif
-			@if(Auth::user()->UsRol <> trans('adminlte_lang::message.Cliente'))
+			@if(Auth::user()->UsRol <> __('adminlte::message.Cliente'))
 				@if(in_array(Auth::user()->UsRol, Permisos::ProgVehic2) || in_array(Auth::user()->UsRol2, Permisos::ProgVehic2))
 					$('#titulo').append(`
-						<a href='#' onclick="ModalStatus('{{$SolicitudServicio->SolSerSlug}}', 'Aprobada')" class="btn btn-success pull-right"><i class="fas fa-clipboard-check"></i> {{trans('adminlte_lang::message.solserstatusaprobado')}}</a>
+						<a href='#' onclick="ModalStatus('{{$SolicitudServicio->SolSerSlug}}', 'Aprobada')" class="btn btn-success pull-right"><i class="fas fa-clipboard-check"></i> {{__('adminlte::message.solserstatusaprobado')}}</a>
 					`);
 				@endif
-				@if(Auth::user()->UsRol <> trans('adminlte_lang::message.Programador'))
+				@if(Auth::user()->UsRol <> __('adminlte::message.Programador'))
 					$('#titulo').append(`
-						<h4><b>{{trans('adminlte_lang::message.solsertitle')}}</b></h4>
+						<h4><b>{{__('adminlte::message.solsertitle')}}</b></h4>
 					`);
 				@endif
 			@endif
@@ -1829,11 +1832,11 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 			$('#titulo').empty();
 			@if(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
 				$('#titulo').append(`
-					<a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/edit" class="btn btn-warning pull-right"><i class="fas fa-edit"></i><b> {{trans('adminlte_lang::message.edit')}}</b></a>
-					<a method='get' href='#' data-toggle='modal' data-target='#myModal{{$SolicitudServicio->SolSerSlug}}' class='btn btn-danger pull-left'><i class="fas fa-trash-alt"></i> <b>{{trans('adminlte_lang::message.delete')}}</b></a>
+					<a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/edit" class="btn btn-warning pull-right"><i class="fas fa-edit"></i><b> {{__('adminlte::message.edit')}}</b></a>
+					<a method='get' href='#' data-toggle='modal' data-target='#myModal{{$SolicitudServicio->SolSerSlug}}' class='btn btn-danger pull-left'><i class="fas fa-trash-alt"></i> <b>{{__('adminlte::message.delete')}}</b></a>
 				`);
 			@endif
-			@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || Auth::user()->email == 'logistica@prosarc.com.co')
+			@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) )
 				$('#titulo').append(`
 				<div class="btn-group" style="float: left;">
 					<button type="button" style="margin-right:1em;" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -1845,24 +1848,25 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 				</div>
 				`);
 			@endif
-			@if(Auth::user()->UsRol <> trans('adminlte_lang::message.Cliente'))
-				@if(Auth::user()->UsRol <> trans('adminlte_lang::message.Programador'))
+			@if(Auth::user()->UsRol <> __('adminlte::message.Cliente'))
+				@if(Auth::user()->UsRol <> __('adminlte::message.Programador'))
 					$('#titulo').append(`
-						<h4><b>{{trans('adminlte_lang::message.solsertitle')}}</b></h4>
+						<h4><b>{{__('adminlte::message.solsertitle')}}</b></h4>
 					`);
 				@endif
 			@endif
 		@break
 		@case('Programado')
 			$('#titulo').empty();
-			@if((in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR)) && ($SolicitudServicio->SolSerTipo !== 'Interno'))
-				$('#titulo').append(`
-					<a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/edit" class="btn btn-warning pull-right"><i class="fas fa-edit"></i><b> {{trans('adminlte_lang::message.edit')}}</b></a>
-				`);
-			@endif
+             @if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
+                $('#titulo').append(`
+                    <a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/edit" class="btn btn-warning pull-right"><i class="fas fa-edit"></i><b> {{__('adminlte::message.edit')}}</b></a>
+                    <a method='get' href='#' data-toggle='modal' data-target='#myModal{{$SolicitudServicio->SolSerSlug}}' class='btn btn-danger pull-left'><i class="fas fa-trash-alt"></i> <b>{{__('adminlte::message.delete')}}</b></a>
+                `);
+            @endif
 			@if(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
 				$('#titulo').append(`
-						<h4><b>{{trans('adminlte_lang::message.solsertitle')}}</b></h4>
+						<h4><b>{{__('adminlte::message.solsertitle')}}</b></h4>
 				`);
 			@endif
 			@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || Auth::user()->email == 'logistica@prosarc.com.co')
@@ -1887,26 +1891,31 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 					
 				@elseif($ProgramacionesActivas == 0)
 					$('#titulo').append(`
-						<a href='#' onclick="ModalStatus('{{$SolicitudServicio->SolSerSlug}}', 'Recibida')" class="btn btn-success pull-right"><i class="fas fa-clipboard-check"></i> {{trans('adminlte_lang::message.solserstatusrecibido')}}</a>
+						<a href='#' onclick="ModalStatus('{{$SolicitudServicio->SolSerSlug}}', 'Recibida')" class="btn btn-success pull-right"><i class="fas fa-clipboard-check"></i> {{__('adminlte::message.solserstatusrecibido')}}</a>
 					`);
 					$('#titulo').append(`
 						<a href='#' onclick="ModalStatus('{{$SolicitudServicio->SolSerSlug}}', 'Residuo Faltante')" style="margin-right:1em;" class="btn btn-warning pull-right"><i class="fas fa-exclamation-triangle"></i> Residuo Faltante</a>
 					`);
 				@else
 					$('#titulo').append(`
-						<a href='#' data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>Faltan Vehiculos por Recibir</b>" data-content="<p style='width: 50%'>Asegúrese de que todos los vehículos correspondientes a la solicitud de servicio <b>#{{$SolicitudServicio->ID_SolSer}}</b> hayan sido recibidos por el área de Logística antes de marcar solicitud de servicio como <b>recibida</b><br>Para mas detalles comuníquese con el <b>Jefe de Logística</b> </p>" onclick="ModalStatus('{{$SolicitudServicio->SolSerSlug}}', 'Recibida')" class="btn btn-warning pull-right"><i class="fas fa-clipboard-check"></i> {{trans('adminlte_lang::message.solserstatusrecibido')}}-Faltan Vehiculos</a>
+						<a href='#' data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>Faltan Vehiculos por Recibir</b>" data-content="<p style='width: 50%'>Asegúrese de que todos los vehículos correspondientes a la solicitud de servicio <b>#{{$SolicitudServicio->ID_SolSer}}</b> hayan sido recibidos por el área de Logística antes de marcar solicitud de servicio como <b>recibida</b><br>Para mas detalles comuníquese con el <b>Jefe de Logística</b> </p>" onclick="ModalStatus('{{$SolicitudServicio->SolSerSlug}}', 'Recibida')" class="btn btn-warning pull-right"><i class="fas fa-clipboard-check"></i> {{__('adminlte::message.solserstatusrecibido')}}-Faltan Vehiculos</a>
 					`);
 					$('#titulo').append(`
 						<a href='#' onclick="ModalStatus('{{$SolicitudServicio->SolSerSlug}}', 'Residuo Faltante')" style="margin-right:1em;" class="btn btn-warning pull-right"><i class="fas fa-exclamation-triangle"></i> Residuo Faltante</a>
 					`);
 				@endif
 			@endif
+			@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol2, Permisos::PROGRAMADOR))
+			$('#titulo').append(`
+					<a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/recibomaterial" class="btn btn-primary">Recibo Material</a>
+                `);
+			@endif
 		@break
 		@case('Notificado')
 			$('#titulo').empty();
-			@if((in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR)) && ($SolicitudServicio->SolSerTipo !== 'Interno'))
+			@if((in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR)) )
 				$('#titulo').append(`
-					<a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/edit" class="btn btn-warning pull-right"><i class="fas fa-edit"></i><b> {{trans('adminlte_lang::message.edit')}}</b></a>
+					<a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/edit" class="btn btn-warning pull-right"><i class="fas fa-edit"></i><b> {{__('adminlte::message.edit')}}</b></a>
 				`);
 			@endif
 			@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || Auth::user()->email == 'logistica@prosarc.com.co')
@@ -1926,14 +1935,14 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 					
 				@elseif($ProgramacionesActivas == 0)
 					$('#titulo').append(`
-						<a href='#' onclick="ModalStatus('{{$SolicitudServicio->SolSerSlug}}', 'Recibida')" class="btn btn-success pull-right"><i class="fas fa-clipboard-check"></i> {{trans('adminlte_lang::message.solserstatusrecibido')}}</a>
+						<a href='#' onclick="ModalStatus('{{$SolicitudServicio->SolSerSlug}}', 'Recibida')" class="btn btn-success pull-right"><i class="fas fa-clipboard-check"></i> {{__('adminlte::message.solserstatusrecibido')}}</a>
 					`);
 					$('#titulo').append(`
 						<a href='#' onclick="ModalStatus('{{$SolicitudServicio->SolSerSlug}}', 'Residuo Faltante')" style="margin-right:1em;" class="btn btn-warning pull-right"><i class="fas fa-exclamation-triangle"></i> Residuo Faltante</a>
 					`);
 				@else
 					$('#titulo').append(`
-						<a href='#' data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>Faltan Vehiculos por Recibir</b>" data-content="<p style='width: 50%'>Asegúrese de que todos los vehículos correspondientes a la solicitud de servicio <b>#{{$SolicitudServicio->ID_SolSer}}</b> hayan sido recibidos por el área de Logística antes de marcar solicitud de servicio como <b>recibida</b><br>Para mas detalles comuníquese con el <b>Jefe de Logística</b> </p>" onclick="ModalStatus('{{$SolicitudServicio->SolSerSlug}}', 'Recibida')" class="btn btn-warning pull-right"><i class="fas fa-clipboard-check"></i> {{trans('adminlte_lang::message.solserstatusrecibido')}}-Faltan Vehiculos</a>
+						<a href='#' data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>Faltan Vehiculos por Recibir</b>" data-content="<p style='width: 50%'>Asegúrese de que todos los vehículos correspondientes a la solicitud de servicio <b>#{{$SolicitudServicio->ID_SolSer}}</b> hayan sido recibidos por el área de Logística antes de marcar solicitud de servicio como <b>recibida</b><br>Para mas detalles comuníquese con el <b>Jefe de Logística</b> </p>" onclick="ModalStatus('{{$SolicitudServicio->SolSerSlug}}', 'Recibida')" class="btn btn-warning pull-right"><i class="fas fa-clipboard-check"></i> {{__('adminlte::message.solserstatusrecibido')}}-Faltan Vehiculos</a>
 					`);
 					$('#titulo').append(`
 						<a href='#' onclick="ModalStatus('{{$SolicitudServicio->SolSerSlug}}', 'Residuo Faltante')" style="margin-right:1em;" class="btn btn-warning pull-right"><i class="fas fa-exclamation-triangle"></i> Residuo Faltante</a>
@@ -1942,7 +1951,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 			@endif
 
 			$('#titulo').append(`
-				<b>{{trans('adminlte_lang::message.solsershowprograma')}}</b><span>{{$TextProgramacion}}</span>
+				<b>{{__('adminlte::message.solsershowprograma')}}</b><span>{{$TextProgramacion}}</span>
 			`);
 		@break
 		@case('Residuo Faltante')
@@ -1952,7 +1961,13 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 					<a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/add-respel" class="btn btn-primary pull-right"><i class="fas fa-plus"></i><b> Añadir Residuo</b></a>
 				`);
 			@endif
-			@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol, Permisos::ADMINISTRADORPLANTA)|| Auth::user()->email == 'logistica@prosarc.com.co')
+    			@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
+                $('#titulo').append(`
+                    <a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/edit" class="btn btn-warning pull-right"><i class="fas fa-edit"></i><b> {{__('adminlte::message.edit')}}</b></a>
+                    <a method='get' href='#' data-toggle='modal' data-target='#myModal{{$SolicitudServicio->SolSerSlug}}' class='btn btn-danger pull-left'><i class="fas fa-trash-alt"></i> <b>{{__('adminlte::message.delete')}}</b></a>
+                `);
+            @endif
+			@if(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol, Permisos::JEFELOGISTICA)|| in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR)|| Auth::user()->email == 'logistica@prosarc.com.co')
 				$('#titulo').append(`
 					<div class="btn-group" style="float: left;">
 						<button type="button" style="margin-right:1em;" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -1969,11 +1984,11 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 					
 				@elseif($ProgramacionesActivas == 0)
 					$('#titulo').append(`
-						<a href='#' onclick="ModalStatus('{{$SolicitudServicio->SolSerSlug}}', 'Recibida')" class="btn btn-success pull-right"><i class="fas fa-clipboard-check"></i> {{trans('adminlte_lang::message.solserstatusrecibido')}}</a>
+						<a href='#' onclick="ModalStatus('{{$SolicitudServicio->SolSerSlug}}', 'Recibida')" class="btn btn-success pull-right"><i class="fas fa-clipboard-check"></i> {{__('adminlte::message.solserstatusrecibido')}}</a>
 					`);
 				@else
 					$('#titulo').append(`
-						<a href='#' data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>Faltan Vehiculos por Recibir</b>" data-content="<p style='width: 50%'>Asegúrese de que todos los vehículos correspondientes a la solicitud de servicio <b>#{{$SolicitudServicio->ID_SolSer}}</b> hayan sido recibidos por el área de Logística antes de marcar solicitud de servicio como <b>recibida</b><br>Para mas detalles comuníquese con el <b>Jefe de Logística</b> </p>" onclick="ModalStatus('{{$SolicitudServicio->SolSerSlug}}', 'Recibida')" class="btn btn-warning pull-right"><i class="fas fa-clipboard-check"></i> {{trans('adminlte_lang::message.solserstatusrecibido')}}-Faltan Vehiculos</a>
+						<a href='#' data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>Faltan Vehiculos por Recibir</b>" data-content="<p style='width: 50%'>Asegúrese de que todos los vehículos correspondientes a la solicitud de servicio <b>#{{$SolicitudServicio->ID_SolSer}}</b> hayan sido recibidos por el área de Logística antes de marcar solicitud de servicio como <b>recibida</b><br>Para mas detalles comuníquese con el <b>Jefe de Logística</b> </p>" onclick="ModalStatus('{{$SolicitudServicio->SolSerSlug}}', 'Recibida')" class="btn btn-warning pull-right"><i class="fas fa-clipboard-check"></i> {{__('adminlte::message.solserstatusrecibido')}}-Faltan Vehiculos</a>
 					`);
 				@endif
 			@endif
@@ -1997,24 +2012,36 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 				</div>
 			`);
 			@endif
+			@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
+                $('#titulo').append(`
+                    <a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/edit" class="btn btn-warning pull-right"><i class="fas fa-edit"></i><b> {{__('adminlte::message.edit')}}</b></a>
+                    <a method='get' href='#' data-toggle='modal' data-target='#myModal{{$SolicitudServicio->SolSerSlug}}' class='btn btn-danger pull-left'><i class="fas fa-trash-alt"></i> <b>{{__('adminlte::message.delete')}}</b></a>
+                `);
+            @endif
 			@if(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol, Permisos::AREALOGISTICA))
 				$('#titulo').append(`
-					<a href='#' onclick="ModalStatus('{{$SolicitudServicio->SolSerSlug}}', 'Conciliada')" style="float: right;" class="btn btn-success"><i class="fas fa-clipboard-check"></i> {{trans('adminlte_lang::message.solserstatusconciliado')}}</a>
-					<a href='#' onclick="ModalStatus('{{$SolicitudServicio->SolSerSlug}}', 'No Deacuerdo')" class='btn btn-danger pull-left'> <i class="fas fa-calendar-times"></i> <b>{{trans('adminlte_lang::message.solserstatusnoconciliado')}}</b></a>
+					<a href='#' onclick="ModalStatus('{{$SolicitudServicio->SolSerSlug}}', 'Conciliada')" style="float: right;" class="btn btn-success"><i class="fas fa-clipboard-check"></i> {{__('adminlte::message.solserstatusconciliado')}}</a>
+					<a href='#' onclick="ModalStatus('{{$SolicitudServicio->SolSerSlug}}', 'No Deacuerdo')" class='btn btn-danger pull-left'> <i class="fas fa-calendar-times"></i> <b>{{__('adminlte::message.solserstatusnoconciliado')}}</b></a>
 				`);
 			@endif
 			@if(in_array(Auth::user()->UsRol, Permisos::ADMINPLANTA) && $ultimoRecordatorio->ObsRepeat > 3)
 				$('#titulo').append(`
-					<a href='#' onclick="ModalStatus('{{$SolicitudServicio->SolSerSlug}}', 'Conciliada')" style="float: right;" class="btn btn-success"><i class="fas fa-clipboard-check"></i> {{trans('adminlte_lang::message.solserstatusconciliado')}}</a>
+					<a href='#' onclick="ModalStatus('{{$SolicitudServicio->SolSerSlug}}', 'Conciliada')" style="float: right;" class="btn btn-success"><i class="fas fa-clipboard-check"></i> {{__('adminlte::message.solserstatusconciliado')}}</a>
 				`);
 			@endif
 
 			$('#titulo').append(`
-				<b>{{trans('adminlte_lang::message.solsershowcomple')}}</b>
+				<b>{{__('adminlte::message.solsershowcomple')}}</b>
 			`);
 		@break
 		@case('No Conciliado')
 			$('#titulo').empty();
+			@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
+                $('#titulo').append(`
+                    <a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/edit" class="btn btn-warning pull-right"><i class="fas fa-edit"></i><b> {{__('adminlte::message.edit')}}</b></a>
+                    <a method='get' href='#' data-toggle='modal' data-target='#myModal{{$SolicitudServicio->SolSerSlug}}' class='btn btn-danger pull-left'><i class="fas fa-trash-alt"></i> <b>{{__('adminlte::message.delete')}}</b></a>
+                `);
+            @endif
 			@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol, Permisos::ADMINISTRADORPLANTA) || Auth::user()->email == 'logistica@prosarc.com.co')
 				$('#titulo').append(`
 					<div class="btn-group" style="float: left;">
@@ -2029,7 +2056,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 			@endif
 			@if(in_array(Auth::user()->UsRol, Permisos::ProgVehic2) || in_array(Auth::user()->UsRol2, Permisos::ProgVehic2))
 				$('#titulo').append(`
-					<a href='#' onclick="ModalStatus('{{$SolicitudServicio->SolSerSlug}}', 'Conciliación')" style="float: right;" class="btn btn-success"><i class="fas fa-certificate"></i> {{trans('adminlte_lang::message.solserstatusconciliacion')}}</a>
+					<a href='#' onclick="ModalStatus('{{$SolicitudServicio->SolSerSlug}}', 'Conciliación')" style="float: right;" class="btn btn-success"><i class="fas fa-certificate"></i> {{__('adminlte::message.solserstatusconciliacion')}}</a>
 				`);
 			@endif
 			@if(in_array(Auth::user()->UsRol, Permisos::SolSer1) || in_array(Auth::user()->UsRol2, Permisos::SolSer1))
@@ -2038,7 +2065,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 				`);
 			@endif
 			$('#titulo').append(`
-				<b>{{trans('adminlte_lang::message.solsershowcomple')}}</b>
+				<b>{{__('adminlte::message.solsershowcomple')}}</b>
 			`);
 		@break
 		@case('Conciliado')
@@ -2059,13 +2086,19 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 					</div>
 				`);
 			@endif
+			@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
+                $('#titulo').append(`
+                    <a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/edit" class="btn btn-warning pull-right"><i class="fas fa-edit"></i><b> {{__('adminlte::message.edit')}}</b></a>
+                    <a method='get' href='#' data-toggle='modal' data-target='#myModal{{$SolicitudServicio->SolSerSlug}}' class='btn btn-danger pull-left'><i class="fas fa-trash-alt"></i> <b>{{__('adminlte::message.delete')}}</b></a>
+                `);
+            @endif
 			@if(in_array(Auth::user()->UsRol, Permisos::SolSer1) || in_array(Auth::user()->UsRol2, Permisos::SolSer1))
 				$('#titulo').append(`
-					<a href='#' onclick="ModalStatus('{{$SolicitudServicio->SolSerSlug}}', 'Tratada')" style="float: right;" class="btn btn-success"><i class="fas fa-clipboard-check"></i> {{trans('adminlte_lang::message.solserstatustratado')}}</a>
+					<a href='#' onclick="ModalStatus('{{$SolicitudServicio->SolSerSlug}}', 'Tratada')" style="float: right;" class="btn btn-success"><i class="fas fa-clipboard-check"></i> {{__('adminlte::message.solserstatustratado')}}</a>
 				`);
 			@endif
 			$('#titulo').append(`
-				<b>{{trans('adminlte_lang::message.solsershowconciliado')}}</b>
+				<b>{{__('adminlte::message.solsershowconciliado')}}</b>
 			`);
 			@if(in_array(Auth::user()->UsRol, Permisos::ASISTENTELOGISTICA) || in_array(Auth::user()->UsRol2, Permisos::ASISTENTELOGISTICA))
 				@if(in_array(Auth::user()->UsRol, Permisos::JEFELOGISTICA))
@@ -2102,8 +2135,14 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 			</div>
 			`);
 			@endif
+			@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
+                $('#titulo').append(`
+                    <a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/edit" class="btn btn-warning pull-right"><i class="fas fa-edit"></i><b> {{__('adminlte::message.edit')}}</b></a>
+                    <a method='get' href='#' data-toggle='modal' data-target='#myModal{{$SolicitudServicio->SolSerSlug}}' class='btn btn-danger pull-left'><i class="fas fa-trash-alt"></i> <b>{{__('adminlte::message.delete')}}</b></a>
+                `);
+            @endif
 			$('#titulo').append(`
-				<b>{{trans('adminlte_lang::message.solsershowtrata')}}</b>
+				<b>{{__('adminlte::message.solsershowtrata')}}</b>
 			`);
 			@if(in_array(Auth::user()->UsRol, Permisos::ASISTENTELOGISTICA) || in_array(Auth::user()->UsRol2, Permisos::ASISTENTELOGISTICA))
 				@if(in_array(Auth::user()->UsRol, Permisos::JEFELOGISTICA))
@@ -2141,8 +2180,14 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 					</div>
 				`);
 			@endif
+			@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
+                $('#titulo').append(`
+                    <a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/edit" class="btn btn-warning pull-right"><i class="fas fa-edit"></i><b> {{__('adminlte::message.edit')}}</b></a>
+                    <a method='get' href='#' data-toggle='modal' data-target='#myModal{{$SolicitudServicio->SolSerSlug}}' class='btn btn-danger pull-left'><i class="fas fa-trash-alt"></i> <b>{{__('adminlte::message.delete')}}</b></a>
+                `);
+            @endif
 			$('#titulo').append(`
-				<b>{{trans('adminlte_lang::message.solsershowcertifica')}}</b>
+				<b>{{__('adminlte::message.solsershowcertifica')}}</b>
 			`);
 			@if(in_array(Auth::user()->UsRol, Permisos::ASISTENTELOGISTICA) || in_array(Auth::user()->UsRol2, Permisos::ASISTENTELOGISTICA))
 				@if(in_array(Auth::user()->UsRol, Permisos::JEFELOGISTICA))
@@ -2179,6 +2224,12 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 					</div>
 				`);
 			@endif
+			@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
+                $('#titulo').append(`
+                    <a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/edit" class="btn btn-warning pull-right"><i class="fas fa-edit"></i><b> {{__('adminlte::message.edit')}}</b></a>
+                    <a method='get' href='#' data-toggle='modal' data-target='#myModal{{$SolicitudServicio->SolSerSlug}}' class='btn btn-danger pull-left'><i class="fas fa-trash-alt"></i> <b>{{__('adminlte::message.delete')}}</b></a>
+                `);
+            @endif
 			$('#titulo').append(`
 				<b>{{'Se han emitido los facturas correspondientes de la solicitud'}}</b>
 			`);
@@ -2218,7 +2269,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 					<div class="modal-header">
 						@csrf
 						<div class="form-group col-md-12">
-							<label color: black; text-align: left;" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.solserstatusdescrip') }}</b>" data-content="{{ trans('adminlte_lang::message.solserstatusdescripdetaill') }}"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{trans('adminlte_lang::message.solserstatusdescrip')}}</label>
+							<label color: black; text-align: left;" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.solserstatusdescrip') }}</b>" data-content="{{ __('adminlte::message.solserstatusdescripdetaill') }}"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{__('adminlte::message.solserstatusdescrip')}}</label>
 							<small id="caracteresrestantesReversar" class="help-block with-errors">`+(status == 'No Deacuerdo' ? '*' : '')+`</small>
 							<textarea onchange="updatecaracteres()" id="textDescriptionReversar" rows="5" style="resize: vertical;" maxlength="4000" class="form-control col-xs-12" `+(status=='No Deacuerdo' ? 'required' : '' )+` name="solserdescript"></textarea>
 						</div>
@@ -2272,7 +2323,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 					<div class="modal-header">
 						@csrf
 						<div class="form-group col-md-12">
-							<label color: black; text-align: left;" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.solserstatusdescrip') }}</b>" data-content="{{ trans('adminlte_lang::message.solserstatusdescripdetaill') }}"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{trans('adminlte_lang::message.solserstatusdescrip')}}</label>
+							<label color: black; text-align: left;" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.solserstatusdescrip') }}</b>" data-content="{{ __('adminlte::message.solserstatusdescripdetaill') }}"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{__('adminlte::message.solserstatusdescrip')}}</label>
 							<small id="caracteresrestantesCancelar" class="help-block with-errors">`+(status == 'No Deacuerdo' ? '*' : '')+`</small>
 							<textarea onchange="updatecaracteres()" id="textDescriptionCancelar" rows="5" style="resize: vertical;" maxlength="4000" class="form-control col-xs-12" required name="solserdescript"></textarea>
 						</div>

@@ -1,11 +1,11 @@
 @extends('layouts.app')
 @if(Auth::user()->UsRol == "Programador"||Auth::user()->UsRol == "JefeOperacion"||Auth::user()->UsRol == "admin")
 @section('htmlheader_title')
-{{ trans('adminlte_lang::LangTratamiento.tratdetaillong') }}
+{{ __('adminlte::LangTratamiento.tratdetaillong') }}
 @endsection
 @section('contentheader_title')
 <span style="background-image: linear-gradient(40deg, #FF856D, #CC0000); padding-right:30vw; position:relative; overflow:hidden;">
-    {{ trans('adminlte_lang::LangTratamiento.pretratMenu') }}
+    {{ __('adminlte::LangTratamiento.pretratMenu') }}
   <div style="background-color:#ecf0f5; position:absolute; height:145%; width:40vw; transform:rotate(30deg); right:-20vw; top:-45%;"></div>
 </span>
 @endsection
@@ -26,18 +26,18 @@
                     <h3 class="profile-username text-center">{{$tratamiento->TratName}}</h3>
                     <p class="text-muted text-center">
                         @if($tratamiento->TratTipo=='1')
-                            <td>{{ trans('adminlte_lang::LangTratamiento.tratInLong') }}</td>
+                            <td>{{ __('adminlte::LangTratamiento.tratInLong') }}</td>
                         @else
-                            <td>{{ trans('adminlte_lang::LangTratamiento.tratOutLong') }}</td>
+                            <td>{{ __('adminlte::LangTratamiento.tratOutLong') }}</td>
                         @endif
                     </p>
                     <ul class="list-group list-group-unbordered">
                         <li class="list-group-item">
-                            <b>{{ trans('adminlte_lang::LangTratamiento.tratSince') }}</b>
+                            <b>{{ __('adminlte::LangTratamiento.tratSince') }}</b>
                             <p class="pull-right" style="color:blue;">{{$tratamiento->created_at->diffForHumans()}}</p>
                         </li>
                     </ul>
-                    <a href='/tratamiento/{{$tratamiento->ID_Trat}}/edit' class='btn btn-warning btn-block'><i class='fas fa-edit'></i> {{ trans('adminlte_lang::message.edit') }} </a>
+                    <a href='/tratamiento/{{$tratamiento->ID_Trat}}/edit' class='btn btn-warning btn-block'><i class='fas fa-edit'></i> {{ __('adminlte::message.edit') }} </a>
                 </div>
                 <!-- /.box-body -->
             </div>
@@ -50,7 +50,7 @@
             <div class="box">
                 <!-- box header -->
                 <div class="box-header with-border">
-                    <h3 class="box-title">{{ trans('adminlte_lang::LangTratamiento.tratdetaillong') }}</h3>
+                    <h3 class="box-title">{{ __('adminlte::LangTratamiento.tratdetaillong') }}</h3>
                 </div>
                 <!-- /.box header -->
                 <!-- box body -->
@@ -59,10 +59,10 @@
                     <div class="nav-tabs-custom">
                         <ul class="nav nav-tabs">
                             <li class="nav-item">
-                                <a class="nav-link" href="#Proveedorpane" data-toggle="tab">{{ trans('adminlte_lang::message.clientproveedor') }}</a>
+                                <a class="nav-link" href="#Proveedorpane" data-toggle="tab">{{ __('adminlte::message.clientproveedor') }}</a>
                             </li>
                             <li class="nav-item active">
-                                <a class="nav-link" href="#Pretratamientospane" data-toggle="tab">{{ trans('adminlte_lang::LangTratamiento.pretrat') }}s</a>
+                                <a class="nav-link" href="#Pretratamientospane" data-toggle="tab">{{ __('adminlte::LangTratamiento.pretrat') }}s</a>
                             </li>
                         </ul>
                         <!-- nav-content -->
@@ -73,28 +73,28 @@
                                 <div class="box box-info">
                                     <div class="box-body box-profile">
                                         <h3 class="profile-username text-center">{{$Sede->SedeName}}</h3>
-                                        @if (Auth::user()->UsRol === trans('adminlte_lang::message.Administrador'))
+                                        @if (Auth::user()->UsRol === __('adminlte::message.Administrador'))
                                         <p class="text-muted text-center">{{$Cliente->CliShortname}}</p>
                                         @endif
                                         <ul class="list-group list-group-unbordered">
                                             <li class="list-group-item">
-                                                <b>{{ trans('adminlte_lang::message.address') }}</b>
-                                                <a title="{{ trans('adminlte_lang::message.copy') }}" onclick="copiarAlPortapapeles('{{ trans('adminlte_lang::message.address') }}')"><i class="far fa-copy"></i></a>
-                                                <a href="#" class="pull-right textpopover" id="{{ trans('adminlte_lang::message.address') }}" title="{{ trans('adminlte_lang::message.address') }}" data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$Sede->SedeAddress}} - {{$Sede->MunName}}, {{$Sede->DepartName}}</p>">{{$Sede->SedeAddress}} - {{$Sede->MunName}}, {{$Sede->DepartName}}</a>
+                                                <b>{{ __('adminlte::message.address') }}</b>
+                                                <a title="{{ __('adminlte::message.copy') }}" onclick="copiarAlPortapapeles('{{ __('adminlte::message.address') }}')"><i class="far fa-copy"></i></a>
+                                                <a href="#" class="pull-right textpopover" id="{{ __('adminlte::message.address') }}" title="{{ __('adminlte::message.address') }}" data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$Sede->SedeAddress}} - {{$Sede->MunName}}, {{$Sede->DepartName}}</p>">{{$Sede->SedeAddress}} - {{$Sede->MunName}}, {{$Sede->DepartName}}</a>
                                             </li>
                                             <li class="list-group-item">
-                                                <b>{{ trans('adminlte_lang::message.mobile') }}</b> <a class="pull-right">{{$Sede->SedeCelular}}</a>
+                                                <b>{{ __('adminlte::message.mobile') }}</b> <a class="pull-right">{{$Sede->SedeCelular}}</a>
                                             </li>
                                             <li class="list-group-item">
-                                                <b>{{ trans('adminlte_lang::message.phone') }}</b> <a class="pull-right">{{$Sede->SedePhone1}} - {{$Sede->SedeExt1}}</a>
+                                                <b>{{ __('adminlte::message.phone') }}</b> <a class="pull-right">{{$Sede->SedePhone1}} - {{$Sede->SedeExt1}}</a>
                                             </li>
                                             <li class="list-group-item">
-                                                <b>{{ trans('adminlte_lang::message.phone') }} 2</b> <a class="pull-right">{{$Sede->SedePhone2}} - {{$Sede->SedeExt2}}</a>
+                                                <b>{{ __('adminlte::message.phone') }} 2</b> <a class="pull-right">{{$Sede->SedePhone2}} - {{$Sede->SedeExt2}}</a>
                                             </li>
                                             <li class="list-group-item">
-                                                <b>{{ trans('adminlte_lang::message.emailaddress') }}</b>
-                                                <a title="{{ trans('adminlte_lang::message.copy') }}" onclick="copiarAlPortapapeles('{{ trans('adminlte_lang::message.emailaddress') }}')"><i class="far fa-copy"></i></a>
-                                                <a href="#" class="pull-right textpopover" id="{{ trans('adminlte_lang::message.emailaddress') }}" title="{{ trans('adminlte_lang::message.emailaddress') }}" data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$Sede->SedeEmail}}</p>">{{$Sede->SedeEmail}}</a>
+                                                <b>{{ __('adminlte::message.emailaddress') }}</b>
+                                                <a title="{{ __('adminlte::message.copy') }}" onclick="copiarAlPortapapeles('{{ __('adminlte::message.emailaddress') }}')"><i class="far fa-copy"></i></a>
+                                                <a href="#" class="pull-right textpopover" id="{{ __('adminlte::message.emailaddress') }}" title="{{ __('adminlte::message.emailaddress') }}" data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$Sede->SedeEmail}}</p>">{{$Sede->SedeEmail}}</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -114,7 +114,7 @@
                                         @foreach($tratamiento->pretratamientos as $pretratamiento)
                                             @if($pretratamiento->PreTratDelete == 0)
                                                 <li class="list-group-item">
-                                                    <b>{{$pretratamiento->PreTratName}}</b> <a href="#" class="pull-right textpopover" id="{{ trans('adminlte_lang::message.address') }}" title="Descripción del Pretratamiento" data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom" data-content="{{$pretratamiento->PreTratDescription}}">{{$pretratamiento->PreTratDescription}}</a>
+                                                    <b>{{$pretratamiento->PreTratName}}</b> <a href="#" class="pull-right textpopover" id="{{ __('adminlte::message.address') }}" title="Descripción del Pretratamiento" data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom" data-content="{{$pretratamiento->PreTratDescription}}">{{$pretratamiento->PreTratDescription}}</a>
                                                 </li>
                                                 @php
                                                 $conteoDePretratamientos = $conteoDePretratamientos + 1;
@@ -123,7 +123,7 @@
                                         @endforeach
                                         @if($conteoDePretratamientos==0)
                                             <li class="list-group-item">
-                                                <p class="text-center"><br><b>{{ trans('adminlte_lang::LangTratamiento.noPretrat') }}</b></p>
+                                                <p class="text-center"><br><b>{{ __('adminlte::LangTratamiento.noPretrat') }}</b></p>
                                             </li>
                                         @endif 
                                     </ul>

@@ -137,7 +137,8 @@ class ClientController extends Controller
                 if (old('FK_SedeMun') !== null){
                     $Municipios = Municipio::select()->where('FK_MunCity', old('departamento'))->get();
                 }
-                return view('clientes.create2', compact('Departamentos', 'Municipios', 'comerciales'));
+                //return view('clientes.create2', compact('Departamentos', 'Municipios', 'comerciales'));
+                return view('clientes.create2', compact('Departamentos', 'comerciales'));
             }else{
                 return redirect()->route('home');
             }
@@ -316,8 +317,8 @@ class ClientController extends Controller
 				->where('personals.PersDelete', 0)
 				->get();
 
-            return $personal;
-          // return view('clientes.show', compact('cliente', 'Sedes', 'SedeSlug', 'Requerimientos'));
+           // return $personal;
+           return view('clientes.show', compact('cliente', 'Sedes', 'SedeSlug', 'Requerimientos'));
           // return view('clientes.show', compact('personal_Cliente','cliente', 'Sedes', 'SedeSlug', 'Requerimientos'));
         }else{
             abort(403);

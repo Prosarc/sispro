@@ -1,10 +1,10 @@
 @extends('layouts.app')
 @section('htmlheader_title')
-	{{ trans('adminlte_lang::message.clientcontacto') }}
+	{{ __('adminlte::message.clientcontacto') }}
 @endsection
 @section('contentheader_title')
 <span style="background-image: linear-gradient(40deg, rgb(255, 216, 111), rgb(252, 98, 98)); padding-right:30vw; position:relative; overflow:hidden;">
-    {{ trans('adminlte_lang::message.clientcontacto') }}
+    {{ __('adminlte::message.clientcontacto') }}
   <div style="background-color:#ecf0f5; position:absolute; height:145%; width:40vw; transform:rotate(30deg); right:-20vw; top:-45%;"></div>
 </span>
 @endsection	
@@ -25,8 +25,8 @@
 						@endcomponent
 						@if($Cliente->CliDelete == 0)
 							@if(in_array(Auth::user()->UsRol, Permisos::Jefes) || in_array(Auth::user()->UsRol2, Permisos::Jefes))
-							<a href="/contactos/{{$Cliente->CliSlug}}/edit" class="btn btn-warning pull-right"><i class="fas fa-edit"></i><b> {{ trans('adminlte_lang::message.edit') }}</b></a>
-							<a method='get' href='#' data-toggle='modal' data-target='#myModal{{$Cliente->ID_Cli}}' class='btn btn-danger pull-left'><i class="fas fa-trash-alt"></i><b> {{ trans('adminlte_lang::message.delete') }}</b></a>
+							<a href="/contactos/{{$Cliente->CliSlug}}/edit" class="btn btn-warning pull-right"><i class="fas fa-edit"></i><b> {{ __('adminlte::message.edit') }}</b></a>
+							<a method='get' href='#' data-toggle='modal' data-target='#myModal{{$Cliente->ID_Cli}}' class='btn btn-danger pull-left'><i class="fas fa-trash-alt"></i><b> {{ __('adminlte::message.delete') }}</b></a>
 							<form action='/contactos/{{$Cliente->CliSlug}}' method='POST'  class="col-12 pull-right">
 								@method('DELETE')
 								@csrf
@@ -39,7 +39,7 @@
 									@method('DELETE')
 									@csrf
 									<button type="submit" class='btn btn-success btn-block'>
-										<i class="fas fa-plus-square"></i><b> {{ trans('adminlte_lang::message.add') }}</b>
+										<i class="fas fa-plus-square"></i><b> {{ __('adminlte::message.add') }}</b>
 									</button>
 								</form>
 							@endif
@@ -47,42 +47,42 @@
 					</div>
 					<h3 class="profile-username text-center">{{$Cliente->CliShortname}}</h3>
 					<li class="list-group-item">
-						<b>{{ trans('adminlte_lang::message.clientcategoría') }}</b> <a class="pull-right">{{$Cliente->CliCategoria}}</a>
+						<b>{{ __('adminlte::message.clientcategoría') }}</b> <a class="pull-right">{{$Cliente->CliCategoria}}</a>
 					</li>
 					<li class="list-group-item">
-						<b>{{ trans('adminlte_lang::message.clirazonsoc') }}</b> <a class="pull-right">{{$Cliente->CliName}}</a>
+						<b>{{ __('adminlte::message.clirazonsoc') }}</b> <a class="pull-right">{{$Cliente->CliName}}</a>
 					</li>
 					<li class="list-group-item">
-						<b>{{ trans('adminlte_lang::message.clientnombrecorto') }}</b> <a class="pull-right">{{$Cliente->CliShortname}}</a>
+						<b>{{ __('adminlte::message.clientnombrecorto') }}</b> <a class="pull-right">{{$Cliente->CliShortname}}</a>
 					</li>
 					<li class="list-group-item">
-						<b>{{ trans('adminlte_lang::message.clientNIT') }}</b> <a class="pull-right">{{$Cliente->CliNit}}</a>
+						<b>{{ __('adminlte::message.clientNIT') }}</b> <a class="pull-right">{{$Cliente->CliNit}}</a>
 					</li>
 				</div>
 			   
 				<div class="box-body box-profile">
-					<h3 class="profile-username text-center">{{ trans('adminlte_lang::message.sclientsede') }}</h3>
+					<h3 class="profile-username text-center">{{ __('adminlte::message.sclientsede') }}</h3>
 					<li class="list-group-item">
-						<b>{{ trans('adminlte_lang::message.sclientnamesede') }}</b> <a class="pull-right">{{$Sede->SedeName}}</a>
+						<b>{{ __('adminlte::message.sclientnamesede') }}</b> <a class="pull-right">{{$Sede->SedeName}}</a>
 					</li>
 					<li class="list-group-item">
-						<b>{{ trans('adminlte_lang::message.address') }}</b>
-						<a title="{{ trans('adminlte_lang::message.copy') }}" onclick="copiarAlPortapapeles('{{ trans('adminlte_lang::message.adddress') }}')"><i class="far fa-copy"></i></a>
-						<a href="#" class="pull-right textpopover" id="{{ trans('adminlte_lang::message.adddress') }}" title="{{ trans('adminlte_lang::message.address') }}" data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$Sede->SedeAddress}} ({{$Municipio->MunName}} - {{$Departamento->DepartName}})</p>">{{$Sede->SedeAddress}} ({{$Municipio->MunName}} - {{$Departamento->DepartName}})</a>
+						<b>{{ __('adminlte::message.address') }}</b>
+						<a title="{{ __('adminlte::message.copy') }}" onclick="copiarAlPortapapeles('{{ __('adminlte::message.adddress') }}')"><i class="far fa-copy"></i></a>
+						<a href="#" class="pull-right textpopover" id="{{ __('adminlte::message.adddress') }}" title="{{ __('adminlte::message.address') }}" data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$Sede->SedeAddress}} ({{$Municipio->MunName}} - {{$Departamento->DepartName}})</p>">{{$Sede->SedeAddress}} ({{$Municipio->MunName}} - {{$Departamento->DepartName}})</a>
 					</li>
 					<li class="list-group-item">
-						<b>{{ trans('adminlte_lang::message.phone') }}</b> <a class="pull-right">{{$Sede->SedePhone1}} - {{$Sede->SedeExt1}}</a>
+						<b>{{ __('adminlte::message.phone') }}</b> <a class="pull-right">{{$Sede->SedePhone1}} - {{$Sede->SedeExt1}}</a>
 					</li>
 					<li class="list-group-item">
-						<b>{{ trans('adminlte_lang::message.phone') }} 2</b> <a class="pull-right">{{$Sede->SedePhone2}} - {{$Sede->SedeExt2}}</a>
+						<b>{{ __('adminlte::message.phone') }} 2</b> <a class="pull-right">{{$Sede->SedePhone2}} - {{$Sede->SedeExt2}}</a>
 					</li>
 					<li class="list-group-item">
-						<b>{{ trans('adminlte_lang::message.email') }}</b>
-						<a title="{{ trans('adminlte_lang::message.copy') }}" onclick="copiarAlPortapapeles('{{ trans('adminlte_lang::message.emailaddress') }}')"><i class="far fa-copy"></i></a>
-						<a href="#" class="pull-right textpopover" id="{{ trans('adminlte_lang::message.emailaddress') }}" title="{{ trans('adminlte_lang::message.emailaddress') }}" data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$Sede->SedeEmail}}</p>">{{$Sede->SedeEmail}}</a>
+						<b>{{ __('adminlte::message.email') }}</b>
+						<a title="{{ __('adminlte::message.copy') }}" onclick="copiarAlPortapapeles('{{ __('adminlte::message.emailaddress') }}')"><i class="far fa-copy"></i></a>
+						<a href="#" class="pull-right textpopover" id="{{ __('adminlte::message.emailaddress') }}" title="{{ __('adminlte::message.emailaddress') }}" data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$Sede->SedeEmail}}</p>">{{$Sede->SedeEmail}}</a>
 					</li>
 					<li class="list-group-item">
-						<b>{{ trans('adminlte_lang::message.mobile') }}</b> <a class="pull-right">{{$Sede->SedeCelular}}</a>
+						<b>{{ __('adminlte::message.mobile') }}</b> <a class="pull-right">{{$Sede->SedeCelular}}</a>
 					</li>
 				</div>
 			</div>
@@ -98,7 +98,7 @@
 							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 							<div style="font-size: 5em; color: green; text-align: center; margin: auto;">
 								<i class="fas fa-plus-circle"></i>
-								<span style="font-size: 0.3em; color: black;"><p>{{ trans('adminlte_lang::message.vehiculocreate') }}</p></span>
+								<span style="font-size: 0.3em; color: black;"><p>{{ __('adminlte::message.vehiculocreate') }}</p></span>
 							</div> 
 						</div>
 						@if ($errors->any() && !old('validate'))
@@ -112,32 +112,32 @@
 						@endif
 						<div class="modal-header">
 							<div class="form-group col-md-12">
-								<label for="VehicPlaca" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.vehicplaca') }}</b>" data-content="Placa de un vehiculo del Tranportador.">
+								<label for="VehicPlaca" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.vehicplaca') }}</b>" data-content="Placa de un vehiculo del Tranportador.">
 									<i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>
-									{{ trans('adminlte_lang::message.vehicplaca') }}
+									{{ __('adminlte::message.vehicplaca') }}
 								</label>
 								<small class="help-block with-errors">*</small>
-								<input type="text" name="CreateVehicPlaca" class="form-control placa" id="VehicPlaca" data-minlength="7" maxlength="7" placeholder="{{ trans('adminlte_lang::message.placaplaceholder') }}" value="{{old('CreateVehicPlaca')}}" required>
+								<input type="text" name="CreateVehicPlaca" class="form-control placa" id="VehicPlaca" data-minlength="7" maxlength="7" placeholder="{{ __('adminlte::message.placaplaceholder') }}" value="{{old('CreateVehicPlaca')}}" required>
 							</div>
 							<div class="col-md-12 form-group">
-								<label for="VehicTipo" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.vehictipo') }}</b>" data-content="{{ trans('adminlte_lang::message.contacvehictipomessage') }}">
+								<label for="VehicTipo" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.vehictipo') }}</b>" data-content="{{ __('adminlte::message.contacvehictipomessage') }}">
 									<i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>
-									{{ trans('adminlte_lang::message.vehictipo') }}
+									{{ __('adminlte::message.vehictipo') }}
 								</label>
 								<small class="help-block with-errors">*</small>
 								<input type="text" name="CreateVehicTipo" class="form-control" id="VehicTipo" maxlength="64" value="{{old('CreateVehicTipo')}}" required>
 							</div>
 							<div class="col-md-12 form-group">
-								<label for="VehicCapacidad" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.vehiccapacidad') }}</b>" data-content="{{ trans('adminlte_lang::message.contacvehiccapacidadmessage') }}">
+								<label for="VehicCapacidad" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.vehiccapacidad') }}</b>" data-content="{{ __('adminlte::message.contacvehiccapacidadmessage') }}">
 									<i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>
-									{{ trans('adminlte_lang::message.vehiccapacidad') }}
+									{{ __('adminlte::message.vehiccapacidad') }}
 								</label>
 								<small class="help-block with-errors">*</small>
 								<input type="text" name="CreateVehicCapacidad" class="form-control numberKg" id="VehicCapacidad" value="{{old('CreateVehicCapacidad')}}" required>
 							</div>
 						</div>
 						<div class="modal-footer">
-							<button type="submit" class="btn btn-success pull-right">{{ trans('adminlte_lang::message.add') }}</button>
+							<button type="submit" class="btn btn-success pull-right">{{ __('adminlte::message.add') }}</button>
 						</div>
 					</div>
 				</div>
@@ -148,14 +148,14 @@
 		<div class="col-md-6">
 			<div class="nav-tabs-custom">
 				<ul class="nav nav-tabs">
-					<li class="active box-info"><a href="#vehiculo" data-toggle="tab">{{ trans('adminlte_lang::message.vehiculos') }}</a></li>
+					<li class="active box-info"><a href="#vehiculo" data-toggle="tab">{{ __('adminlte::message.vehiculos') }}</a></li>
 				</ul>
 				<div class="tab-content">
 					<div class="active tab-pane" id="vehiculo">
 						<div class="text-center">
 							{{-- BOTON DE CREAR VEHICULO --}}
 							@if($Cliente->CliDelete == 0 && (in_array(Auth::user()->UsRol, Permisos::Jefes) || in_array(Auth::user()->UsRol2, Permisos::Jefes)))
-								<a method='get' href='#' data-toggle='modal' data-target='#create'  id="createvehiculo" class="btn btn-success text-center"><i class="fas fa-plus-circle"></i><b> {{ trans('adminlte_lang::message.addvehiculo') }}</b></a>
+								<a method='get' href='#' data-toggle='modal' data-target='#create'  id="createvehiculo" class="btn btn-success text-center"><i class="fas fa-plus-circle"></i><b> {{ __('adminlte::message.addvehiculo') }}</b></a>
 							@endif
 						</div>
 						<div style='overflow-y:auto; max-height:463px;'>
@@ -180,13 +180,13 @@
 									@endif
 									<h3 class="profile-username text-center">{{$Vehiculo->VehicPlaca}}</h3>
 									<li class="list-group-item">
-										<b>{{ trans('adminlte_lang::message.vehicplaca') }}</b> <a class="pull-right">{{$Vehiculo->VehicPlaca}}</a>
+										<b>{{ __('adminlte::message.vehicplaca') }}</b> <a class="pull-right">{{$Vehiculo->VehicPlaca}}</a>
 									</li>
 									<li class="list-group-item">
-										<b>{{ trans('adminlte_lang::message.vehictipo') }}</b> <a class="pull-right">{{$Vehiculo->VehicTipo}}</a>
+										<b>{{ __('adminlte::message.vehictipo') }}</b> <a class="pull-right">{{$Vehiculo->VehicTipo}}</a>
 									</li>
 									<li class="list-group-item">
-										<b>{{ trans('adminlte_lang::message.vehiccapacidad') }}</b> <a class="pull-right">{{$Vehiculo->VehicCapacidad}}</a>
+										<b>{{ __('adminlte::message.vehiccapacidad') }}</b> <a class="pull-right">{{$Vehiculo->VehicCapacidad}}</a>
 									</li>
 								</div>
 							@endforeach
@@ -215,31 +215,31 @@
 								<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 								<div style="font-size: 5em; color: orange; text-align: center; margin: auto;">
 									<i class="fas fa-edit"></i>
-									<span style="font-size: 0.3em; color: black;"><p>{{ trans('adminlte_lang::message.vehiculoedit') }}</p></span>
+									<span style="font-size: 0.3em; color: black;"><p>{{ __('adminlte::message.vehiculoedit') }}</p></span>
 								</div>
 							</div>
 							<div id="errors"></div>
 							<div class="modal-header">
 								<div class="form-group col-md-12">
-									<label for="VehicPlaca" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.vehicplaca') }}</b>" data-content="Placa de un vehiculo del Tranportador.">
+									<label for="VehicPlaca" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.vehicplaca') }}</b>" data-content="Placa de un vehiculo del Tranportador.">
 										<i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>
-										{{ trans('adminlte_lang::message.vehicplaca') }}
+										{{ __('adminlte::message.vehicplaca') }}
 									</label>
 									<small class="help-block with-errors">*</small>
-									<input type="text" name="VehicPlaca" class="form-control placa" id="VehicPlaca" data-minlength="7" maxlength="7" placeholder="{{ trans('adminlte_lang::message.placaplaceholder') }}" value="`+placa+`" required>
+									<input type="text" name="VehicPlaca" class="form-control placa" id="VehicPlaca" data-minlength="7" maxlength="7" placeholder="{{ __('adminlte::message.placaplaceholder') }}" value="`+placa+`" required>
 								</div>
 								<div class="col-md-12 form-group">
-									<label for="VehicTipo" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.vehictipo') }}</b>" data-content="{{ trans('adminlte_lang::message.contacvehictipomessage') }}">
+									<label for="VehicTipo" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.vehictipo') }}</b>" data-content="{{ __('adminlte::message.contacvehictipomessage') }}">
 										<i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>
-										{{ trans('adminlte_lang::message.vehictipo') }}
+										{{ __('adminlte::message.vehictipo') }}
 									</label>
 									<small class="help-block with-errors">*</small>
 									<input type="text" name="VehicTipo" class="form-control" id="VehicTipo" maxlength="64" value="`+tipo+`" required>
 								</div>
 								<div class="col-md-12 form-group">
-									<label for="VehicCapacidad" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.vehiccapacidad') }}</b>" data-content="{{ trans('adminlte_lang::message.contacvehiccapacidadmessage') }}">
+									<label for="VehicCapacidad" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.vehiccapacidad') }}</b>" data-content="{{ __('adminlte::message.contacvehiccapacidadmessage') }}">
 										<i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>
-										{{ trans('adminlte_lang::message.vehiccapacidad') }}
+										{{ __('adminlte::message.vehiccapacidad') }}
 									</label>
 									<small class="help-block with-errors">*</small>
 									<input type="text" name="VehicCapacidad" class="form-control numberKg" id="VehicCapacidad" value="`+capacidad+`" required>
@@ -247,7 +247,7 @@
 							</div>
 							<input type="text" name="validate" hidden value="`+id+`">
 							<div class="modal-footer">
-								<button type="submit" class="btn btn-warning pull-right">{{ trans('adminlte_lang::message.update') }}</button>
+								<button type="submit" class="btn btn-warning pull-right">{{ __('adminlte::message.update') }}</button>
 							</div>
 						</div>
 					</div>
@@ -272,13 +272,13 @@
 								<div style="font-size: 5em; color: red; text-align: center; margin: auto;">
 									<i class="fas fa-exclamation-triangle"></i>
 									<span style="font-size: 0.3em; color: black;">
-										<p>{{ trans('adminlte_lang::message.deletevehiculo') }} <b><i>`+placa+`</i></b> {{ trans('adminlte_lang::message.?') }} </p>
+										<p>{{ __('adminlte::message.deletevehiculo') }} <b><i>`+placa+`</i></b> {{ __('adminlte::message.?') }} </p>
 									</span>
 								</div> 
 							</div>
 							<div class="modal-footer">
-								<button type="button" class="btn btn-success pull-left" data-dismiss="modal">{{ trans('adminlte_lang::message.modalexit') }}</button>
-								<label for="delete" class='btn btn-danger'>{{ trans('adminlte_lang::message.modaldelete') }}</label>
+								<button type="button" class="btn btn-success pull-left" data-dismiss="modal">{{ __('adminlte::message.modalexit') }}</button>
+								<label for="delete" class='btn btn-danger'>{{ __('adminlte::message.modaldelete') }}</label>
 							</div>
 						</div>
 					</div>

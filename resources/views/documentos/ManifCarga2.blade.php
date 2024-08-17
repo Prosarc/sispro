@@ -314,9 +314,9 @@ style='width:100.0%;border-collapse:collapse;border:none'>
   <td width="100%" colspan=14 style='width:100.0%;border-top:none;border-left:
   solid windowtext 1.0pt;border-bottom:none;border-right:solid windowtext 1.0pt;
   padding:0cm 1.4pt 0cm 1.4pt;height:36.05pt'>
-  <center>
+  <center> 
   <p class=MsoNormal style='margin-bottom:0cm;line-height:normal'><span
-    style='font-size:8.0pt;font-family:"Arial",sans-serif'>{{$SolicitudServicio->SolSerDescript}}</span></p>
+    style='font-size:8.0pt;font-family:"Arial",sans-serif'>{{$Observaciones->ObsMensaje}}</span></p>
   </center>
     </td>
  </tr>
@@ -759,10 +759,86 @@ style='width:100.0%;border-collapse:collapse;border:none'>
   </td>
 </tr> 
 
+<table class=MsoNormalTable border=1 cellspacing=0 cellpadding=0 
+style='width:100.0%;border-collapse:collapse;border:none'><br>
+ <tr width="100%" style='width:100.0%;height:19.4pt'>
+  <td width="100%" colspan=5 style='width:100.0%;border:solid windowtext 1.0pt;background:#D6DCE4;padding:0cm 1.4pt 0cm 1.4pt;height:19.4pt'>
+  <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
+  line-height:normal'><b><span style='font-size:10.0pt;font-family:"Arial",sans-serif;
+  color:black'>LAS PARTES HACEN CONSTAR QUE:</span></b></p>
+  </td>
+ </tr>
+</table>
 
-  </table>
+<table class=MsoNormalTable border=1 cellspacing=0 cellpadding=0 
+ style='width:100.0%;border-collapse:collapse;border:none'>
+ <tr style='height:21.9pt'>
+  <td width="100%" colspan=1 style='width:100.0%;border-top:none;border-left:
+  solid windowtext 1.0pt;border-bottom:none;border-right:solid windowtext 1.0pt;
+  padding:0cm 1.4pt 0cm 1.4pt;height:21.9pt'>
+  <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
+  line-height:normal'><span style='font-size:8.0pt;font-family:"Arial",sans-serif'>a.
+  La Empresa Usuaria certifica que los residuos y/o materiales entregados para su tratamiento y disposición final correspondiente fielmente a lo relacionado y especificado en la declaración de residuos y que NO ha enviado con el presente servicio materiales o residuos explosivos o radiactivos.</span></p>
+  </td>
+ </tr>
+ <tr style='height:20.1pt'>
+  <td width="100%" colspan=14 style='width:100.0%;border-top:none;border-left:
+  solid windowtext 1.0pt;border-bottom:none;border-right:solid windowtext 1.0pt;
+  padding:0cm 1.4pt 0cm 1.4pt;height:20.1pt'>
+  <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
+  line-height:normal'><span style='font-size:8.0pt;font-family:"Arial",sans-serif'>b.
+  Que los residuos y/o materiales entregados han sido identificados de acuerdo a lo estipulado en el Decreto 4741 y que se encuentran debidamente embalados y sin riesgo de que se produzca derrame durante su cargue o transporte.</span></p>
+  </td>
+ </tr>
+ <tr style='height:21.1pt'>
+  <td width="100%" colspan=14 style='width:100.0%;border-top:none;border-left:
+  solid windowtext 1.0pt;border-bottom:none;border-right:solid windowtext 1.0pt;
+  padding:0cm 1.4pt 0cm 1.4pt;height:21.1pt'>
+  <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
+  line-height:normal'><span style='font-size:8.0pt;font-family:"Arial",sans-serif'>c.
+    Así mismo se hace constar que las puertas del furgón ha sido cerradas con candado y ha sido colocado y cerrado el PRECINTO DE SEGURIDAD Na.__________________ en presencia de ____________________ con cedula No.________________</span></p>
+  </td>
+  <br>
+ </tr>
+</table>
+
+<table class=MsoNormalTable border=1 cellspacing=0 cellpadding=0 
+style='width:100.0%;border-collapse:collapse;border:none'>
+<tr width="100%" style='width:100.0%;height:19.4pt'>
+  <td width="100%" colspan=5 style='width:100.0%;border:solid windowtext 1.0pt;
+  background:#D6DCE4;padding:0cm 1.4pt 0cm 1.4pt;height:19.4pt'>
+  <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
+  line-height:normal'><b><span style='font-size:10.0pt;font-family:"Arial",sans-serif;
+  color:black'>OBSERVACIONES</span></b></p>
+  </td>
+ </tr>
+</table>
+
+<table class=MsoNormalTable border=1 cellspacing=0 cellpadding=0 
+ style='width:100.0%;border-collapse:collapse;border:none'>
+ <tr style='height:21.9pt'>
+  <td width="100%" colspan=14 style='width:100.0%;border-top:none;border-left:
+  solid windowtext 1.0pt;border-bottom:none;border-right:solid windowtext 1.0pt;
+  padding:0cm 1.4pt 0cm 1.4pt;height:21.9pt'>
+  </td>
+ </tr>
+ <tr style='height:20.1pt'>
+  <td width="100%" colspan=14 style='width:100.0%;border-top:none;border-left:
+  solid windowtext 1.0pt;border-bottom:none;border-right:solid windowtext 1.0pt;
+  padding:0cm 1.4pt 0cm 1.4pt;height:20.1pt'>
+  </td>
+ </tr>
+ <tr style='height:21.1pt'>
+  <td width="100%" colspan=14 style='width:100.0%;border-top:none;border-left:
+  solid windowtext 1.0pt;border-bottom:none;border-right:solid windowtext 1.0pt;
+  padding:0cm 1.4pt 0cm 1.4pt;height:21.1pt'>
+  </td>
+ </tr>
+ </table>
+</table>
+
   <table class=MsoNormalTable border=1 cellspacing=0 cellpadding=0 
-  style='width:100.0%;border-collapse:collapse;border:none'><br>
+  style='width:100.0%;border-collapse:collapse;border:none'>
   <tr>
   <td width="10%" nowrap colspan=3 style='width:10.78%;border:solid windowtext 1.0pt;background:#D6DCE4;padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
   <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;

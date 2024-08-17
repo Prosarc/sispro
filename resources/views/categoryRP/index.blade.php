@@ -15,7 +15,7 @@ Lista de Categorias
 				<div class="box">
 					<div class="box-header">
 						<h3 class="box-title">Lista de Categorias</h3>
-						<a href="/categorypublic/create" class="btn btn-primary pull-right">{{ trans('adminlte_lang::message.create') }}</a>
+						<a href="/categorypublic/create" class="btn btn-primary pull-right">{{ __('adminlte::message.create') }}</a>
 					</div>
 					<div class="box box-info">
 						<div class="box-body">
@@ -38,7 +38,7 @@ Lista de Categorias
 											@endforeach
 											</ul>
 										</td>
-										<td><a href='/categorypublic/{{$CateroryRP->ID_CategoryRP}}/edit' class='btn btn-warning'><i class="fas fa-edit"></i> <b>{{trans('adminlte_lang::message.edit')}}</b></a></td>
+										<td><a href='/categorypublic/{{$CateroryRP->ID_CategoryRP}}/edit' class='btn btn-warning'><i class="fas fa-edit"></i> <b>{{__('adminlte::message.edit')}}</b></a></td>
 									</tr>
 									@endforeach
 								</tbody>

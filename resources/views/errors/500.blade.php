@@ -1,4 +1,4 @@
-@extends('errors::illustrated-layout')
+{{--@extends('errors::illustrated-layout')--}}
 
 @section('code', '500')
 @section('title', __('Error'))
@@ -10,5 +10,5 @@
 @if($exception->getMessage()&&(in_array(Auth::user()->UsRol, Permisos::TODOPROSARC)))
 	@section('message', $exception->getMessage())
 @else
-	@section('message', trans('adminlte_lang::message.wewillwork'))
+	@section('message', __('adminlte::message.wewillwork'))
 @endif

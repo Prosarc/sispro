@@ -19,7 +19,7 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" data-dismiss="modal" aria-label="Close" class="btn btn-success pull-right">{{ trans('adminlte_lang::message.add') }}</button>
+				<button type="button" data-dismiss="modal" aria-label="Close" class="btn btn-success pull-right">{{ __('adminlte::message.add') }}</button>
 			</div>
 		</div>
 	</div>

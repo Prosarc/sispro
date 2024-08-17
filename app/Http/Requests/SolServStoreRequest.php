@@ -87,11 +87,12 @@ class SolServStoreRequest extends FormRequest
                             'AddressCollect'           => 'required|max:255',
                             'municipio2'               => ['required',Rule::exists('municipios', 'ID_Mun')],
                         ];
-                    } if($request->input('SolSerTypeCollect') == null){
+                    }/*
+                 if($request->input('SolSerTypeCollect') == null){
                         $rules = [
                             'SolSerFecha'      => 'required',
                             ];
-                    }
+                    }*/
                 }
                 break;
 
@@ -195,7 +196,7 @@ class SolServStoreRequest extends FormRequest
                 # code...
                 break;
         }
-        foreach ($this->request->get('SGenerador') as $Generador => $value) {
+      /*  foreach ($this->request->get('SGenerador') as $Generador => $value) {
             $attributes['SGenerador.'.$Generador] = '"Seleccione el generador (N° '.($Generador+1).')"';
             $attributes['FK_SolResRg.'.$Generador.'.0'] = '"Residuo (N° 1)" del generador (N° '.($Generador+1).')';
             if (isset($this->instance()->all()['FK_SolResRg'][$Generador])) {
@@ -209,7 +210,7 @@ class SolServStoreRequest extends FormRequest
                     $attributes['SolResProfundo.'.$Generador.'.'.$y] = '"Profundo" del residuo (N°'.($y+1).') del generador (N° '.($Generador+1).')';
                 }
             }
-        }
+        }*/
         return $attributes;
     }
 

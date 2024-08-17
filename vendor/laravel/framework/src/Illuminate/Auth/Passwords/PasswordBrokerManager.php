@@ -2,9 +2,8 @@
 
 namespace Illuminate\Auth\Passwords;
 
-use Illuminate\Support\Str;
-use InvalidArgumentException;
 use Illuminate\Contracts\Auth\PasswordBrokerFactory as FactoryContract;
+use InvalidArgumentException;
 
 /**
  * @mixin \Illuminate\Contracts\Auth\PasswordBroker
@@ -70,7 +69,8 @@ class PasswordBrokerManager implements FactoryContract
         // aggregate service of sorts providing a convenient interface for resets.
         return new PasswordBroker(
             $this->createTokenRepository($config),
-            $this->app['auth']->createUserProvider($config['provider'] ?? null)
+            $this->app['auth']->createUserProvider($config['provider'] ?? null),
+            $this->app['events'] ?? null,
         );
     }
 
@@ -84,7 +84,7 @@ class PasswordBrokerManager implements FactoryContract
     {
         $key = $this->app['config']['app.key'];
 
-        if (Str::startsWith($key, 'base64:')) {
+        if (str_starts_with($key, 'base64:')) {
             $key = base64_decode(substr($key, 7));
         }
 
@@ -95,7 +95,8 @@ class PasswordBrokerManager implements FactoryContract
             $this->app['hash'],
             $config['table'],
             $key,
-            $config['expire']
+            $config['expire'],
+            $config['throttle'] ?? 0
         );
     }
 
@@ -103,7 +104,7 @@ class PasswordBrokerManager implements FactoryContract
      * Get the password broker configuration.
      *
      * @param  string  $name
-     * @return array
+     * @return array|null
      */
     protected function getConfig($name)
     {
@@ -135,7 +136,7 @@ class PasswordBrokerManager implements FactoryContract
      * Dynamically call the default driver instance.
      *
      * @param  string  $method
-     * @param  array   $parameters
+     * @param  array  $parameters
      * @return mixed
      */
     public function __call($method, $parameters)

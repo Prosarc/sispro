@@ -1,10 +1,10 @@
 @extends('layouts.app')
 @section('htmlheader_title')
-{{ trans('adminlte_lang::LangTratamiento.pretratMenu') }}
+{{ __('adminlte::LangTratamiento.pretratMenu') }}
 @endsection
 @section('contentheader_title')
 <span style="background-image: linear-gradient(40deg, #FF856D, #CC0000); padding-right:30vw; position:relative; overflow:hidden;">
-    {{ trans('adminlte_lang::LangTratamiento.pretratnew') }}
+    {{ __('adminlte::LangTratamiento.pretratnew') }}
   <div style="background-color:#ecf0f5; position:absolute; height:145%; width:40vw; transform:rotate(30deg); right:-20vw; top:-45%;"></div>
 </span>
 @endsection
@@ -15,9 +15,9 @@
             <!-- Default box -->
             <div class="box">
                 <div class="box-header with-border">
-                    <h3 class="box-title">{{ trans('adminlte_lang::LangTratamiento.pretratMenu') }}</h3>
+                    <h3 class="box-title">{{ __('adminlte::LangTratamiento.pretratMenu') }}</h3>
                     <div class="box-tools pull-right">
-                     <button onclick="AgregarPreTrat()" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> {{ trans('adminlte_lang::LangTratamiento.pretratadd') }}</button>
+                     <button onclick="AgregarPreTrat()" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> {{ __('adminlte::LangTratamiento.pretratadd') }}</button>
                     </div>
                 </div>
                 <div class="row">
@@ -34,26 +34,26 @@
                                     <div class="col-md-6" id="pretratname0">
                                         {{-- input oculto para llevar el control y conteo de los ids --}}
                                         <input id="ID_Propo0" class="form-control" type="hidden" name="ID_PreTrat[]">
-                                        <label for="input[]">{{ trans('adminlte_lang::LangTratamiento.pretratname') }} </label>
+                                        <label for="input[]">{{ __('adminlte::LangTratamiento.pretratname') }} </label>
                                         <div class="input-group">
                                             <input maxlength="60" id="input[]" class="form-control" type="text" name="PreTratName[]" required>
-                                            <a onclick="EliminarPreTrat(0)" class="input-group-addon" style=" color: red;" data-toggle="popover" title="{{ trans('adminlte_lang::LangTratamiento.pretratname') }}" data-content="{{ trans('adminlte_lang::LangTratamiento.popoverdescript1') }}"><i class="fas fa-backspace"></i></a>
+                                            <a onclick="EliminarPreTrat(0)" class="input-group-addon" style=" color: red;" data-toggle="popover" title="{{ __('adminlte::LangTratamiento.pretratname') }}" data-content="{{ __('adminlte::LangTratamiento.popoverdescript1') }}"><i class="fas fa-backspace"></i></a>
                                         </div><br>      
                                     </div>
 
                                     <div class="col-md-6" id="pretratdescription0">
-                                        <label for="inputdescript[]">{{ trans('adminlte_lang::LangTratamiento.pretratdescript') }} </label>
+                                        <label for="inputdescript[]">{{ __('adminlte::LangTratamiento.pretratdescript') }} </label>
                                         <div class="input-group">
                                             <input maxlength="250" id="inputdescript[]" class="form-control" type="text" name="PreTratDescription[]">
-                                            <a class="input-group-addon" data-toggle="popover" title="{{ trans('adminlte_lang::LangTratamiento.popovertittle2') }}" data-content="<p style='width: 50%'>{{ trans('adminlte_lang::LangTratamiento.popoverdescript2') }}</p>"><i class="fas fa-info-circle"></i></a>
+                                            <a class="input-group-addon" data-toggle="popover" title="{{ __('adminlte::LangTratamiento.popovertittle2') }}" data-content="<p style='width: 50%'>{{ __('adminlte::LangTratamiento.popoverdescript2') }}</p>"><i class="fas fa-info-circle"></i></a>
                                         </div>
                                     </div>
                                 </div>
                                 <!-- /.box-body -->
                                 <div class="box-footer">
-                                    <button type="submit" class="btn btn-success" style="margin-left: 1.5rem;"><i class="fas fa-check"></i> {{ trans('adminlte_lang::LangTratamiento.pretratcreate') }}</button>
+                                    <button type="submit" class="btn btn-success" style="margin-left: 1.5rem;"><i class="fas fa-check"></i> {{ __('adminlte::LangTratamiento.pretratcreate') }}</button>
 
-                                    <a class="btn btn-default btn-close pull-right" style="margin-right: 1.7rem;" href="{{ route('tratamiento.index') }}"><i class="fas fa-backspace" color="red"></i> {{ trans('adminlte_lang::LangTratamiento.cancel') }}</a>
+                                    <a class="btn btn-default btn-close pull-right" style="margin-right: 1.7rem;" href="{{ route('tratamiento.index') }}"><i class="fas fa-backspace" color="red"></i> {{ __('adminlte::LangTratamiento.cancel') }}</a>
                                 </div>
                             </form>
                         </div>

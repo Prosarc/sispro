@@ -27,11 +27,11 @@ Categorías
 						@endcomponent
 						<h3 class="box-title">Edicion de Categoría</h3>
 						@if($Subcategorias == 0)
-							<a method='get' href='#' data-toggle='modal' data-target='#myModal{{$categoria->ID_CategoryRP}}' class='btn btn-danger pull-right'><i class="fas fa-trash-alt"></i><b> {{ trans('adminlte_lang::message.delete') }}</b></a>
+							<a method='get' href='#' data-toggle='modal' data-target='#myModal{{$categoria->ID_CategoryRP}}' class='btn btn-danger pull-right'><i class="fas fa-trash-alt"></i><b> {{ __('adminlte::message.delete') }}</b></a>
 						@else
-							<a data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>Eliminar Categoria</b>" data-content="Para eliminar esta categoria primero elimine todas las <b>SubCategorias</b> relacionadas... " class='btn btn-default pull-right'><i class="fas fa-trash-alt"></i><b> {{ trans('adminlte_lang::message.delete') }}</b></a>
+							<a data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>Eliminar Categoria</b>" data-content="Para eliminar esta categoria primero elimine todas las <b>SubCategorias</b> relacionadas... " class='btn btn-default pull-right'><i class="fas fa-trash-alt"></i><b> {{ __('adminlte::message.delete') }}</b></a>
 						@endif
-						{{-- <a method='get' href='#' data-toggle='modal' data-target='#myModal{{$categoria->ID_CategoryRP}}' class='btn btn-danger pull-right'><i class="fas fa-trash-alt"></i><b> {{ trans('adminlte_lang::message.delete') }}</b></a> --}}
+						{{-- <a method='get' href='#' data-toggle='modal' data-target='#myModal{{$categoria->ID_CategoryRP}}' class='btn btn-danger pull-right'><i class="fas fa-trash-alt"></i><b> {{ __('adminlte::message.delete') }}</b></a> --}}
 						{{-- <a style="margin-right: 1em;" onclick="addSubcategory()" id="addsubcategorybutton" class="btn btn-primary pull-right"><i class='fas fa-plus fa-lg'></i> Añadir Subcategoria</a> --}}
 						<form action='/categorypublic/{{$categoria->ID_CategoryRP}}' method='POST'>
 							@method('DELETE')
@@ -54,7 +54,7 @@ Categorías
 							@endif
 							<div class="box-body">
 								<div class="form-group col-xs-12 col-md-12 has-feedback">
-									<label for="CategoryRpName" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.CategoryName') }}</b>" data-content="{{ trans('adminlte_lang::message.CategoryNameInfo') }}"><i style="font-size: 1.7rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{ trans('adminlte_lang::message.CategoryName') }}</label>
+									<label for="CategoryRpName" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.CategoryName') }}</b>" data-content="{{ __('adminlte::message.CategoryNameInfo') }}"><i style="font-size: 1.7rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{ __('adminlte::message.CategoryName') }}</label>
 									<small class="help-block with-errors">*</small>
 										<input data-minlength="5" required="true" name="CategoryRpName" autofocus="true" type="text" class="form-control inputText" id="CategoryRpName" value="{{$categoria->CategoryRpName}}">
 									{{-- <div class="input-group">
@@ -67,7 +67,7 @@ Categorías
 								<div id="subcategorias">
 									@foreach($categoria->SubCategoryRP as $SubCategory)
 									<div class="form-group col-xs-12 col-md-6">
-										<label for="SubCategoryRpName" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>Nombre de la Subcategoria</b>" data-content="{{ trans('adminlte_lang::message.SubCategoryNameInfo') }}"><i style="font-size: 1.7rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>Nombre de la Subcategoria</label>
+										<label for="SubCategoryRpName" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>Nombre de la Subcategoria</b>" data-content="{{ __('adminlte::message.SubCategoryNameInfo') }}"><i style="font-size: 1.7rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>Nombre de la Subcategoria</label>
 										<small class="help-block with-errors">*</small>
 										<input disabled data-minlength="5" required="true" name="SubCategoryRp[]name" autofocus="true" type="text" class="form-control inputText" id="SubCategoryRpName" value="{{$SubCategory->SubCategoryRpName}}">
 										<input hidden name="ID_SubCategoryRP[]" value="{{$SubCategory->ID_SubCategoryRP}}">
@@ -77,7 +77,7 @@ Categorías
 							</div>
 							<div class="box box-info">
 								<div class="box-footer">
-									<button type="submit" class="btn btn-success pull-right">{{ trans('adminlte_lang::message.update') }}</button>
+									<button type="submit" class="btn btn-success pull-right">{{ __('adminlte::message.update') }}</button>
 								</div>
 							</div>
 						</form>
@@ -98,7 +98,7 @@ Categorías
 	}
 	function addSubcategory(){
 		validarprevent();
-		$('#subcategorias').append('<div id ="minusSubCategoryButton'+contador+'Container" class="form-group col-xs-12 col-md-6"><label for="SubCategoryRpName" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.SubCategoryName') }}</b>" data-content="{{ trans('adminlte_lang::message.SubCategoryNameInfo') }}"><i style="font-size: 1.7rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{ trans('adminlte_lang::message.SubCategoryName') }}</label><a onclick="EliminarSubcategory('+contador+')" id="minusSubCategoryButton'+contador+'"><i style="color:red; margin: 0; padding: 0; margin-top: 0.25em; cursor: pointer;" class="fa fa-trash-alt pull-right"></i></a><small class="help-block with-errors pull-right">*</small><input data-minlength="5" required="true" name="SubCategoryRpName[]" autofocus="true" type="text" class="form-control inputText" id="SubCategoryRpName'+contador+'"></div>');
+		$('#subcategorias').append('<div id ="minusSubCategoryButton'+contador+'Container" class="form-group col-xs-12 col-md-6"><label for="SubCategoryRpName" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.SubCategoryName') }}</b>" data-content="{{ __('adminlte::message.SubCategoryNameInfo') }}"><i style="font-size: 1.7rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{ __('adminlte::message.SubCategoryName') }}</label><a onclick="EliminarSubcategory('+contador+')" id="minusSubCategoryButton'+contador+'"><i style="color:red; margin: 0; padding: 0; margin-top: 0.25em; cursor: pointer;" class="fa fa-trash-alt pull-right"></i></a><small class="help-block with-errors pull-right">*</small><input data-minlength="5" required="true" name="SubCategoryRpName[]" autofocus="true" type="text" class="form-control inputText" id="SubCategoryRpName'+contador+'"></div>');
 		$("#categoryRPForm").validator('update');
 		contador = parseInt(contador) + 1;
 		popover();

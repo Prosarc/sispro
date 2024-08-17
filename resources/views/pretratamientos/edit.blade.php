@@ -1,10 +1,10 @@
 @extends('layouts.app')
 @section('htmlheader_title')
-{{ trans('adminlte_lang::LangTratamiento.pretratupdate') }}
+{{ __('adminlte::LangTratamiento.pretratupdate') }}
 @endsection
 @section('contentheader_title')
 <span style="background-image: linear-gradient(40deg, #FF856D, #CC0000); padding-right:30vw; position:relative; overflow:hidden;">
-    {{ trans('adminlte_lang::LangTratamiento.pretratMenu') }}
+    {{ __('adminlte::LangTratamiento.pretratMenu') }}
   <div style="background-color:#ecf0f5; position:absolute; height:145%; width:40vw; transform:rotate(30deg); right:-20vw; top:-45%;"></div>
 </span>
 @endsection
@@ -15,7 +15,7 @@
       <!-- Default box -->
       <div class="box">
         <div class="box-header with-border">
-          <h3 class="box-title">{{ trans('adminlte_lang::LangTratamiento.pretratupdate') }}</h3>
+          <h3 class="box-title">{{ __('adminlte::LangTratamiento.pretratupdate') }}</h3>
           @component('layouts.partials.modal')
               @slot('slug')
                 {{$pretratamiento->ID_PreTrat}}
@@ -26,7 +26,7 @@
             @endcomponent
             @if($pretratamiento->PreTratDelete == 0)
               @if(in_array(Auth::user()->UsRol, Permisos::JefeOperaciones) || in_array(Auth::user()->UsRol2, Permisos::JefeOperaciones))
-              <a method='get' href='#' data-toggle='modal' data-target='#myModal{{$pretratamiento->ID_PreTrat}}' class='btn btn-danger pull-right'><i class="fas fa-trash-alt"></i><b> {{ trans('adminlte_lang::message.delete') }}</b></a>
+              <a method='get' href='#' data-toggle='modal' data-target='#myModal{{$pretratamiento->ID_PreTrat}}' class='btn btn-danger pull-right'><i class="fas fa-trash-alt"></i><b> {{ __('adminlte::message.delete') }}</b></a>
               <form action='/pretratamiento/{{$pretratamiento->ID_PreTrat}}' method='POST'  class="pull-right">
                 @method('DELETE')
                 @csrf
@@ -39,7 +39,7 @@
                   @method('DELETE')
                   @csrf
                   <button type="submit" class='btn btn-success btn-block pull-right'>
-                    <i class="fas fa-plus-square"></i><b> {{ trans('adminlte_lang::message.add') }}</b>
+                    <i class="fas fa-plus-square"></i><b> {{ __('adminlte::message.add') }}</b>
                   </button>
                 </form>
               @endif
@@ -62,24 +62,24 @@
                         <hr class="col-md-10 col-md-offset-1 align-self-center" id="pretratsparator0" />
                         <input id="ID_Propo0" class="form-control" type="hidden" name="ID_PreTrat" value="{{$pretratamiento->ID_PreTrat}}">
                         <div class="col-md-6" id="pretratname0">
-                          <label for="input[]">{{ trans('adminlte_lang::LangTratamiento.pretratname') }} </label>
+                          <label for="input[]">{{ __('adminlte::LangTratamiento.pretratname') }} </label>
                           <div class="input-group">
                             <input maxlength="60" id="input[]" class="form-control" type="text" name="PreTratName" value="{{$pretratamiento->PreTratName}}" required>
-                            <a data-placement="auto" data-trigger="hover" data-html="true" onclick="EliminarPreTrat(0)" class="input-group-addon" style=" color: red;" data-toggle="popover" title="{{ trans('adminlte_lang::LangTratamiento.pretratname') }}" data-content="{{ trans('adminlte_lang::LangTratamiento.popoverdescript1') }}"><i class="fas fa-backspace"></i></a>
+                            <a data-placement="auto" data-trigger="hover" data-html="true" onclick="EliminarPreTrat(0)" class="input-group-addon" style=" color: red;" data-toggle="popover" title="{{ __('adminlte::LangTratamiento.pretratname') }}" data-content="{{ __('adminlte::LangTratamiento.popoverdescript1') }}"><i class="fas fa-backspace"></i></a>
                           </div><br>
                         </div>
                         <div class="col-md-6" id="pretratdescription0">
-                          <label for="inputdescript[]">{{ trans('adminlte_lang::LangTratamiento.pretratdescript') }} </label>
+                          <label for="inputdescript[]">{{ __('adminlte::LangTratamiento.pretratdescript') }} </label>
                           <div class="input-group">
                             <input maxlength="250" id="inputdescript[]" class="form-control" type="text" name="PreTratDescription" value="{{$pretratamiento->PreTratDescription}}">
-                            <a data-placement="auto" data-trigger="hover" data-html="true" class="input-group-addon" data-toggle="popover" title="{{ trans('adminlte_lang::LangTratamiento.popovertittle2') }}" data-content="<p style='width: 50%'>{{ trans('adminlte_lang::LangTratamiento.popoverdescript2') }}</p>"><i class="fas fa-info-circle"></i></a>
+                            <a data-placement="auto" data-trigger="hover" data-html="true" class="input-group-addon" data-toggle="popover" title="{{ __('adminlte::LangTratamiento.popovertittle2') }}" data-content="<p style='width: 50%'>{{ __('adminlte::LangTratamiento.popoverdescript2') }}</p>"><i class="fas fa-info-circle"></i></a>
                           </div>
                         </div>
                       </div>
                 <!-- /.box-body -->
                 <div class="box-footer">
-                  <button type="submit" class="btn btn-success" style="margin-left: 2rem;"><i class="fas fa-check"></i> {{ trans('adminlte_lang::message.update') }}</button>
-                  <a class="btn btn-default btn-close pull-right" style="margin-right: 2rem;" href="{{ route('tratamiento.index') }}"><i class="fas fa-backspace" color="red"></i> {{ trans('adminlte_lang::LangTratamiento.cancel') }}</a>
+                  <button type="submit" class="btn btn-success" style="margin-left: 2rem;"><i class="fas fa-check"></i> {{ __('adminlte::message.update') }}</button>
+                  <a class="btn btn-default btn-close pull-right" style="margin-right: 2rem;" href="{{ route('tratamiento.index') }}"><i class="fas fa-backspace" color="red"></i> {{ __('adminlte::LangTratamiento.cancel') }}</a>
                 </div>
               </form>
             </div>

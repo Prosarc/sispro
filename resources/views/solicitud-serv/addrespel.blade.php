@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('htmlheader_title')
-{{ trans('adminlte_lang::message.solsertitle') }}
+{{ __('adminlte::message.solsertitle') }}
 @endsection
 @section('contentheader_title')
 <span style="background-image: linear-gradient(40deg, #fbc2eb, #aa66cc); padding-right:30vw; position:relative; overflow:hidden;">
@@ -15,7 +15,7 @@
 			<div class="box">
 				<div class="box-header with-border">
 					<h3 class="box-title">Añadir residuos adicionales</h3>
-					<a href="{{ route('solicitud-serv.Createrespel')}}" class="btn btn-primary pull-right"><i class="fas fa-plus-square"></i> <b>{{ trans('adminlte_lang::message.respelscreate') }}</b></a>
+					<a href="{{ route('solicitud-serv.Createrespel')}}" class="btn btn-primary pull-right"><i class="fas fa-plus-square"></i> <b>{{ __('adminlte::message.respelscreate') }}</b></a>
 				</div>
 				<div class="box box-info">
 					<form role="form" id="EditSolSer" action="/solicitud-servicio/{{$Solicitud->SolSerSlug}}/update-respel" method="POST" enctype="multipart/form-data" data-toggle="validator">
@@ -36,13 +36,13 @@
 
 							</div>
 							<div id="AddGenerador" class="col-md-16">
-								<a onclick="AgregarGenerador()" id="Agregar" class="btn btn-primary" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b> {{ trans('adminlte_lang::message.solseraddgener') }}</b>" data-content="{{ trans('adminlte_lang::message.solseraddgenerdescrit2') }}"><i class="fas fa-plus-circle"></i> {{ trans('adminlte_lang::message.solseraddgener') }}</a>
+								<a onclick="AgregarGenerador()" id="Agregar" class="btn btn-primary" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b> {{ __('adminlte::message.solseraddgener') }}</b>" data-content="{{ __('adminlte::message.solseraddgenerdescrit2') }}"><i class="fas fa-plus-circle"></i> {{ __('adminlte::message.solseraddgener') }}</a>
 							</div>
 						</div>
 						<div id="ModalSupport"></div>
 						<div class="box box-info">
 							<div class="box-footer">
-								<a href="#" onclick="$('#Submit').hasClass('disabled') ? $('#Submit').click() : submitverify()" id="Submit2" class="btn btn-success pull-right">{{ trans('adminlte_lang::message.update') }}</a>
+								<a href="#" onclick="$('#Submit').hasClass('disabled') ? $('#Submit').click() : submitverify()" id="Submit2" class="btn btn-success pull-right">{{ __('adminlte::message.update') }}</a>
 								<button type="submit" id="Submit" style="display: none;"></button>
 							</div>
 						</div>
@@ -107,7 +107,7 @@ function submitverify(){
 							</div>
 							<div class="modal-header">
 								<div class="form-group col-md-12">
-									<label style="color: black; text-align: left;" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.solsersupportpay') }}</b>" data-content="{{ trans('adminlte_lang::message.solsersupportpaydescript') }}"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{trans('adminlte_lang::message.solsersupportpay')}}</label>
+									<label style="color: black; text-align: left;" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.solsersupportpay') }}</b>" data-content="{{ __('adminlte::message.solsersupportpaydescript') }}"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{__('adminlte::message.solsersupportpay')}}</label>
 									<small class="help-block with-errors"></small>
 									<input name="SupportPay" type="file" data-filesize="5120" class="form-control" data-accept="pdf" accept=".pdf">
 								</div>

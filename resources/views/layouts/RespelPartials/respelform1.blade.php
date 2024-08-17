@@ -4,61 +4,61 @@
 			<hr>
 		</div> --}}
 		<div class="col-md-6 form-group has-feedback">
-			<label>{{ trans('adminlte_lang::message.name') }}</label>
+			<label>{{ __('adminlte::message.name') }}</label>
 			<small class="help-block with-errors">*</small>
 			<input maxlength="128" name="RespelName[]" type="text" class="form-control" placeholder="Nombre del Residuo" required value="{{ old('RespelName.0') }}">
 		</div>
 		<div class="col-md-6 form-group has-feedback">
-			<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 500}' data-delay='{"show": 500}' title="{{ trans('adminlte_lang::LangRespel.respeldescriptittle') }}" data-content="{{ trans('adminlte_lang::LangRespel.respeldescriptinfo') }}"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{ trans('adminlte_lang::LangRespel.descripcion') }}</label>
+			<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 500}' data-delay='{"show": 500}' title="{{ __('adminlte::LangRespel.respeldescriptittle') }}" data-content="{{ __('adminlte::LangRespel.respeldescriptinfo') }}"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{ __('adminlte::LangRespel.descripcion') }}</label>
 			<small class="help-block with-errors">*</small>
 			<input required maxlength="512" name="RespelDescrip[]" type="text" class="form-control" placeholder="Descripcion del Residuo" value="{{ old('RespelDescrip.0') }}">
 		</div>
 		<div class="col-md-6 form-group has-feedback">
-			<label>{{ trans('adminlte_lang::LangRespel.estadofisico') }}</label><small class="help-block with-errors">*</small>
+			<label>{{ __('adminlte::LangRespel.estadofisico') }}</label><small class="help-block with-errors">*</small>
 			<select name="RespelEstado[]" class="form-control" required>
-				<option value="">{{ trans('adminlte_lang::LangRespel.select') }}</option>
-				<option value="{{ trans('adminlte_lang::LangRespel.estadofisico1') }}">{{ trans('adminlte_lang::LangRespel.estadofisico1') }}</option>
-				<option value="{{ trans('adminlte_lang::LangRespel.estadofisico2') }}">{{ trans('adminlte_lang::LangRespel.estadofisico2') }}</option>
-				<option value="{{ trans('adminlte_lang::LangRespel.estadofisico4') }}">{{ trans('adminlte_lang::LangRespel.estadofisico4') }} (lodos y similares)</option>
-				<option value="{{ trans('adminlte_lang::LangRespel.estadofisico3') }}">{{ trans('adminlte_lang::LangRespel.estadofisico3') }}</option>
+				<option value="">{{ __('adminlte::LangRespel.select') }}</option>
+				<option value="{{ __('adminlte::LangRespel.estadofisico1') }}">{{ __('adminlte::LangRespel.estadofisico1') }}</option>
+				<option value="{{ __('adminlte::LangRespel.estadofisico2') }}">{{ __('adminlte::LangRespel.estadofisico2') }}</option>
+				<option value="{{ __('adminlte::LangRespel.estadofisico4') }}">{{ __('adminlte::LangRespel.estadofisico4') }} (lodos y similares)</option>
+				<option value="{{ __('adminlte::LangRespel.estadofisico3') }}">{{ __('adminlte::LangRespel.estadofisico3') }}</option>
 			</select>
 		</div>
 		<div class="col-md-6 form-group has-feedback">
-			<label>{{ trans('adminlte_lang::LangRespel.danger') }}</label>
+			<label>{{ __('adminlte::LangRespel.danger') }}</label>
 			<small class="help-block with-errors">*</small>
 			<select id="selectDanger0" name="RespelIgrosidad[]" class="form-control" required>
-				<option value="">{{ trans('adminlte_lang::LangRespel.select')}}</option>
+				<option value="">{{ __('adminlte::LangRespel.select')}}</option>
 
-				<option value ="{{ trans('adminlte_lang::LangRespel.danger1')}}" onclick="setNoDanger(0)">
-					{{ trans('adminlte_lang::LangRespel.danger1') }}
+				<option value ="{{ __('adminlte::LangRespel.danger1')}}" onclick="setNoDanger(0)">
+					{{ __('adminlte::LangRespel.danger1') }}
 				</option>
 
-				<option value = "{{ trans('adminlte_lang::LangRespel.danger2')}}" onclick="setDanger(0)">
-					{{ trans('adminlte_lang::LangRespel.danger2') }}
+				<option value = "{{ __('adminlte::LangRespel.danger2')}}" onclick="setDanger(0)">
+					{{ __('adminlte::LangRespel.danger2') }}
 				</option>
 
-				<option value = "{{ trans('adminlte_lang::LangRespel.danger3')}}" onclick="setDanger(0)">
-					{{ trans('adminlte_lang::LangRespel.danger3') }}
+				<option value = "{{ __('adminlte::LangRespel.danger3')}}" onclick="setDanger(0)">
+					{{ __('adminlte::LangRespel.danger3') }}
 				</option>
 
-				<option value = "{{ trans('adminlte_lang::LangRespel.danger4')}}" onclick="setDanger(0)">
-					{{ trans('adminlte_lang::LangRespel.danger4') }}
+				<option value = "{{ __('adminlte::LangRespel.danger4')}}" onclick="setDanger(0)">
+					{{ __('adminlte::LangRespel.danger4') }}
 				</option>
 
-				<option value = "{{ trans('adminlte_lang::LangRespel.danger5')}}" onclick="setDanger(0)">
-					{{ trans('adminlte_lang::LangRespel.danger5') }}
+				<option value = "{{ __('adminlte::LangRespel.danger5')}}" onclick="setDanger(0)">
+					{{ __('adminlte::LangRespel.danger5') }}
 				</option>
 
-				<option value = "{{ trans('adminlte_lang::LangRespel.danger6')}}" onclick="setDanger(0)">
-					{{ trans('adminlte_lang::LangRespel.danger6') }}
+				<option value = "{{ __('adminlte::LangRespel.danger6')}}" onclick="setDanger(0)">
+					{{ __('adminlte::LangRespel.danger6') }}
 				</option>
 
-				<option value = "{{ trans('adminlte_lang::LangRespel.danger7')}}" onclick="setDanger(0)">
-					{{ trans('adminlte_lang::LangRespel.danger7') }}
+				<option value = "{{ __('adminlte::LangRespel.danger7')}}" onclick="setDanger(0)">
+					{{ __('adminlte::LangRespel.danger7') }}
 				</option>
 
-				<option value = "{{ trans('adminlte_lang::LangRespel.danger8')}}" onclick="setDanger(0)">
-					{{ trans('adminlte_lang::LangRespel.danger8') }}
+				<option value = "{{ __('adminlte::LangRespel.danger8')}}" onclick="setDanger(0)">
+					{{ __('adminlte::LangRespel.danger8') }}
 				</option>
 
 			</select>
@@ -71,30 +71,30 @@
 		<div class="col-md-6 form-group has-feedback" id="Clasif0" hidden="">
 		</div>
 		<div class="col-md-6 form-group has-feedback">
-			<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 500}' title="<b>{{ trans('adminlte_lang::LangRespel.hojadeseguridad') }}</b>" data-content="{{ trans('adminlte_lang::LangRespel.hojapopoverinfo') }}"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{ trans('adminlte_lang::LangRespel.hojadeseguridad') }}</label>
+			<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 500}' title="<b>{{ __('adminlte::LangRespel.hojadeseguridad') }}</b>" data-content="{{ __('adminlte::LangRespel.hojapopoverinfo') }}"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{ __('adminlte::LangRespel.hojadeseguridad') }}</label>
 			<small class="help-block with-errors">*</small>
 			<input id="hoja0" name="RespelHojaSeguridad[]" type="file" data-validate="true" required data-filesize="10240" class="form-control" data-accept="pdf" accept=".pdf">
 		</div>
 		<div class="col-md-6 form-group has-feedback">
-			<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 500}' title="<b>{{ trans('adminlte_lang::LangRespel.tarjetaemergencia') }}</b>" data-content="{{ trans('adminlte_lang::LangRespel.tarjetapopoverinfo') }}"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{ trans('adminlte_lang::LangRespel.tarjetaemergencia') }}</label>
+			<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 500}' title="<b>{{ __('adminlte::LangRespel.tarjetaemergencia') }}</b>" data-content="{{ __('adminlte::LangRespel.tarjetapopoverinfo') }}"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{ __('adminlte::LangRespel.tarjetaemergencia') }}</label>
 			<small class="help-block with-errors">*</small>
 			<input name="RespelTarj[]" type="file" data-filesize="5120" class="form-control" data-accept="pdf" accept=".pdf" required>
 		</div>
 		<div class="col-md-6 form-group has-feedback">
-			<label style="margin-bottom: 3px;" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 500}' title="<b>{{ trans('adminlte_lang::LangRespel.foto') }}</b>" data-content="{{ trans('adminlte_lang::LangRespel.fotopopoverinfo') }}"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{ trans('adminlte_lang::LangRespel.fotolabel') }}</label>
+			<label style="margin-bottom: 3px;" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 500}' title="<b>{{ __('adminlte::LangRespel.foto') }}</b>" data-content="{{ __('adminlte::LangRespel.fotopopoverinfo') }}"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{ __('adminlte::LangRespel.fotolabel') }}</label>
 			<small class="help-block with-errors"></small>
 			<input id="foto0" name="RespelFoto[]" type="file" class="form-control" data-accept="jpg, jpeg, png" accept=".jpg,.jpeg,.png" data-filesize="5120" value="{{ old('RespelFoto.0') }}">
 			<span class="form-control-feedback fa fa-camera" style="margin-right: 1.8em;" aria-hidden="true"><span>
 		</div>
 		<div class="col-md-6 form-group has-feedback">
-			<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 500}' title="{{ trans('adminlte_lang::LangRespel.resolucion1tittle') }}" data-content="{{ trans('adminlte_lang::LangRespel.resolucion1descrip') }}">{{ trans('adminlte_lang::LangRespel.controlx') }}
-				<a href="{{ trans('adminlte_lang::LangRespel.resolucion1link') }}" target="_blank">{{ trans('adminlte_lang::LangRespel.resolucion1') }}<i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i></a>
+			<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 500}' title="{{ __('adminlte::LangRespel.resolucion1tittle') }}" data-content="{{ __('adminlte::LangRespel.resolucion1descrip') }}">{{ __('adminlte::LangRespel.controlx') }}
+				<a href="{{ __('adminlte::LangRespel.resolucion1link') }}" target="_blank">{{ __('adminlte::LangRespel.resolucion1') }}<i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i></a>
 			</label>
 			<small class="help-block with-errors">*</small>
 			<select id="selectControl0" name="SustanciaControlada[]" class="form-control" required>
-				<option value="">{{ trans('adminlte_lang::LangRespel.select') }}</option>
-				<option value="0" onclick="setNoControlada(0)">{{ trans('adminlte_lang::LangRespel.no') }}</option>
-				<option value="1" onclick="setControlada(0)">{{ trans('adminlte_lang::LangRespel.yes') }}</option>
+				<option value="">{{ __('adminlte::LangRespel.select') }}</option>
+				<option value="0" onclick="setNoControlada(0)">{{ __('adminlte::LangRespel.no') }}</option>
+				<option value="1" onclick="setControlada(0)">{{ __('adminlte::LangRespel.yes') }}</option>
 			</select>
 		</div>
 		<div class="col-md-6 form-group has-feedback" id="sustanciaFormtype0" style="text-align: center;" hidden="">
@@ -109,14 +109,14 @@
 
 
 		<div class="col-md-6 form-group has-feedback">
-			<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 500}' title="{{ trans('adminlte_lang::LangRespel.AceiteUsado') }}">
-				{{ trans('adminlte_lang::LangRespel.AceiteUsado') }}
+			<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 500}' title="{{ __('adminlte::LangRespel.AceiteUsado') }}">
+				{{ __('adminlte::LangRespel.AceiteUsado') }}
 			</label>
 			<small class="help-block with-errors">*</small>
 			<select id="ControlSelect0" name="AceiteUsado[]" class="form-control" required> 
-				<option value="">{{ trans('adminlte_lang::LangRespel.select') }}</option>
-				<option value="0" onclick="setNoAceiteUsado(0)">{{ trans('adminlte_lang::LangRespel.no') }}</option>
-				<option value="1" onclick="setAceiteUsado(0)">{{ trans('adminlte_lang::LangRespel.yes') }}</option>
+				<option value="">{{ __('adminlte::LangRespel.select') }}</option>
+				<option value="0" onclick="setNoAceiteUsado(0)">{{ __('adminlte::LangRespel.no') }}</option>
+				<option value="1" onclick="setAceiteUsado(0)">{{ __('adminlte::LangRespel.yes') }}</option>
 			</select>
 		</div>
 		<div class="col-md-6 form-group has-feedback">
@@ -132,13 +132,13 @@
 			</select>
 		</div>
 		<div class="col-md-6 form-group has-feedback">
-			<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 500}' title="<b>{{ trans('adminlte_lang::LangRespel.aceptaciontittlepopover') }}<b>" data-content="{{ trans('adminlte_lang::LangRespel.aceptacioninfopopover') }}">
-				<i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{ trans('adminlte_lang::LangRespel.aceptacionlabel') }}
+			<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 500}' title="<b>{{ __('adminlte::LangRespel.aceptaciontittlepopover') }}<b>" data-content="{{ __('adminlte::LangRespel.aceptacioninfopopover') }}">
+				<i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{ __('adminlte::LangRespel.aceptacionlabel') }}
 			</label>
 			<small class="help-block with-errors">*</small>
 			<select id="selectDdeclaracion0" name="RespelDeclaracion[]" class="form-control" required>
-				<option value="" selected>{{ trans('adminlte_lang::LangRespel.select')}}</option>
-				<option value="1">{{ trans('adminlte_lang::LangRespel.yes') }}</option>
+				<option value="" selected>{{ __('adminlte::LangRespel.select')}}</option>
+				<option value="1">{{ __('adminlte::LangRespel.yes') }}</option>
 			</select>
 		</div>
 		<div id="NodangerNoclasf0">

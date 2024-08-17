@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('htmlheader_title')
-{{ trans('adminlte_lang::message.solsertitle') }}
+{{ __('adminlte::message.solsertitle') }}
 @endsection
 @section('contentheader_title')
 <span
@@ -17,9 +17,9 @@
         <div class="col-md-16 col-md-offset-0">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">{{ trans('adminlte_lang::message.solsertitleindex') }}</h3>
+                    <h3 class="box-title">{{ __('adminlte::message.solsertitleindex') }}</h3>
                     @if(in_array(Auth::user()->UsRol, Permisos::EXPRESS) || in_array(Auth::user()->UsRol, Permisos::EXPRESS))
-                        <a href="serviciosexpress/create" class="btn btn-primary pull-right">{{ trans('adminlte_lang::message.create') }}</a>
+                        <a href="serviciosexpress/create" class="btn btn-primary pull-right">{{ __('adminlte::message.create') }}</a>
                     @endif
                 </div>
                 <div class="box box-info">
@@ -29,16 +29,16 @@
                         <table id="SolicitudservicioTable" class="table table-compact table-bordered table-striped d-none">
                             <thead>
                                 <tr>
-                                    <th>{{trans('adminlte_lang::message.solsershowdateRPDA')}}</th>
+                                    <th>{{__('adminlte::message.solsershowdateRPDA')}}</th>
                                     <th>N°</th>
                                     <th nowrap>Status</th>
-                                    <th>{{trans('adminlte_lang::message.clientcliente')}}</th>
+                                    <th>{{__('adminlte::message.clientcliente')}}</th>
                                     <th>Contacto</th>
                                     <th>Dirección</th>
                                     {{-- <th>Cantidad</th> --}}
-                                    <th>{{trans('adminlte_lang::message.seemore')}}</th>
+                                    <th>{{__('adminlte::message.seemore')}}</th>
                                     @if(in_array(Auth::user()->UsRol, Permisos::SolSerCertifi) || in_array(Auth::user()->UsRol2, Permisos::SolSerCertifi))
-                                        <th>{{trans('adminlte_lang::message.solserstatuscertifi')}}</th>
+                                        <th>{{__('adminlte::message.solserstatuscertifi')}}</th>
                                     @endif
                                     @if(in_array(Auth::user()->UsRol, Permisos::COMERCIALES) || in_array(Auth::user()->UsRol2, Permisos::COMERCIALES))
                                         <th>{{'Facturar'}}</th>
@@ -164,7 +164,7 @@
                                     {{-- <td>{{$Servicio->totalrerspel}} Kg</td> --}}
                                     <td style="text-align: center;"><a
                                             href='/serviciosexpress/{{$Servicio->SolSerSlug}}' class="btn btn-info"
-                                            title="{{ trans('adminlte_lang::message.seemoredetails')}}"><i
+                                            title="{{ __('adminlte::message.seemoredetails')}}"><i
                                                 class="fas fa-search"></i></a>
                                     </td>
                                     @if(in_array(Auth::user()->UsRol, Permisos::COMERCIALES) || in_array(Auth::user()->UsRol2, Permisos::COMERCIALES))
@@ -191,7 +191,7 @@
                                             style="text-align: center;"
                                             class="{{'classCertStatus'.$Servicio->SolSerSlug}} btn btn-{{$Servicio->SolSerStatus == 'Certificacion' ? 'default' : 'success'}}"><i
                                                 class="fas fa-certificate"></i>
-                                            {{trans('adminlte_lang::message.solserstatuscertifi')}}</button>
+                                            {{__('adminlte::message.solserstatuscertifi')}}</button>
                                     </td>
                                     @endif
                                 </tr>

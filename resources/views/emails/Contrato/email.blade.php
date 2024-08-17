@@ -11,6 +11,6 @@ Los siguientes contratos están apunto de ser vencidos.<br><br><br>
     @endforeach
 @endcomponent
 <br><br>
-@lang('Si desea ver más detalles diríjase a aplicación de SisPRO en el apartado de "Contratos".')
+{{ __('Si desea ver más detalles diríjase a aplicación de SisPRO en el apartado de "Contratos".')}}
 
 @endcomponent

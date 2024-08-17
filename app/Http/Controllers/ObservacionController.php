@@ -109,7 +109,7 @@ class ObservacionController extends Controller
                             $comercial->PersEmail
                         ];  
 
-        if (Auth::user()->UsRol !== trans('adminlte_lang::message.Cliente')) {
+        if (Auth::user()->UsRol !== __('adminlte::message.Cliente')) {
             array_push($recipient, $email->PersEmail);
         }
 
@@ -139,7 +139,7 @@ class ObservacionController extends Controller
         }
 
 
-        if (Auth::user()->UsRol === trans('adminlte_lang::message.Cliente')) {
+        if (Auth::user()->UsRol === __('adminlte::message.Cliente')) {
             Mail::to($recipient)->cc($copy)->send(new NewObservationClient($email, $Observacion));
         }else{
             Mail::to($recipient)->cc($copy)->send(new NewObservation($email, $Observacion));

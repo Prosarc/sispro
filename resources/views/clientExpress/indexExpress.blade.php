@@ -14,7 +14,7 @@ Clientes Express
         <div class="col-md-16 col-md-offset-0">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">{{ trans('adminlte_lang::message.clientindexboxtitle') }}</h3>
+                    <h3 class="box-title">{{ __('adminlte::message.clientindexboxtitle') }}</h3>
                 </div>
                 <div class="box box-info">
                     <div class="box-body">
@@ -22,13 +22,13 @@ Clientes Express
                             <thead>
                                 <tr>
                                     <th>Registro</th>
-                                    <th>{{ trans('adminlte_lang::message.clientNIT') }}</th>
-                                    <th>{{ trans('adminlte_lang::message.clirazonsoc') }}</th>
+                                    <th>{{ __('adminlte::message.clientNIT') }}</th>
+                                    <th>{{ __('adminlte::message.clirazonsoc') }}</th>
                                     <th>Dirección</th>
                                     @if(in_array(Auth::user()->UsRol, Permisos::TODOPROSARCMenosComercial))
                                     <th>Comercial Asignado</th>
                                     @endif
-                                    <th>{{ trans('adminlte_lang::message.seemore') }}</th>
+                                    <th>{{ __('adminlte::message.seemore') }}</th>
                                 </tr>
                             </thead>
                             <tbody onload="renderTable()" id="readyTable">
@@ -51,7 +51,7 @@ Clientes Express
                                     </td>
                                     @endif
                                     <td>
-                                        <a method='get' href='/clientexpress/{{$cliente->CliSlug}}' class='btn btn-info btn-block' title="{{ trans('adminlte_lang::message.seemoredetails')}}"><i class="fas fa-search"></i></a>
+                                        <a method='get' href='/clientexpress/{{$cliente->CliSlug}}' class='btn btn-info btn-block' title="{{ __('adminlte::message.seemoredetails')}}"><i class="fas fa-search"></i></a>
                                     </td>
                                 </tr>
                                 @endforeach
@@ -100,7 +100,7 @@ Clientes Express
 									</div>
 								</div>
 								<div class="modal-footer">
-									<button type="submit" class="btn btn-success pull-right">{{trans('adminlte_lang::message.save')}}</button>
+									<button type="submit" class="btn btn-success pull-right">{{__('adminlte::message.save')}}</button>
 								</div>
 							</div>
 						</div>

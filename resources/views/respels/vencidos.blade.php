@@ -1,8 +1,8 @@
 @extends('layouts.app')
-@section('htmlheader_title', trans('adminlte_lang::LangRespel.Respellist'))
+@section('htmlheader_title', __('adminlte::LangRespel.Respellist'))
 @section('contentheader_title')
 <span style="background-image: linear-gradient(40deg, #FF856D, #CC0000); padding-right:30vw; position:relative; overflow:hidden;">
-	{{ trans('adminlte_lang::LangRespel.respelmenu') }}
+	{{ __('adminlte::LangRespel.respelmenu') }}
   <div style="background-color:#ecf0f5; position:absolute; height:145%; width:40vw; transform:rotate(30deg); right:-20vw; top:-45%;"></div>
 </span>
 @endsection
@@ -48,7 +48,7 @@
 													</th>
 													<th>{{$requerimiento->tarifa->TarifaVencimiento}}</th>
 													<th>{{$requerimiento->respel->cotizacion->sede->clientes->CliName}}</th>
-													<th class="text-center"><a href="/respels/{{$requerimiento->respel->RespelSlug}}/edit" class="btn btn-warning">{{ trans('adminlte_lang::message.edit') }}</a>{{-- <button class="btn btn-warning">Editar</button> --}}</th>
+													<th class="text-center"><a href="/respels/{{$requerimiento->respel->RespelSlug}}/edit" class="btn btn-warning">{{ __('adminlte::message.edit') }}</a>{{-- <button class="btn btn-warning">Editar</button> --}}</th>
 												</tr>
 											@endforeach
 										@else
@@ -69,7 +69,7 @@
 															@endif
 														@endforeach
 													</th>
-													<th class="text-center"><a href="/respels/{{$requerimiento->respel->RespelSlug}}/edit" class="btn btn-warning">{{ trans('adminlte_lang::message.edit') }}</a>{{-- <button class="btn btn-warning">Editar</button> --}}</th>
+													<th class="text-center"><a href="/respels/{{$requerimiento->respel->RespelSlug}}/edit" class="btn btn-warning">{{ __('adminlte::message.edit') }}</a>{{-- <button class="btn btn-warning">Editar</button> --}}</th>
 												</tr>
 											@endforeach
 										@endif

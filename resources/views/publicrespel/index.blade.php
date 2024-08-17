@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('htmlheader_title', trans('adminlte_lang::LangRespel.Respellist'))
+@section('htmlheader_title', __('adminlte::LangRespel.Respellist'))
 @section('contentheader_title')
 <span style="background-image: linear-gradient(40deg, #d4fc79, #00C851); padding-right:30vw; position:relative; overflow:hidden;">
 	Residuos Comunes
@@ -13,13 +13,13 @@
 			<!-- /.box -->
 			<div class="box">
 				<div class="box-header">
-					<h3 class="box-title">{{ trans('adminlte_lang::LangRespel.Respellist') }}</h3 class="pull-left">
+					<h3 class="box-title">{{ __('adminlte::LangRespel.Respellist') }}</h3 class="pull-left">
 					@if(in_array(Auth::user()->UsRol, Permisos::JefeOperaciones)||in_array(Auth::user()->UsRol2, Permisos::JefeOperaciones))
 						<a href="respelspublic/create" class="btn btn-primary" style="float: right;">Nuevo Residuo Común</a>
 					@elseif(in_array(Auth::user()->UsRol, Permisos::CLIENTE)||in_array(Auth::user()->UsRol2, Permisos::CLIENTE))
 						
 					@else
-						<a href="#" disabled class="btn btn-default pull-right" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>Nuevo Residuo Común</b>" data-content="<p style='width: 50%'>Su cuenta no posee los permisos necesarios para agregar nuevos residuos comunes </p>">{{trans('adminlte_lang::LangRespel.CreaterespelButton')}}</a>
+						<a href="#" disabled class="btn btn-default pull-right" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>Nuevo Residuo Común</b>" data-content="<p style='width: 50%'>Su cuenta no posee los permisos necesarios para agregar nuevos residuos comunes </p>">{{__('adminlte::LangRespel.CreaterespelButton')}}</a>
 					@endif
 				</div>
 				<!-- /.box-header -->
@@ -31,10 +31,10 @@
 									<th>Actualizado</th>
 									<th>Categoría</th>
 									<th>Tratamiento</th>
-									<th>{{trans('adminlte_lang::LangRespel.RespelName')}}</th>
-									<th>{{trans('adminlte_lang::LangRespel.Respelclas')}}</th>
-									<th>{{trans('adminlte_lang::LangRespel.Respelhoja')}}</th>
-									<th>{{trans('adminlte_lang::LangRespel.Respeltarj')}}</th>
+									<th>{{__('adminlte::LangRespel.RespelName')}}</th>
+									<th>{{__('adminlte::LangRespel.Respelclas')}}</th>
+									<th>{{__('adminlte::LangRespel.Respelhoja')}}</th>
+									<th>{{__('adminlte::LangRespel.Respeltarj')}}</th>
 									@if(in_array(Auth::user()->UsRol, Permisos::CLIENTE))
 									<th nowrap><span data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 100}' title="Status del Residuo" data-content="
 									<p class='row'>
@@ -64,8 +64,8 @@
 									@if(in_array(Auth::user()->UsRol, Permisos::JefeOperaciones)||in_array(Auth::user()->UsRol2, Permisos::JefeOperaciones))
 									<th>evaluar</th>
 									@endif
-									<th>{{trans('adminlte_lang::LangRespel.Respeligro')}}</th>
-									<th>{{trans('adminlte_lang::LangRespel.Respelestado')}}</th>
+									<th>{{__('adminlte::LangRespel.Respeligro')}}</th>
+									<th>{{__('adminlte::LangRespel.Respelestado')}}</th>
 								</tr>
 							</thead>
 							<tbody id="readyTable">

@@ -1,10 +1,10 @@
 @extends('layouts.app')
 @section('htmlheader_title')
-{{ trans('adminlte_lang::message.solsertitle') }}
+{{ __('adminlte::message.solsertitle') }}
 @endsection
 @section('contentheader_title')
 <span style="background-image: linear-gradient(40deg, #fbc2eb, #aa66cc); padding-right:30vw; position:relative; overflow:hidden;">
-	Servicios-Documentos
+	Servicios-Documentos 7777
   <div style="background-color:#ecf0f5; position:absolute; height:145%; width:40vw; transform:rotate(30deg); right:-20vw; top:-45%;"></div>
 </span>
 @endsection
@@ -43,7 +43,7 @@
 									<th>Aprobar</th>
 								@endif
 								@if(in_array(Auth::user()->UsRol, Permisos::SolSerCertifi) || in_array(Auth::user()->UsRol2, Permisos::SolSerCertifi))
-									<th>{{trans('adminlte_lang::message.solserstatuscertifi')}}</th>
+									<th>{{__('adminlte::message.solserstatuscertifi')}}</th>
 								@endif
 								<th>Actualizado el:</th>
 							</thead>
@@ -75,19 +75,36 @@
 									<td>{{$certificado->CertObservacion}}</td>
 									@switch($certificado->CertType)
 										@case(0)
-											@if($certificado->CertSrc!=="CertificadoDefault.pdf")
-												<td class="text-center"><a method='get' href='/img/Certificados/{{$certificado->CertSrc}}' target='_blank' class='btn btn-success'><i class='fas fa-file-contract fa-lg'></a></td>
+											@if (date('Y', strtotime($certificado->created_at)) < 2024)
+												@if ($certificado->CertSrc!=="CertificadoDefault.pdf")
+													<td class="text-center"><a method='get' href='/img/Certificados/{{$certificado->CertSrc}}' target='_blank' class='btn btn-success'><i class='fas fa-file-contract fa-lg'></a></td>
+												@else
+													<td class="text-center"><a disabled method='get' href='/img/CertificadoDefault.pdf' target='_blank' class='btn btn-default'><i class='far fa-file-alt fa-lg'></a></td>
+												@endif
 											@else
-												<td class="text-center"><a disabled method='get' href='/img/CertificadoDefault.pdf' class='btn btn-default'><i class='fas fa-file-contract fa-lg'></a></td>
+												@if ($certificado->CertSrc!=="CertificadoDefault.pdf")
+													<td class="text-center"><a method='get' href="{{asset('storage/certificadoRegular/'.$certificado->CertSrc.'')}}" target='_blank' class='btn btn-success'><i class='fas fa-file-contract fa-lg'></a></td>
+												@else
+													<td class="text-center"><a disabled method='get' href='/img/CertificadoDefault.pdf' target='_blank' class='btn btn-default'><i class='far fa-file-alt fa-lg'></a></td>
+												@endif
 											@endif
 											@break
-										@case(1)
-											@if($certificado->CertSrcManif!=="CertificadoDefault.pdf")
-												<td class="text-center"><a method='get' href='/img/Manifiestos/{{$certificado->CertSrcManif}}' target='_blank' class='btn btn-primary'><i class='far fa-file-alt fa-lg'></a></td>
+											@case(1)
+											@if (date('Y', strtotime($certificado->created_at)) < 2024)
+												@if ($certificado->CertSrcManif !== "CertificadoDefault.pdf")
+													<td class="text-center"><a method='get' href='/img/Manifiestos/{{$certificado->CertSrcManif}}' target='_blank' class='btn btn-primary'><i class='far fa-file-alt fa-lg'></a></td>
+												@else
+													<td class="text-center"><a disabled method='get' href='/img/CertificadoDefault.pdf' target='_blank' class='btn btn-default'><i class='far fa-file-alt fa-lg'></a></td>
+												@endif
 											@else
-												<td class="text-center"><a disabled method='get' href='/img/CertificadoDefault.pdf' target='_blank' class='btn btn-default'><i class='far fa-file-alt fa-lg'></a></td>
+												@if ($certificado->CertSrc !== "CertificadoDefault.pdf")
+													<td class="text-center">
+														<a method='get' href="{{ asset('storage/manifiestosRegular/'.$certificado->CertSrc.'') }}" target='_blank' class='btn btn-primary'><i class='far fa-file-alt fa-lg'></a></td>
+												@else
+													<td class="text-center"><a disabled method='get' href='/img/CertificadoDefault.pdf' target='_blank' class='btn btn-default'><i class='far fa-file-alt fa-lg'></a></td>
+												@endif
 											@endif
-											@break
+											@break										
 										@case(2)
 											@if($certificado->CertSrcExt!=="CertificadoDefault.pdf")
 												<td class="text-center"><a method='get' href='/img/CertificadosEXT/{{$certificado->CertSrcExt}}' target='_blank' class='btn btn-warning'><i class='far fa-file-alt fa-lg'></a></td>
@@ -253,7 +270,7 @@
 									@endif
 									@if(in_array(Auth::user()->UsRol, Permisos::SolSerCertifi) || in_array(Auth::user()->UsRol2, Permisos::SolSerCertifi))
 										<td>
-											<a onclick="ModalStatus('{{$certificado->SolicitudServicio->SolSerSlug}}', '{{$certificado->SolicitudServicio->ID_SolSer}}', '{{in_array($certificado->SolicitudServicio->SolSerStatus, $Status)}}', 'Certificada', 'certificar')" {{in_array($certificado->SolicitudServicio->SolSerStatus, $Status) ? '' :  'disabled'}} style="text-align: center;" class="btn btn-{{in_array($certificado->SolicitudServicio->SolSerStatus, $Status) ? 'success' : 'default'}}"><i class="fas fa-certificate"></i> {{trans('adminlte_lang::message.solserstatuscertifi')}}</a>
+											<a onclick="ModalStatus('{{$certificado->SolicitudServicio->SolSerSlug}}', '{{$certificado->SolicitudServicio->ID_SolSer}}', '{{in_array($certificado->SolicitudServicio->SolSerStatus, $Status)}}', 'Certificada', 'certificar')" {{in_array($certificado->SolicitudServicio->SolSerStatus, $Status) ? '' :  'disabled'}} style="text-align: center;" class="btn btn-{{in_array($certificado->SolicitudServicio->SolSerStatus, $Status) ? 'success' : 'default'}}"><i class="fas fa-certificate"></i> {{__('adminlte::message.solserstatuscertifi')}}</a>
 										</td>
 									@endif
 									<td>{{$certificado->updated_at}}</td>

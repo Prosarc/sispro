@@ -98,7 +98,7 @@
 						<h3 class="box-title">Información para generar Certificado</h3>
 						<div class="box-tools pull-right">
 							@if (in_array(Auth::user()->UsRol, Permisos::EDITMANIFCERT) ||in_array(Auth::user()->UsRol, Permisos::EDITMANIFCERT))
-								<a href="/certificadosexpress/{{$certificado->CertSlug}}/edit" class="btn btn-warning pull-right"> <i class="fas fa-edit"></i> <b>{{ trans('adminlte_lang::message.edit') }}</b></a>
+								<a href="/certificadosexpress/{{$certificado->CertSlug}}/edit" class="btn btn-warning pull-right"> <i class="fas fa-edit"></i> <b>{{ __('adminlte::message.edit') }}</b></a>
 							@endif
 							@if (in_array(Auth::user()->UsRol, Permisos::EDITMANIFCERT) ||in_array(Auth::user()->UsRol, Permisos::EDITMANIFCERT))
 								<a target="_blank" href="/certificadosexpress/{{$certificado->CertSlug}}/wordtemplate" class="btn btn-primary pull-right" style="margin-right: 1em"> <i class="fas fa-file-word"></i> <b>Plantilla</b></a>

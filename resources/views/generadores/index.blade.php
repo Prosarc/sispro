@@ -1,16 +1,16 @@
 @extends('layouts.app')
 @section('htmlheader_title')
-  {{ trans('adminlte_lang::message.genermenu') }}
+  {{ __('adminlte::message.genermenu') }}
 @endsection
 @section('contentheader_title')
 @if(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol2, Permisos::CLIENTE))
 <span style="background-image: linear-gradient(40deg, rgb(69, 202, 252), rgb(48, 63, 159)); padding-right:30vw; position:relative; overflow:hidden;">
-	{{ trans('adminlte_lang::message.gener') }}
+	{{ __('adminlte::message.gener') }}
   <div style="background-color:#ecf0f5; position:absolute; height:145%; width:40vw; transform:rotate(30deg); right:-20vw; top:-45%;"></div>
 </span>
 @else
 <span style="background-image: linear-gradient(40deg, rgb(255, 216, 111), rgb(252, 98, 98)); padding-right:30vw; position:relative; overflow:hidden;">
-	{{ trans('adminlte_lang::message.gener') }}
+	{{ __('adminlte::message.gener') }}
   <div style="background-color:#ecf0f5; position:absolute; height:145%; width:40vw; transform:rotate(30deg); right:-20vw; top:-45%;"></div>
 </span>
 @endif
@@ -22,20 +22,24 @@
 			<div class="box">
 				<div class="box-header">
 					<div class="col-sm-16 text-center">
-						<h3 class="box-title pull-left">{{ trans('adminlte_lang::message.generindex') }}</h3>
-						@if(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
-							@if (!isset($Gener))
-								<div class="col-xs-6 col-md-8">
-									<form action='/Soy-Gener/{{Auth::user()->UsSlug}}' method='POST'>
-										@csrf
-										<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ trans('adminlte_lang::message.soygener') }}</b>" data-content="{{ trans('adminlte_lang::message.soygener-info') }}">
-											<input type="submit" class="btn btn-info" value="{{ trans('adminlte_lang::message.soygener') }}">
-										</label>
-									</form>
-								</div>
-							@endif
-							<a href="/generadores/create" class="btn btn-primary pull-right" >{{ trans('adminlte_lang::message.create') }}</a>
+						<h3 class="box-title pull-left">{{ __('adminlte::message.generindex') }}</h3>
+						@if(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol, Permisos::INGDETURNO))
+						@if (!isset($Gener))
+							<div class="col-xs-6 col-md-8">
+								<form action='/Soy-Gener/{{Auth::user()->UsSlug}}' method='POST'>
+									@csrf
+									<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.soygener') }}</b>" data-content="{{ __('adminlte::message.soygener-info') }}">
+										<input type="submit" class="btn btn-info" value="{{ __('adminlte::message.soygener') }}">
+									</label>
+								</form>
+							</div>
 						@endif
+						@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol, Permisos::INGDETURNO))
+							<a href="/generadores/createit" class="btn btn-primary pull-right">{{ __('adminlte::message.create') }}</a>
+						@else
+							<a href="/generadores/create" class="btn btn-primary pull-right">{{ __('adminlte::message.create') }}</a>
+						@endif
+					@endif		
 					</div>
 				</div>
 				<div class="box box-info">
@@ -44,14 +48,14 @@
 							<thead>
 								<tr>
 									@if(in_array(Auth::user()->UsRol, Permisos::TODOPROSARC))
-										<th>{{ trans('adminlte_lang::message.clientcliente') }} - {{ trans('adminlte_lang::message.sclientsede') }}</th>
+										<th>{{ __('adminlte::message.clientcliente') }} - {{ __('adminlte::message.sclientsede') }}</th>
 									@endif
 									@if(in_array(Auth::user()->UsRol, Permisos::CLIENTE))
-										<th>{{ trans('adminlte_lang::message.sclientsede') }}</th>
+										<th>{{ __('adminlte::message.sclientsede') }}</th>
 									@endif
-									<th>{{ trans('adminlte_lang::message.gener') }}</th>
-									<th>{{ trans('adminlte_lang::message.clientNIT') }}</th>
-									<th>{{ trans('adminlte_lang::message.seemore') }}</th>
+									<th>{{ __('adminlte::message.gener') }}</th>
+									<th>{{ __('adminlte::message.clientNIT') }}</th>
+									<th>{{ __('adminlte::message.seemore') }}</th>
 								</tr>
 							</thead>
 							<tbody id="readyTable">
@@ -66,7 +70,7 @@
 									<td>{{$Gener->GenerName}}</td>
 									<td>{{$Gener->GenerNit}}</td>
 									<td>
-										<a method='get' href='/generadores/{{$Gener->GenerSlug}}' class='btn btn-info btn-block' title="{{ trans('adminlte_lang::message.seemoredetails')}}"><i class="fas fa-search"></i></a>
+										<a method='get' href='/generadores/{{$Gener->GenerSlug}}' class='btn btn-info btn-block' title="{{ __('adminlte::message.seemoredetails')}}"><i class="fas fa-search"></i></a>
 									</td>
 								</tr>
 							@endforeach

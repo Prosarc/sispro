@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('htmlheader_title')
-{{ trans('adminlte_lang::message.solsertitle') }}
+{{ __('adminlte::message.solsertitle') }}
 @endsection
 @section('contentheader_title')
 <span
@@ -17,7 +17,7 @@
         <div class="col-md-16 col-md-offset-0">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">{{ trans('adminlte_lang::message.solsertitleindex') }}</h3>
+                    <h3 class="box-title">{{ __('adminlte::message.solsertitleindex') }}</h3>
                 </div>
                 <div class="box box-info">
                     <div class="box-body">
@@ -26,13 +26,13 @@
                             <thead>
                                 <tr>
                                     <th>Último Recordatorio</th>
-                                    <th>{{trans('adminlte_lang::message.solsershowdateRPDA')}}</th>
+                                    <th>{{__('adminlte::message.solsershowdateRPDA')}}</th>
                                     <th>N°</th>
                                     <th nowrap>Status</th>
-                                    <th>{{trans('adminlte_lang::message.clientcliente')}}</th>
+                                    <th>{{__('adminlte::message.clientcliente')}}</th>
                                     <th>Contacto</th>
                                     <th>Comercial Asignado</th>
-                                    <th>{{trans('adminlte_lang::message.seemore')}}</th>
+                                    <th>{{__('adminlte::message.seemore')}}</th>
                                     @if(in_array(Auth::user()->UsRol, Permisos::ProgVehic2) || in_array(Auth::user()->UsRol2, Permisos::ProgVehic2))
                                         <th>Enviar</th>
                                     @endif
@@ -62,7 +62,7 @@
                                     <td>{{$Servicio->ComercialPersFirstName.' '.$Servicio->ComercialPersLastName}}</td>
                                     <td style="text-align: center;"><a
                                             href='/solicitud-servicio/{{$Servicio->SolSerSlug}}' class="btn btn-info"
-                                            title="{{ trans('adminlte_lang::message.seemoredetails')}}"><i
+                                            title="{{ __('adminlte::message.seemoredetails')}}"><i
                                                 class="fas fa-search"></i></a>
                                     </td>
                                     @if(in_array(Auth::user()->UsRol, Permisos::ProgVehic2) || in_array(Auth::user()->UsRol2, Permisos::ProgVehic2))

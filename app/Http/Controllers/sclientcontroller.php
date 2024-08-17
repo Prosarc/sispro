@@ -49,7 +49,8 @@ class sclientcontroller extends Controller
                 $Municipios = Municipio::where('FK_MunCity', old('departamento'))->get();
             }
             $Departamentos = Departamento::all();
-            return view('sclientes.create', compact('Clientes', 'Departamentos', 'Municipios'));
+            //return view('sclientes.create', compact('Clientes', 'Departamentos', 'Municipios'));
+            return view('sclientes.create', compact('Departamentos'));
         }else{
             abort(403);
         }
@@ -93,9 +94,9 @@ class sclientcontroller extends Controller
         $Sede->FK_SedeCli = $ID_Cli;
         $Sede->SedeDelete = 0;
         $Sede->save();
-        $id = Cliente::select('CliSlug')->where('ID_Cli', $Sede->FK_SedeCli)->first();
+        $slug = Cliente::select('CliSlug')->where('ID_Cli', $Sede->FK_SedeCli)->first();
 
-        return redirect()->route('cliente-show', compact('id'));
+        return redirect()->route('cliente-show', compact('slug'));
     }
 
     /**

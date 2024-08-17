@@ -4,9 +4,9 @@
 # {{ $greeting }}
 @else
 @if ($level === 'error')
-# @lang('Whoops!')
+# {{ __('Whoops!') }}
 @else
-# @lang('Hola!')
+# {{ __('Hola!') }}
 @endif
 @endif
 
@@ -43,19 +43,19 @@
 @if (! empty($salutation))
 {{ $salutation }}
 @else
-@lang('Regards'),<br>{{ config('app.name') }}
+{{ __('Regards') }},<br>{{ config('app.name') }}
 @endif
 
 {{-- Subcopy --}}
 @isset($actionText)
 @component('mail::subcopy')
-@lang(
+{{ __(
     "Si tiene problemas para hacer clic en el botón \":actionText\", copie y pegue la siguiente URL \nen su navegador web: [:actionURL](:actionURL)",
     [
         'actionText' => $actionText,
         'actionURL' => $actionUrl,
     ]
-)
+) }}
 @endcomponent
 @endisset
 @endcomponent

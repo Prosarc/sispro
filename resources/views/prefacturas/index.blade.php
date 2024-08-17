@@ -44,7 +44,7 @@ Prefacturas
 									<td>{{$prefactura->orden_compra}}</td>
 									<td>{{$prefactura->Total_prefactura}}</td>
 									<td>{{$prefactura->status_prefactura}}</td>
-									<td><a method='get' href='{{route('prefacturas.show', ['prefactura' => $prefactura])}}' class='btn btn-info btn-block' title="{{ trans('adminlte_lang::message.seemoredetails')}}"><i class="fas fa-search"></i></a></td>
+									<td><a method='get' href='{{route('prefacturas.show', ['prefactura' => $prefactura])}}' class='btn btn-info btn-block' title="{{ __('adminlte::message.seemoredetails')}}"><i class="fas fa-search"></i></a></td>
 								</tr>
 								@endforeach
 							</tbody>
@@ -137,7 +137,7 @@ Prefacturas
 									<td></td>
 									<td>Total</td>
 									<td>{{$prefactura->Total_prefactura}}</td>
-									<td><a method='get' href='{{route('prefacturas.show', ['prefactura' => $prefactura])}}' class='btn btn-info btn-block' title="{{ trans('adminlte_lang::message.seemoredetails')}}"><i class="fas fa-search"></i></a></td>
+									<td><a method='get' href='{{route('prefacturas.show', ['prefactura' => $prefactura])}}' class='btn btn-info btn-block' title="{{ __('adminlte::message.seemoredetails')}}"><i class="fas fa-search"></i></a></td>
 								</tr>
 							@endforeach
 							</tbody>

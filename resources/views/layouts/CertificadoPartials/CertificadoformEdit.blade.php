@@ -99,7 +99,7 @@ if ($collection2->isNotEmpty()) {
 					@endif
 					@break
 				@case(2)
-					@if ($certificado->CertSrcManif != 'CertificadoDefault.pdf')
+					@if ($certificado->CertSrc != 'CertificadoDefault.pdf')
 						<label id="labelGroupNumDoc">Número de Certificado Externo Actual</label>
 						<div class="input-group" id="inputGroupNumDoc">
 							<span class="input-group-addon" id="prefijo">M</span>
@@ -145,23 +145,25 @@ if ($collection2->isNotEmpty()) {
 			<label># Recibo de materiales</label>
 			<input maxlength="128" name="CertNumRm" type="text" class="form-control" placeholder="Numero de Recibo de materiales" value="{{$uniquestring}}">
 		</div>
-		<div class="col-md-6 form-group has-feedback">
-			<label id="srcLabel">Archivo Pdf del Certificado</label>
-			<small class="help-block with-errors"></small>
-			<div class="input-group">
-			<input name="CertSrc" {{($certificado->CertAuthJo == 0||$certificado->CertAuthJl == 0||$certificado->CertAuthDp == 0) ? '' : 'disabled'}} type="file" data-filesize="5120" class="form-control" data-accept="pdf" accept=".pdf">
-				<div class="input-group-btn">
-					@if($certificado->CertSrc == 'CertificadoDefault.pdf')
-					<a class='btn btn-default'><i class='fas fa-file-pdf fa-lg'></i></a>
-					@else
-					<a method='get' href='/img/Certificados/{{$certificado->CertSrc}}' target='_blank' class='btn btn-success'><i class='fas fa-file-pdf fa-lg'></i></a>
-					@endif
+		<div id="inicial" class="col-md-6 form-group has-feedback">
+			<div id="inicial0">
+				<label  id="srcLabel">Archivo Pdf del Certificado</label>
+				<small class="help-block with-errors"></small>
+				<div class="input-group">
+				<input name="CertSrc" {{($certificado->CertAuthJo == 0||$certificado->CertAuthJl == 0||$certificado->CertAuthDp == 0) ? '' : 'disabled'}} type="file" data-filesize="5120" class="form-control" data-accept="pdf" accept=".pdf">
+					<div class="input-group-btn">
+						@if($certificado->CertSrc == 'CertificadoDefault.pdf')
+						<a class='btn btn-default'><i class='fas fa-file-pdf fa-lg'></i></a>
+						@else
+						<a method='get' href='/storage/certificadoRegular/{{$certificado->CertSrc}}' target='_blank' class='btn btn-success'><i class='fas fa-file-pdf fa-lg'></i></a>
+						@endif
+					</div>
 				</div>
-			</div>
+			</div>	
 		</div>
 		<div class="col-md-6 form-group has-feedback">
 			<div class="input-group copyable" id="inputQR" style="cursor: pointer;">
-				<img src="{{$qrCode->writeDataUri()}}" alt="" id="inputQrImg">
+				{{--<img src="{{$qrCode->writeDataUri()}}" alt="" id="inputQrImg">--}}
 				{{-- <button class="btn btn-primary" id="copiarQR"><i style="font-size: 1.8rem; color: white;" class="fas fa-copy fa-2x"></i>Copiar QR</button> --}}
 			</div>
 		</div>
@@ -180,10 +182,29 @@ if ($collection2->isNotEmpty()) {
 				$("#docNumberInput").val('');
 				$("#labelGroupNumDoc").empty();
 				$("#labelGroupNumDoc").prepend('Número de Certificado Externo');
-				$("#srcLabel").empty();
-				$("#srcLabel").prepend('Archivo Pdf del Certificado Externo');
-				$("#docNumberInput").attr('placeholder','Número de Certificado Externo');
-				$("#inputQrCode").val('https://sispro.prosarc.com/img/CertificadosEXT/{{$certificado->CertSlug}}.pdf');
+				//$("#srcLabel").empty();
+				//$("#srcLabel").prepend('Archivo Pdf del Certificado Externo');
+				$("#case1").remove();
+				$("#case0").remove();
+				$("#inicial0").remove();
+				$("#inicial").append(`
+				<div id="case2">
+				<label id="srcLabel">Archivo Pdf del Certificado Externo</label>
+				<small class="help-block with-errors"></small>
+				<div class="input-group">
+				<input name="CertSrc" {{($certificado->CertAuthJo == 3||$certificado->CertAuthJl == 2||$certificado->CertAuthDp == 1) ? '' : 'disabled'}} type="file" data-filesize="5120" class="form-control" data-accept="pdf" accept=".pdf">
+					<div class="input-group-btn">
+						@if($certificado->CertSrc == 'CertificadoDefault.pdf')
+						<a class='btn btn-default'><i class='fas fa-file-pdf fa-lg'></i></a>
+						@else
+						<a method='get' href='/storage/manifiestosRegular/{{$certificado->CertSrc}}' target='_blank' class='btn btn-success'><i class='fas fa-file-pdf fa-lg'></i></a>
+						@endif
+					</div>
+				</div>
+				</div>
+				`);
+				$("#docNumberInput").append('placeholder','Número de Certificado Externo');
+				$("#inputQrCode").val('https://sispro.prosarc.com/storage/manifiestosRegular//{{$certificado->CertSlug}}.pdf');
 		 	} else {
 				$.ajaxSetup({
 					headers: {
@@ -204,22 +225,60 @@ if ($collection2->isNotEmpty()) {
 							case '0':
 								$("#labelGroupNumDoc").empty();
 								$("#labelGroupNumDoc").prepend('Número de Certificado (Recomendado)');
-								$("#srcLabel").empty();
-								$("#srcLabel").prepend('Archivo Pdf del Certificado');
+								//$("#srcLabel").empty();
+								//$("#srcLabel").prepend('Archivo Pdf del Certificado');
 								$("#prefijo").remove();
 								$("#docNumberInput").val(res);
 								$("#docNumberInput").attr('placeholder','Número de Certificado');
+								$("#case1").remove();
+								$("#case2").remove();
+								$("#inicial0").remove();
+								$("#inicial").append(`
+								<div id="case0">
+								<label id="srcLabel">Archivo Pdf del Certificado </label>
+								<small class="help-block with-errors"></small>
+								<div class="input-group">
+								<input name="CertSrc" {{($certificado->CertAuthJo == 0||$certificado->CertAuthJl == 0||$certificado->CertAuthDp == 0) ? '' : 'disabled'}} type="file" data-filesize="5120" class="form-control" data-accept="pdf" accept=".pdf">
+									<div class="input-group-btn">
+										@if($certificado->CertSrc == 'CertificadoDefault.pdf')
+										<a class='btn btn-default'><i class='fas fa-file-pdf fa-lg'></i></a>
+										@else
+										<a method='get' href='/img/Certificados/{{$certificado->CertSrc}}' target='_blank' class='btn btn-success'><i class='fas fa-file-pdf fa-lg'></i></a>
+										@endif
+									</div>
+								</div>
+								</div>
+								`);
 								$("#inputQrCode").val('https://sispro.prosarc.com/img/Certificados/{{$certificado->CertSlug}}.pdf');
 								break;
 							case '1':
 								$("#labelGroupNumDoc").empty();
 								$("#labelGroupNumDoc").prepend('Número de Manifiesto (Recomendado)');
-								$("#srcLabel").empty();
-								$("#srcLabel").prepend('Archivo Pdf del Manifiesto');
+								//$("#srcLabel").empty();
+								//$("#srcLabel").prepend('Archivo Pdf del Manifiesto');
 								$("#inputGroupNumDoc").prepend('<span class="input-group-addon" id="prefijo">M</span>');
 								$("#docNumberInput").attr('placeholder','Número de Manifiesto');
 								$("#docNumberInput").val(res);
-								$("#inputQrCode").val('https://sispro.prosarc.com/img/Manifiestos/{{$certificado->CertSlug}}.pdf');
+								$("#case2").remove();
+								$("#case0").remove();
+								$("#inicial0").remove();
+								$("#inicial").append(`
+								<div id="case1">
+								<label id="srcLabel">Archivo Pdf del Manifiesto </label>
+								<small class="help-block with-errors"></small>
+								<div class="input-group">
+								<input name="CertSrc" {{($certificado->CertAuthJo == 0||$certificado->CertAuthJl == 0||$certificado->CertAuthDp == 0) ? '' : 'disabled'}} type="file" data-filesize="5120" class="form-control" data-accept="pdf" accept=".pdf">
+									<div class="input-group-btn">
+										@if($certificado->CertSrc == 'CertificadoDefault.pdf')
+										<a class='btn btn-default'><i class='fas fa-file-pdf fa-lg'></i></a>
+										@else
+										<a method='get' href='/storage/manifiestosRegular/{{$certificado->CertSrc}}' target='_blank' class='btn btn-success'><i class='fas fa-file-pdf fa-lg'></i></a>
+										@endif
+									</div>
+								</div>
+								</div>
+								`);
+								$("#inputQrCode").val('https://sispro.prosarc.com/storage/manifiestosRegular/{{$certificado->CertSlug}}.pdf');
 								break;
 							default:
 								$("#labelGroupNumDoc").empty();

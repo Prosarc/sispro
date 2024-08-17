@@ -1,12 +1,12 @@
 @extends('layouts.app')
 {{-- vista de edición para el cliente --}}
 @section('htmlheader_title')
-{{ trans('adminlte_lang::LangRespel.Respeledittag') }}
+{{ __('adminlte::LangRespel.Respeledittag') }}
 @endsection
 
 @section('contentheader_title')
 <span style="background-image: linear-gradient(40deg, #FF856D, #CC0000); padding-right:30vw; position:relative; overflow:hidden;">
-	{{ trans('adminlte_lang::LangRespel.Respeleditmenu') }}
+	{{ __('adminlte::LangRespel.Respeleditmenu') }}
   <div style="background-color:#ecf0f5; position:absolute; height:145%; width:40vw; transform:rotate(30deg); right:-20vw; top:-45%;"></div>
 </span>
 @endsection
@@ -29,7 +29,7 @@
 						@method('PUT')
 						@csrf
 						<div class="box-header">
-							<h3 class="box-title">{{ trans('adminlte_lang::LangRespel.Respeleditmenu') }}</h3>
+							<h3 class="box-title">{{ __('adminlte::LangRespel.Respeleditmenu') }}</h3>
 						</div>
 							<!-- left column -->
 							<!-- general form elements -->
@@ -50,7 +50,7 @@
 							</div>
 							<div class="box box-info">
 								<div class="box-footer">
-									<button type="submit" class="btn btn-success pull-right"><i class="fa fa-check"></i>{{ trans('adminlte_lang::LangRespel.updaterespelButton') }}</button>
+									<button type="submit" class="btn btn-success pull-right"><i class="fa fa-check"></i>{{ __('adminlte::LangRespel.updaterespelButton') }}</button>
 								</div>
 							</div>
 						</div>

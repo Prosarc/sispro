@@ -59,6 +59,7 @@ class ProgramacionExpressController extends Controller
 					}
                 })
                 ->where('CliCategoria', 'ClientePrepago')
+				->whereBetween('solicitud_servicios.created_at',['2024-01-01 00:00:00','2024-12-31 23:59:00'])
 				->get();
 			$personals = DB::table('personals')
 				->select('ID_Pers', 'PersFirstName', 'PersLastName')
@@ -909,7 +910,7 @@ class ProgramacionExpressController extends Controller
 		$log->AuditUser=Auth::user()->email;
 		$log->Auditlog=$request->all();
 		$log->save();
-		return redirect()->route('programacion-express.edit',['id' => $id])->with('mensaje', trans('adminlte_lang::message.progvehceditsuccess'));
+		return redirect()->route('programacion-express.edit',['id' => $id])->with('mensaje', __('adminlte::message.progvehceditsuccess'));
 	}
 
 	/**
@@ -1004,7 +1005,7 @@ class ProgramacionExpressController extends Controller
 					$log->AuditUser = Auth::user()->email;
 					$log->Auditlog = $programacion->ProgVehDelete;
 					$log->save();
-					return redirect()->route('programacion-express.create')->with('Delete', trans('adminlte_lang::message.progvehcdeletesuccess'));
+					return redirect()->route('programacion-express.create')->with('Delete', __('adminlte::message.progvehcdeletesuccess'));
 				}
 				else{
 					$programacion->ProgVehDelete = 0;
@@ -1025,7 +1026,7 @@ class ProgramacionExpressController extends Controller
 					$log->Auditlog = $programacion->ProgVehDelete;
 					$log->save();
 					$programacion->save();
-					return redirect()->route('programacion-express.edit',['id' => $id])->with('mensaje', trans('adminlte_lang::message.progvehcdelete2success'));
+					return redirect()->route('programacion-express.edit',['id' => $id])->with('mensaje', __('adminlte::message.progvehcdelete2success'));
 				}
 			break;
 			
@@ -1118,7 +1119,7 @@ class ProgramacionExpressController extends Controller
 					$Observacion->FK_ObsSolSer = $SolicitudServicio->ID_SolSer;
 					$Observacion->save();
 
-					return redirect()->route('programacion-express.create')->with('Delete', trans('adminlte_lang::message.progvehcdeletesuccess'));
+					return redirect()->route('programacion-express.create')->with('Delete', __('adminlte::message.progvehcdeletesuccess'));
 				}
 				else{
 					$programacion->ProgVehDelete = 0;
@@ -1138,7 +1139,7 @@ class ProgramacionExpressController extends Controller
 					$log->Auditlog = $programacion->ProgVehDelete;
 					$log->save();
 					
-					return redirect()->route('programacion-express.edit',['id' => $id])->with('mensaje', trans('adminlte_lang::message.progvehcdelete2success'));
+					return redirect()->route('programacion-express.edit',['id' => $id])->with('mensaje', __('adminlte::message.progvehcdelete2success'));
 				}
 			break;
 

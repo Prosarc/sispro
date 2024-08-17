@@ -62,11 +62,11 @@ class ResetPasswordController extends Controller
     {
         if ($request->expectsJson()) {
             return response()->json([
-                'status' => trans($response)
+                'status' => __($response)
             ]);
         }
         return redirect($this->redirectPath())
-            ->with('status', trans($response));
+            ->with('status', __($response));
     }
 
     /**
@@ -79,11 +79,11 @@ class ResetPasswordController extends Controller
     protected function sendResetFailedResponse(Request $request, $response)
     {
         if ($request->expectsJson()) {
-            return new JsonResponse(['email' => trans($response) ], 422);
+            return new JsonResponse(['email' => __($response) ], 422);
         }
         return redirect()->back()
             ->withInput($request->only('email'))
-            ->withErrors(['email' => trans($response)]);
+            ->withErrors(['email' => __($response)]);
     }
 
     /**

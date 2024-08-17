@@ -28,7 +28,7 @@ class WebDriverWait
     public function __construct(WebDriver $driver, $timeout_in_second = null, $interval_in_millisecond = null)
     {
         $this->driver = $driver;
-        $this->timeout = isset($timeout_in_second) ? $timeout_in_second : 30;
+        $this->timeout = $timeout_in_second ?? 30;
         $this->interval = $interval_in_millisecond ?: 250;
     }
 
@@ -38,9 +38,9 @@ class WebDriverWait
      * @param callable|WebDriverExpectedCondition $func_or_ec
      * @param string $message
      *
+     * @throws \Exception
      * @throws NoSuchElementException
      * @throws TimeoutException
-     * @throws \Exception
      * @return mixed The return value of $func_or_ec
      */
     public function until($func_or_ec, $message = '')

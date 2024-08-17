@@ -1,13 +1,17 @@
 @extends('layouts.app')
 
 @section('htmlheader_title')
-	{{ trans('adminlte_lang::message.home') }}
+	{{ __('adminlte::message.home') }}
 @endsection
 @section('title')
-	{{ trans('adminlte_lang::message.home') }}
+	{{ __('adminlte::message.home') }}
 @endsection
 @section('contentheader_title')
 <div class="text-center"><h2> Bienvenid@ {{ Auth::user()->name }}</h4></div>
+@endsection
+@section('contentheader_description')
+    @component('layouts.partials.modalemergente')
+    @endcomponent
 @endsection
 @switch(Auth::user()->UsRol)
     @case('JefeLogistica')
@@ -36,7 +40,7 @@
 		</div>
 	</div>
 	<div class="box-body">
-		{{ trans('adminlte_lang::message.logged') }}. Comienza creandote una aplicacion increible!
+		{{ __('adminlte::message.logged') }}. Comienza creandote una aplicacion increible!
 	</div>
 	<!-- /.box-body -->
 </div> --}}

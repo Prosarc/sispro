@@ -3,23 +3,24 @@
 namespace Facebook\WebDriver\Chrome;
 
 use Facebook\WebDriver\Remote\DesiredCapabilities;
+use JsonSerializable;
+use ReturnTypeWillChange;
 
 /**
  * The class manages the capabilities in ChromeDriver.
  *
  * @see https://sites.google.com/a/chromium.org/chromedriver/capabilities
  */
-class ChromeOptions
+class ChromeOptions implements JsonSerializable
 {
     /**
-     * The key of chrome options desired capabilities (in legacy OSS JsonWire protocol)
-     * @deprecated
+     * The key of chromeOptions in desired capabilities
      */
-    const CAPABILITY = 'chromeOptions';
+    public const CAPABILITY = 'goog:chromeOptions';
     /**
-     * The key of chrome options desired capabilities (in W3C compatible protocol)
+     * @deprecated Use CAPABILITY instead
      */
-    const CAPABILITY_W3C = 'goog:chromeOptions';
+    public const CAPABILITY_W3C = self::CAPABILITY;
     /**
      * @var array
      */
@@ -38,6 +39,17 @@ class ChromeOptions
     private $experimentalOptions = [];
 
     /**
+     * Return a version of the class which can JSON serialized.
+     *
+     * @return array
+     */
+    #[ReturnTypeWillChange]
+    public function jsonSerialize()
+    {
+        return $this->toArray();
+    }
+
+    /**
      * Sets the path of the Chrome executable. The path should be either absolute
      * or relative to the location running ChromeDriver server.
      *
@@ -52,7 +64,6 @@ class ChromeOptions
     }
 
     /**
-     * @param array $arguments
      * @return ChromeOptions
      */
     public function addArguments(array $arguments)
@@ -66,7 +77,6 @@ class ChromeOptions
      * Add a Chrome extension to install on browser startup. Each path should be
      * a packed Chrome extension.
      *
-     * @param array $paths
      * @return ChromeOptions
      */
     public function addExtensions(array $paths)
@@ -93,6 +103,9 @@ class ChromeOptions
 
     /**
      * Sets an experimental option which has not exposed officially.
+     *
+     * When using "prefs" to set Chrome preferences, please be aware they are so far not supported by
+     * Chrome running in headless mode, see https://bugs.chromium.org/p/chromium/issues/detail?id=775911
      *
      * @param string $name
      * @param mixed $value

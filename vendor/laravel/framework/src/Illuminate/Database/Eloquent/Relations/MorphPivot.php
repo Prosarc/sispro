@@ -2,9 +2,6 @@
 
 namespace Illuminate\Database\Eloquent\Relations;
 
-use Illuminate\Support\Str;
-use Illuminate\Database\Eloquent\Builder;
-
 class MorphPivot extends Pivot
 {
     /**
@@ -28,14 +25,27 @@ class MorphPivot extends Pivot
     /**
      * Set the keys for a save update query.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param  \Illuminate\Database\Eloquent\Builder<static>  $query
+     * @return \Illuminate\Database\Eloquent\Builder<static>
      */
-    protected function setKeysForSaveQuery(Builder $query)
+    protected function setKeysForSaveQuery($query)
     {
         $query->where($this->morphType, $this->morphClass);
 
         return parent::setKeysForSaveQuery($query);
+    }
+
+    /**
+     * Set the keys for a select query.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder<static>  $query
+     * @return \Illuminate\Database\Eloquent\Builder<static>
+     */
+    protected function setKeysForSelectQuery($query)
+    {
+        $query->where($this->morphType, $this->morphClass);
+
+        return parent::setKeysForSelectQuery($query);
     }
 
     /**
@@ -45,11 +55,33 @@ class MorphPivot extends Pivot
      */
     public function delete()
     {
+        if (isset($this->attributes[$this->getKeyName()])) {
+            return (int) parent::delete();
+        }
+
+        if ($this->fireModelEvent('deleting') === false) {
+            return 0;
+        }
+
         $query = $this->getDeleteQuery();
 
         $query->where($this->morphType, $this->morphClass);
 
-        return $query->delete();
+        return tap($query->delete(), function () {
+            $this->exists = false;
+
+            $this->fireModelEvent('deleted', false);
+        });
+    }
+
+    /**
+     * Get the morph type for the pivot.
+     *
+     * @return string
+     */
+    public function getMorphType()
+    {
+        return $this->morphType;
     }
 
     /**
@@ -101,7 +133,7 @@ class MorphPivot extends Pivot
      * Get a new query to restore one or more models by their queueable IDs.
      *
      * @param  array|int  $ids
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder<static>
      */
     public function newQueryForRestoration($ids)
     {
@@ -109,7 +141,7 @@ class MorphPivot extends Pivot
             return $this->newQueryForCollectionRestoration($ids);
         }
 
-        if (! Str::contains($ids, ':')) {
+        if (! str_contains($ids, ':')) {
             return parent::newQueryForRestoration($ids);
         }
 
@@ -125,11 +157,13 @@ class MorphPivot extends Pivot
      * Get a new query to restore multiple models by their queueable IDs.
      *
      * @param  array  $ids
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder<static>
      */
     protected function newQueryForCollectionRestoration(array $ids)
     {
-        if (! Str::contains($ids[0], ':')) {
+        $ids = array_values($ids);
+
+        if (! str_contains($ids[0], ':')) {
             return parent::newQueryForRestoration($ids);
         }
 

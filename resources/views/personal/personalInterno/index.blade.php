@@ -1,10 +1,10 @@
 @extends('layouts.app')
 @section('htmlheader_title')
-{{ trans('adminlte_lang::message.personalhtmlheader_title') }}
+{{ __('adminlte::message.personalhtmlheader_title') }}
 @endsection
 @section('contentheader_title')
 <span style="background-image: linear-gradient(40deg, #FFFFFF, #A3A2AE); padding-right:30vw; position:relative; overflow:hidden;">
-	{{ trans('adminlte_lang::message.personalhtmlheader_title') }}
+	{{ __('adminlte::message.personalhtmlheader_title') }}
 	<div style="background-color:#ecf0f5; position:absolute; height:145%; width:40vw; transform:rotate(30deg); right:-20vw; top:-45%;"></div>
 </span>
 @endsection
@@ -14,9 +14,9 @@
 		<div class="col-md-16 col-md-offset-0">
 			<div class="box">
 				<div class="box-header">
-					<h3 class="box-title">{{ trans('adminlte_lang::message.personaltitlelist') }}</h3>
+					<h3 class="box-title">{{ __('adminlte::message.personaltitlelist') }}</h3>
 					@if(in_array(Auth::user()->UsRol, Permisos::PersInter1) || in_array(Auth::user()->UsRol2, Permisos::PersInter1))
-					<a href="personalInterno/create" class="btn btn-primary pull-right">{{ trans('adminlte_lang::message.create') }}</a>
+					<a href="personalInterno/create" class="btn btn-primary pull-right">{{ __('adminlte::message.create') }}</a>
 					@endif
 				</div>
 				<div class="box box-info">
@@ -25,17 +25,17 @@
 							<thead>
 								<tr>
 									@if(in_array(Auth::user()->UsRol, Permisos::PERSONAL) || in_array(Auth::user()->UsRol2, Permisos::PERSONAL))
-									<th>{{ trans('adminlte_lang::message.persdocument') }}</th>
+									<th>{{ __('adminlte::message.persdocument') }}</th>
 									@endif
-									<th>{{ trans('adminlte_lang::message.persname') }}</th>
-									<th>{{ trans('adminlte_lang::message.emailaddress') }}</th>
-									<th>{{ trans('adminlte_lang::message.mobile') }}</th>
+									<th>{{ __('adminlte::message.persname') }}</th>
+									<th>{{ __('adminlte::message.emailaddress') }}</th>
+									<th>{{ __('adminlte::message.mobile') }}</th>
 									<th>parafiscales</th>
 									<th>vencimiento</th>
 									<th>Cargo</th>
 									<th>Área</th>
 									@if(in_array(Auth::user()->UsRol, Permisos::PersInter1) || in_array(Auth::user()->UsRol2, Permisos::PersInter1))
-									<th>{{ trans('adminlte_lang::message.see') }}</th>
+									<th>{{ __('adminlte::message.see') }}</th>
 									@endif
 
 								</tr>
@@ -62,7 +62,7 @@
 									<td>{{$Personal->CargName}}</td>
 									<td>{{$Personal->AreaName}}</td>
 									@if(in_array(Auth::user()->UsRol, Permisos::PersInter1) || in_array(Auth::user()->UsRol2, Permisos::PersInter1))
-									<td><a method='get' href='/personalInterno/{{$Personal->PersSlug}}' class='btn btn-info btn-block' title="{{ trans('adminlte_lang::message.seemoredetails')}}"><i class="fas fa-search"></i></a></td>
+									<td><a method='get' href='/personalInterno/{{$Personal->PersSlug}}' class='btn btn-info btn-block' title="{{ __('adminlte::message.seemoredetails')}}"><i class="fas fa-search"></i></a></td>
 									@endif
 
 								</tr>

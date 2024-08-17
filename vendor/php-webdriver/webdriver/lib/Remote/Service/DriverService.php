@@ -2,13 +2,14 @@
 
 namespace Facebook\WebDriver\Remote\Service;
 
-use Exception;
+use Facebook\WebDriver\Exception\Internal\IOException;
+use Facebook\WebDriver\Exception\Internal\RuntimeException;
 use Facebook\WebDriver\Net\URLChecker;
 use Symfony\Component\Process\Process;
-use Symfony\Component\Process\ProcessBuilder;
 
 /**
  * Start local WebDriver service (when remote WebDriver server is not used).
+ * This will start new process of respective browser driver and take care of its lifecycle.
  */
 class DriverService
 {
@@ -45,7 +46,7 @@ class DriverService
      */
     public function __construct($executable, $port, $args = [], $environment = null)
     {
-        $this->executable = self::checkExecutable($executable);
+        $this->setExecutable($executable);
         $this->url = sprintf('http://localhost:%d', $port);
         $this->args = $args;
         $this->environment = $environment ?: $_ENV;
@@ -70,6 +71,8 @@ class DriverService
 
         $this->process = $this->createProcess();
         $this->process->start();
+
+        $this->checkWasStarted($this->process);
 
         $checker = new URLChecker();
         $checker->waitUntilAvailable(20 * 1000, $this->url . '/status');
@@ -108,44 +111,73 @@ class DriverService
     }
 
     /**
-     * Check if the executable is executable.
-     *
+     * @deprecated Has no effect. Will be removed in next major version. Executable is now checked
+     * when calling setExecutable().
      * @param string $executable
-     * @throws Exception
      * @return string
      */
     protected static function checkExecutable($executable)
     {
-        if (!is_file($executable)) {
-            throw new Exception("'$executable' is not a file.");
-        }
-
-        if (!is_executable($executable)) {
-            throw new Exception("'$executable' is not executable.");
-        }
-
         return $executable;
     }
 
     /**
-     * @return Process
+     * @param string $executable
+     * @throws IOException
      */
-    private function createProcess()
+    protected function setExecutable($executable)
     {
-        // BC: ProcessBuilder deprecated since Symfony 3.4 and removed in Symfony 4.0.
-        if (class_exists(ProcessBuilder::class)
-            && false === mb_strpos('@deprecated', (new \ReflectionClass(ProcessBuilder::class))->getDocComment())
-        ) {
-            $processBuilder = (new ProcessBuilder())
-                ->setPrefix($this->executable)
-                ->setArguments($this->args)
-                ->addEnvironmentVariables($this->environment);
+        if ($this->isExecutable($executable)) {
+            $this->executable = $executable;
 
-            return $processBuilder->getProcess();
+            return;
         }
-        // Safe to use since Symfony 3.3
+
+        throw IOException::forFileError(
+            'File is not executable. Make sure the path is correct or use environment variable to specify'
+            . ' location of the executable.',
+            $executable
+        );
+    }
+
+    /**
+     * @param Process $process
+     */
+    protected function checkWasStarted($process)
+    {
+        usleep(10000); // wait 10ms, otherwise the asynchronous process failure may not yet be propagated
+
+        if (!$process->isRunning()) {
+            throw RuntimeException::forDriverError($process);
+        }
+    }
+
+    private function createProcess(): Process
+    {
         $commandLine = array_merge([$this->executable], $this->args);
 
         return new Process($commandLine, null, $this->environment);
+    }
+
+    /**
+     * Check whether given file is executable directly or using system PATH
+     */
+    private function isExecutable(string $filename): bool
+    {
+        if (is_executable($filename)) {
+            return true;
+        }
+        if ($filename !== basename($filename)) { // $filename is an absolute path, do no try to search it in PATH
+            return false;
+        }
+
+        $paths = explode(PATH_SEPARATOR, getenv('PATH'));
+        foreach ($paths as $path) {
+            if (is_executable($path . DIRECTORY_SEPARATOR . $filename)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

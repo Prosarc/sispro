@@ -818,19 +818,19 @@ var currentScrollPos = window.pageYOffset;
 								<div style="font-size: 5em; color: red; text-align: center; margin: auto;" class="textodeleteRespelsSGener">
 									<i class="fas fa-exclamation-triangle"></i>
 									<span style="font-size: 0.3em; color: black;">
-										<p>{{ trans('adminlte_lang::message.modaldeletegener') }} <b><i>`+RespelName+`</i></b> 
+										<p>{{ __('adminlte::message.modaldeletegener') }} <b><i>`+RespelName+`</i></b> 
 										@if(Route::currentRouteName() === 'sgeneradores.show')
-											{{ trans('adminlte_lang::message.modalsgener') }} <b>
+											{{ __('adminlte::message.modalsgener') }} <b>
 										@else
-											{{ trans('adminlte_lang::message.modalgener') }} <b>
+											{{ __('adminlte::message.modalgener') }} <b>
 										@endif
-											<i> `+name+`</i></b>{{ trans('adminlte_lang::message.?') }} </p>
+											<i> `+name+`</i></b>{{ __('adminlte::message.?') }} </p>
 									</span>
 								</div> 
 							</div>
 							<div class="modal-footer">
-								<button type="button" class="btn btn-success pull-left" data-dismiss="modal">{{ trans('adminlte_lang::message.modalexit') }}</button>
-								<label for="delete`+slug+`" class='btn btn-danger'>{{ trans('adminlte_lang::message.modaldelete') }}</label>
+								<button type="button" class="btn btn-success pull-left" data-dismiss="modal">{{ __('adminlte::message.modalexit') }}</button>
+								<label for="delete`+slug+`" class='btn btn-danger'>{{ __('adminlte::message.modaldelete') }}</label>
 							</div>
 						</div>
 					</div>

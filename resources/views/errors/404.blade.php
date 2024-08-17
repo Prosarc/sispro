@@ -1,4 +1,4 @@
-@extends('errors::illustrated-layout')
+{{--@extends('errors::illustrated-layout')--}}
 @section('code', '404')
 @section('title', __('Pagina no encontrada'))
 @section('image')
@@ -8,5 +8,5 @@
 @if($exception->getMessage())
 	@section('message', $exception->getMessage())
 @else
-	@section('message', trans('adminlte_lang::message.notfindpage'))
+	@section('message', __('adminlte::message.notfindpage'))
 @endif

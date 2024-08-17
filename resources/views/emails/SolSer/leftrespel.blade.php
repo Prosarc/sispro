@@ -15,13 +15,13 @@ En estos momentos la Solicitud de Servicio N° {{$SolicitudServicio->ID_SolSer}}
 
 <p style="background-color:#f0f3f8;"><i>{!!nl2br($SolicitudServicio->SolSerDescript)!!}</i></p>
 
-@lang("Puede comunicarse con:")<br>
+{{__("Puede comunicarse con:")}}<br>
 
-***@lang("Nombre: ")***{{$SolicitudServicio['personalcliente']->PersFirstName}} {{$SolicitudServicio['personalcliente']->PersLastName}}<br>
+***{{__("Nombre: ")}}***{{$SolicitudServicio['personalcliente']->PersFirstName}} {{$SolicitudServicio['personalcliente']->PersLastName}}<br>
 
-***@lang("E-mail: ")***{{$SolicitudServicio['personalcliente']->PersEmail}}<br>
+***{{__("E-mail: ")}}***{{$SolicitudServicio['personalcliente']->PersEmail}}<br>
 
-***@lang("N° Celular: ")***{{$SolicitudServicio['personalcliente']->PersCellphone}}<br>
+***{{__("N° Celular: ")}}***{{$SolicitudServicio['personalcliente']->PersCellphone}}<br>
 
 @component('mail::button', ['url' => url('/solicitud-servicio', [$SolicitudServicio->SolSerSlug])])
 {{-- {{$nameButton}} --}}

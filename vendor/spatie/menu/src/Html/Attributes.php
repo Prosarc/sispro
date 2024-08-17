@@ -4,23 +4,18 @@ namespace Spatie\Menu\Html;
 
 class Attributes
 {
-    /** @var array */
-    protected $attributes = [];
+    protected array $attributes = [];
 
-    /** @var array */
-    protected $classes = [];
+    protected array $classes = [];
+
+    protected ?string $id = null;
 
     public function __construct(array $attributes = [])
     {
         $this->setAttributes($attributes);
     }
 
-    /**
-     * @param array $attributes
-     *
-     * @return $this
-     */
-    public function setAttributes(array $attributes)
+    public function setAttributes(array $attributes): self
     {
         foreach ($attributes as $attribute => $value) {
             if ($attribute === 'class') {
@@ -40,13 +35,7 @@ class Attributes
         return $this;
     }
 
-    /**
-     * @param string $attribute
-     * @param string $value
-     *
-     * @return $this
-     */
-    public function setAttribute(string $attribute, string $value = '')
+    public function setAttribute(string $attribute, string $value = ''): self
     {
         if ($attribute === 'class') {
             $this->addClass($value);
@@ -59,12 +48,7 @@ class Attributes
         return $this;
     }
 
-    /**
-     * @param string|array $class
-     *
-     * @return $this
-     */
-    public function addClass($class)
+    public function addClass(string | array $class): self
     {
         if (! is_array($class)) {
             $class = [$class];
@@ -77,15 +61,18 @@ class Attributes
         return $this;
     }
 
-    /**
-     * @param \Spatie\Menu\Html\Attributes $attributes
-     *
-     * @return $this
-     */
-    public function mergeWith(self $attributes)
+    public function id(?string $id): self
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    public function mergeWith(self $attributes): self
     {
         $this->attributes = array_merge($this->attributes, $attributes->attributes);
         $this->classes = array_merge($this->classes, $attributes->classes);
+        $this->id = $this->id ?: $attributes->id;
 
         return $this;
     }
@@ -97,11 +84,10 @@ class Attributes
 
     public function toArray(): array
     {
-        if (empty($this->classes)) {
-            return $this->attributes;
-        }
-
-        return array_merge($this->attributes, ['class' => implode(' ', $this->classes)]);
+        return array_merge($this->attributes, array_filter([
+            'class' => implode(' ', $this->classes),
+            'id' => $this->id,
+        ]));
     }
 
     public function toString(): string

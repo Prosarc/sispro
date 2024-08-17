@@ -1,6 +1,6 @@
 @extends('layouts.appinvitado')
 @section('htmlheader_title')
-{{ trans('adminlte_lang::message.clientcliente') }}
+{{ __('adminlte::message.clientcliente') }}
 @endsection
 @section('contentheader_title')
 {{ 'Registro Express' }}
@@ -11,7 +11,7 @@
 		<div class="col-md-16 col-md-offset-0">
 			<div class="box">
                 <div class="box-header">
-					<h3 class="box-title">{{ trans('adminlte_lang::message.smartwizzardtitle') }}</h3>
+					<h3 class="box-title">{{ __('adminlte::message.smartwizzardtitle') }}</h3>
 				</div>
                 <div class="box box-info">
                     <form role="form" action="/sendregisterexpress" method="POST" enctype="multipart/form-data" data-toggle="validator">
@@ -30,31 +30,31 @@
                             <div class="tab-pane" id="addRowWizz">
                                 <div class="smartwizard">
                                     <ul>
-                                        <li><a href="#step-1"><b>{{ trans('adminlte_lang::message.Paso 1') }}</b><br /><small>{{ trans('adminlte_lang::message.client') }}</small></a></li>
-                                        <li><a href="#step-2"><b>{{ trans('adminlte_lang::message.Paso 2') }}</b><br /><small>{{ trans('adminlte_lang::message.clientpers') }}</small></a></li>
+                                        <li><a href="#step-1"><b>{{ __('adminlte::message.Paso 1') }}</b><br /><small>{{ __('adminlte::message.client') }}</small></a></li>
+                                        <li><a href="#step-2"><b>{{ __('adminlte::message.Paso 2') }}</b><br /><small>{{ __('adminlte::message.clientpers') }}</small></a></li>
                                     </ul>
                                     <div class="row">
                                         <div id="step-1" class="tab-pane step-content">
                                             <div id="form-step-0" role="form" data-toggle="validator">
                                                 <div class="col-md-6 form-group ">
-                                                    <label for="ClienteInputNit">{{ trans('adminlte_lang::message.clientNIT') }}</label><small class="help-block with-errors">*</small>
-                                                    <input  type="text" name="CliNit" class="form-control nitlargo" id="ClienteInputNit" data-minlength="13" data-maxlength="15" placeholder="{{ trans('adminlte_lang::message.clientNITplacehoder') }}" value="{{ old('CliNit') }}" required>
+                                                    <label for="ClienteInputNit">{{ __('adminlte::message.clientNIT') }}</label><small class="help-block with-errors">*</small>
+                                                    <input  type="text" name="CliNit" class="form-control nitlargo" id="ClienteInputNit" data-minlength="13" data-maxlength="15" placeholder="{{ __('adminlte::message.clientNITplacehoder') }}" value="{{ old('CliNit') }}" required>
                                                 </div>
                                                 <div class="col-md-6 form-group">
-                                                    <label for="ClienteInputRazon">{{ trans('adminlte_lang::message.clirazonsoc') }}</label><small class="help-block with-errors">*</small>
+                                                    <label for="ClienteInputRazon">{{ __('adminlte::message.clirazonsoc') }}</label><small class="help-block with-errors">*</small>
                                                     <input type="text" name="CliName" class="form-control" id="ClienteInputRazon"  maxlength="100" required value="{{ old('CliName') }}">
                                                 </div>
                                                 <div class="form-group col-md-6">
-                                                    <label for="departamentoExpress">{{ trans('adminlte_lang::message.departamento') }}</label><small class="help-block with-errors">*</small>
+                                                    <label for="departamentoExpress">{{ __('adminlte::message.departamento') }}</label><small class="help-block with-errors">*</small>
                                                     <select class="form-control select" id="departamentoExpress" name="departamento" required data-dependent="FK_SedeMun">
-                                                        <option value="">{{ trans('adminlte_lang::message.select') }}</option>
+                                                        <option value="">{{ __('adminlte::message.select') }}</option>
                                                         @foreach ($Departamentos as $Departamento)
                                                             <option value="{{$Departamento->ID_Depart}}" {{ old('departamento') == $Departamento->ID_Depart ? 'selected' : '' }}>{{$Departamento->DepartName}}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
                                                 <div class="form-group col-md-6">
-                                                    <label for="municipio">{{ trans('adminlte_lang::message.municipio') }}</label><a class="load"></a>
+                                                    <label for="municipio">{{ __('adminlte::message.municipio') }}</label><a class="load"></a>
                                                     <small class="help-block with-errors">*</small>
                                                     <select class="form-control select" id="municipio" name="FK_SedeMun" required>
                                                         @if (isset($Municipios))
@@ -92,7 +92,7 @@
                                                 </div>
                                                 <div class="col-md-6 form-group">
                                                     <label for="sedeinputaddress">Dirección de certificación</label><small class="help-block with-errors">*</small>
-                                                    <input type="text" class="form-control" id="sedeinputaddress" name="SedeAddress" placeholder="{{ trans('adminlte_lang::message.addressplaceholder') }}" minlength="5" maxlength="128" required value="{{ old('SedeAddress') }}">
+                                                    <input type="text" class="form-control" id="sedeinputaddress" name="SedeAddress" placeholder="{{ __('adminlte::message.addressplaceholder') }}" minlength="5" maxlength="128" required value="{{ old('SedeAddress') }}">
                                                 </div>
                                                 <!-- search input box -->
                                                 <div class="form-group col-md-6 " id="SedeMapAddressContainer">
@@ -122,7 +122,7 @@
                                         <div id="step-2">
                                             <div id="form-step-1" role="form" data-toggle="validator">
                                                 <div class="col-md-9">
-                                                    <h2>{{ trans('adminlte_lang::message.personaltitleh2') }}</h2>
+                                                    <h2>{{ __('adminlte::message.personaltitleh2') }}</h2>
                                                 </div>
                                                 <div class="form-group col-md-6">
                                                     <label for="PersFirstName">{{'Nombre'}}</label><small class="help-block with-errors">*</small>
@@ -134,26 +134,26 @@
                                                 </div>
                                                 <div class="form-group col-md-6">
                                                     <label for="CliComercial">Correo electrónico</label><small class="help-block with-errors">*</small>
-                                                    <input type="email" class="form-control" id="PersEmail" name="PersEmail" maxlength="255" required value="{{ old('PersEmail') }}" placeholder="{{ trans('adminlte_lang::message.emailplaceholder') }}">
+                                                    <input type="email" class="form-control" id="PersEmail" name="PersEmail" maxlength="255" required value="{{ old('PersEmail') }}" placeholder="{{ __('adminlte::message.emailplaceholder') }}">
 
                                                 </div>
                                                 <div class="form-group col-md-6">
-                                                    <label for="PersCellphone">{{ trans('adminlte_lang::message.mobile') }}</label><small class="help-block with-errors">*</small>
+                                                    <label for="PersCellphone">{{ __('adminlte::message.mobile') }}</label><small class="help-block with-errors">*</small>
                                                     <div class="input-group">
                                                         <span class="input-group-addon">(+57)</span>
-                                                        <input type="text" class="form-control mobile" id="PersCellphone" name="PersCellphone" placeholder="{{ trans('adminlte_lang::message.mobileplaceholder') }}" data-minlength="12"  maxlength="12" value="{{ old('PersCellphone') }}" required>
+                                                        <input type="text" class="form-control mobile" id="PersCellphone" name="PersCellphone" placeholder="{{ __('adminlte::message.mobileplaceholder') }}" data-minlength="12"  maxlength="12" value="{{ old('PersCellphone') }}" required>
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-6 form-group">
-                                                    <label for="sedeinputphone1">{{ trans('adminlte_lang::message.phone') }}</label><small class="help-block with-errors"></small>
-                                                    <input type="text" class="form-control phone tel" id="sedeinputphone1" name="SedePhone1" placeholder="{{ trans('adminlte_lang::message.phoneplaceholder') }}" data-minlength="11" value="{{ old('SedePhone1') }}">
+                                                    <label for="sedeinputphone1">{{ __('adminlte::message.phone') }}</label><small class="help-block with-errors"></small>
+                                                    <input type="text" class="form-control phone tel" id="sedeinputphone1" name="SedePhone1" placeholder="{{ __('adminlte::message.phoneplaceholder') }}" data-minlength="11" value="{{ old('SedePhone1') }}">
                                                 </div>
 
                                                 <div class="form-group col-md-6">
                                                     <label for="CliComercial">Comercial Asignado</label><small class="help-block with-errors">*</small>
                                                     <select class="form-control select" id="CliComercial" name="CliComercial" required>
-                                                        <option value="">{{ trans('adminlte_lang::message.select') }}</option>
+                                                        <option value="">{{ __('adminlte::message.select') }}</option>
                                                         @foreach ($comerciales as $comercial)
                                                         <option value="{{$comercial->ID_Pers}}" {{ old('CliComercial') == $comercial->ID_Pers ? 'selected' : '' }}>{{ $comercial->PersFirstName }} {{$comercial->PersSecondName}} {{$comercial->PersLastName}}</option>
                                                         @endforeach
@@ -163,7 +163,7 @@
                                             </div>
 
                                             <div class="box-footer">
-                                                <button type="submit" class="btn btn-success pull-right">{{ trans('adminlte_lang::message.register') }}</button>
+                                                <button type="submit" class="btn btn-success pull-right">{{ __('adminlte::message.register') }}</button>
                                             </div>
                                         </div>
                                     </div>

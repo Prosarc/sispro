@@ -1,10 +1,10 @@
 @extends('layouts.app')
 @section('htmlheader_title')
-	{{ trans('adminlte_lang::message.sedesgener') }}
+	{{ __('adminlte::message.sedesgener') }}
 @endsection
 @section('contentheader_title')
   <span style="background-image: linear-gradient(40deg, rgb(69, 202, 252), rgb(48, 63, 159)); padding-right:30vw; position:relative; overflow:hidden;">
-  	{{ trans('adminlte_lang::message.sedesgener') }}
+  	{{ __('adminlte::message.sedesgener') }}
     <div style="background-color:#ecf0f5; position:absolute; height:145%; width:40vw; transform:rotate(30deg); right:-20vw; top:-45%;"></div>
   </span>
 @endsection
@@ -14,9 +14,9 @@
 			<div class="col-md-16 col-md-offset-0">
 				<div class="box">
 					<div class="box-header">
-						<h3 class="box-title">{{ trans('adminlte_lang::message.sgenerlist') }}</h3>
+						<h3 class="box-title">{{ __('adminlte::message.sgenerlist') }}</h3>
 						@if(in_array(Auth::user()->UsRol, Permisos::CLIENTE))
-							<a href="/sgeneradores/create" class="btn btn-primary pull-right">{{ trans('adminlte_lang::message.create') }}</a>
+							<a href="/sgeneradores/create" class="btn btn-primary pull-right">{{ __('adminlte::message.create') }}</a>
 						@endif
 					</div>
 					<div class="box box-info">
@@ -25,14 +25,14 @@
 								<thead>
 									<tr>
 										@if(in_array(Auth::user()->UsRol, Permisos::TODOPROSARC))
-											<th>{{ trans('adminlte_lang::message.clientcliente') }}</th>
+											<th>{{ __('adminlte::message.clientcliente') }}</th>
 										@endif
-										<th>{{ trans('adminlte_lang::message.gener') }}</th>
-										<th>{{ trans('adminlte_lang::message.SGenertitle') }}</th>
-										<th>{{ trans('adminlte_lang::message.address') }}</th>
-										<th>{{ trans('adminlte_lang::message.emailaddress') }}</th>
-										<th>{{ trans('adminlte_lang::message.mobile') }}</th>
-										<th>{{ trans('adminlte_lang::message.seemore') }}</th>
+										<th>{{ __('adminlte::message.gener') }}</th>
+										<th>{{ __('adminlte::message.SGenertitle') }}</th>
+										<th>{{ __('adminlte::message.address') }}</th>
+										<th>{{ __('adminlte::message.emailaddress') }}</th>
+										<th>{{ __('adminlte::message.mobile') }}</th>
+										<th>{{ __('adminlte::message.seemore') }}</th>
 									</tr>
 								</thead>
 								<tbody id="readyTable">
@@ -49,7 +49,7 @@
 											<td>{{$GSede->GSedeEmail}}</td>
 											<td>{{$GSede->GSedeCelular}}</td>
 											<td>
-												<a method='get' href='/sgeneradores/{{$GSede->GSedeSlug}}' class='btn btn-info btn-block' title="{{ trans('adminlte_lang::message.seemoredetails')}}"><i class="fas fa-search"></i></a>
+												<a method='get' href='/sgeneradores/{{$GSede->GSedeSlug}}' class='btn btn-info btn-block' title="{{ __('adminlte::message.seemoredetails')}}"><i class="fas fa-search"></i></a>
 											</td>
 										</tr>
 									@endforeach

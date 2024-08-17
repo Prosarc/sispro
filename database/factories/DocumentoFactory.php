@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Factories;
+
 /* @var $factory \Illuminate\Database\Eloquent\Factory */
 
 use App\Documento;

@@ -13,7 +13,7 @@
 		<!-- mini logo for sidebar mini 50x50 pixels -->
 		<span class="logo-mini"><img src="/img/LogoProsarc.png" style="width: 60%; margin: 5px; border-radius: 50%;"></span>
 		<!-- logo for regular state and mobile devices -->
-		<span class="logo-lg"><b>{{ trans('adminlte_lang::message.Appname') }}</b><img src="/img/LogoProsarc.png" style="width: 1.8em; margin: 5px; border-radius: 50%;"></span>
+		<span class="logo-lg"><b>{{ __('adminlte::message.Appname') }}</b><img src="/img/LogoProsarc.png" style="width: 1.8em; margin: 5px; border-radius: 50%;"></span>
 	</a>
 
 	<!-- Header Navbar -->
@@ -56,7 +56,7 @@
 						<span class="label label-success">10    </span>
 					</a>
 					<ul class="dropdown-menu">
-						<li class="header">{{ trans('adminlte_lang::message.tabmessages') }}</li>
+						<li class="header">{{ __('adminlte::message.tabmessages') }}</li>
 						<li>
 							<!-- inner menu: contains the messages -->
 							<ul class="menu">
@@ -68,11 +68,11 @@
 										</div>
 										<!-- Message title and timestamp -->
 										<h4>
-											{{ trans('adminlte_lang::message.supteam') }}
+											{{ __('adminlte::message.supteam') }}
 											<small><i class="fa fa-clock"></i> 5 mins</small>
 										</h4>
 										<!-- The message -->
-										<p>{{ trans('adminlte_lang::message.awesometheme') }}</p>
+										<p>{{ __('adminlte::message.awesometheme') }}</p>
 									</a>
 								</li><!-- end message -->
 							</ul><!-- /.menu -->
@@ -89,18 +89,18 @@
 						<span class="label label-warning">10</span>
 					</a>
 					<ul class="dropdown-menu">
-						<li class="header">{{ trans('adminlte_lang::message.notifications') }}</li>
+						<li class="header">{{ __('adminlte::message.notifications') }}</li>
 						<li>
 							<!-- Inner Menu: contains the notifications -->
 							<ul class="menu">
 								<li><!-- start notification -->
 									<a href="#">
-										<i class="fa fa-users text-aqua"></i> {{ trans('adminlte_lang::message.newmembers') }}
+										<i class="fa fa-users text-aqua"></i> {{ __('adminlte::message.newmembers') }}
 									</a>
 								</li><!-- end notification -->
 							</ul>
 						</li>
-						<li class="footer"><a href="#">{{ trans('adminlte_lang::message.viewall') }}</a></li>
+						<li class="footer"><a href="#">{{ __('adminlte::message.viewall') }}</a></li>
 					</ul>
 				</li> --}}
 				<!-- Tasks Menu -->
@@ -111,7 +111,7 @@
 						<span class="label label-danger">9</span>
 					</a>
 					<ul class="dropdown-menu">
-						<li class="header">{{ trans('adminlte_lang::message.tasks') }}</li>
+						<li class="header">{{ __('adminlte::message.tasks') }}</li>
 						<li>
 							<!-- Inner menu: contains the tasks -->
 							<ul class="menu">
@@ -119,14 +119,14 @@
 									<a href="#">
 										<!-- Task title and progress text -->
 										<h3>
-											{{ trans('adminlte_lang::message.tasks') }}
+											{{ __('adminlte::message.tasks') }}
 											<small class="pull-right">20%</small>
 										</h3>
 										<!-- The progress bar -->
 										<div class="progress xs">
 											<!-- Change the css width attribute to simulate progress -->
 											<div class="progress-bar progress-bar-aqua" style="width: 20%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-												<span class="sr-only">20% {{ trans('adminlte_lang::message.complete') }}</span>
+												<span class="sr-only">20% {{ __('adminlte::message.complete') }}</span>
 											</div>
 										</div>
 									</a>
@@ -134,13 +134,13 @@
 							</ul>
 						</li>
 						<li class="footer">
-							<a href="#">{{ trans('adminlte_lang::message.alltasks') }}</a>
+							<a href="#">{{ __('adminlte::message.alltasks') }}</a>
 						</li>
 					</ul>
 				</li> --}}
 			   {{--  @if (Auth::guest())
-					<li><a href="{{ url('/register') }}">{{ trans('adminlte_lang::message.register') }}</a></li>
-					<li><a href="{{ url('/login') }}">{{ trans('adminlte_lang::message.login') }}</a></li>
+					<li><a href="{{ url('/register') }}">{{ __('adminlte::message.register') }}</a></li>
+					<li><a href="{{ url('/login') }}">{{ __('adminlte::message.login') }}</a></li>
 				@else --}}
 					
 					<!-- User Account Menu -->
@@ -198,31 +198,31 @@
 								@endif
 								<p>
 									<span data-toggle="tooltip" title="{{ Auth::user()->name }}">{{ Auth::user()->name }}</span>
-									<small>{{ trans('adminlte_lang::message.login') }} Nov. 2012</small>
+									<small>{{ __('adminlte::message.login') }} Nov. 2012</small>
 								</p>
 							</li>
 							<!-- Menu Body -->
 							<li class="user-body">
 								<div class="col-xs-4 text-center">
-									<a href="#">{{ trans('adminlte_lang::message.followers') }}</a>
+									<a href="#">{{ __('adminlte::message.followers') }}</a>
 								</div>
 								<div class="col-xs-4 text-center">
-									<a href="#">{{ trans('adminlte_lang::message.sales') }}</a>
+									<a href="#">{{ __('adminlte::message.sales') }}</a>
 								</div>
 								<div class="col-xs-4 text-center">
-									<a href="#">{{ trans('adminlte_lang::message.friends') }}</a>
+									<a href="#">{{ __('adminlte::message.friends') }}</a>
 								</div>
 							</li>
 							<!-- Menu Footer-->
 							<li class="user-footer">
 								<div class="pull-left">
-									<a href="/profile/{{Auth::user()->UsSlug}}" class="btn btn-info" style="background-color: #5bc0de;">{{ trans('adminlte_lang::message.profile') }}</a>
+									<a href="/profile/{{Auth::user()->UsSlug}}" class="btn btn-info" style="background-color: #5bc0de;">{{ __('adminlte::message.profile') }}</a>
 								</div>
 								<div class="pull-right">
 									<a href="{{ url('/logout') }}" class="btn btn-danger" id="logout"
 									   onclick="event.preventDefault();
 												 document.getElementById('logout-form').submit();" style="background-color: #d9534f;">
-										{{ trans('adminlte_lang::message.signout') }}
+										{{ __('adminlte::message.signout') }}
 									</a>
 
 									<form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
@@ -237,7 +237,7 @@
 					<li style="height: 100%;">
 						<a href="/preguntas-frecuentes" style="height: 100%;" title="Preguntas Frecuentes"><i class="fas x2 fa-question-circle" style="font-size: 1.5em"></i></a>
 					</li>
-					@if ((in_array(Auth::user()->UsRol, Permisos::TODOPROSARC) || in_array(Auth::user()->UsRol, Permisos::TODOPROSARC)))
+					@if ((in_array(Auth::user()->UsRol, Permisos::TODOPROSARC) || in_array(Auth::user()->UsRol, Permisos::TODOPROSARC)|| in_array(Auth::user()->UsRol, Permisos::INGDETURNO)))
 					<li style="height: 100%;">
 						<a href="{{ route('reportes.indextemp')}}" style="height: 100%; font-size: 1.2em;" title="Reportes"><i style="font-size: 1.2em;" class="fas x2 fa-chart-bar"></i><b> Reporte</b></a>
 					</li>

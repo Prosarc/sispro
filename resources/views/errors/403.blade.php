@@ -1,4 +1,4 @@
-@extends('errors::illustrated-layout')
+{{--@extends('errors::illustrated-layout')--}}
 @section('code', '403')
 @section('title', __('Prohibido'))
 @section('image')
@@ -8,5 +8,5 @@
 @if($exception->getMessage())
 	@section('message', $exception->getMessage())
 @else
-	@section('message', trans('adminlte_lang::message.withoutpermission'))
+	@section('message', __('adminlte::message.withoutpermission'))
 @endif

@@ -179,7 +179,7 @@ class ServiceExpressController extends Controller
 
 		$Cliente = Cliente::where('ID_Cli', $sede->FK_SedeCli)->first();
 
-        $file = $request->file('pagoComprobante');
+       /* $file = $request->file('pagoComprobante');
 
         switch ($file->getClientOriginalExtension()) {
             case 'pdf':
@@ -209,7 +209,7 @@ class ServiceExpressController extends Controller
             default:
                 abort(422, 'El archivo debe estar de un formato permitido png, jpg o pdf');
                 break;
-        }
+        }*/
         // return $filePath;
 
         // generar el registro para el recibo de pago
@@ -219,7 +219,7 @@ class ServiceExpressController extends Controller
         $recibo->referencia = $request->input('Referencia');
         $recibo->medio_de_pago = $request->input('mediodepago');
         $recibo->observacion = $request->input('SolSerDescript');
-        $recibo->url_comprobante = $filePath;
+        $recibo->url_comprobante = '';
         $recibo->url_recibo = '';
         $recibo->FK_ReciboCliente = $Cliente->ID_Cli;
         $recibo->ReciboSlug = hash('md5', rand().time().$recibo->Referencia);
@@ -227,7 +227,7 @@ class ServiceExpressController extends Controller
 
         /**crear el pdf de recibo */
 
-        $qrCode = new QrCode(route('recibosdepago.show', ['reciboDePago' => $recibo->ReciboSlug]));
+        $qrCode = new QrCode(route('recibosdepago.show', ['recibosdepago' => $recibo->ReciboSlug]));
 		$qrCode->setLogoPath(asset('img/LogoQR.png'));
 		$qrCode->setLogoSize(60, 60);
 		$qrCode->setSize(300);
@@ -235,9 +235,9 @@ class ServiceExpressController extends Controller
 		$qrCode->setRoundBlockSize(true, QrCode::ROUND_BLOCK_SIZE_MODE_SHRINK);
 
         $pdf = PDF::setPaper('letter', 'portrait')->loadView('recibos.recibotopdf', compact(['recibo','Cliente','qrCode','sede']));
-        Storage::put('recibosdepago/'.$foldername.'/RP-'.sprintf("%07s", $recibo->ID_Recibo).'.pdf', $pdf->output(), 'public');
+        Storage::put('recibosdepago/'.'/RP-'.sprintf("%07s", $recibo->ID_Recibo).'.pdf', $pdf->output(), 'public');
 
-        $recibo->url_recibo = 'recibosdepago/'.$foldername.'/RP-'.sprintf("%07s", $recibo->ID_Recibo).'.pdf';
+        $recibo->url_recibo = 'recibosdepago/'.'/RP-'.sprintf("%07s", $recibo->ID_Recibo).'.pdf';
         $recibo->save();
 
         // return $request;
@@ -257,7 +257,7 @@ class ServiceExpressController extends Controller
 			$SolicitudServicio->SolSerStatus = 'Aprobado';
 			$SolicitudServicio->SolSerAuditable = 0;
 			$SolicitudServicio->SolResAuditoriaTipo = "No Auditable";
-            $SolicitudServicio->SolSerSupport = 'comprobantes/'.$foldername.'/'.$fileName.'.'.$file->getClientOriginalExtension();
+           // $SolicitudServicio->SolSerSupport = 'comprobantes/'.$fileName.'.'.$file->getClientOriginalExtension();
 			$SolicitudServicio->SolSerTipo = "Interno";
 			$SolicitudServicio->SolSerNameTrans = 'Prosarc S.A. ESP.';
 			$SolicitudServicio->SolSerNitTrans = '900.079.188-0';
@@ -317,7 +317,7 @@ class ServiceExpressController extends Controller
 		// Mail::to($sede->SedeEmail)->cc($destinatarios)->send(new NewSolServEmail($SolicitudServicio));
         // se envia correo al cliente con el recibo de pado
         Mail::to($sede->SedeEmail)->cc($destinatarios)->send(new SolSerExpressRecibo($pdf, $recibo, $comercial, $Cliente, $sede));
-		return redirect()->route('serviciosexpress.show', ['id' => $SolicitudServicio->SolSerSlug]);
+		return redirect()->route('serviciosexpress.show', ['serviciosexpress' => $SolicitudServicio->SolSerSlug]);
     }
 
     /**
@@ -2240,7 +2240,7 @@ class ServiceExpressController extends Controller
 
 			$Solicitud->nombreDeFirma = 'firmasClientes/'.$nombreDeFirma.'.png';
 
-			$qrCode = new QrCode(route('certificadosexpress.show', ['certificado' => $certificado->CertSlug]));
+			$qrCode = new QrCode(route('certificadosexpress.show', ['certificadosexpress' => $certificado->CertSlug]));
 			$qrCode->setLogoPath(asset('img/LogoQR.png'));
 			$qrCode->setLogoSize(60, 60);
 			$qrCode->setSize(300);
@@ -2325,7 +2325,7 @@ class ServiceExpressController extends Controller
             Mail::to('serviciosexpress@prosarc.com.co')->cc($destinatario)->send(new SolSerExpressEmail($email, $pdf, $certificado));
 		}
 
-		return redirect()->route('serviciosexpress.show', ['id' => $Solicitud->SolSerSlug]);
+		return redirect()->route('serviciosexpress.show', ['serviciosexpress' => $Solicitud->SolSerSlug]);
 
 	}
 
@@ -2400,7 +2400,7 @@ class ServiceExpressController extends Controller
 
         Mail::to('coordinadorse@prosarc.com.co')->cc($comercialaddress)->send(new SolSerExpressConciliado($emailData));
 
-		return redirect()->route('serviciosexpress.show', ['id' => $Solicitud->SolSerSlug]);
+		return redirect()->route('serviciosexpress.show', ['serviciosexpress' => $Solicitud->SolSerSlug]);
 
 	}
 

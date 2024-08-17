@@ -22,7 +22,7 @@ Artículos por Proveedor
 						@endslot
 					@endcomponent
 					@if($ArtProvs->ArtDelete == 0)
-						<a method='get' href='#' data-toggle='modal' data-target='#myModal{{$ArtProvs->ID_ArtiProve}}'  class='btn btn-danger pull-right'><i class="fas fa-trash-alt"></i><b> {{ trans('adminlte_lang::message.delete') }}</b></a>
+						<a method='get' href='#' data-toggle='modal' data-target='#myModal{{$ArtProvs->ID_ArtiProve}}'  class='btn btn-danger pull-right'><i class="fas fa-trash-alt"></i><b> {{ __('adminlte::message.delete') }}</b></a>
 						<form action='/articulos-proveedor/{{$ArtProvs->ID_ArtiProve}}' method='POST'>
 							@method('DELETE')
 							@csrf
@@ -32,7 +32,7 @@ Artículos por Proveedor
 						<form action='/articulos-proveedor/{{$ArtProvs->ID_ArtiProve}}' method='POST' style="float: right;">
 						@method('DELETE')
 						@csrf
-						<button type="submit" class='btn btn-success btn-block'>{{ trans('adminlte_lang::message.add') }}</button>
+						<button type="submit" class='btn btn-success btn-block'>{{ __('adminlte::message.add') }}</button>
 						</form>
 					@endif
 					{{-- <div class="box-tools pull-right">

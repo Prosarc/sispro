@@ -147,12 +147,12 @@ class userController extends Controller
 			'newpassword'          => 'required|confirmed:confirmnewpassword|min:8',
 		]);
 		if(Hash::check($request->input('oldpassword'), $user->password)){
-			$Menssage = trans('adminlte_lang::message.updatetrue');
+			$Menssage = __('adminlte::message.updatetrue');
 			$user->password = bcrypt($request->input('newpassword'));
 			$user->save();
 		}
 		else{
-			$Menssage = trans('adminlte_lang::message.passwordchangefalse');
+			$Menssage = __('adminlte::message.passwordchangefalse');
 			return redirect()->route('permisos-edit', ['id' => $user->UsSlug])->with('Menssage', $Menssage)->with('Error', 'Error');
 		}
 

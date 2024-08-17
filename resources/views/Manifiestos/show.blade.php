@@ -96,7 +96,7 @@
 						<h3 class="box-title">Información para generar Manifiesto</h3>
 						<div class="box-tools pull-right">
 							@if (in_array(Auth::user()->UsRol, Permisos::EDITMANIFCERT) ||in_array(Auth::user()->UsRol, Permisos::EDITMANIFCERT))
-								<a href="/manifiestos/{{$manifiesto->ManifSlug}}/edit" class="btn btn-warning pull-right"> <i class="fas fa-edit"></i> <b>{{ trans('adminlte_lang::message.edit') }}</b></a>
+								<a href="/manifiestos/{{$manifiesto->ManifSlug}}/edit" class="btn btn-warning pull-right"> <i class="fas fa-edit"></i> <b>{{ __('adminlte::message.edit') }}</b></a>
 							@endif
 						</div>
 					</div>

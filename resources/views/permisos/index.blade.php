@@ -1,9 +1,9 @@
 @extends('layouts.app')
 @section('htmlheader_title')
-{{ trans('adminlte_lang::message.users') }}
+{{ __('adminlte::message.users') }}
 @endsection
 @section('contentheader_title')
-{{ trans('adminlte_lang::message.users') }}
+{{ __('adminlte::message.users') }}
 @endsection
 @section('main-content')
 <div class="container-fluid spark-screen">
@@ -11,9 +11,9 @@
 		<div class="col-md-16 col-md-offset-0">
 			<div class="box">
 				<div class="box-header">
-                    <h3 class="box-title">{{ trans('adminlte_lang::message.userlist') }}</h3>
+                    <h3 class="box-title">{{ __('adminlte::message.userlist') }}</h3>
                     @if(in_array(Auth::user()->UsRol, Permisos::PersInter1) || in_array(Auth::user()->UsRol2, Permisos::PersInter1))
-                    <a href="/permisos/create" class="btn btn-primary pull-right">{{ trans('adminlte_lang::message.create') }}</a>
+                    <a href="/permisos/create" class="btn btn-primary pull-right">{{ __('adminlte::message.create') }}</a>
                     @endif
 				</div>
                 <div class="box box-info">
@@ -21,12 +21,12 @@
                         <table id="permisosTable" class="table table-compact table-bordered table-striped">
                             <thead>
                             <tr>
-                                <th>{{ trans('adminlte_lang::message.username') }}</th>
-                                <th>{{ trans('adminlte_lang::message.userperson') }}</th>
-                                <th>{{ trans('adminlte_lang::message.emailaddress') }}</th>
-                                <th>{{ trans('adminlte_lang::message.userrol') }}</th>
-                                <th>{{ trans('adminlte_lang::message.userrol2') }}</th>
-                                <th>{{ trans('adminlte_lang::message.seemore') }}</th>
+                                <th>{{ __('adminlte::message.username') }}</th>
+                                <th>{{ __('adminlte::message.userperson') }}</th>
+                                <th>{{ __('adminlte::message.emailaddress') }}</th>
+                                <th>{{ __('adminlte::message.userrol') }}</th>
+                                <th>{{ __('adminlte::message.userrol2') }}</th>
+                                <th>{{ __('adminlte::message.seemore') }}</th>
                             </tr>
                             </thead>
                             <tbody id="readyTable">

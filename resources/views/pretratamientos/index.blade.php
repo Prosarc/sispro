@@ -1,10 +1,10 @@
 @extends('layouts.app')
 @section('htmlheader_title')
-{{ trans('adminlte_lang::LangTratamiento.pretratMenu') }}
+{{ __('adminlte::LangTratamiento.pretratMenu') }}
 @endsection
 @section('contentheader_title')
 <span style="background-image: linear-gradient(40deg, #FF856D, #CC0000); padding-right:30vw; position:relative; overflow:hidden;">
-    {{ trans('adminlte_lang::LangTratamiento.pretratMenu') }}
+    {{ __('adminlte::LangTratamiento.pretratMenu') }}
   <div style="background-color:#ecf0f5; position:absolute; height:145%; width:40vw; transform:rotate(30deg); right:-20vw; top:-45%;"></div>
 </span>
 @endsection
@@ -14,11 +14,11 @@
 		<div class="col-md-16 col-md-offset-0">
 			<div class="box">
 				<div class="box-header">
-					<h3 class="box-title">{{ trans('adminlte_lang::LangTratamiento.pretratlist') }}</h3>
+					<h3 class="box-title">{{ __('adminlte::LangTratamiento.pretratlist') }}</h3>
 					@if(in_array(Auth::user()->UsRol, Permisos::JefeOperaciones) || in_array(Auth::user()->UsRol2, Permisos::JefeOperaciones))
-					<a href="/pretratamiento/create" class="btn btn-primary" style="float: right;">{{ trans('adminlte_lang::message.create') }}</a>
+					<a href="/pretratamiento/create" class="btn btn-primary" style="float: right;">{{ __('adminlte::message.create') }}</a>
 					@else
-					<a href="#" disabled class="btn btn-default pull-right" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>Crear Tratamiento</b>" data-content="<p style='width: 50%'> Unicamente el jefe de operaciones cuenta con la autorizacion para crear tratamientos">{{ trans('adminlte_lang::message.create') }}</a>
+					<a href="#" disabled class="btn btn-default pull-right" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>Crear Tratamiento</b>" data-content="<p style='width: 50%'> Unicamente el jefe de operaciones cuenta con la autorizacion para crear tratamientos">{{ __('adminlte::message.create') }}</a>
 					@endif
 				</div>
 				<!-- /.box-header -->
@@ -27,9 +27,9 @@
 						<table id="pretratamientosTable" class="table table-bordered table-striped" width="100%">
 							<thead>
 								<tr>
-									<th>{{ trans('adminlte_lang::LangTratamiento.pretratname') }}</th>
-									<th>{{ trans('adminlte_lang::LangTratamiento.pretratdescript') }}</th>
-									<th>{{ trans('adminlte_lang::message.seemore') }}</th>
+									<th>{{ __('adminlte::LangTratamiento.pretratname') }}</th>
+									<th>{{ __('adminlte::LangTratamiento.pretratdescript') }}</th>
+									<th>{{ __('adminlte::message.seemore') }}</th>
 								</tr>
 							</thead>
 							<tbody id="readyTable">
@@ -40,7 +40,7 @@
 									>
 									<td>{{$pretratamiento->PreTratName}}</td>
 									<td>{{$pretratamiento->PreTratDescription}}</td>
-									<td><a method='get' href='/pretratamiento/{{$pretratamiento->ID_PreTrat}}/edit' class='btn btn-info btn-block' title="{{ trans('adminlte_lang::message.seemoredetails')}}"><i class="fas fa-search"></i></a></td>
+									<td><a method='get' href='/pretratamiento/{{$pretratamiento->ID_PreTrat}}/edit' class='btn btn-info btn-block' title="{{ __('adminlte::message.seemoredetails')}}"><i class="fas fa-search"></i></a></td>
 								</tr>
 								@endforeach
 							</tbody>

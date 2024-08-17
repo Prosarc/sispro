@@ -104,7 +104,7 @@ Requerimientos
 							</div>
 							<div class="box box-info">
 								<div class="box-footer">
-									<button type="submit" class="btn btn-success pull-right">{{trans('adminlte_lang::message.create')}}</button>
+									<button type="submit" class="btn btn-success pull-right">{{__('adminlte::message.create')}}</button>
 								</div>
 							</div>
 							<input hidden type="text" name="updated_by" value="{{Auth::user()->email}}">

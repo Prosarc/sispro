@@ -17,8 +17,9 @@ class VerificationCodeController extends Controller
     {
         //$codes = VerificationCode::with('grupo')->orderBy('created_at','desc')->get();
         $codes = VerificationCode::with('grupo')
-        ->whereYear('created_at','2022')->
-        get();
+        ->whereYear('created_at','2023')
+       // ->whereMonth('created_at','12')
+        ->get();
 
 
 		return view('verifycodes.index', compact('codes'));

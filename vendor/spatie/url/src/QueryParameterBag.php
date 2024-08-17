@@ -2,36 +2,34 @@
 
 namespace Spatie\Url;
 
-use Spatie\Url\Helpers\Arr;
-
-class QueryParameterBag
+class QueryParameterBag implements \Stringable
 {
-    /** @var array */
-    protected $parameters;
-
-    public function __construct(array $parameters = [])
-    {
-        $this->parameters = $parameters;
+    public function __construct(
+        protected array $parameters = [],
+    ) {
+        //
     }
 
-    public static function fromString(string $query = ''): self
+    public static function fromString(string $query = ''): static
     {
         if ($query === '') {
             return new static();
         }
 
-        return new static(Arr::mapToAssoc(explode('&', $query), function (string $keyValue) {
-            $parts = explode('=', $keyValue, 2);
+        $parameters = [];
+        parse_str($query, $parameters);
+        $parameters = array_map(fn ($param) => $param !== '' ? $param : null, $parameters);
 
-            return count($parts) === 2
-                ? [$parts[0], rawurldecode($parts[1])]
-                : [$parts[0], null];
-        }));
+        return new static($parameters);
     }
 
-    public function get(string $key, $default = null)
+    public function get(string $key, mixed $default = null): mixed
     {
-        return $this->parameters[$key] ?? $default;
+        if ($this->has($key)) {
+            return $this->parameters[$key];
+        }
+
+        return is_callable($default) ? $default() : $default;
     }
 
     public function has(string $key): bool
@@ -39,16 +37,23 @@ class QueryParameterBag
         return array_key_exists($key, $this->parameters);
     }
 
-    public function set(string $key, string $value)
+    public function set(string $key, string|array $value): self
     {
         $this->parameters[$key] = $value;
 
         return $this;
     }
 
-    public function unset(string $key)
+    public function unset(string $key): self
     {
         unset($this->parameters[$key]);
+
+        return $this;
+    }
+
+    public function unsetAll(): self
+    {
+        $this->parameters = [];
 
         return $this;
     }
@@ -58,12 +63,8 @@ class QueryParameterBag
         return $this->parameters;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        $keyValuePairs = Arr::map($this->parameters, function ($value, $key) {
-            return "{$key}=".rawurlencode($value);
-        });
-
-        return implode('&', $keyValuePairs);
+        return http_build_query($this->parameters, '', '&', PHP_QUERY_RFC3986);
     }
 }

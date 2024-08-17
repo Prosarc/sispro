@@ -151,9 +151,9 @@
             $trans = [];
             foreach ($lang_files as $f) {
                 $filename = pathinfo($f)['filename'];
-                $trans[$filename] = trans($filename);
+                $trans[$filename] = __($filename);
             }
-            $trans['adminlte_lang_message'] = trans('adminlte_lang::message');
+            $trans['adminlte_message'] = __('adminlte::message');
             echo json_encode($trans);
             // echo $trans;
         @endphp
@@ -184,11 +184,11 @@
                         <!-- Authentication Links -->
                         @guest
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ trans('adminlte_lang::message.login') }}</a>
+                                <a class="nav-link" href="{{ route('login') }}">{{ __('adminlte::message.login') }}</a>
                             </li>
                             @if (Route::has('register'))
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ trans('adminlte_lang::message.register') }}</a>
+                                    <a class="nav-link" href="{{ route('register') }}">{{ __('adminlte::message.register') }}</a>
                                 </li>
                             @endif
                         @else
@@ -201,7 +201,7 @@
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                        {{ trans('adminlte_lang::message.signout') }}
+                                        {{ __('adminlte::message.signout') }}
                                     </a>
 
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">

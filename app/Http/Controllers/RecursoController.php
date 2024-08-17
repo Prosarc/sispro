@@ -123,7 +123,8 @@ class RecursoController extends Controller
             ->where('RecCarte', 'Video')
             ->orderBy('RecTipo')
             ->get();
-        return view('recursos.show', compact('Recursos', 'SolRes', 'Fotos', 'Videos', 'SolSer', 'Respel', 'Programacion'));
+       // return view('recursos.show', compact('Recursos', 'SolRes', 'Fotos', 'Videos', 'SolSer', 'Respel', 'Programacion'));
+       return view('recursos.show', compact( 'SolRes', 'Fotos', 'Videos', 'SolSer', 'Respel', 'Programacion'));
 
     }
     

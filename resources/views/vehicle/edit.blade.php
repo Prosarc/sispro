@@ -1,10 +1,10 @@
 @extends('layouts.app')
 @section('htmlheader_title')
-{{trans('adminlte_lang::message.vehicletitle')}}
+{{__('adminlte::message.vehicletitle')}}
 @endsection
 @section('contentheader_title')
 <span style="background-image: linear-gradient(40deg, rgb(69, 202, 252), rgb(48, 63, 159)); padding-right:30vw; position:relative; overflow:hidden;">
-	{{ trans('adminlte_lang::message.vehicletitle') }}
+	{{ __('adminlte::message.vehicletitle') }}
   <div style="background-color:#ecf0f5; position:absolute; height:145%; width:40vw; transform:rotate(30deg); right:-20vw; top:-45%;"></div>
 </span>
 @endsection
@@ -22,9 +22,9 @@
 							el vehiculo con placa <b>{{$Vehicle->VehicPlaca}}</b>
 						@endslot
 					@endcomponent
-					<h3 class="box-title">{{trans('adminlte_lang::message.vehicleedit')}}</h3>
+					<h3 class="box-title">{{__('adminlte::message.vehicleedit')}}</h3>
 					@if($Vehicle->VehicDelete === 0)
-					<a method='get' href='#' data-toggle='modal' data-target='#myModal{{$Vehicle->VehicPlaca}}'  class='btn btn-danger pull-right'><i class="fas fa-trash-alt"></i><b> {{ trans('adminlte_lang::message.delete') }}</b></a>
+					<a method='get' href='#' data-toggle='modal' data-target='#myModal{{$Vehicle->VehicPlaca}}'  class='btn btn-danger pull-right'><i class="fas fa-trash-alt"></i><b> {{ __('adminlte::message.delete') }}</b></a>
 					<form action='/vehicle/{{$Vehicle->VehicPlaca}}' method='POST'>
 						@method('DELETE')
 						@csrf
@@ -34,7 +34,7 @@
 					<form action='/vehicle/{{$Vehicle->VehicPlaca}}' method='POST' style="float: right;">
 						@method('DELETE')
 						@csrf
-						<button type="submit" class='btn btn-success btn-block'>{{ trans('adminlte_lang::message.add') }}</button>
+						<button type="submit" class='btn btn-success btn-block'>{{ __('adminlte::message.add') }}</button>
 					</form>
 					@endif
 				</div>
@@ -44,33 +44,33 @@
 						@csrf
 						<div class="box-body">
 							<div class="form-group col-md-12">
-								<label for="FK_VehiSede">{{trans('adminlte_lang::message.vehicsedes')}}</label>
+								<label for="FK_VehiSede">{{__('adminlte::message.vehicsedes')}}</label>
 								<small class="help-block with-errors">*</small>
 								<select class="form-control" id="FK_VehiSede" name="FK_VehiSede" required="true">
-									<option value="">{{ trans('adminlte_lang::message.select') }}</option>
+									<option value="">{{ __('adminlte::message.select') }}</option>
 									@foreach($Sedes as $Sede)
 										<option value="{{$Sede->ID_Sede}}" {{$Vehicle->FK_VehiSede == $Sede->ID_Sede ? 'selected' : ''}}>{{$Sede->SedeName}}</option>
 									@endforeach
 								</select>
 							</div>
 							<div class="form-group col-md-6">
-								<label for="VehicPlaca">{{trans('adminlte_lang::message.vehicplaca')}}</label>
+								<label for="VehicPlaca">{{__('adminlte::message.vehicplaca')}}</label>
 								<small class="help-block with-errors">*</small>
 								<input type="text" class="form-control placa" id="VehicPlaca" name="VehicPlaca" required="true" data-minlength="7" value="{{$Vehicle->VehicPlaca}}">
 							</div>
 							
 							<div class="form-group col-md-6">
-								<label for="VehicCapacidad">{{trans('adminlte_lang::message.vehiccapacidad')}}</label>
+								<label for="VehicCapacidad">{{__('adminlte::message.vehiccapacidad')}}</label>
 								<small class="help-block with-errors">*</small>
 								<input type="number" class="form-control" id="VehicCapacidad" name="VehicCapacidad" max="999999" value="{{$Vehicle->VehicCapacidad}}">
 							</div>
 							<div class="form-group col-md-6">
-								<label for="VehicKmActual">{{trans('adminlte_lang::message.vehickm')}}</label>
+								<label for="VehicKmActual">{{__('adminlte::message.vehickm')}}</label>
 								{{-- <small class="help-block with-errors">*</small> --}}
 								<input disabled type="number" class="form-control" id="VehicKmActual" name="VehicKmActual" max="999999" value="{{$Vehicle->VehicKmActual}}">
 							</div>
 							<div class="form-group col-md-6">
-								<label for="VehicTipo">{{trans('adminlte_lang::message.vehictipo')}}</label>
+								<label for="VehicTipo">{{__('adminlte::message.vehictipo')}}</label>
 								<small class="help-block with-errors">*</small>
 								<select class="form-control" id="VehicTipo" name="VehicTipo" required="true" maxlength="64">
 									<option value="Camión sencillo (2 Ejes)">Camión sencillo (2 Ejes)</option>
@@ -87,7 +87,7 @@
 						<!-- /.box-body -->
 						<div class="box box-info">
 							<div class="box-footer">
-								<button type="submit" class="btn btn-success pull-right">{{trans('adminlte_lang::message.update')}}</button>
+								<button type="submit" class="btn btn-success pull-right">{{__('adminlte::message.update')}}</button>
 							</div>
 						</div>
 					</form>

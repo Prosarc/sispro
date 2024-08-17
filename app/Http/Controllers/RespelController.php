@@ -134,9 +134,9 @@ class RespelController extends Controller
                 ->where('personals.ID_Pers', Auth::user()->FK_UserPers)
                 ->get();
             $tratamientos = Tratamiento::select('*')->get();
-
+            
             return view('respels.create', compact('Sede', 'tratamientos'));
-        }elseif(in_array(Auth::user()->UsRol, Permisos::RESPELPUBLIC) || in_array(Auth::user()->UsRol2, Permisos::RESPELPUBLIC)){
+        }elseif(in_array(Auth::user()->UsRol, Permisos::RESPELPUBLIC) || in_array(Auth::user()->UsRol2, Permisos::RESPELPUBLIC)|| in_array(Auth::user()->UsRol, Permisos::INGDETURNO)){
             $Sedes = DB::table('clientes')
                 ->join('sedes', 'sedes.FK_SedeCli', '=', 'clientes.ID_Cli')
                 ->select('sedes.ID_Sede', 'clientes.CliName')
@@ -472,19 +472,19 @@ class RespelController extends Controller
                 /*el Cliente solo puede editar pendientes e incompletos*/
                 switch ($statusRespel) {
                     case 'Aprobado':
-                        return view('respels.edit', compact('Respels', 'Sede', 'Requerimientos', 'tratamientos'));
+                        return view('respels.edit', compact('Respels', 'Sede','tratamientos'));
                         break;
                     case 'Pendiente':
-                        return view('respels.edit', compact('Respels', 'Sede', 'Requerimientos', 'tratamientos'));
+                        return view('respels.edit', compact('Respels', 'Sede', 'tratamientos'));
                         break;
                     case 'Incompleto':
-                        return view('respels.edit', compact('Respels', 'Sede', 'Requerimientos', 'tratamientos'));
+                        return view('respels.edit', compact('Respels', 'Sede', 'tratamientos'));
                         break;
                     case 'Falta TDE':
-                        return view('respels.editTDE', compact('Respels', 'Sede', 'Requerimientos', 'tratamientos'));
+                        return view('respels.editTDE', compact('Respels', 'Sede', 'tratamientos'));
                         break;
                     case 'TDE actualizada':
-                        return view('respels.editTDE', compact('Respels', 'Sede', 'Requerimientos', 'tratamientos'));
+                        return view('respels.editTDE', compact('Respels', 'Sede', 'tratamientos'));
                         break;
                     default:
                         abort(403);
@@ -544,6 +544,61 @@ class RespelController extends Controller
             abort(403);
         }
     }
+
+        /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function editADP($id)
+    {
+        /*se verifican el rol del usuario para dar acceso a la edicion de respel o evaluacion de respel*/
+        if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR)){
+
+            $Respels = Respel::where('RespelSlug', $id)->first();
+
+            //Tabla tratamientos con su respectivo gestor
+            $tratamientos = DB::table('tratamientos')
+                ->join('sedes', 'sedes.ID_Sede', '=', 'tratamientos.FK_TratProv')
+                ->join('clientes', 'clientes.ID_Cli', '=', 'sedes.FK_SedeCli')
+                ->select('sedes.*', 'clientes.*', 'tratamientos.*')
+                ->where('TratDelete', 0)
+                ->get();
+
+                /*se valida que el residuo no este eliminado*/
+                if ($Respels->RespelDelete == 1) {
+                    abort(404);
+                }
+                // se verifica el rol y el status del residuo para saber si se puede editar
+                $statusRespel = $Respels->RespelStatus;
+
+                /*se  verifica si el residuo tiene alguna registro hijo o dependiente*/
+                $ResiduoConDependencia1 = ResiduosGener::where('FK_Respel', $Respels->ID_Respel)->first();
+                $ResiduoConDependencia2 = Requerimiento::where('FK_ReqRespel', $Respels->ID_Respel)->first();
+
+                if ($ResiduoConDependencia1||$ResiduoConDependencia2) {
+                    $deleteButton = 'No borrable';
+                }else{
+                    $deleteButton = 'borrable';
+                }
+
+                $Sede = DB::table('personals')
+                    ->join('cargos', 'cargos.ID_Carg', 'personals.FK_PersCargo')
+                    ->join('areas', 'areas.ID_Area', 'cargos.CargArea')
+                    ->join('sedes', 'sedes.ID_Sede', 'areas.FK_AreaSede')
+                    ->select('sedes.ID_Sede')
+                    ->where('personals.ID_Pers', Auth::user()->FK_UserPers)
+                    ->get();
+
+                return view('respels.editADP', compact('Respels', 'Sede',   'tratamientos'));
+                       
+                
+            }
+            else{
+                abort(403);
+            }
+         }
 
     /**
      * Update the specified resource in storage.
@@ -686,7 +741,7 @@ class RespelController extends Controller
             Mail::to($destinatarios)->send(new RespelCorregido($respel));
         }
 
-        return redirect()->route('respels.show', [$respel->RespelSlug]);
+        return redirect()->route('respels.index', [$respel->RespelSlug]);
 
     }
 
@@ -1244,7 +1299,7 @@ class RespelController extends Controller
                 }
             })
             ->where('clientes.CliCategoria', 'ClientePrepago')
-            ->whereYear('respels.created_at','2023')
+            //->whereYear('respels.created_at','2023')
             ->get();
 
             foreach ($Respels as $key => $value) {
@@ -1285,7 +1340,7 @@ class RespelController extends Controller
             ->where('clientes.ID_Cli', '<>', 1)
             ->get();
 
-            $tratamientos = Tratamiento::where('FK_TratProv', 1)->get();
+            $tratamientos = Tratamiento::select('*')->get();
             $categories = Categoryrespelpublic::all();
 
             return view('solicitud-serv.Createrespel', compact('Sede', 'tratamientos', 'categories'));

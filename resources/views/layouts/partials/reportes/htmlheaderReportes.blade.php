@@ -24,9 +24,9 @@
             $trans = [];
             foreach ($lang_files as $f) {
                 $filename = pathinfo($f)['filename'];
-                $trans[$filename] = trans($filename);
+                $trans[$filename] = __($filename);
             }
-            $trans['adminlte_lang_message'] = trans('adminlte_lang::message');
+            $trans['adminlte_message'] = __('adminlte::message');
             echo json_encode($trans);
             // echo $trans;
         @endphp

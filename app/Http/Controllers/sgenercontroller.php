@@ -67,7 +67,8 @@ class sgenercontroller extends Controller
             if (old('FK_GSedeMun') !== null){
                 $Municipios = Municipio::where('FK_MunCity', old('departamento'))->get();
             }
-            return view('sgeneradores.create', compact('Generadores', 'Departamentos', 'Municipios', 'Respels'));
+            //return view('sgeneradores.create', compact('Generadores', 'Departamentos', 'Municipios', 'Respels'));
+            return view('sgeneradores.create', compact('Generadores', 'Departamentos', 'Respels'));
         }else{
             abort(403);
         }

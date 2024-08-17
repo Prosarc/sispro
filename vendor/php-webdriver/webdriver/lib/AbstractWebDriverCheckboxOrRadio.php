@@ -2,9 +2,9 @@
 
 namespace Facebook\WebDriver;
 
+use Facebook\WebDriver\Exception\InvalidElementStateException;
 use Facebook\WebDriver\Exception\NoSuchElementException;
 use Facebook\WebDriver\Exception\UnexpectedTagNameException;
-use Facebook\WebDriver\Exception\WebDriverException;
 use Facebook\WebDriver\Support\XPathEscaper;
 
 /**
@@ -30,7 +30,7 @@ abstract class AbstractWebDriverCheckboxOrRadio implements WebDriverSelectInterf
 
         $this->name = $element->getAttribute('name');
         if ($this->name === null) {
-            throw new WebDriverException('The input does not have a "name" attribute.');
+            throw new InvalidElementStateException('The input does not have a "name" attribute.');
         }
 
         $this->element = $element;
@@ -66,7 +66,7 @@ abstract class AbstractWebDriverCheckboxOrRadio implements WebDriverSelectInterf
         }
 
         throw new NoSuchElementException(
-            sprintf('No %s are selected', 'radio' === $this->type ? 'radio buttons' : 'checkboxes')
+            sprintf('No %s are selected', $this->type === 'radio' ? 'radio buttons' : 'checkboxes')
         );
     }
 

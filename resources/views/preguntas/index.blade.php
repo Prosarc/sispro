@@ -1,10 +1,10 @@
 @extends('layouts.app')
 @section('htmlheader_title')
-{{ trans('adminlte_lang::message.frequent questions') }}
+{{ __('adminlte::message.frequent questions') }}
 @endsection
 @section('contentheader_title')
 <div class="text-center" style="font-size:31px; margin-top: 20px; margin-bottom: -5px;">
-    <span >{{ trans('adminlte_lang::message.frequent questions') }}</span>
+    <span >{{ __('adminlte::message.frequent questions') }}</span>
 </div>
 @endsection
 @section('main-content')
@@ -25,7 +25,7 @@
                             <div id="collapse1" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="question1">
                                 <div class="panel-body">
                                     <span>
-                                        {{ trans('adminlte_lang::message.question-1-description') }}
+                                        {{ __('adminlte::message.question-1-description') }}
                                     </span>
                                 </div>
                             </div>
@@ -34,14 +34,14 @@
                             <div class="panel-heading" role="tab" id="question2">
                                 <h4 class="panel-title">
                                     <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse2" aria-expanded="false" aria-controls="collapse2">
-                                        <span>{{ trans('adminlte_lang::message.question-2-title') }}</span>
+                                        <span>{{ __('adminlte::message.question-2-title') }}</span>
                                     </a>
                                 </h4>
                             </div>
                             <div id="collapse2" class="panel-collapse collapse" role="tabpanel" aria-labelledby="question2">
                                 <div class="panel-body">
                                     <span>
-                                        {{ trans('adminlte_lang::message.question-2-description') }}
+                                        {{ __('adminlte::message.question-2-description') }}
                                     </span>
                                 </div>
                             </div>
@@ -66,14 +66,14 @@
                             <div class="panel-heading" role="tab" id="question4">
                                 <h4 class="panel-title">
                                     <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse4" aria-expanded="false" aria-controls="collapse4">
-                                        <span> {{ trans('adminlte_lang::message.question-4-title') }}</span>
+                                        <span> {{ __('adminlte::message.question-4-title') }}</span>
                                     </a>
                                 </h4>
                             </div>
                             <div id="collapse4" class="panel-collapse collapse" role="tabpanel" aria-labelledby="question4">
                                 <div class="panel-body">
                                     <span>
-                                        {{ trans('adminlte_lang::message.question-4-description') }}
+                                        {{ __('adminlte::message.question-4-description') }}
                                         <br><br><strong> NOTA: </strong>El botón solo funciona una vez así que le recomedamos que lo haga una vez haya colocado todos sus datos.
                                     </span>
                                 </div>
@@ -83,14 +83,14 @@
                             <div class="panel-heading" role="tab" id="question5">
                                 <h4 class="panel-title">
                                     <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse5" aria-expanded="false" aria-controls="collapse5">
-                                        <span> {{ trans('adminlte_lang::message.question-5-title') }}</span>
+                                        <span> {{ __('adminlte::message.question-5-title') }}</span>
                                     </a>
                                 </h4>
                             </div>
                             <div id="collapse5" class="panel-collapse collapse" role="tabpanel" aria-labelledby="question5">
                                 <div class="panel-body">
                                     <span>
-                                        {{ trans('adminlte_lang::message.question-5-description') }}
+                                        {{ __('adminlte::message.question-5-description') }}
                                     </span>
                                 </div>
                             </div>
@@ -99,14 +99,14 @@
                             <div class="panel-heading" role="tab" id="question6">
                                 <h4 class="panel-title">
                                     <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse6" aria-expanded="false" aria-controls="collapse6">
-                                        <span> {{ trans('adminlte_lang::message.question-6-title') }}</span>
+                                        <span> {{ __('adminlte::message.question-6-title') }}</span>
                                     </a>
                                 </h4>
                             </div>
                             <div id="collapse6" class="panel-collapse collapse" role="tabpanel" aria-labelledby="question6">
                                 <div class="panel-body">
                                     <span>
-                                        {{ trans('adminlte_lang::message.question-6-description') }}
+                                        {{ __('adminlte::message.question-6-description') }}
                                     </span>
                                 </div>
                             </div>
@@ -115,14 +115,14 @@
                             <div class="panel-heading" role="tab" id="question7">
                                 <h4 class="panel-title">
                                     <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse7" aria-expanded="false" aria-controls="collapse7">
-                                        <span> {{ trans('adminlte_lang::message.question-7-title') }} </span>
+                                        <span> {{ __('adminlte::message.question-7-title') }} </span>
                                     </a>
                                 </h4>
                             </div>
                             <div id="collapse7" class="panel-collapse collapse" role="tabpanel" aria-labelledby="question7">
                                 <div class="panel-body">
                                     <span>
-                                        {{ trans('adminlte_lang::message.question-7-description') }}
+                                        {{ __('adminlte::message.question-7-description') }}
                                         <br><br><strong>NOTA: </strong>Si tiene alguna duda por favor comuniquese directamente con su Asesor Comercial 
                                     </span>
                                 </div>
@@ -132,14 +132,14 @@
                             <div class="panel-heading" role="tab" id="question8">
                                 <h4 class="panel-title">
                                     <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse8" aria-expanded="false" aria-controls="collapse8">
-                                        <span>{{ trans('adminlte_lang::message.question-8-title') }}</span>
+                                        <span>{{ __('adminlte::message.question-8-title') }}</span>
                                     </a>
                                 </h4>
                             </div>
                             <div id="collapse8" class="panel-collapse collapse" role="tabpanel" aria-labelledby="question7">
                                 <div class="panel-body">
                                     <span>
-                                        {{ trans('adminlte_lang::message.question-8-description') }}
+                                        {{ __('adminlte::message.question-8-description') }}
                                     </span>
                                 </div>
                             </div>

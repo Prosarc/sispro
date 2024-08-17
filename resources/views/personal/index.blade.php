@@ -1,16 +1,16 @@
 @extends('layouts.app')
 @section('htmlheader_title')
-{{ trans('adminlte_lang::message.personalhtmlheader_title') }}
+{{ __('adminlte::message.personalhtmlheader_title') }}
 @endsection
 @section('contentheader_title')
 @if(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol2, Permisos::CLIENTE))
 <span style="background-image: linear-gradient(40deg, #FFFFFF, #A3A2AE); padding-right:30vw; position:relative; overflow:hidden;">
-	{{ trans('adminlte_lang::message.personalhtmlheader_title') }}
+	{{ __('adminlte::message.personalhtmlheader_title') }}
   <div style="background-color:#ecf0f5; position:absolute; height:145%; width:40vw; transform:rotate(30deg); right:-20vw; top:-45%;"></div>
 </span>
 @else
 <span style="background-image: linear-gradient(40deg, rgb(255, 216, 111), rgb(252, 98, 98)); padding-right:30vw; position:relative; overflow:hidden;">
-	{{ trans('adminlte_lang::message.personalhtmlheader_title') }}
+	{{ __('adminlte::message.personalhtmlheader_title') }}
   <div style="background-color:#ecf0f5; position:absolute; height:145%; width:40vw; transform:rotate(30deg); right:-20vw; top:-45%;"></div>
 </span>
 @endif
@@ -21,7 +21,7 @@
 		<div class="col-md-16 col-md-offset-0">
 			<div class="box">
 				<div class="box-header">
-					<h3 class="box-title">{{ trans('adminlte_lang::message.personaltitlelist') }}</h3>
+					<h3 class="box-title">{{ __('adminlte::message.personaltitlelist') }}</h3>
 					
 
 					@if(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
@@ -40,17 +40,17 @@
 						<table id="PersonalsTable" class="table table-compact table-bordered table-striped">
 							<thead>
 								<tr>
-									<th>{{ trans('adminlte_lang::message.persdocument') }}</th>
-									<th>{{ trans('adminlte_lang::message.persname') }}</th>
-									<th>{{ trans('adminlte_lang::message.emailaddress') }}</th>
-									<th>{{ trans('adminlte_lang::message.mobile') }}</th>
-									<th>{{ trans('adminlte_lang::message.cargoname') }}</th>
-									<th>{{ trans('adminlte_lang::message.areaname') }}</th>
-									@if(Auth::user()->UsRol <> trans('adminlte_lang::message.Cliente'))
-										<th>{{ trans('adminlte_lang::message.clientmenu') }}</th>
+									<th>{{ __('adminlte::message.persdocument') }}</th>
+									<th>{{ __('adminlte::message.persname') }}</th>
+									<th>{{ __('adminlte::message.emailaddress') }}</th>
+									<th>{{ __('adminlte::message.mobile') }}</th>
+									<th>{{ __('adminlte::message.cargoname') }}</th>
+									<th>{{ __('adminlte::message.areaname') }}</th>
+									@if(Auth::user()->UsRol <> __('adminlte::message.Cliente'))
+										<th>{{ __('adminlte::message.clientmenu') }}</th>
 									@endif
 									{{-- <th>Contacto de facturación</th> --}}
-									<th>{{ trans('adminlte_lang::message.see') }}</th>
+									<th>{{ __('adminlte::message.see') }}</th>
 								</tr>
 							</thead>
 							<tbody id="readyTable">
@@ -62,11 +62,11 @@
 									<td>{{$Personal->PersCellphone}}</td>
 									<td>{{$Personal->CargName}}</td>
 									<td>{{$Personal->AreaName}}</td>
-									@if(Auth::user()->UsRol <> trans('adminlte_lang::message.Cliente'))
+									@if(Auth::user()->UsRol <> __('adminlte::message.Cliente'))
 										<td>{{$Personal->CliName}}</td>
 									@endif
 									{{-- <td>{{$Personal->PersFactura==1 ? "Si" : "No"}}</td> --}}
-									<td><a method='get' href='/personal/{{$Personal->PersSlug}}' class='btn btn-info btn-block' title="{{ trans('adminlte_lang::message.seemoredetails')}}"><i class="fas fa-search"></i></a></td>
+									<td><a method='get' href='/personal/{{$Personal->PersSlug}}' class='btn btn-info btn-block' title="{{ __('adminlte::message.seemoredetails')}}"><i class="fas fa-search"></i></a></td>
 								</tr>
 								@endforeach
 							</tbody>

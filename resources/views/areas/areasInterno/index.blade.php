@@ -1,10 +1,10 @@
 @extends('layouts.app')
 @section('htmlheader_title')
-{{ trans('adminlte_lang::message.areatitle') }}
+{{ __('adminlte::message.areatitle') }}
 @endsection
 @section('contentheader_title')
 <span style="background-image: linear-gradient(40deg, #FFFFFF, #A3A2AE); padding-right:30vw; position:relative; overflow:hidden;">
-	{{ trans('adminlte_lang::message.areatitle') }}
+	{{ __('adminlte::message.areatitle') }}
   <div style="background-color:#ecf0f5; position:absolute; height:145%; width:40vw; transform:rotate(30deg); right:-20vw; top:-45%;"></div>
 </span>
 @endsection
@@ -14,9 +14,9 @@
 			<div class="col-md-16 col-md-offset-0">
 				<div class="box">
 					<div class="box-header">
-						<h3 class="box-title">{{ trans('adminlte_lang::message.listarea') }}</h3>
+						<h3 class="box-title">{{ __('adminlte::message.listarea') }}</h3>
 						@if(in_array(Auth::user()->UsRol, Permisos::PersInter1) || in_array(Auth::user()->UsRol2, Permisos::PersInter1))
-						<a href="/areasInterno/create" class="btn btn-primary pull-right">{{ trans('adminlte_lang::message.create') }}</a>
+						<a href="/areasInterno/create" class="btn btn-primary pull-right">{{ __('adminlte::message.create') }}</a>
 						@endif
 					</div>
 					<div class="box box-info">
@@ -24,10 +24,10 @@
 							<table id="AreaTable" class="table table-compact table-bordered table-striped">
 								<thead>
 									<tr>
-										<th>{{ trans('adminlte_lang::message.areaname') }}</th>
-										<th>{{ trans('adminlte_lang::message.sclientsede') }}</th>
+										<th>{{ __('adminlte::message.areaname') }}</th>
+										<th>{{ __('adminlte::message.sclientsede') }}</th>
 										@if(in_array(Auth::user()->UsRol, Permisos::PersInter1) || in_array(Auth::user()->UsRol2, Permisos::PersInter1))
-										<th>{{ trans('adminlte_lang::message.edit') }}</th>
+										<th>{{ __('adminlte::message.edit') }}</th>
 										@endif
 									</tr>
 								</thead>
@@ -37,7 +37,7 @@
 										<td>{{$Area->AreaName}}</td>
 										<td>{{$Area->SedeName}}</td>
 										@if(in_array(Auth::user()->UsRol, Permisos::PersInter1) || in_array(Auth::user()->UsRol2, Permisos::PersInter1))
-										<td><a href='/areasInterno/{{$Area->AreaSlug}}/edit' class='btn btn-warning btn-block'><i class="fas fa-edit"></i> <b>{{trans('adminlte_lang::message.edit')}}</b></a></td>
+										<td><a href='/areasInterno/{{$Area->AreaSlug}}/edit' class='btn btn-warning btn-block'><i class="fas fa-edit"></i> <b>{{__('adminlte::message.edit')}}</b></a></td>
 										@endif
 									</tr>
 									@endforeach

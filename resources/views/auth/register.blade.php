@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ trans('adminlte_lang::message.register') }}</div>
+                <div class="card-header">{{ __('adminlte::message.register') }}</div>
 
                 <div class="card-body">
 
@@ -13,7 +13,7 @@
                         @csrf
 
                         <div class="form-group row">
-                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ trans('adminlte_lang::message.name') }}</label>
+                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('adminlte::message.name') }}</label>
 
                             <div class="col-md-6">
                                 <input id="name" type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" name="name" value="{{ old('name') }}" required autofocus>
@@ -27,7 +27,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ trans('adminlte_lang::message.emailaddress') }}</label>
+                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('adminlte::message.emailaddress') }}</label>
 
                             <div class="col-md-6">
                                 <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required>
@@ -41,7 +41,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ trans('adminlte_lang::message.password') }}</label>
+                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('adminlte::message.password') }}</label>
 
                             <div class="col-md-6">
                                 <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
@@ -55,7 +55,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ trans('adminlte_lang::message.confirmpassword') }}</label>
+                            <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('adminlte::message.confirmpassword') }}</label>
 
                             <div class="col-md-6">
                                 <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
@@ -76,7 +76,7 @@
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
-                                    {{ trans('adminlte_lang::message.register') }}
+                                    {{ __('adminlte::message.register') }}
                                 </button>
                             </div>
                         </div>

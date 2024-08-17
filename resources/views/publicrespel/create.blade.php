@@ -32,10 +32,10 @@ Residuos Comunes
 							<div class="box-body">
 								@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol2, Permisos::PROGRAMADOR))
 									<div class="col-md-12 form-group">
-										<label for="Sede">{{ trans('adminlte_lang::LangRespel.createcliente') }}</label>
+										<label for="Sede">{{ __('adminlte::LangRespel.createcliente') }}</label>
 										<small class="help-block with-errors">*</small>
 										<select name="Sede" id="Sede" class="form-control" required>
-											<option value="">{{ trans('adminlte_lang::LangRespel.selecthem') }}</option>
+											<option value="">{{ __('adminlte::LangRespel.selecthem') }}</option>
 											@foreach($Sedes as $Cliente)
 												<option value="{{$Cliente->ID_Sede}}">{{$Cliente->CliName}}</option>
 											@endforeach
@@ -67,8 +67,8 @@ Residuos Comunes
 							<!-- /.box-body -->
 							<div class="box box-info">	
 								<div class="box-footer">
-									<a onclick="AgregarRes()" class="btn btn-primary"><i class="fa fa-plus"></i>{{ trans('adminlte_lang::LangRespel.addrespelButton') }}</a>	
-									<button type="submit" class="btn btn-success pull-right">{{ trans('adminlte_lang::LangRespel.registerrespelButton') }}</button>
+									<a onclick="AgregarRes()" class="btn btn-primary"><i class="fa fa-plus"></i>{{ __('adminlte::LangRespel.addrespelButton') }}</a>	
+									<button type="submit" class="btn btn-success pull-right">{{ __('adminlte::LangRespel.registerrespelButton') }}</button>
 								</div>
 							</div>
 						</form>

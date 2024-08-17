@@ -50,7 +50,7 @@ if (token) {
 
 // window.Vue = require('vue')
 
-// Use trans function in Vue (equivalent to trans() Laravel Translations helper). See htmlheader.balde.php partial.
+// Use trans function in Vue (equivalent to __() Laravel Translations helper). See htmlheader.balde.php partial.
 // Vue.prototype.trans = (key) => {
 //   return _.get(window.trans, key, key)
 // }

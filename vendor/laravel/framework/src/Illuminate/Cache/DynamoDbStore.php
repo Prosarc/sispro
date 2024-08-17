@@ -2,16 +2,16 @@
 
 namespace Illuminate\Cache;
 
-use RuntimeException;
-use Illuminate\Support\Str;
-use Illuminate\Support\Carbon;
 use Aws\DynamoDb\DynamoDbClient;
-use Illuminate\Contracts\Cache\Store;
-use Illuminate\Support\InteractsWithTime;
-use Illuminate\Contracts\Cache\LockProvider;
 use Aws\DynamoDb\Exception\DynamoDbException;
+use Illuminate\Contracts\Cache\LockProvider;
+use Illuminate\Contracts\Cache\Store;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\InteractsWithTime;
+use Illuminate\Support\Str;
+use RuntimeException;
 
-class DynamoDbStore implements Store, LockProvider
+class DynamoDbStore implements LockProvider, Store
 {
     use InteractsWithTime;
 
@@ -129,6 +129,10 @@ class DynamoDbStore implements Store, LockProvider
      */
     public function many(array $keys)
     {
+        if (count($keys) === 0) {
+            return [];
+        }
+
         $prefixedKeys = array_map(function ($key) {
             return $this->prefix.$key;
         }, $keys);
@@ -151,6 +155,7 @@ class DynamoDbStore implements Store, LockProvider
         $now = Carbon::now();
 
         return array_merge(collect(array_flip($keys))->map(function () {
+            //
         })->all(), collect($response['Responses'][$this->table])->mapWithKeys(function ($response) use ($now) {
             if ($this->isExpired($response, $now)) {
                 $value = null;
@@ -210,7 +215,7 @@ class DynamoDbStore implements Store, LockProvider
     }
 
     /**
-     * Store multiple items in the cache for a given number of $seconds.
+     * Store multiple items in the cache for a given number of seconds.
      *
      * @param  array  $values
      * @param  int  $seconds
@@ -218,6 +223,10 @@ class DynamoDbStore implements Store, LockProvider
      */
     public function putMany(array $values, $seconds)
     {
+        if (count($values) === 0) {
+            return true;
+        }
+
         $expiration = $this->toTimestamp($seconds);
 
         $this->dynamo->batchWriteItem([
@@ -276,14 +285,14 @@ class DynamoDbStore implements Store, LockProvider
                 ],
                 'ExpressionAttributeValues' => [
                     ':now' => [
-                        'N' => (string) Carbon::now()->getTimestamp(),
+                        'N' => (string) $this->currentTime(),
                     ],
                 ],
             ]);
 
             return true;
         } catch (DynamoDbException $e) {
-            if (Str::contains($e->getMessage(), 'ConditionalCheckFailed')) {
+            if (str_contains($e->getMessage(), 'ConditionalCheckFailed')) {
                 return false;
             }
 
@@ -296,7 +305,7 @@ class DynamoDbStore implements Store, LockProvider
      *
      * @param  string  $key
      * @param  mixed  $value
-     * @return int|bool
+     * @return int|false
      */
     public function increment($key, $value = 1)
     {
@@ -317,7 +326,7 @@ class DynamoDbStore implements Store, LockProvider
                 ],
                 'ExpressionAttributeValues' => [
                     ':now' => [
-                        'N' => (string) Carbon::now()->getTimestamp(),
+                        'N' => (string) $this->currentTime(),
                     ],
                     ':amount' => [
                         'N' => (string) $value,
@@ -328,7 +337,7 @@ class DynamoDbStore implements Store, LockProvider
 
             return (int) $response['Attributes'][$this->valueAttribute]['N'];
         } catch (DynamoDbException $e) {
-            if (Str::contains($e->getMessage(), 'ConditionalCheckFailed')) {
+            if (str_contains($e->getMessage(), 'ConditionalCheckFailed')) {
                 return false;
             }
 
@@ -341,7 +350,7 @@ class DynamoDbStore implements Store, LockProvider
      *
      * @param  string  $key
      * @param  mixed  $value
-     * @return int|bool
+     * @return int|false
      */
     public function decrement($key, $value = 1)
     {
@@ -362,7 +371,7 @@ class DynamoDbStore implements Store, LockProvider
                 ],
                 'ExpressionAttributeValues' => [
                     ':now' => [
-                        'N' => (string) Carbon::now()->getTimestamp(),
+                        'N' => (string) $this->currentTime(),
                     ],
                     ':amount' => [
                         'N' => (string) $value,
@@ -373,7 +382,7 @@ class DynamoDbStore implements Store, LockProvider
 
             return (int) $response['Attributes'][$this->valueAttribute]['N'];
         } catch (DynamoDbException $e) {
-            if (Str::contains($e->getMessage(), 'ConditionalCheckFailed')) {
+            if (str_contains($e->getMessage(), 'ConditionalCheckFailed')) {
                 return false;
             }
 
@@ -390,7 +399,7 @@ class DynamoDbStore implements Store, LockProvider
      */
     public function forever($key, $value)
     {
-        return $this->put($key, $value, now()->addYears(5)->getTimestamp());
+        return $this->put($key, $value, Carbon::now()->addYears(5)->getTimestamp());
     }
 
     /**
@@ -442,6 +451,8 @@ class DynamoDbStore implements Store, LockProvider
      * Remove all items from the cache.
      *
      * @return bool
+     *
+     * @throws \RuntimeException
      */
     public function flush()
     {
@@ -458,7 +469,7 @@ class DynamoDbStore implements Store, LockProvider
     {
         return $seconds > 0
                     ? $this->availableAt($seconds)
-                    : Carbon::now()->getTimestamp();
+                    : $this->currentTime();
     }
 
     /**
@@ -520,6 +531,16 @@ class DynamoDbStore implements Store, LockProvider
      */
     public function setPrefix($prefix)
     {
-        $this->prefix = ! empty($prefix) ? $prefix.':' : '';
+        $this->prefix = $prefix;
+    }
+
+    /**
+     * Get the DynamoDb Client instance.
+     *
+     * @return \Aws\DynamoDb\DynamoDbClient
+     */
+    public function getClient()
+    {
+        return $this->dynamo;
     }
 }

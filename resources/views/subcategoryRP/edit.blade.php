@@ -59,7 +59,7 @@ Subcategorías
                 <div class="box-footer">
                     <button type="submit" class="btn btn-success" style="margin-left: 1.5rem;"><i class="fas fa-check"></i> Actualizar</button>
 
-                    <a class="btn btn-default btn-close pull-right" style="margin-right: 1.7rem;" href="{{ URL::previous() }}"><i class="fas fa-backspace" color="red"></i> {{ trans('adminlte_lang::LangTratamiento.cancel') }}</a>
+                    <a class="btn btn-default btn-close pull-right" style="margin-right: 1.7rem;" href="{{ URL::previous() }}"><i class="fas fa-backspace" color="red"></i> {{ __('adminlte::LangTratamiento.cancel') }}</a>
                 </div>
                 </form>
             </div>

@@ -2,13 +2,20 @@
 
 namespace Laravel\Dusk\Console;
 
+use Exception;
+use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Utils;
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 use Laravel\Dusk\OperatingSystem;
+use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Process\Process;
 use ZipArchive;
 
 /**
  * @copyright Originally created by Jonas Staudenmeir: https://github.com/staudenmeir/dusk-updater
  */
+#[AsCommand(name: 'dusk:chrome-driver')]
 class ChromeDriverCommand extends Command
 {
     /**
@@ -18,6 +25,7 @@ class ChromeDriverCommand extends Command
      */
     protected $signature = 'dusk:chrome-driver {version?}
                     {--all : Install a ChromeDriver binary for every OS}
+                    {--detect : Detect the installed Chrome / Chromium version}
                     {--proxy= : The proxy to download the binary through (example: "tcp://127.0.0.1:9000")}
                     {--ssl-no-verify : Bypass SSL certificate verification when installing through a proxy}';
 
@@ -29,39 +37,7 @@ class ChromeDriverCommand extends Command
     protected $description = 'Install the ChromeDriver binary';
 
     /**
-     * URL to the latest stable release version.
-     *
-     * @var string
-     */
-    protected $latestVersionUrl = 'https://chromedriver.storage.googleapis.com/LATEST_RELEASE';
-
-    /**
-     * URL to the latest release version for a major Chrome version.
-     *
-     * @var string
-     */
-    protected $versionUrl = 'https://chromedriver.storage.googleapis.com/LATEST_RELEASE_%d';
-
-    /**
-     * URL to the ChromeDriver download.
-     *
-     * @var string
-     */
-    protected $downloadUrl = 'https://chromedriver.storage.googleapis.com/%s/chromedriver_%s.zip';
-
-    /**
-     * Download slugs for the available operating systems.
-     *
-     * @var array
-     */
-    protected $slugs = [
-        'linux' => 'linux64',
-        'mac' => 'mac64',
-        'win' => 'win32',
-    ];
-
-    /**
-     * The legacy versions for the ChromeDriver.
+     * The legacy versions for ChromeDriver.
      *
      * @var array
      */
@@ -115,11 +91,11 @@ class ChromeDriverCommand extends Command
 
         $currentOS = OperatingSystem::id();
 
-        foreach ($this->slugs as $os => $slug) {
+        foreach (OperatingSystem::all() as $os) {
             if ($all || ($os === $currentOS)) {
-                $archive = $this->download($version, $slug);
+                $archive = $this->download($version, $os);
 
-                $binary = $this->extract($archive);
+                $binary = $this->extract($version, $archive);
 
                 $this->rename($binary, $os);
             }
@@ -139,6 +115,10 @@ class ChromeDriverCommand extends Command
     {
         $version = $this->argument('version');
 
+        if ($this->option('detect')) {
+            $version = $this->detectChromeVersion(OperatingSystem::id());
+        }
+
         if (! $version) {
             return $this->latestVersion();
         }
@@ -151,11 +131,14 @@ class ChromeDriverCommand extends Command
 
         if ($version < 70) {
             return $this->legacyVersions[$version];
+        } elseif ($version < 115) {
+            return $this->fetchChromeVersionFromUrl($version);
         }
 
-        return trim($this->getUrl(
-            sprintf($this->versionUrl, $version)
-        ));
+        $milestones = $this->resolveChromeVersionsPerMilestone();
+
+        return $milestones['milestones'][$version]['version']
+            ?? throw new Exception('Could not determine the ChromeDriver version.');
     }
 
     /**
@@ -165,24 +148,64 @@ class ChromeDriverCommand extends Command
      */
     protected function latestVersion()
     {
-        return trim(file_get_contents($this->latestVersionUrl));
+        $versions = json_decode($this->getUrl('https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json'), true);
+
+        return $versions['channels']['Stable']['version']
+            ?? throw new Exception('Could not get the latest ChromeDriver version.');
+    }
+
+    /**
+     * Detect the installed Chrome / Chromium major version.
+     *
+     * @param  string  $os
+     * @return int|bool
+     */
+    protected function detectChromeVersion($os)
+    {
+        foreach (OperatingSystem::chromeVersionCommands($os) as $command) {
+            $process = Process::fromShellCommandline($command);
+
+            $process->run();
+
+            preg_match('/(\d+)(\.\d+){3}/', $process->getOutput(), $matches);
+
+            if (! isset($matches[1])) {
+                continue;
+            }
+
+            return $matches[1];
+        }
+
+        $this->error('Chrome version could not be detected.');
+
+        return false;
     }
 
     /**
      * Download the ChromeDriver archive.
      *
      * @param  string  $version
-     * @param  string  $slug
+     * @param  string  $os
      * @return string
      */
-    protected function download($version, $slug)
+    protected function download($version, $os)
     {
-        $url = sprintf($this->downloadUrl, $version, $slug);
+        $url = $this->resolveChromeDriverDownloadUrl($version, $os);
 
-        file_put_contents(
-            $archive = $this->directory.'chromedriver.zip',
-            $this->getUrl($url)
-        );
+        $resource = Utils::tryFopen($archive = $this->directory.'chromedriver.zip', 'w');
+
+        $client = new Client();
+
+        $response = $client->get($url, array_merge([
+            'sink' => $resource,
+            'verify' => $this->option('ssl-no-verify') === false,
+        ], array_filter([
+            'proxy' => $this->option('proxy'),
+        ])));
+
+        if ($response->getStatusCode() < 200 || $response->getStatusCode() > 299) {
+            throw new Exception("Unable to download ChromeDriver from [{$url}].");
+        }
 
         return $archive;
     }
@@ -190,10 +213,11 @@ class ChromeDriverCommand extends Command
     /**
      * Extract the ChromeDriver binary from the archive and delete the archive.
      *
+     * @param  string  $version
      * @param  string  $archive
      * @return string
      */
-    protected function extract($archive)
+    protected function extract($version, $archive)
     {
         $zip = new ZipArchive;
 
@@ -201,7 +225,13 @@ class ChromeDriverCommand extends Command
 
         $zip->extractTo($this->directory);
 
-        $binary = $zip->getNameIndex(0);
+        $index = match (true) {
+            version_compare($version, '115.0', '<') => 0,
+            version_compare($version, '127.0', '<') => 1,
+            default => 2,
+        };
+
+        $binary = $zip->getNameIndex($index);
 
         $zip->close();
 
@@ -219,7 +249,11 @@ class ChromeDriverCommand extends Command
      */
     protected function rename($binary, $os)
     {
-        $newName = str_replace('chromedriver', 'chromedriver-'.$os, $binary);
+        $binary = str_replace(DIRECTORY_SEPARATOR, '/', $binary);
+
+        $newName = Str::contains($binary, '/')
+            ? Str::after(str_replace('chromedriver', 'chromedriver-'.$os, $binary), '/')
+            : str_replace('chromedriver', 'chromedriver-'.$os, $binary);
 
         rename($this->directory.$binary, $this->directory.$newName);
 
@@ -227,25 +261,77 @@ class ChromeDriverCommand extends Command
     }
 
     /**
+     * Get the Chrome version from URL.
+     *
+     * @return string
+     */
+    protected function fetchChromeVersionFromUrl(int $version)
+    {
+        return trim((string) $this->getUrl(
+            sprintf('https://chromedriver.storage.googleapis.com/LATEST_RELEASE_%d', $version)
+        ));
+    }
+
+    /**
+     * Get the Chrome versions per milestone.
+     *
+     * @return array
+     */
+    protected function resolveChromeVersionsPerMilestone()
+    {
+        return json_decode(
+            $this->getUrl('https://googlechromelabs.github.io/chrome-for-testing/latest-versions-per-milestone-with-downloads.json'), true
+        );
+    }
+
+    /**
+     * Resolve the download URL.
+     *
+     * @return string
+     *
+     * @throws \Exception
+     */
+    protected function resolveChromeDriverDownloadUrl(string $version, string $os)
+    {
+        $slug = OperatingSystem::chromeDriverSlug($os, $version);
+
+        if (version_compare($version, '115.0', '<')) {
+            return sprintf('https://chromedriver.storage.googleapis.com/%s/chromedriver_%s.zip', $version, $slug);
+        }
+
+        $milestone = (int) $version;
+
+        $versions = $this->resolveChromeVersionsPerMilestone();
+
+        /** @var array<string, mixed> $chromedrivers */
+        $chromedrivers = $versions['milestones'][$milestone]['downloads']['chromedriver']
+            ?? throw new Exception('Could not get the ChromeDriver version.');
+
+        return collect($chromedrivers)->firstWhere('platform', $slug)['url']
+            ?? throw new Exception('Could not get the ChromeDriver version.');
+    }
+
+    /**
      * Get the contents of a URL using the 'proxy' and 'ssl-no-verify' command options.
      *
-     * @param  string  $url
-     * @return string|bool
+     * @return string
+     *
+     * @throws Exception
      */
     protected function getUrl(string $url)
     {
-        $contextOptions = [];
+        $client = new Client();
 
-        if ($this->option('proxy')) {
-            $contextOptions['http'] = ['proxy' => $this->option('proxy'), 'request_fulluri' => true];
+        $response = $client->get($url, array_merge([
+            'verify' => $this->option('ssl-no-verify') === false,
+        ], array_filter([
+            'proxy' => $this->option('proxy'),
+        ])));
+
+        if ($response->getStatusCode() < 200 || $response->getStatusCode() > 299) {
+            throw new Exception("Unable to fetch contents from [{$url}].");
         }
 
-        if ($this->option('ssl-no-verify')) {
-            $contextOptions['ssl'] = ['verify_peer' => false];
-        }
-
-        $streamContext = stream_context_create($contextOptions);
-
-        return file_get_contents($url, false, $streamContext);
+        return (string) $response->getBody();
     }
 }

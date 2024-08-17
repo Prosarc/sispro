@@ -1,10 +1,10 @@
 @extends('layouts.app')
 @section('htmlheader_title')
-{{ trans('adminlte_lang::message.contracttitle') }}
+{{ __('adminlte::message.contracttitle') }}
 @endsection
 @section('contentheader_title')
 <span style="background-image: linear-gradient(40deg, #FFFFFF, #A3A2AE); padding-right:30vw; position:relative; overflow:hidden;">
-	{{ trans('adminlte_lang::message.contracttitle') }}
+	{{ __('adminlte::message.contracttitle') }}
   <div style="background-color:#ecf0f5; position:absolute; height:145%; width:40vw; transform:rotate(30deg); right:-20vw; top:-45%;"></div>
 </span>
 @endsection
@@ -22,9 +22,9 @@
 			@endcomponent
 			<div class="box">
 				<div class="box-header with-border">
-					<h3 class="box-title">{{trans('adminlte_lang::message.contractedit')}}</h3>
+					<h3 class="box-title">{{__('adminlte::message.contractedit')}}</h3>
 					@if($Contrato->ContraDelete == 0)
-						<a method='get' href='#' data-toggle='modal' data-target='#myModal{{$Contrato->ContraSlug}}' class='btn btn-danger pull-right'><i class="fas fa-trash-alt"></i><b> {{ trans('adminlte_lang::message.delete') }}</b></a>
+						<a method='get' href='#' data-toggle='modal' data-target='#myModal{{$Contrato->ContraSlug}}' class='btn btn-danger pull-right'><i class="fas fa-trash-alt"></i><b> {{ __('adminlte::message.delete') }}</b></a>
 						<form action='/contratos/{{$Contrato->ContraSlug}}' method='POST'>
 							@method('DELETE')
 							@csrf
@@ -34,7 +34,7 @@
 						<form action='/contratos/{{$Contrato->ContraSlug}}' method='POST' class="pull-right">
 							@method('DELETE')
 							@csrf
-							<button type="submit" class='btn btn-success btn-block'>{{ trans('adminlte_lang::message.add') }}</button>
+							<button type="submit" class='btn btn-success btn-block'>{{ __('adminlte::message.add') }}</button>
 						</form>
 					@endif
 				</div>
@@ -44,16 +44,16 @@
 						@csrf
 						<div class="box-body">
 							<div class="form-group col-md-6">
-								<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 500}' title="<b>{{ trans('adminlte_lang::message.contractclien') }}</b>" data-content="{{ trans('adminlte_lang::message.contractcliendescript') }}" for="AreaSelect"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{trans('adminlte_lang::message.contractclien')}}</label><small class="help-block with-errors">*</small>
+								<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 500}' title="<b>{{ __('adminlte::message.contractclien') }}</b>" data-content="{{ __('adminlte::message.contractcliendescript') }}" for="AreaSelect"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{__('adminlte::message.contractclien')}}</label><small class="help-block with-errors">*</small>
 								<select name="Fk_ContraCli" required id="Fk_ContraCli" class="form-control select">
-									<option value="">{{trans('adminlte_lang::message.select')}}</option>
+									<option value="">{{__('adminlte::message.select')}}</option>
 									@foreach($Clientes as $Cliente)
 										<option value="{{$Cliente->CliSlug}}" {{$Cliente->ID_Cli == $Contrato->Fk_ContraCli ? 'selected' : ''}}>{{$Cliente->CliShortname}}</option>
 									@endforeach
 								</select>
 							</div>
 							<div class="form-group col-md-6">
-								<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 500}' title="<b>{{ trans('adminlte_lang::message.contractpdf') }}</b>" data-content="{{ trans('adminlte_lang::message.contractpdfdescript') }}" for="CargoGrade"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{trans('adminlte_lang::message.contractpdf')}}</label>
+								<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 500}' title="<b>{{ __('adminlte::message.contractpdf') }}</b>" data-content="{{ __('adminlte::message.contractpdfdescript') }}" for="CargoGrade"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{__('adminlte::message.contractpdf')}}</label>
 								<div class="input-group">
 									<input type="file" name="ContraPdf" data-validate="true" data-filesize="5120" class="form-control" data-accept="pdf" accept=".pdf">
 									<div class="input-group-btn">
@@ -62,12 +62,12 @@
 								</div>
 							</div>
 							<div class="form-group col-md-6">
-								<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 500}' title="<b>{{ trans('adminlte_lang::message.contractvigencia') }}</b>" data-content="{{ trans('adminlte_lang::message.contractvigenciadescript') }}" for="NombreCargo"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{trans('adminlte_lang::message.contractvigencia')}}</label><small class="help-block with-errors">*</small>
+								<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 500}' title="<b>{{ __('adminlte::message.contractvigencia') }}</b>" data-content="{{ __('adminlte::message.contractvigenciadescript') }}" for="NombreCargo"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{__('adminlte::message.contractvigencia')}}</label><small class="help-block with-errors">*</small>
 								<input required name="ContraVigencia" autofocus="true" type="date" class="form-control" id="ContraVigencia" value="{{$Contrato->ContraVigencia}}">
 							</div>
 							
 							<div class="form-group col-md-6">
-								<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 500}' title="<b>{{ trans('adminlte_lang::message.contractnotify') }}</b>" data-content="{{ trans('adminlte_lang::message.contractnotifydescript') }}" for="CargoSalary"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{trans('adminlte_lang::message.contractnotify')}}</label>
+								<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 500}' title="<b>{{ __('adminlte::message.contractnotify') }}</b>" data-content="{{ __('adminlte::message.contractnotifydescript') }}" for="CargoSalary"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{__('adminlte::message.contractnotify')}}</label>
 								<div class="input-group">
 									<input type="text" class="form-control number" maxlength="2" name="ContratoNumVigencia"value="{{$Contrato->ContratoNumVigencia}}">
 									<input type="text" name="ContratoTypeVigencia" id="ContratoTypeVigencia" hidden="" value="{{$Contrato->ContratoTypeVigencia}}">
@@ -86,7 +86,7 @@
 						</div>
 						<div class="box box-info">
 							<div class="box-footer">
-								<button type="submit" class="btn btn-success pull-right">{{trans('adminlte_lang::message.update')}}</button>
+								<button type="submit" class="btn btn-success pull-right">{{__('adminlte::message.update')}}</button>
 							</div>
 						</div>
 					</form>

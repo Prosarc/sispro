@@ -73,7 +73,25 @@ class genercontroller extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function createit()
+    {
+        if (in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol, Permisos::INGDETURNO)) {
+            $ID_Clit = Cliente::where('CliDelete', 0)->get();
+            $Departamentos = Departamento::all();
+    
+            return view('generadores.createit', compact('ID_Clit'));
+        } else {
+            abort(403);
+        }
+    }    
+    
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create(Request $request)
     {
         if(in_array(Auth::user()->UsRol, Permisos::CLIENTE)||in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR)){
             $ID_Cli = userController::IDClienteSegunUsuario();
@@ -96,7 +114,33 @@ class genercontroller extends Controller
             if (old('FK_GSedeMun') !== null){
                 $Municipios = Municipio::where('FK_MunCity', old('departamento'))->get();
             }
-            return view('generadores.create', compact('Sedes', 'Clientes', 'Departamentos', 'Municipios', 'Respels'));
+            return view('generadores.create', compact('Sedes', 'Cliente', 'Departamentos', 'Respels'));
+
+        }else if (in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol, Permisos::INGDETURNO)){
+
+            $ID_Cli = $request->input('ID_Cli');
+    
+            $Sedes = Sede::select('SedeName', 'SedeSlug')
+                ->where('FK_SedeCli', $ID_Cli)
+                ->where('SedeDelete', 0)
+                ->get();
+            $Cliente = Sede::where('SedeDelete', 0)->get();
+            $Departamentos = Departamento::all();
+
+            $Respels = DB::table('respels')
+                ->join('cotizacions', 'cotizacions.ID_Coti', '=', 'respels.FK_RespelCoti')
+                ->join('sedes', 'sedes.ID_Sede', '=', 'cotizacions.FK_CotiSede')
+                ->join('clientes', 'clientes.ID_Cli', '=', 'sedes.FK_SedeCli')
+                ->where('clientes.ID_Cli', '=', $ID_Cli)
+                ->whereIn('respels.RespelStatus', ['Aprobado', 'Revisado', 'Falta TDE', 'TDE actualizada'])
+                ->where('respels.RespelDelete', '=', 0)
+                ->get();
+
+            if (old('FK_GSedeMun') !== null){
+                $Municipios = Municipio::where('FK_MunCity', old('departamento'))->get();
+            }
+            return view('generadores.create', compact('Sedes', 'Cliente', 'Departamentos', 'Respels'));
+
         }else{
             abort(403);
         }
@@ -318,7 +362,7 @@ class genercontroller extends Controller
         /*codigo para incluir la actualizacion en la tabla de auditoria*/
         AuditRequest::auditUpdate($this->tableGener, $Generador->ID_Gener, json_encode($request->all()));
 
-        return redirect()->route('generadores.show', compact('id'));
+        return redirect()->route('generadores.show', ['generadore' => $id]);
     }
 
     /**

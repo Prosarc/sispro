@@ -18,7 +18,7 @@
 					@endcomponent
 					<h3 class="box-title">Datos de la capacitación de una persona</h3>
 					@if($CapaPer->CapaPersDelete === 0)
-						<a method='get' href='#' data-toggle='modal' data-target='#myModal{{$CapaPer->ID_CapPers}}' class='btn btn-danger pull-right'><i class="fas fa-trash-alt"></i><b> {{ trans('adminlte_lang::message.delete') }}</b></a>
+						<a method='get' href='#' data-toggle='modal' data-target='#myModal{{$CapaPer->ID_CapPers}}' class='btn btn-danger pull-right'><i class="fas fa-trash-alt"></i><b> {{ __('adminlte::message.delete') }}</b></a>
 						<form action='/capacitacion-personal/{{$CapaPer->ID_CapPers}}' method='POST'>
 							@method('DELETE')
 							@csrf
@@ -28,7 +28,7 @@
 						<form action='/capacitacion-personal/{{$CapaPer->ID_CapPers}}' method='POST' style="float: right;">
 							@method('DELETE')
 							@csrf
-							<button type="submit" class='btn btn-success btn-block'>{{ trans('adminlte_lang::message.add') }}</button>
+							<button type="submit" class='btn btn-success btn-block'>{{ __('adminlte::message.add') }}</button>
 						</form>
 					@endif
 				</div>

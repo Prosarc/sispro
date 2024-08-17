@@ -2,11 +2,14 @@
 
 namespace Illuminate\Database\Console\Migrations;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Composer;
+use Illuminate\Contracts\Console\PromptsForMissingInput;
 use Illuminate\Database\Migrations\MigrationCreator;
+use Illuminate\Support\Composer;
+use Illuminate\Support\Str;
+use Symfony\Component\Console\Attribute\AsCommand;
 
-class MigrateMakeCommand extends BaseCommand
+#[AsCommand(name: 'make:migration')]
+class MigrateMakeCommand extends BaseCommand implements PromptsForMissingInput
 {
     /**
      * The console command signature.
@@ -18,7 +21,7 @@ class MigrateMakeCommand extends BaseCommand
         {--table= : The table to migrate}
         {--path= : The location where the migration file should be created}
         {--realpath : Indicate any provided migration file paths are pre-resolved absolute paths}
-        {--fullpath : Output the full path of the migration}';
+        {--fullpath : Output the full path of the migration (Deprecated)}';
 
     /**
      * The console command description.
@@ -38,6 +41,8 @@ class MigrateMakeCommand extends BaseCommand
      * The Composer instance.
      *
      * @var \Illuminate\Support\Composer
+     *
+     * @deprecated Will be removed in a future Laravel version.
      */
     protected $composer;
 
@@ -92,8 +97,6 @@ class MigrateMakeCommand extends BaseCommand
         // the migration out, we will dump-autoload for the entire framework to
         // make sure that the migrations are registered by the class loaders.
         $this->writeMigration($name, $table, $create);
-
-        $this->composer->dumpAutoloads();
     }
 
     /**
@@ -101,8 +104,8 @@ class MigrateMakeCommand extends BaseCommand
      *
      * @param  string  $name
      * @param  string  $table
-     * @param  bool    $create
-     * @return string
+     * @param  bool  $create
+     * @return void
      */
     protected function writeMigration($name, $table, $create)
     {
@@ -110,11 +113,7 @@ class MigrateMakeCommand extends BaseCommand
             $name, $this->getMigrationPath(), $table, $create
         );
 
-        if (! $this->option('fullpath')) {
-            $file = pathinfo($file, PATHINFO_FILENAME);
-        }
-
-        $this->line("<info>Created Migration:</info> {$file}");
+        $this->components->info(sprintf('Migration [%s] created successfully.', $file));
     }
 
     /**
@@ -134,12 +133,14 @@ class MigrateMakeCommand extends BaseCommand
     }
 
     /**
-     * Determine if the given path(s) are pre-resolved "real" paths.
+     * Prompt for missing input arguments using the returned questions.
      *
-     * @return bool
+     * @return array
      */
-    protected function usingRealPath()
+    protected function promptForMissingArgumentsUsing()
     {
-        return $this->input->hasOption('realpath') && $this->option('realpath');
+        return [
+            'name' => ['What should the migration be named?', 'E.g. create_flights_table'],
+        ];
     }
 }

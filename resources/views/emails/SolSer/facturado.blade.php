@@ -31,7 +31,7 @@ array_push($certificadosdeTratamiento, "M-".$residuo->SolicitudResiduo->certdato
 |{{$prefactura->FK_Servicio}}|@foreach (array_unique($certificadosdeTratamiento) as $certnumber){{$certnumber}}<br>@endforeach|@foreach (json_decode($tratamiento->RMs) as $rm => $value){{$value}}<br>@endforeach|{{$prefactura->Fecha_Servicio}}|{{$prefactura->cliente->CliName}}|{{$tratamiento->cantidad_tratamiento}}|{{$tratamiento->tratamiento->TratName}}|{{$tratamiento->Total_prefactratamiento}}|{{$prefactura->orden_compra}}</tr>
 @endforeach
 |{{$prefactura->FK_Servicio}}| | | |{{$prefactura->Fecha_Servicio}}|{{$prefactura->cliente->CliName}}| |Transporte|{{$prefactura->Costo_transporte}}|</tr>
-|{{$prefactura->FK_Servicio}}| | | |{{$prefactura->Fecha_Servicio}}|{{$prefactura->cliente->CliName}}| |Total|{{$prefactura->Total_prefactura}}|<a method='get' href='{{route('prefacturas.show', ['prefactura' => $prefactura])}}' class='btn btn-info btn-block' title="{{ trans('adminlte_lang::message.seemoredetails')}}"><i class="fas fa-search"></i></a></tr>
+|{{$prefactura->FK_Servicio}}| | | |{{$prefactura->Fecha_Servicio}}|{{$prefactura->cliente->CliName}}| |Total|{{$prefactura->Total_prefactura}}|<a method='get' href='{{route('prefacturas.show', ['prefactura' => $prefactura])}}' class='btn btn-info btn-block' title="{{ __('adminlte::message.seemoredetails')}}"><i class="fas fa-search"></i></a></tr>
 @endforeach
 @endcomponent --}}
 

@@ -1,16 +1,16 @@
 @extends('layouts.app')
 @section('htmlheader_title')
-	{{ trans('adminlte_lang::message.gener') }}
+	{{ __('adminlte::message.gener') }}
 @endsection
 @section('contentheader_title')
 @if(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol2, Permisos::CLIENTE))
 <span style="background-image: linear-gradient(40deg, rgb(69, 202, 252), rgb(48, 63, 159)); padding-right:30vw; position:relative; overflow:hidden;">
-	{{ trans('adminlte_lang::message.gener') }}
+	{{ __('adminlte::message.gener') }}
   <div style="background-color:#ecf0f5; position:absolute; height:145%; width:40vw; transform:rotate(30deg); right:-20vw; top:-45%;"></div>
 </span>
 @else
 <span style="background-image: linear-gradient(40deg, rgb(255, 216, 111), rgb(252, 98, 98)); padding-right:30vw; position:relative; overflow:hidden;">
-	{{ trans('adminlte_lang::message.gener') }}
+	{{ __('adminlte::message.gener') }}
   <div style="background-color:#ecf0f5; position:absolute; height:145%; width:40vw; transform:rotate(30deg); right:-20vw; top:-45%;"></div>
 </span>
 @endif
@@ -23,7 +23,7 @@
 				<div class="box-body box-profile">
 					<div class="col-md-12 col-xs-12">
 						@if (in_array(Auth::user()->UsRol, Permisos::CLIENTE) ||in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
-							<a href="/generadores/{{$Generador->GenerSlug}}/edit" class="btn btn-warning pull-right"> <i class="fas fa-edit"></i> <b>{{ trans('adminlte_lang::message.edit') }}</b></a>
+							<a href="/generadores/{{$Generador->GenerSlug}}/edit" class="btn btn-warning pull-right"> <i class="fas fa-edit"></i> <b>{{ __('adminlte::message.edit') }}</b></a>
 						@endif
 						@component('layouts.partials.modal')
 							@slot('slug')
@@ -35,7 +35,7 @@
 						@endcomponent
 						@if($Generador->GenerDelete == 0)
 							@if(in_array(Auth::user()->UsRol, Permisos::CLIENTE) ||in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
-								<a method='get' href='#' data-toggle='modal' data-target='#myModal{{$Generador->GenerSlug}}' class='btn btn-danger pull-left'><i class="fas fa-trash-alt"></i><b> {{ trans('adminlte_lang::message.delete') }}</b></a>
+								<a method='get' href='#' data-toggle='modal' data-target='#myModal{{$Generador->GenerSlug}}' class='btn btn-danger pull-left'><i class="fas fa-trash-alt"></i><b> {{ __('adminlte::message.delete') }}</b></a>
 								<form action='/generadores/{{$Generador->GenerSlug}}' method='POST'  class="col-12 pull-right">
 									@method('DELETE')
 									@csrf
@@ -48,7 +48,7 @@
 									@method('DELETE')
 									@csrf
 									<button type="submit" class='btn btn-success btn-block'>
-										<i class="fas fa-plus-square"></i><b> {{ trans('adminlte_lang::message.add') }}</b>
+										<i class="fas fa-plus-square"></i><b> {{ __('adminlte::message.add') }}</b>
 									</button>
 								</form>
 							@endif
@@ -58,32 +58,32 @@
 					<ul class="list-group list-group-unbordered">
 						@if (in_array(Auth::user()->UsRol, Permisos::TODOPROSARC) || in_array(Auth::user()->UsRol2, Permisos::TODOPROSARC))
 							<li class="list-group-item">
-								<b>{{ trans('adminlte_lang::message.clientcliente') }}</b>
-								<a href="#" class="pull-right textpopover" title="{{ trans('adminlte_lang::message.clientcliente') }}" data-toggle="popover" data-trigger="hover" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$Cliente->CliName}}</p>">{{$Cliente->CliName}}</a>
+								<b>{{ __('adminlte::message.clientcliente') }}</b>
+								<a href="#" class="pull-right textpopover" title="{{ __('adminlte::message.clientcliente') }}" data-toggle="popover" data-trigger="hover" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$Cliente->CliName}}</p>">{{$Cliente->CliName}}</a>
 							</li>
 						@endif
 						<li class="list-group-item">
-							<b>{{ trans('adminlte_lang::message.sclientsede') }}</b>
-							<a href="#" class="pull-right textpopover" title="{{ trans('adminlte_lang::message.sclientsede') }}" data-toggle="popover" data-trigger="hover" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$Sede->SedeName}}</p>">{{$Sede->SedeName}}</a>
+							<b>{{ __('adminlte::message.sclientsede') }}</b>
+							<a href="#" class="pull-right textpopover" title="{{ __('adminlte::message.sclientsede') }}" data-toggle="popover" data-trigger="hover" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$Sede->SedeName}}</p>">{{$Sede->SedeName}}</a>
 						</li>
 						<li class="list-group-item">
-							<b>{{ trans('adminlte_lang::message.clientNIT') }}</b>
+							<b>{{ __('adminlte::message.clientNIT') }}</b>
 							<a href="#" class="pull-right">{{$Generador->GenerNit}}</a>
 						</li>
 						<li class="list-group-item">
-							<b>{{ trans('adminlte_lang::message.clirazonsoc') }}</b>
-							<a href="#" class="pull-right textpopover" title="{{ trans('adminlte_lang::message.clirazonsoc') }}" data-toggle="popover" data-trigger="hover" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$Generador->GenerName}}</p>">{{$Generador->GenerName}}</a>
+							<b>{{ __('adminlte::message.clirazonsoc') }}</b>
+							<a href="#" class="pull-right textpopover" title="{{ __('adminlte::message.clirazonsoc') }}" data-toggle="popover" data-trigger="hover" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$Generador->GenerName}}</p>">{{$Generador->GenerName}}</a>
 						</li>
 						{{-- <li class="list-group-item">
-							<b>{{ trans('adminlte_lang::message.clientnombrecorto') }}</b>
-							<a href="#" class="pull-right textpopover" title="{{ trans('adminlte_lang::message.clientnombrecorto') }}" data-toggle="popover" data-trigger="hover" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$Generador->GenerShortname}}</p>">{{$Generador->GenerShortname}}</a>
+							<b>{{ __('adminlte::message.clientnombrecorto') }}</b>
+							<a href="#" class="pull-right textpopover" title="{{ __('adminlte::message.clientnombrecorto') }}" data-toggle="popover" data-trigger="hover" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$Generador->GenerShortname}}</p>">{{$Generador->GenerShortname}}</a>
 						</li> --}}
 						<li class="list-group-item">
-							<b>{{ trans('adminlte_lang::message.genercode') }}</b>
-							<a href="#" class="pull-right textpopover" title="{{ trans('adminlte_lang::message.genercode') }}" data-toggle="popover" data-trigger="hover" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$Generador->GenerCode}}</p>">{{$Generador->GenerCode}}</a>
+							<b>{{ __('adminlte::message.genercode') }}</b>
+							<a href="#" class="pull-right textpopover" title="{{ __('adminlte::message.genercode') }}" data-toggle="popover" data-trigger="hover" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$Generador->GenerCode}}</p>">{{$Generador->GenerCode}}</a>
 						</li>
 						{{-- @if (in_array(Auth::user()->UsRol, Permisos::TODOPROSARC) ||in_array(Auth::user()->UsRol2, Permisos::TODOPROSARC)) --}}
-						<h4 class="text-center"><i>{{ trans('adminlte_lang::message.generaddresssgener') }}</i></h4>
+						<h4 class="text-center"><i>{{ __('adminlte::message.generaddresssgener') }}</i></h4>
 						<div style='overflow-y:auto; max-height:200px;'>
 							@php
 								$i = 0;
@@ -92,10 +92,10 @@
 								<li class="list-group-item col-md-12 col-xs-12">
 									<div class="col-md-6 col-xs-6">
 										<b class="textolargo" style="{{in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) && $GenerSede->GSedeDelete == 1 ? 'color:red;': ''}}">{{$GenerSede->GSedeName}}</b>
-										<a title="{{ trans('adminlte_lang::message.copy') }}" onclick="copiarAlPortapapeles('SGeneraddress{{$i}}')"><i class="far fa-copy"></i></a>
+										<a title="{{ __('adminlte::message.copy') }}" onclick="copiarAlPortapapeles('SGeneraddress{{$i}}')"><i class="far fa-copy"></i></a>
 									</div>
 									<div>
-										<p href="#" class="pull-right textpopoveraddress" id="SGeneraddress{{$i}}" title="<b>{{ trans('adminlte_lang::message.address') }}</b>" data-toggle="popover" data-trigger="hover" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$GenerSede->GSedeAddress}} ({{$GenerSede->MunName}}, {{$GenerSede->DepartName}})</p>">{{$GenerSede->GSedeAddress}} ({{$GenerSede->MunName}}, {{$GenerSede->DepartName}})</p>
+										<p href="#" class="pull-right textpopoveraddress" id="SGeneraddress{{$i}}" title="<b>{{ __('adminlte::message.address') }}</b>" data-toggle="popover" data-trigger="hover" data-html="true" data-placement="bottom" data-content="<p class='textolargo'>{{$GenerSede->GSedeAddress}} ({{$GenerSede->MunName}}, {{$GenerSede->DepartName}})</p>">{{$GenerSede->GSedeAddress}} ({{$GenerSede->MunName}}, {{$GenerSede->DepartName}})</p>
 									</div>
 								</li>
 								@php
@@ -119,7 +119,7 @@
 								<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 								<div style="font-size: 5em; color: green; text-align: center; margin: auto;">
 									<i class="fas fa-plus-circle"></i>
-									<span style="font-size: 0.3em; color: black;"><p>{{ trans('adminlte_lang::message.assignrrespelssedegener') }}</p></span>
+									<span style="font-size: 0.3em; color: black;"><p>{{ __('adminlte::message.assignrrespelssedegener') }}</p></span>
 								</div>
 							</div>
 							@if ($errors->any())
@@ -133,16 +133,16 @@
 							@endif
 							<div class="modal-header">
 								<div class="col-md-12 form-group">
-									<label for="FK_SGener">{{ trans('adminlte_lang::message.sedesgener') }}</label><small class="help-block with-errors">*</small>
+									<label for="FK_SGener">{{ __('adminlte::message.sedesgener') }}</label><small class="help-block with-errors">*</small>
 									<select class="form-control select" id="FK_SGener" name="FK_SGener" required>
-										<option value="">{{ trans('adminlte_lang::message.select') }}</option>
+										<option value="">{{ __('adminlte::message.select') }}</option>
 										@foreach ($GenerSedes as $GenerSede)
 											<option value="{{$GenerSede->GSedeSlug}}">{{$GenerSede->GSedeName}}</option>
 										@endforeach
 									</select>
 								</div>
 								<div class="col-md-12 form-group select-multiple-contenedor">
-									<label for="FK_Respel">{{ trans('adminlte_lang::message.MenuRespel') }} <a id="load"></a></label><small class="help-block with-errors">*</small>
+									<label for="FK_Respel">{{ __('adminlte::message.MenuRespel') }} <a id="load"></a></label><small class="help-block with-errors">*</small>
 									<select class="form-control select-multiple" id="FK_Respel" name="FK_Respel[]" multiple required>
 										@if(isset($Residuos))
 											@foreach ($Residuos as $Residuo)
@@ -153,7 +153,7 @@
 								</div>
 							</div>
 							<div class="modal-footer">
-								<button type="submit" class="btn btn-success pull-right"><b>{{ trans('adminlte_lang::message.add') }}</b></button>
+								<button type="submit" class="btn btn-success pull-right"><b>{{ __('adminlte::message.add') }}</b></button>
 							</div>
 						</div>
 					</div>
@@ -165,27 +165,27 @@
 			<div class="nav-tabs-custom">
 				<ul class="nav nav-tabs">
 					{{-- Barra de navegación --}}
-					<li class="active box-info" ><a href="#residuos" data-toggle="tab">{{ trans('adminlte_lang::message.MenuRespel') }}</a></li>
-					<li><a href="#sedes" data-toggle="tab">{{ trans('adminlte_lang::message.sclientsedes') }}</a></li>
+					<li class="active box-info" ><a href="#residuos" data-toggle="tab">{{ __('adminlte::message.MenuRespel') }}</a></li>
+					<li><a href="#sedes" data-toggle="tab">{{ __('adminlte::message.sclientsedes') }}</a></li>
 				</ul>
 				<div class="tab-content">
 					<div class="active tab-pane" id="residuos">
-						@if (in_array(Auth::user()->UsRol, Permisos::CLIENTE) ||in_array(Auth::user()->UsRol, Permisos::AREALOGISTICA))
+						@if (in_array(Auth::user()->UsRol, Permisos::CLIENTE) ||in_array(Auth::user()->UsRol, Permisos::AREALOGISTICA) || in_array(Auth::user()->UsRol, Permisos::INGDETURNO))
 							{{-- BOTONES DE CREAR RESIDUOS Y ASIGNARLOS --}}
-							<a href="/respels/create" class="btn btn-primary mx-auto"><i class="fas fa-plus-square"></i> <b>{{ trans('adminlte_lang::message.respelscreate') }}</b></a>
-							<a method='get' href='#' data-toggle='modal' data-target='#add'  class="btn btn-success mx-auto pull-right"><i class="fas fa-plus-circle"></i><b> {{ trans('adminlte_lang::message.assignrespels') }}</b></a>
+							<a href="/respels/create" class="btn btn-primary mx-auto"><i class="fas fa-plus-square"></i> <b>{{ __('adminlte::message.respelscreate') }}</b></a>
+							<a method='get' href='#' data-toggle='modal' data-target='#add'  class="btn btn-success mx-auto pull-right"><i class="fas fa-plus-circle"></i><b> {{ __('adminlte::message.assignrespels') }}</b></a>
 						@endif
 						<div style='overflow-y:auto; max-height:503px;'>
 							@foreach ($Respels as $Respel)
 								<ul class="list-group" style="list-style:none; margin-top:10px;">
 									<li class="col-md-11 col-xs-12 col-12">
-										@if (in_array(Auth::user()->UsRol, Permisos::CLIENTE) ||in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
+										@if (in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol, Permisos::INGDETURNO) || in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
 											<a method='get' href='#' data-toggle='modal' data-target='#eliminar{{$Respel->SlugSGenerRes}}' onclick="deleteRespelGener(`{{$Respel->SlugSGenerRes}}`, `{{$Respel->RespelName}}`, `{{$Generador->GenerName}}`)" style="font-size: 1.5em; color: red; margin-bottom:-2px;" class="pull-right" ><i class="fas fa-times-circle"></i></a>
 										@endif
 										<h4><a href="/respels/{{$Respel->RespelSlug}}" class="list-group-item list-group-item-action list-group-item-light textolargo col-md-offset-1" style="display:flex; justify-content:center;" target="_blank">{{$Respel->RespelName}}</a></h4>
 									</li>
 									<li class="col-md-12 col-xs-12 col-12">
-										@if (in_array(Auth::user()->UsRol, Permisos::CLIENTE) ||in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) && $Generador->GenerDelete == 0)
+										@if (in_array(Auth::user()->UsRol, Permisos::CLIENTE) ||in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol, Permisos::INGDETURNO) && $Generador->GenerDelete == 0)
 										{{--  Modal Eliminar un Residuo de una SedeGener--}}
 											<div class="deleterespelgener"></div>
 										{{-- END Modal --}}
@@ -198,7 +198,7 @@
 					<div class="tab-pane" id="sedes">
 						<div class="text-center">
 							@if (in_array(Auth::user()->UsRol, Permisos::CLIENTE) ||in_array(Auth::user()->UsRol, Permisos::AREALOGISTICA))
-								<a href="/sgeneradores/create" class="btn btn-primary"><i class="fas fa-plus-square"></i><b> {{ trans('adminlte_lang::message.addsedegener') }}</b></a>
+								<a href="/sgeneradores/create" class="btn btn-primary"><i class="fas fa-plus-square"></i><b> {{ __('adminlte::message.addsedegener') }}</b></a>
 							@endif
 						</div>
 						<div style='overflow-y:auto; max-height:503px;'>

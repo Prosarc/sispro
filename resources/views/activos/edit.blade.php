@@ -24,7 +24,7 @@ Datos de Activos
 						<form action='/activos/{{$Activos->ID_Act}}' method='POST' style="float: right;">
 						@method('DELETE')
 						@csrf
-						<button type="submit" class='btn btn-success btn-block'>{{ trans('adminlte_lang::message.add') }}</button>
+						<button type="submit" class='btn btn-success btn-block'>{{ __('adminlte::message.add') }}</button>
 						</form>
 					@endif
 					{{-- <div class="box-tools pull-right">

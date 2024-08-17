@@ -115,7 +115,7 @@ class RespelPublicController extends Controller
                 ->get();
                 $tratamientos = Tratamiento::where('FK_TratProv', 1)->get();
             return view('respels.create', compact('Sede', 'tratamientos'));
-        }elseif(in_array(Auth::user()->UsRol, Permisos::RESPELPUBLIC) || in_array(Auth::user()->UsRol2, Permisos::RESPELPUBLIC)){
+        }elseif(in_array(Auth::user()->UsRol, Permisos::RESPELPUBLIC) || in_array(Auth::user()->UsRol2, Permisos::RESPELPUBLIC)|| in_array(Auth::user()->UsRol, Permisos::INGDETURNO)){
 
             $categories = Categoryrespelpublic::all();
             $tratamientos = Tratamiento::where('FK_TratProv', 1)->get();
@@ -251,7 +251,7 @@ class RespelPublicController extends Controller
         $ResiduoConDependencia1 = ResiduosGener::where('FK_Respel', $Respels->ID_Respel)->first();
         $ResiduoConDependencia2 = Requerimiento::where('FK_ReqRespel', $Respels->ID_Respel)->first();
 
-        if (in_array(Auth::user()->UsRol, Permisos::CLIENTE))
+        if (in_array(Auth::user()->UsRol, Permisos::CLIENTE)|| in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
             if ($Respels->RespelStatus=='Aprobado'||$Respels->RespelStatus=='Vencido') {
                 $editButton = 'No editable';
             }else{
@@ -291,7 +291,7 @@ class RespelPublicController extends Controller
     public function edit($id)
     {
         /*se verifican el rol del usuario para dar acceso a la edicion de respel o evaluacion de respel*/
-        if(in_array(Auth::user()->UsRol, Permisos::RESPELPUBLIC) || in_array(Auth::user()->UsRol2, Permisos::RESPELPUBLIC)){
+        if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR)|| in_array(Auth::user()->UsRol, Permisos::RESPELPUBLIC) || in_array(Auth::user()->UsRol2, Permisos::RESPELPUBLIC)){
 
             $Respels = Respel::where('RespelSlug', $id)->first();
             // return $Respels;
@@ -514,7 +514,7 @@ class RespelPublicController extends Controller
         $newRespel = $PublicRespel->replicate();
         $newRespel->RespelSlug = hash('sha256', rand().time().$PublicRespel->RespelName);
         $newRespel->RespelPublic = 0;
-        $newRespel->RespelStatus ='Aprobado';
+        $newRespel->RespelStatus = 'Aprobado';
         $newRespel->FK_RespelCoti = $Cotizacion->ID_Coti;
         $newRespel->save();
 

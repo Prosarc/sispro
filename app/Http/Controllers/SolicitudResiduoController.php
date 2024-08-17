@@ -105,7 +105,8 @@ class SolicitudResiduoController extends Controller
 			foreach ($KGenviados as $KGenviado) {
 				$totalenviado = $totalenviado + $KGenviado->SolResKgEnviado;
 			}
-			return view('solicitud-resid.edit', compact('SolRes', 'Respel', 'RespelSgener', 'SolSer', 'Programacion', 'totalenviado', 'Requerimientos'));
+			//return view('solicitud-resid.edit', compact('SolRes', 'Respel', 'RespelSgener', 'SolSer', 'Programacion', 'totalenviado', 'Requerimientos'));
+			return view('solicitud-resid.edit', compact('SolRes', 'Respel', 'RespelSgener', 'SolSer', 'totalenviado', 'Requerimientos'));
 		}else{
 			abort(403);
 		}
@@ -199,7 +200,7 @@ class SolicitudResiduoController extends Controller
 
 			$id = $SolSer->SolSerSlug;
 
-			return redirect()->route('serviciosexpress.show', compact('id'));
+			return redirect()->route('serviciosexpress.show', ['serviciosexpress' => $id]);
 		} else {
 			$Validate = $request->validate([
 				'SolResKg'  => 'required|numeric|max:50000|nullable',
@@ -268,7 +269,13 @@ class SolicitudResiduoController extends Controller
 
 			$id = $SolSer->SolSerSlug;
 
-			return redirect()->route('solicitud-servicio.show', compact('id'));
+			
+
+			if (in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR)) {
+				return redirect()->route('recibo.material', ['id' => $SolSer->SolSerSlug]);
+			}else{
+				return redirect()->route('solicitud-servicio.show', ['solicitud_servicio' => $id]);
+			}
 		}
 
 
@@ -430,7 +437,7 @@ class SolicitudResiduoController extends Controller
 		$log->Auditlog=json_encode($request->all());
 		$log->save();
 
-		return redirect()->route('recurso.show', compact('id'));
+		return redirect()->route('recurso.show', ['recurso' => $id]);
 	}
 
 	/**
@@ -565,7 +572,7 @@ class SolicitudResiduoController extends Controller
 
 		$id = $SolicitudServicio->SolSerSlug;
 
-		return redirect()->route('solicitud-servicio.show', compact('id'));
+		return redirect()->route('solicitud-servicio.show', ['solicitud_servicio' => $id]);
 	}
 
 		/**

@@ -1,5 +1,6 @@
 <?php
 
+//Use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -90,7 +91,14 @@ Route::middleware(['web', 'auth', 'verified', 'bindings'])->group(function () {
 	Route::get('/sede/{slug}/edit', 'SedesAllController@edit')->name('sedes-edit');
 	Route::put('/sedes/{slug}/update', 'SedesAllController@update')->name('sedes-update');
 	Route::delete('/sedes/{slug}/destroy', 'SedesAllController@destroy')->name('sedes-destroy');
-	Route::resource('/generadores', 'genercontroller');
+	Route::get('/generadores/create', 'genercontroller@create');
+	//correcta
+	Route::post('/generadores/create', 'GenerController@create');
+	Route::get('/generadores/createit', 'genercontroller@createit')->name('generadorprueba');
+
+	Route::get('/solicitud-servicio/createit', 'SolicitudServicioController@createit')->name('solicitudprueba');
+	//Route::post('/solicitud-servicio/create', 'SolicitudServicioController@create');
+
 	Route::post('/Soy-Gener/{id}', 'genercontroller@storeSoyGenerador');
 	Route::resource('/sgeneradores', 'sgenercontroller');
 	Route::resource('/respels', 'RespelController');
@@ -114,6 +122,8 @@ Route::middleware(['web', 'auth', 'verified', 'bindings'])->group(function () {
 	Route::put('/respels/{id}/updateStatusRespel', 'RespelController@updateStatusRespel');
 	Route::put('/respels/{id}/makePublicRespel', 'RespelController@makePublicRespel');
 	Route::put('/respels/{id}/updateTDE', 'RespelController@updateTDE');
+	Route::resource('/generadores', 'genercontroller');
+	Route::get('/respels/{id}/editADP', 'RespelController@editADP');
 	Route::get('/respelsexpress', 'RespelController@indexExpress')->name('respels.indexExpress');
 	Route::post('/respelGener', 'RespelSedeGenerController@storeGener');
 	Route::delete('/respelGener/{id}', 'RespelSedeGenerController@destroyGener');
@@ -179,6 +189,7 @@ Route::middleware(['web', 'auth', 'verified', 'bindings'])->group(function () {
 	
 	Route::get('/reportes.ReporteDatos', ['as'=> 'reportes.ReporteDatos', 'uses' => 'SolicitudResiduoController@reportesRegularesDatos']);	
 	Route::resource('/solicitud-servicio', 'SolicitudServicioController');
+	Route::get('/solicitud-servicio/{id}/recibomaterial', 'SolicitudServicioController@recibomaterial')->name('recibo.material');;	
 	Route::post('/solicitud-servicio/changestatus', 'SolicitudServicioController@changestatus');
 	Route::post('/solicitud-servicio/reversarStatus', 'SolicitudServicioController@reversarStatus');
 	Route::post('/solicitud-servicio/cancelarServicio', 'SolicitudServicioController@cancelarServicio');
@@ -251,6 +262,7 @@ Route::middleware(['web', 'auth', 'verified', 'bindings'])->group(function () {
 	Route::get('/sedegener-respel/{id}', 'AjaxController@SGenerRespel');
 	Route::get('/contacto-vehiculos/{id}', 'AjaxController@VehiculosContacto');
 	Route::get('/RequeRespel/{id}', 'AjaxController@RequeRespel');
+	Route::get('/SustanciaControlada/{id}', 'AjaxController@SustanciaControlada');
 	Route::get('/vehicle-transport/{id}', 'AjaxController@VehicTransport');
 	Route::get('/preTratamientoDinamico/{id}', 'AjaxController@preTratamientoDinamico');
 	Route::get('/SubcategoriaDinamico/{id}', 'AjaxController@SubcategoriaDinamico');
@@ -269,6 +281,10 @@ Route::middleware(['web', 'auth', 'verified', 'bindings'])->group(function () {
 	Route::get('certificados.2021', ['as' => 'certificados.2021', 'uses' => 'CertificadoController@cert2021']);
 	Route::get('certificados.2022', ['as' => 'certificados.2022', 'uses' => 'CertificadoController@cert2022']);
 	Route::get('certificados.2023', ['as' => 'certificados.2023', 'uses' => 'CertificadoController@cert2023']);
+	Route::get('certificados.2024', ['as' => 'certificados.2024', 'uses' => 'CertificadoController@cert2024']);
+
+	Route::get('certificadosExpress.2023', ['as' => 'certificadosExpress.2023', 'uses' => 'CertificadoExpressController@certex2023']);
+	Route::get('certificadosExpress.2024', ['as' => 'certificadosExpress.2024', 'uses' => 'CertificadoExpressController@certex2024']);
 
 	Route::get('/solicitud-serv.Createrespel', 'RespelController@createrespelcliente') ->name('solicitud-serv.Createrespel');	
 	Route::post('/respel', 'RespelController@storenewrespel')->name('respel'); 

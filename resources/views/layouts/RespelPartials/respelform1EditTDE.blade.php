@@ -2,7 +2,7 @@
 	<div id="Residuo">
 	{{-- input de la tarjeta de emergencia --}}
 			<div class="col-md-12 form-group has-feedback">
-				<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 500}' title="<b>{{ trans('adminlte_lang::LangRespel.tarjetaemergencia') }}</b>" data-content="{{ trans('adminlte_lang::LangRespel.tarjetapopoverinfo') }}"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{ trans('adminlte_lang::LangRespel.tarjetaemergencia') }}</label>
+				<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 500}' title="<b>{{ __('adminlte::LangRespel.tarjetaemergencia') }}</b>" data-content="{{ __('adminlte::LangRespel.tarjetapopoverinfo') }}"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{ __('adminlte::LangRespel.tarjetaemergencia') }}</label>
 				<small class="help-block with-errors">*</small>
 				@if($Respels->RespelTarj!=='RespelTarjetaDefault.pdf')
 				<div class="input-group">

@@ -35,7 +35,6 @@ class StoreServExpressRequest extends FormRequest
             'SolServCantidad' => 'required|numeric',
             'SolServFrecuencia' => 'required|in:semanal,quincenal,mensual,bimensual,trimestral,semestral,anual',
             'SolSerDescript' => 'max:4000',
-            'pagoComprobante' => 'required|max:2048|mimes:jpg,jpeg,png,jpe,pdf'
         ];
         if ($request->input('SolServTypeRecolection') == 'Especifica') {
             foreach ($request->input('SGenerador') as $Generador => $value) {
@@ -95,7 +94,18 @@ class StoreServExpressRequest extends FormRequest
      */
     public function attributes()
     {
-        foreach ($this->request->get('SGenerador') as $Generador => $value) {
+
+        $attributes = [
+            'fechadepago' => 'Fecha en que se realiza un pago',
+            'Referencia' => 'Numero de referencia de servicio',
+            'mediodepago' => 'Medio de pago',
+            'montodepago' => 'Valor pagado',
+            'SolServCantidad' => 'Cantidad enviada',
+            'SolServFrecuencia' => 'Frecuencia del servicio',
+            'SolSerDescript' => 'Descripción del servicio',
+
+        ];
+        /*foreach ($this->request->get('SGenerador') as $Generador => $value) {
             $attributes['SGenerador.'.$Generador] = '"Seleccione el generador (N° '.($Generador+1).')"';
             $attributes['FK_SolResRg.'.$Generador.'.0'] = '"Residuo (N° 1)" del generador (N° '.($Generador+1).')';
             if (isset($this->instance()->all()['FK_SolResRg'][$Generador])) {
@@ -109,7 +119,7 @@ class StoreServExpressRequest extends FormRequest
                     $attributes['SolResProfundo.'.$Generador.'.'.$y] = '"Profundo" del residuo (N°'.($y+1).') del generador (N° '.($Generador+1).')';
                 }
             }
-        }
+        }*/
         return $attributes;
     }
 

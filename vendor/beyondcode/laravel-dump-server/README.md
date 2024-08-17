@@ -1,14 +1,11 @@
 # Laravel Dump Server
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/beyondcode/laravel-dump-server.svg?style=flat-square)](https://packagist.org/packages/beyondcode/laravel-dump-server)
-[![Quality Score](https://img.shields.io/scrutinizer/g/beyondcode/laravel-dump-server.svg?style=flat-square)](https://scrutinizer-ci.com/g/beyondcode/laravel-dump-server)
 [![Total Downloads](https://img.shields.io/packagist/dt/beyondcode/laravel-dump-server.svg?style=flat-square)](https://packagist.org/packages/beyondcode/laravel-dump-server)
 
 Bringing the [Symfony Var-Dump Server](https://symfony.com/doc/current/components/var_dumper.html#the-dump-server) to Laravel.
 
 This package will give you a dump server, that collects all your `dump` call outputs, so that it does not interfere with HTTP / API responses.
-
-> If you want to learn how to create reusable PHP packages yourself, take a look at my upcoming [PHP Package Development](https://phppackagedevelopment.com) video course.
 
 ## Installation
 
@@ -18,41 +15,21 @@ You can install the package via composer:
 composer require --dev beyondcode/laravel-dump-server
 ```
 
-The package will register itself automatically. 
+## Documentation
 
-Optionally you can publish the package configuration using:
+You can find the documentation on the [Beyond Code website](https://beyondco.de/docs/laravel-dump-server/installation).
 
-```bash
-php artisan vendor:publish --provider=BeyondCode\\DumpServer\\DumpServerServiceProvider
-```
+## Looking for `dump` on steroids? Check out Laravel Herd!
+<img src="https://github.com/beyondcode/laravel-dump-server/assets/26432041/28a74ab1-35bd-42d1-bcfe-98e7f7101c1e" alt="Herd logo" style="width: 150px"/>
 
-This will publish a file called `debug-server.php` in your `config` folder.
-In the config file, you can specify the dump server host that you want to listen on, in case you want to change the default value.
 
-## Usage
+Herd Pro gives you a powerful interface to help you watch and collect your debug information.
 
-Start the dump server by calling the artisan command:
+All of your application's `dump()` and `dd()` calls will be beautifully formatted and can be filtered from Herd's separate Dump window.
 
-```bash
-php artisan dump-server
-```
+Just keep using `dump()` as usual – Herd will take care of the rest.
 
-You can set the output format to HTML using the `--format` option:
-
-```bash
-php artisan dump-server --format=html > dump.html
-```
-
-And then you can, as you are used to, put `dump` calls in your methods. But instead of dumping the output in your current HTTP request, they will be dumped in the artisan command.
-This is very useful, when you want to dump data from API requests, without having to deal with HTTP errors.
-
-You can see it in action here:
-
-![Dump Server Demo](https://beyondco.de/github/dumpserver/dumpserver.gif)
-
-### Changelog
-
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
+[herd.laravel.com](https://herd.laravel.com)
 
 ## Contributing
 
@@ -70,4 +47,3 @@ If you discover any security related issues, please email marcel@beyondco.de ins
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
- 

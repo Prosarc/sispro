@@ -45,10 +45,10 @@ class ForgotPasswordController extends Controller
     {
         if ($request->expectsJson()) {
             return response()->json([
-                'status' => trans($response)
+                'status' => __($response)
             ]);
         }
-        return back()->with('status', trans($response));
+        return back()->with('status', __($response));
     }
 
     /**
@@ -66,12 +66,12 @@ class ForgotPasswordController extends Controller
             return new JsonResponse([
                 'message' =>  'The given data was invalid.',
                 'errors' => [
-                    'email' => trans($response)
+                    'email' => __($response)
                 ]
             ], 422);
         }
         return back()->withErrors(
-            ['email' => trans($response)]
+            ['email' => __($response)]
         );
     }
 
