@@ -1,0 +1,12 @@
+[2025-06-12 11:44:07] local.ERROR: Cannot use try without catch or finally {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot use try without catch or finally at C:\\laragon\\www\\lprosarc2\\app\\Http\\Controllers\\ServiceExpressController.php:2663)
+[stacktrace]
+#0 {main}
+"} 
+[2025-06-12 11:44:44] local.ERROR: Cannot use try without catch or finally {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot use try without catch or finally at C:\\laragon\\www\\lprosarc2\\app\\Http\\Controllers\\ServiceExpressController.php:2663)
+[stacktrace]
+#0 {main}
+"} 
+[2025-06-12 11:44:50] local.ERROR: Cannot use try without catch or finally {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot use try without catch or finally at C:\\laragon\\www\\lprosarc2\\app\\Http\\Controllers\\ServiceExpressController.php:2663)
+[stacktrace]
+#0 {main}
+"} 

@@ -56,5 +56,18 @@ class SolicitudResiduo extends Model{
     protected $casts = [
         'SolResRM' => 'array',
     ];
+
+    public function scopeForRm($query, $solServId, $generId)
+    {
+        return $query->with([
+            'generespel.gener_sede.generador',
+            'requerimiento.tratamiento.sede.cliente',
+            'Respel'
+        ])
+        ->where('FK_SolResSolSer', $solServId)
+        ->whereHas('generespel.gener_sede.generador', function($q) use ($generId) {
+            $q->where('ID_Gener', $generId);
+        });
+    }
 }
 

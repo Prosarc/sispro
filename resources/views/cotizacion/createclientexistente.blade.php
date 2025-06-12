@@ -88,15 +88,17 @@ Crear Cotizacion
                                     </div>
                                 
                                     <div style="text-align: right;  margin-bottom: 20px;">
-                                <!-- Bot��n Crear Residuo con Icono -->
+                                <!-- Botón Crear Residuo con Icono -->
+                                        @if(in_array(Auth::user()->UsRol, Permisos::RESPELPUBLIC) || in_array(Auth::user()->UsRol2, Permisos::RESPELPUBLIC))
                                         <a href="{{ route('respelspublic.create') }}" target="_blank" class="btn btn-success"style="margin-bottom: -29px;">
                                             <i class="fas fa-plus-circle"></i> Crear Un Nuevo Residuo
                                         </a>
+                                        @endif
                                     </div>
                                 <div id="ResidoComun">
                                     <div id="residuosContainer" class="col-md-12">
-                                    <!-- Aqu�� se agregar�� el primer conjunto de residuos -->
-                                    <div class="residuo-form" style="margin-bottom: 20px;"> <!-- Espacio a�0�9adido -->
+                                    <!-- Aqu se agregar el primer conjunto de residuos -->
+                                    <div class="residuo-form" style="margin-bottom: 20px;"> <!-- Espacio a09adido -->
                                         <div class="form-group">
                                             <label for="residuo">Selecciona el Residuo:</label>
                                             <select name="residuos[]" class="form-control" required onchange="mostrarPeligrosidad(this); mostrarClasificacion(this); checkResidueStatus();">
@@ -169,13 +171,13 @@ Crear Cotizacion
                                                 <input type="number" class="form-control" name="precio_kg[0][]" required step="0.01" value="0" oninput="calcularSubtotal(this)">
                                             </div>
 
-                                            <!-- Subtotal calculado num��ricamente (oculto o no editable) -->
+                                            <!-- Subtotal calculado numericamente (oculto o no editable) -->
                                             <div class="col-md-12" style="margin-top: 30px;">
                                                 <label for="subtotal">Subtotal</label>
-                                                <!-- Campo num��rico oculto usado para c��lculos -->
+                                                <!-- Campo numerico oculto usado para clculos -->
                                                 <input type="hidden" class="form-control subtotal" name="subtotal[0][]" readonly style="display:none;">
                                                 
-                                                <!-- input donde se mostrar�� el subtotal formateado -->
+                                                <!-- input donde se mostrar el subtotal formateado -->
                                                 <span class="subtotalFormatted" style="font-weight: bold;"></span>
                                             </div>
                                             </div>
@@ -197,7 +199,7 @@ Crear Cotizacion
                                 <!-- Campo para el total general -->
                                 <div class="col-md-6" style="text-align: center; margin-top: 20px;">
                                         <label for="Total">Total:</label>
-                                        <!-- Campo num��rico oculto usado para c��lculos -->
+                                        <!-- Campo numerico oculto usado para clculos -->
                                         <input type="hidden" class="form-control" id="Total" name="Total" readonly>
                                         <!-- Campo visible para mostrar el total formateado -->
                                         <input type="text" class="form-control" id="TotalFormatted" readonly>
@@ -212,7 +214,7 @@ Crear Cotizacion
                                                     </select>
                                     </div>
                                     </div> 
-                                    <!-- Campo oculto para el estado de la cotizaci��n -->
+                                    <!-- Campo oculto para el estado de la cotizacion -->
                                     <input type="hidden" name="status" value="Pendiente"> 
                                     <div class="col-md-12" style="margin-top: 1.7vw;">
                                         <div class="box-footer" style="margin-right: 5vw;">
@@ -235,12 +237,12 @@ Crear Cotizacion
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    let contadorResiduos = 1; // Inicia en 1 ya que el primer residuo usa ��ndice 0
+    let contadorResiduos = 1; // Inicia en 1 ya que el primer residuo usa indice 0
 
-    // Funci��n para inicializar los botones de agregar tratamiento
+    // Función para inicializar los botones de agregar tratamiento
     function initializeAddTratamientoButtons() {
         document.querySelectorAll('.add-tratamiento').forEach(function(button) {
-            button.removeEventListener('click', handleAddTratamiento); // Evitar m��ltiples listeners
+            button.removeEventListener('click', handleAddTratamiento); // Evitar multiples listeners
             button.addEventListener('click', handleAddTratamiento);
         });
     }
@@ -274,7 +276,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <input type="number" class="form-control" name="precio_kg[${residuoIndex}][]" required step="0.01" value="0" oninput="calcularSubtotal(this)">
                 </div>
 
-                <!-- Subtotal calculado num��ricamente (oculto o no editable) -->
+                <!-- Subtotal calculado numericamente (oculto o no editable) -->
                 <div class="col-md-12" style="margin-top: 30px;">
                     <label for="subtotal">Subtotal</label>
                     <input type="hidden" class="form-control subtotal" name="subtotal[${residuoIndex}][]" readonly style="display:none;">
@@ -283,17 +285,17 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
         `;
 
-        // A�0�9adir la nueva fila al contenedor de tratamientos
+        // A09adir la nueva fila al contenedor de tratamientos
         container.appendChild(newRow);
     }
 
     // Inicializar los botones existentes
     initializeAddTratamientoButtons();
 
-    // Manejar la adici��n de nuevos residuos
+    // Manejar la adición de nuevos residuos
     document.getElementById("agregarResiduoBtn").addEventListener("click", function() {
         const residuoIndex = contadorResiduos;
-        contadorResiduos++; // Incrementar el contador para el pr��ximo residuo
+        contadorResiduos++; // Incrementar el contador para el próximo residuo
 
         // Crear nuevo contenedor de residuo
         const nuevoContenedor = document.createElement("div");
@@ -301,7 +303,7 @@ document.addEventListener('DOMContentLoaded', function() {
         nuevoContenedor.style.marginBottom = '10px';
         nuevoContenedor.style.position = 'relative';
 
-        // Crear el t��tulo del residuo
+        // Crear el título del residuo
         const tituloResiduo = document.createElement("div");
         tituloResiduo.style.marginTop = '10px';
         tituloResiduo.style.marginBottom = '10px';
@@ -313,7 +315,7 @@ document.addEventListener('DOMContentLoaded', function() {
         tituloResiduo.style.fontSize = 'larger';
         tituloResiduo.textContent = `Residuo ${residuoIndex + 1}`;
 
-        // A�0�9adir el t��tulo al nuevo contenedor
+        // A09adir el título al nuevo contenedor
         nuevoContenedor.appendChild(tituloResiduo);
 
         // Contenido del nuevo residuo (el formulario)
@@ -337,7 +339,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                     <div class="contenedorTextoClasi">
                         <div class="col-md-6" style="margin-top: 1.3vw;padding-left: unset;">
-                            <label for="clasf4741">Clasificaci��n 4741</label>
+                            <label for="clasf4741">Clasificación 4741</label>
                             <input type="text" class="form-control clasificacion" name="clasf4741[]" readonly>
                         </div>
                     </div>
@@ -354,7 +356,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             </div>
             
-            <!-- T��tulo de Tratamientos -->
+            <!-- Título de Tratamientos -->
             <div class="tratamientos-title" style="margin-top: 20px; font-weight: bold;">
                 Tratamientos
             </div>
@@ -392,7 +394,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             </div>
             
-            <!-- Bot��n para agregar m��s tratamientos a este Residuo -->
+            <!-- Botón para agregar ms tratamientos a este Residuo -->
             <button type="button" class="btn btn-primary add-tratamiento" data-residuo-index="${residuoIndex}" style="margin-top: 10px; margin-bottom: 20px;">
                 Agregar Tratamiento
             </button>
@@ -432,7 +434,7 @@ function mostrarPeligrosidad(selectElement) {
 }
 
 function mostrarClasificacion(selectElement) {
-    // Obtenemos la opci��n seleccionada
+    // Obtenemos la opción seleccionada
     var selectedOption = selectElement.options[selectElement.selectedIndex];
     // Obtenemos el valor de data-clasificacion
     var clasificacion = selectedOption.getAttribute('data-clasificacion');
@@ -440,7 +442,7 @@ function mostrarClasificacion(selectElement) {
     var clasificacionInput = selectElement.closest('.residuo-form').querySelector('.clasificacion');
     
     console.log("Selected Option:", selectedOption);
-    console.log("Clasificaci��n:", clasificacion);
+    console.log("Clasificación:", clasificacion);
     console.log("Input Element:", clasificacionInput);
 
     // Verificamos si el input existe y actualizamos su valor
@@ -448,15 +450,15 @@ function mostrarClasificacion(selectElement) {
         if (clasificacion && clasificacion.trim() !== "") {
             clasificacionInput.value = clasificacion; // Asignamos el valor clasificacion al input
         } else {
-            clasificacionInput.value = "Sin clasificaci��n"; // Valor predeterminado si no hay clasificaci��n
+            clasificacionInput.value = "Sin clasificación"; // Valor predeterminado si no hay clasificación
         }
         console.log("Valor asignado al input:", clasificacionInput.value); // Verificamos el valor asignado
     } else {
-        console.error("No se encontr�� el elemento input para clasificacion.");
+        console.error("No se encontr el elemento input para clasificacion.");
     }
 }
 
-// Funci��n para calcular el subtotal basado en cantidad de kilos y precio por kilo
+// Función para calcular el subtotal basado en cantidad de kilos y precio por kilo
 function calcularSubtotal(element) {
     var container = element.closest('.residuo-form');
     var cantidadKilos = container.querySelector('input[name^="cantidad_kilos"]').value;
@@ -465,7 +467,7 @@ function calcularSubtotal(element) {
     if (cantidadKilos && precioKg) {
         var subtotal = parseFloat(cantidadKilos) * parseFloat(precioKg);
         
-        // Almacenar el subtotal num��rico (valor usado en c��lculos)
+        // Almacenar el subtotal numérico (valor usado en cálculos)
         container.querySelector('input[name^="subtotal"]').value = subtotal.toFixed(2);
         
         // Formatear el subtotal a COP y mostrarlo en el span
@@ -484,7 +486,7 @@ function calcularSubtotal(element) {
     }
 }
 
-// Funci��n para calcular el total general
+// Función para calcular el total general
 function calcularTotalGeneral() {
     let subtotales = document.querySelectorAll('input[name^="subtotal"]');
     let totalGeneral = 0;
@@ -494,11 +496,11 @@ function calcularTotalGeneral() {
         totalGeneral += parseFloat(input.value) || 0;
     });
     
-    // A�0�9adir el valor del transporte
+    // A09adir el valor del transporte
     let transporte = parseFloat(document.querySelector('input[name="transporte"]').value) || 0;
     totalGeneral += transporte;
     
-    // Almacenar el total num��rico (valor usado en c��lculos)
+    // Almacenar el total numérico (valor usado en cálculos)
     document.getElementById('Total').value = totalGeneral.toFixed(2);
     
     // Formatear el total a COP y mostrarlo en el campo visible
@@ -520,7 +522,7 @@ function checkResidueStatus() {
     residueSelects.forEach(function(selectElement){
         var residuoId = selectElement.value;
         if (residuoId) {
-            // Hacer una petici��n AJAX para obtener el estado del residuo
+            // Hacer una petición AJAX para obtener el estado del residuo
             var ajaxCall = fetch(`/residuo/status/${residuoId}`)
                 .then(response => response.json())
                 .then(data => {

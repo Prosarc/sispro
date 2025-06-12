@@ -4880,7 +4880,7 @@ foreach ($certificados as $certificado) {
 		 $decoded_image = base64_decode($encoded_image);
 		 $nombreDeFirma = hash('md5', rand() . time());
 		 Storage::put('public/FirmasClientesRegulares/' . $nombreDeFirma . '.png', $decoded_image, 'public');
-		 
+			
 		 
 		 // Guardar la firma en la base de datos
 		 if ($firmacliente) {
@@ -5090,21 +5090,7 @@ foreach ($certificados as $certificado) {
 				->get();
 			}	
 
-			$Residuosoriginal = DB::table('solicitud_residuos')
-				->join('residuos_geners', 'residuos_geners.ID_SGenerRes', '=', 'solicitud_residuos.FK_SolResRg')
-				->join('gener_sedes', 'gener_sedes.ID_GSede', '=', 'residuos_geners.FK_SGener')
-				->join('generadors', 'generadors.ID_Gener', '=', 'gener_sedes.FK_GSede')
-				->join('respels' , 'respels.ID_Respel', '=', 'residuos_geners.FK_Respel')
-				->join('requerimientos' , 'solicitud_residuos.FK_SolResRequerimiento', '=', 'requerimientos.ID_Req')
-				->join('tratamientos' , 'requerimientos.FK_ReqTrata', '=', 'tratamientos.ID_Trat')
-				->join('sedes' , 'tratamientos.FK_TratProv', '=', 'sedes.ID_Sede')
-				->join('clientes' , 'sedes.FK_SedeCli', '=', 'clientes.ID_Cli')
-				->select('solicitud_residuos.*','residuos_geners.FK_SGener', 'respels.*', 'requerimientos.ID_Req', 'tratamientos.TratName', 'tratamientos.ID_Trat', 'clientes.CliShortName', 'gener_sedes.FK_GSede', 'generadors.*')
-				->where('solicitud_residuos.FK_SolResSolSer', $SolicitudServicio->ID_SolSer)
-				//->where('generadors.ID_Gener', $firmas->FK_Gener )
-				// ->where('requerimientos.ofertado', 1)
-				// ->where('forevaluation', 0)
-				->get();
+			        $Residuosoriginal = SolicitudResiduo::forRm($SolicitudServicio->ID_SolSer, $firmas->FK_Gener)->get();
 			//return $Residuosoriginal;
 				
 			$Residuos = $Residuosoriginal->map(function ($item) {

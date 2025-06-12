@@ -22,7 +22,7 @@ $("#FK_SolSerCliente").change(function(e){
 		},
 		success: function(res){
 			id_div = 0;
-			ID_Gener =res.respels[0].GSedeSlug;
+			ID_Gener = res.respels[0].GSedeSlug;
 			contadorRespel[id_div] = 0;
 			$("#SGenerador").val(ID_Gener);
 			$("#DivRepel"+id_div).empty();
@@ -37,35 +37,27 @@ $("#FK_SolSerCliente").change(function(e){
 			$(icon).addClass('fa-minus');
 
 			var residuos = new Array();
-			// $("#FK_SolResRg"+id_div+contadorRespel[id_div]).empty();
+			$("#FK_SolResRg"+id_div+contadorRespel[id_div]).empty();
 			$("#FK_SolResRg"+id_div+contadorRespel[id_div]).append(`<option onclick="HiddenRequeRespel(`+id_div+`,`+contadorRespel[id_div]+`)" value="">{{ __('adminlte::message.select') }}</option>`);
-			for(var i = res.respels.length -1; i >= 0; i--){
-				if ($.inArray(res.respels[i].SlugSGenerRes, residuos) < 0) {
-					$("#FK_SolResRg"+id_div+contadorRespel[id_div]).append(`<option onclick="RequeRespel(`+id_div+`,`+contadorRespel[id_div]+`,'`+res.respels[i].RespelSlug+`')" value="${res.respels[i].SlugSGenerRes}">${res.respels[i].RespelName} (${res.respels[i].TratName})</option>`);
-					residuos.push(res.respels[i].SlugSGenerRes);
-				}
-
-				
-			// Agregar residuos comunes después de los del cliente
+			
+			// Cargar todos los residuos disponibles
 			$.ajax({
 				url: "{{url('/ResiduosComunes')}}",
 				method: 'GET',
-				success: function(comunesRes){
-					if(comunesRes && Array.isArray(comunesRes)){
-						for(var j = 0; j < comunesRes.length; j++){
-							if ($.inArray(comunesRes[j].SlugSGenerRes, residuos) < 0) {
-								$("#FK_SolResRg"+id_div+contadorRespel[id_div]).append(`<option onclick="RequeRespel(`+id_div+`,`+contadorRespel[id_div]+`,'`+comunesRes[j].RespelSlug+`')" value="${comunesRes[j].SlugSGenerRes}">${comunesRes[j].RespelName} (${comunesRes[j].TratName})</option>`);
-								residuos.push(comunesRes[j].SlugSGenerRes);
+				success: function(allResidues){
+					if(allResidues && Array.isArray(allResidues)){
+						for(var j = 0; j < allResidues.length; j++){
+							if ($.inArray(allResidues[j].SlugSGenerRes, residuos) < 0) {
+								$("#FK_SolResRg"+id_div+contadorRespel[id_div]).append(`<option onclick="RequeRespel(`+id_div+`,`+contadorRespel[id_div]+`,'`+allResidues[j].RespelSlug+`')" value="${allResidues[j].SlugSGenerRes}">${allResidues[j].RespelName} (${allResidues[j].TratName})</option>`);
+								residuos.push(allResidues[j].SlugSGenerRes);
 							}
 						}
 					}
 				}
 			});
-			}
 
-            var sedes = new Array();
-			// $("#FK_SolResRg"+id_div+contadorRespel[id_div]).empty();
-            $("#SedeSlug").empty();
+			var sedes = new Array();
+			$("#SedeSlug").empty();
 			$("#SedeSlug").append(`<option value="">{{ __('adminlte::message.select') }}</option>`);
 			for(var i = res.sedes.length -1; i >= 0; i--){
 				if ($.inArray(res.sedes[i].SedeSlug, sedes) < 0) {
@@ -351,7 +343,7 @@ $("#SolServTypeRecolection").change(function(e){
             },
             success: function(res){
                 id_div = 0;
-                ID_Gener =res.respels[0].GSedeSlug;
+                ID_Gener = res.respels[0].GSedeSlug;
                 contadorRespel[id_div] = 0;
                 $("#SGenerador").val(ID_Gener);
                 $("#DivRepel"+id_div).empty();
@@ -366,33 +358,26 @@ $("#SolServTypeRecolection").change(function(e){
                 $(icon).addClass('fa-minus');
 
                 var residuos = new Array();
-                // $("#FK_SolResRg"+id_div+contadorRespel[id_div]).empty();
+                $("#FK_SolResRg"+id_div+contadorRespel[id_div]).empty();
                 $("#FK_SolResRg"+id_div+contadorRespel[id_div]).append(`<option onclick="HiddenRequeRespel(`+id_div+`,`+contadorRespel[id_div]+`)" value="">{{ __('adminlte::message.select') }}</option>`);
-                for(var i = res.respels.length -1; i >= 0; i--){
-                    if ($.inArray(res.respels[i].SlugSGenerRes, residuos) < 0) {
-                        $("#FK_SolResRg"+id_div+contadorRespel[id_div]).append(`<option onclick="RequeRespel(`+id_div+`,`+contadorRespel[id_div]+`,'`+res.respels[i].RespelSlug+`')" value="${res.respels[i].SlugSGenerRes}">${res.respels[i].RespelName} (${res.respels[i].TratName})</option>`);
-                        residuos.push(res.respels[i].SlugSGenerRes);
+                
+                // Cargar todos los residuos disponibles
+                $.ajax({
+                    url: "{{url('/ResiduosComunes')}}",
+                    method: 'GET',
+                    success: function(allResidues){
+                        if(allResidues && Array.isArray(allResidues)){
+                            for(var j = 0; j < allResidues.length; j++){
+                                if ($.inArray(allResidues[j].SlugSGenerRes, residuos) < 0) {
+                                    $("#FK_SolResRg"+id_div+contadorRespel[id_div]).append(`<option onclick="RequeRespel(`+id_div+`,`+contadorRespel[id_div]+`,'`+allResidues[j].RespelSlug+`')" value="${allResidues[j].SlugSGenerRes}">${allResidues[j].RespelName} (${allResidues[j].TratName})</option>`);
+                                    residuos.push(allResidues[j].SlugSGenerRes);
+                                }
+                            }
+                        }
                     }
-										
-					// Agregar residuos comunes después de los del cliente
-					$.ajax({
-						url: "{{url('/ResiduosComunes')}}",
-						method: 'GET',
-						success: function(comunesRes){
-							if(comunesRes && Array.isArray(comunesRes)){
-								for(var j = 0; j < comunesRes.length; j++){
-									if ($.inArray(comunesRes[j].SlugSGenerRes, residuos) < 0) {
-										$("#FK_SolResRg"+id_div+contadorRespel[id_div]).append(`<option onclick="RequeRespel(`+id_div+`,`+contadorRespel[id_div]+`,'`+comunesRes[j].RespelSlug+`')" value="${comunesRes[j].SlugSGenerRes}">${comunesRes[j].RespelName} (${comunesRes[j].TratName})</option>`);
-										residuos.push(comunesRes[j].SlugSGenerRes);
-									}
-								}
-							}
-						}
-					});
-                }
+                });
 
                 var sedes = new Array();
-                // $("#FK_SolResRg"+id_div+contadorRespel[id_div]).empty();
                 $("#SedeSlug").empty();
                 $("#SedeSlug").append(`<option value="">{{ __('adminlte::message.select') }}</option>`);
                 for(var i = res.sedes.length -1; i >= 0; i--){

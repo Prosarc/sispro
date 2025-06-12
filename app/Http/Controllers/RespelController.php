@@ -123,25 +123,19 @@ class RespelController extends Controller
      */
     public function create()
     {
+        // Bloquear acceso a clientes
         if(in_array(Auth::user()->UsRol, Permisos::CLIENTE)){
-            $Sede = DB::table('personals')
-                ->join('cargos', 'cargos.ID_Carg', 'personals.FK_PersCargo')
-                ->join('areas', 'areas.ID_Area', 'cargos.CargArea')
-                ->join('sedes', 'sedes.ID_Sede', 'areas.FK_AreaSede')
-                ->select('sedes.ID_Sede')
-                ->where('personals.ID_Pers', Auth::user()->FK_UserPers)
-                ->get();
-            $tratamientos = Tratamiento::select('*')->get();
-            
-            return view('respels.create', compact('Sede', 'tratamientos'));
-        }elseif(in_array(Auth::user()->UsRol, Permisos::RESPELPUBLIC) || in_array(Auth::user()->UsRol2, Permisos::RESPELPUBLIC)|| in_array(Auth::user()->UsRol, Permisos::INGDETURNO)){
+            abort(403, 'Los clientes no pueden crear residuos directamente. Por favor envíe la información por correo electrónico para evaluación técnica.');
+        }
+
+        // Solo personal autorizado puede crear residuos
+        if(in_array(Auth::user()->UsRol, Permisos::RESPELPUBLIC) || in_array(Auth::user()->UsRol2, Permisos::RESPELPUBLIC)|| in_array(Auth::user()->UsRol, Permisos::INGDETURNO)){
             $Sedes = DB::table('clientes')
                 ->join('sedes', 'sedes.FK_SedeCli', '=', 'clientes.ID_Cli')
                 ->select('sedes.ID_Sede', 'clientes.CliName')
-                //->where('clientes.ID_Cli', '<>', 1)
                 ->where('CliDelete', '0')
                 ->get();
-                $tratamientos = Tratamiento::select('*')->get();
+            $tratamientos = Tratamiento::select('*')->get();
             $categories = Categoryrespelpublic::all();
             return view('respels.create', compact('Sedes', 'categories', 'tratamientos'));
         }else{
@@ -157,17 +151,17 @@ class RespelController extends Controller
      */
     public function store(RespelStoreRequest $request)
     {
-
+        // Bloquear creación para clientes
         if (in_array(Auth::user()->UsRol, Permisos::CLIENTE)) {
-            $UserSedeID = DB::table('personals')
-                ->join('cargos', 'cargos.ID_Carg', 'personals.FK_PersCargo')
-                ->join('areas', 'areas.ID_Area', 'cargos.CargArea')
-                ->join('sedes', 'sedes.ID_Sede', 'areas.FK_AreaSede')
-                ->where('personals.ID_Pers', Auth::user()->FK_UserPers)
-                ->value('sedes.ID_Sede');
-        }else{
-            $UserSedeID = $request->input('Sede');
+            abort(403, 'Los clientes no pueden crear residuos directamente. Por favor envíe la información por correo electrónico para evaluación técnica.');
         }
+
+        // Solo personal autorizado puede crear residuos
+        if(!(in_array(Auth::user()->UsRol, Permisos::RESPELPUBLIC) || in_array(Auth::user()->UsRol2, Permisos::RESPELPUBLIC)|| in_array(Auth::user()->UsRol, Permisos::INGDETURNO))){
+            abort(403);
+        }
+
+        $UserSedeID = $request->input('Sede');
         //return $request['FK_SubCategoryRP'];
         if ($request['FK_SubCategoryRP'] == 2) {
             $subcategoria = new Subcategoryrespelpublic();
@@ -1366,20 +1360,27 @@ class RespelController extends Controller
 
      public function createrespelcliente()
      {
-        
-         if(in_array(Auth::user()->UsRol, Permisos::CLIENTE)||in_array(Auth::user()->UsRol2, Permisos::AREALOGISTICA)){
-            $Sede = DB::table('clientes')
-            ->join('sedes', 'sedes.FK_SedeCli', '=', 'clientes.ID_Cli')
-            ->select('sedes.ID_Sede', 'sedes.SedeName','clientes.CliName')
-            ->where('clientes.ID_Cli', '<>', 1)
-            ->get();
-
-            $tratamientos = Tratamiento::select('*')->get();
-            $categories = Categoryrespelpublic::all();
-            //return $Sede;
-            return view('solicitud-serv.Createrespel', compact('Sede', 'tratamientos', 'categories'));
+         // Bloquear acceso a clientes
+         if(in_array(Auth::user()->UsRol, Permisos::CLIENTE)){
+             abort(403, 'Los clientes no pueden crear residuos directamente. Por favor envíe la información por correo electrónico para evaluación técnica.');
          }
- }
+
+         // Solo personal autorizado puede crear residuos
+         if(!(in_array(Auth::user()->UsRol, Permisos::RESPELPUBLIC) || in_array(Auth::user()->UsRol2, Permisos::RESPELPUBLIC)|| in_array(Auth::user()->UsRol, Permisos::INGDETURNO))){
+             abort(403);
+         }
+
+         $Sede = DB::table('personals')
+             ->join('cargos', 'cargos.ID_Carg', 'personals.FK_PersCargo')
+             ->join('areas', 'areas.ID_Area', 'cargos.CargArea')
+             ->join('sedes', 'sedes.ID_Sede', 'areas.FK_AreaSede')
+             ->select('sedes.ID_Sede')
+             ->where('personals.ID_Pers', Auth::user()->FK_UserPers)
+             ->get();
+         $tratamientos = Tratamiento::select('*')->get();
+         
+         return view('respels.create', compact('Sede', 'tratamientos'));
+     }
 
  
 

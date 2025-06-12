@@ -14,10 +14,10 @@
 			<div class="box">
 				<div class="box-header">
 					<h3 class="box-title">{{ __('adminlte::LangRespel.Respellist') }}</h3 class="pull-left">
-				@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol2, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol, Permisos::INGDETURNO) ||in_array(Auth::user()->UsRol, Permisos::COMERCIALAP))
+				@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol2, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol, Permisos::INGDETURNO) || Auth::user()->UsRol == 'Usaquen' || Auth::user()->UsRol == 'JefeComercial')
 						<a href="respels/create" class="btn btn-primary" style="float: right;">{{__('adminlte::LangRespel.CreaterespelButton')}}</a>
 				@endif
-				@if(in_array(Auth::user()->UsRol, Permisos::RESPELPUBLIC) || in_array(Auth::user()->UsRol2, Permisos::RESPELPUBLIC) || in_array(Auth::user()->UsRol, Permisos::INGDETURNO) ||in_array(Auth::user()->UsRol, Permisos::COMERCIALAP))
+				@if(in_array(Auth::user()->UsRol, Permisos::RESPELPUBLIC) || in_array(Auth::user()->UsRol2, Permisos::RESPELPUBLIC) || in_array(Auth::user()->UsRol, Permisos::INGDETURNO) || Auth::user()->UsRol == 'Usaquen' || Auth::user()->UsRol == 'JefeComercial')
 						<a href="respelspublic/create" class="btn btn-primary" style="float: right; margin-right: 0.5em;">Crear Residuo Común</a>
 				@endif
 

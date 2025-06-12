@@ -2,23 +2,55 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
+use App\Mail\CotizacionCreada;
+use App\Mail\CotizacionAprobada;
 
 class Cotizacion extends Model
 {
-    protected $table = 'cotizacions';
+    use HasFactory;
 
-    protected $fillable = ['CotiNumero', 'CotiFechaSolicitud', 'CotiFechaRespuesta', 'CotiFechaVencimiento', 'CotiVencida', 'CotiPrecioTotal', 'CotiPrecioSubtotal', 'FK_CotiSede', 'CotiDelete'];
+    protected $table = 'cotizacion'; // Asegúrate de que el nombre de la tabla es correcto
+    protected $primaryKey = 'id_cotizacion';
 
-    protected $primaryKey = 'ID_Coti';
+    protected $fillable = [
+        'Auditlog',
+        'FechaCotizacion',
+        'Nit',
+        'Razon_Social',
+        'Telefono',
+        'Correo',
+        'Direccion',
+        'CoStatus',
+        'Total',
+        'transporte',
+        'sede',
+        'frecuencia_recoleccion',
+        'Observaciones',
+        'tipo_cotizacion',
+        'Auditlog',
+        'status',
+        
+    ];
+    protected $casts = [
+        'FechaCotizacion' => 'datetime',
+    ];
 
-    public function Sede()
-	{
-	 return $this->belongsTo('App\Sede', 'FK_CotiSede', 'ID_Sede');
-	}
+    // Relación con CotiRespel (uno a muchos)
+    public function coti_respel()
+{
+    return $this->hasMany(CotiRespel::class, 'cotizacion_id');
+}
 
-	public function respels()
-	{
-	 return $this->hasMany('App\respel', 'ID_Respel');
-	}
+    public $timestamps = true;
+
+    public function comercial()
+    {
+        return $this->belongsTo(User::class, 'Auditlog', 'email'); // Relacionando 'Auditlog' con 'email' del User
+    }
+
+    
 }

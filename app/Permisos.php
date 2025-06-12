@@ -226,7 +226,7 @@ class Permisos{
 		respel/edit
 	 */
 
-	const COMERCIALEXPRESS = ['Programador', 'Comercial','Comercialap', 'usaquen'];
+	const COMERCIALEXPRESS = ['Programador', 'Comercial','Comercialap', 'usaquen', 'Ejecutivo Comercial'];
 	/* Using ->
 		clientcontoller::index
 	*/

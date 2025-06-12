@@ -1991,7 +1991,7 @@ return $Residuosoriginal;
 		$Observacion->FK_ObsSolSer = $Solicitud->ID_SolSer;
 		$Observacion->save();
 
-		return redirect()->route('serviciosexpress.show', ['id' => $Solicitud->SolSerSlug]);
+		return redirect()->route('serviciosexpress.show', ['serviciosexpress' => $Solicitud->SolSerSlug]);
 
 	}
 
@@ -2660,24 +2660,94 @@ return $Residuosoriginal;
 
 	public function getResiduosComunes()
 {
-    // Residuos comunes (tabla respels) donde RespelPublic = 1
-    $commonResidues = DB::table('respels')
-        ->leftJoin('requerimientos', 'requerimientos.FK_ReqRespel', '=', 'respels.ID_Respel')
-        ->leftJoin('tratamientos', 'requerimientos.FK_ReqTrata', '=', 'tratamientos.ID_Trat')
-        ->select('respels.ID_Respel', 'respels.RespelName', 'respels.RespelSlug', 
-                DB::raw('CONCAT("ComRes-", respels.ID_Respel) as SlugSGenerRes'), 
-                'tratamientos.TratName')
-        ->where('respels.RespelPublic', 1)
-        ->where('respels.RespelDelete', 0)
-        // Quitamos las condiciones restrictivas o las hacemos opcionales
-        ->where(function($query) {
-            $query->where('requerimientos.ofertado', 1)
-                  ->where('requerimientos.forevaluation', 1)
-                  ->orWhereNull('requerimientos.ofertado'); // Para incluir residuos sin requerimientos
-        })
-        ->distinct() // Para evitar duplicados
-        ->get();
-    
-    return response()->json($commonResidues);
+    try {
+        // Verificar que el usuario esté autenticado
+        if (!Auth::check()) {
+            return response()->json([
+                'error' => 'Usuario no autenticado',
+                'message' => 'Debe iniciar sesión para acceder a esta función'
+            ], 401);
+        }
+
+        // Verificar permisos - el usuario debe tener alguno de estos roles
+        $allowedRoles = array_merge(
+            Permisos::COMERCIALEXPRESS,
+            Permisos::TODOPROSARC,
+            ['Cliente']
+        );
+
+        if (!in_array(Auth::user()->UsRol, $allowedRoles)) {
+            return response()->json([
+                'error' => 'Acceso no autorizado',
+                'message' => 'No tiene los permisos necesarios para acceder a esta función'
+            ], 403);
+        }
+
+        // Obtener el ID del generador actual
+        $generador = null;
+        if (isset($_GET['generador'])) {
+            $generador = GenerSede::where('GSedeSlug', $_GET['generador'])->first();
+        }
+
+        // Residuos express (tabla respels) donde RespelPublic = 1
+        $expressResidues = DB::table('respels')
+            ->leftJoin('requerimientos', function($join) {
+                $join->on('requerimientos.FK_ReqRespel', '=', 'respels.ID_Respel')
+                    ->where('requerimientos.ofertado', 1)
+                    ->where('requerimientos.forevaluation', 1);
+            })
+            ->leftJoin('tratamientos', 'requerimientos.FK_ReqTrata', '=', 'tratamientos.ID_Trat')
+            ->select(
+                'respels.ID_Respel', 
+                'respels.RespelName', 
+                'respels.RespelSlug',
+                DB::raw('COALESCE(tratamientos.TratName, "Sin Tratamiento") as TratName')
+            )
+            ->where('respels.RespelPublic', 1)
+            ->where('respels.RespelDelete', 0)
+            ->whereIn('respels.RespelStatus', ['Aprobado', 'Revisado', 'Falta TDE', 'TDE actualizada', 'Vencido'])
+            ->distinct()
+            ->get();
+
+        // Si hay un generador seleccionado, crear o actualizar los registros en residuos_geners
+        if ($generador) {
+            foreach ($expressResidues as $residue) {
+                // Verificar si ya existe el registro
+                $existingRecord = ResiduosGener::where('FK_SGener', $generador->ID_GSede)
+                    ->where('FK_Respel', $residue->ID_Respel)
+                    ->first();
+
+                if (!$existingRecord) {
+                    // Crear nuevo registro
+                    $ResiduoSedeGener = new ResiduosGener();
+                    $ResiduoSedeGener->FK_SGener = $generador->ID_GSede;
+                    $ResiduoSedeGener->FK_Respel = $residue->ID_Respel;
+                    $ResiduoSedeGener->DeleteSGenerRes = 0;
+                    $ResiduoSedeGener->SlugSGenerRes = hash('sha256', rand().time().$ResiduoSedeGener->FK_Respel);
+                    $ResiduoSedeGener->save();
+
+                    // Asignar el SlugSGenerRes al objeto de residuo
+                    $residue->SlugSGenerRes = $ResiduoSedeGener->SlugSGenerRes;
+                } else {
+                    // Usar el registro existente
+                    $residue->SlugSGenerRes = $existingRecord->SlugSGenerRes;
+                }
+            }
+        } else {
+            // Si no hay generador, usar un slug temporal
+            foreach ($expressResidues as $residue) {
+                $residue->SlugSGenerRes = "ComRes-".$residue->ID_Respel;
+            }
+        }
+        
+        return response()->json($expressResidues);
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => 'Error al obtener los residuos',
+            'message' => $e->getMessage()
+        ], 500);
+    }
+	return view('serviciosexpress.show', compact('expressResidues'));
 }
+
 }

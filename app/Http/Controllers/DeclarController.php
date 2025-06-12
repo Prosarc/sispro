@@ -10,6 +10,7 @@ use App\Declaration;
 use App\generador;
 use App\audit;
 use Illuminate\Support\Facades\Auth;
+use App\Permisos;
     
 class DeclarController extends Controller
 {
@@ -46,6 +47,11 @@ class DeclarController extends Controller
      */
     public function create()
     {
+        // Bloquear acceso a clientes
+        if (in_array(Auth::user()->UsRol, Permisos::CLIENTE)) {
+            abort(403, 'Los clientes no pueden crear declaraciones de residuos directamente. Por favor envíe la información por correo electrónico para evaluación técnica.');
+        }
+
         $sedes = sede::all();
         $generadores = GenerSede::all();
         return view('declaraciones.create', compact('sedes', 'generadores'));
@@ -59,6 +65,11 @@ class DeclarController extends Controller
      */
     public function store(Request $request)
     {
+        // Bloquear acceso a clientes
+        if (in_array(Auth::user()->UsRol, Permisos::CLIENTE)) {
+            abort(403, 'Los clientes no pueden crear declaraciones de residuos directamente. Por favor envíe la información por correo electrónico para evaluación técnica.');
+        }
+
         $Declaration = new Declaration();
         $Declaration->DeclarApply = $request->input('DeclarApply');
         $Declaration->DeclarTipo = $request->input('DeclarTipo');

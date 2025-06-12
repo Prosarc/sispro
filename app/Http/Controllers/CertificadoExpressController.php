@@ -206,6 +206,96 @@ class CertificadoExpressController extends Controller
         return view ('certificadosExpress.2024', compact('certificados'));  
         
       }
+      public function certex2025(){
+        // validacion del status del cliente segun cartera
+        $clienteID = userController::IDClienteSegunUsuario();
+        $clienteStatus= Cliente::where('ID_Cli', $clienteID)->first('CliStatus');
+        if ($clienteStatus->CliStatus == 'Bloqueado') {
+            abort(403, "el acceso a la lista de certificados se encuentra bloqueado, comuniquese con su asesor comercial en PROSARC S.A. ESP");
+        }      
+   
+        $certificados = CertificadoExpress::where(function($query){
+          $years = DB :: table('certificadosexpress')
+              ->select(DB::raw('distinct year(created_at) as year'))
+              ->orderBy('year', 'desc')
+              ->get(); 
+
+              foreach ($years as $year) {
+                $registros = DB::table('certificadosexpress')
+                ->whereYear('created_at', $year='2025')
+                ->get();
+              }
+  
+            switch (Auth::user()->UsRol) {
+                case 'Cliente':
+                    /*se define la sede del usuario actual*/
+                    $UserSedeID = DB::table('personals')
+                    ->join('cargos', 'cargos.ID_Carg', 'personals.FK_PersCargo')
+                    ->join('areas', 'areas.ID_Area', 'cargos.CargArea')
+                    ->join('sedes', 'sedes.ID_Sede', 'areas.FK_AreaSede')
+                    ->join('clientes', 'clientes.ID_Cli', 'sedes.FK_SedeCli')
+                    ->where('personals.ID_Pers', Auth::user()->FK_UserPers)
+                    ->where('clientes.CliStatus', 'Autorizado')
+                    ->value('clientes.ID_Cli');
+  
+                    $servicioscertificadosdelcliente = SolicitudServicio::where('FK_SolSerCliente',$UserSedeID)
+                    ->where('SolServCertStatus', 2)
+                    ->get('ID_SolSer');
+  
+                    //$query->whereYear('created_at', $year='2020')
+                    $query->where('FK_CertCliente', $UserSedeID);
+                    $query->where('CertAuthJo', '!=', 0);
+                    $query->where('CertAuthJl', '!=', 0);
+                    $query->where('CertAuthDp', '!=', 0);
+                    $query->whereIn('FK_CertSolser', $servicioscertificadosdelcliente);
+                    break;
+  
+                case 'Comercial':
+                    /*se define la sede del usuario actual*/
+                    $clientes = Cliente::where('CliDelete', 0)->where('CliCategoria', 'Cliente')->where('CliComercial', Auth::user()->FK_UserPers)->get('ID_Cli');
+  
+                    // return $clientes;
+                    $query->whereIn('FK_CertCliente', $clientes);
+                    break;
+  
+                default:
+                    // $query->where('ID_Cert', '>', 0);
+                    break;
+            }
+        })
+        ->with(['tratamiento'])
+        ->whereYear('created_at', $year='2025')
+        ->get();
+        $certificados->map(function ($certificado) {
+          
+            $fecharecepcionenplanta = $certificado->SolicitudServicio->programacionesrecibidas()->first('ProgVehSalida');
+            if ($fecharecepcionenplanta != null) {
+                $certificado->recepcion = $fecharecepcionenplanta->ProgVehSalida;
+            }else{
+                $certificado->recepcion = "";
+            }
+            $certificado->cliente = $certificado->SolicitudServicio->cliente()->first('CliName')->CliName;
+            $certificado->SolSerStatus = $certificado->SolicitudServicio()->first('SolSerStatus')->SolSerStatus;
+            $certificado->url_pdf = null;
+    switch ($certificado->CertType) {
+        case 0:
+            $certificado->url_pdf = asset('img/Certificados/' . $certificado->CertSrc);
+            break;
+        case 1:
+            $certificado->url_pdf = asset('img/Manifiestos/' . $certificado->CertSrcManif);
+            break;
+        case 2:
+            $certificado->url_pdf = asset('img/CertificadosEXT/' . $certificado->CertSrcExt);
+            break;
+    }
+
+    return $certificado;
+      });
+           
+        // return $registros;
+        return view ('certificadosExpress.2025', compact('certificados'));  
+        
+      }
 
     /**
      * Show the form for creating a new resource.

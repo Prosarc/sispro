@@ -83,23 +83,23 @@ Lista de Certificados
 									@switch($certificado->CertType)
 										@case(0)
 											@if($certificado->CertSrc!=="CertificadoDefault.pdf")
-												<td class="text-center"><a method='get' href='/public/certificadoRegular/{{$certificado->CertSrc}}' target='_blank' class='btn btn-success'><i class='fas fa-file-contract fa-lg'></a></td>
+												<td class="text-center"><a method='get' href='{{asset("storage/certificadoExpress/".$certificado->CertSrc)}}' target='_blank' class='btn btn-success'><i class='fas fa-file-contract fa-lg'></a></td>
 											@else
-												<td class="text-center"><a disabled method='get' href='/img/CertificadoDefault.pdf' class='btn btn-default'><i class='fas fa-file-contract fa-lg'></a></td>
+												<td class="text-center"><a disabled method='get' href='{{asset("storage/certificadoExpress/CertificadoDefault.pdf")}}' class='btn btn-default'><i class='fas fa-file-contract fa-lg'></a></td>
 											@endif
 											@break
 										@case(1)
 											@if($certificado->CertSrcManif!=="CertificadoDefault.pdf")
-												<td class="text-center"><a method='get' href='/public/manifiestosRegular/{{$certificado->CertSrcManif}}' target='_blank' class='btn btn-primary'><i class='far fa-file-alt fa-lg'></a></td>
+												<td class="text-center"><a method='get' href='{{asset("storage/manifiestoExpress/".$certificado->CertSrcManif)}}' target='_blank' class='btn btn-primary'><i class='far fa-file-alt fa-lg'></a></td>
 											@else
-												<td class="text-center"><a disabled method='get' href='/img/CertificadoDefault.pdf' target='_blank' class='btn btn-default'><i class='far fa-file-alt fa-lg'></a></td>
+												<td class="text-center"><a disabled method='get' href='{{asset("storage/certificadoExpress/CertificadoDefault.pdf")}}' target='_blank' class='btn btn-default'><i class='far fa-file-alt fa-lg'></a></td>
 											@endif
 											@break
 										@case(2)
 											@if($certificado->CertSrcExt!=="CertificadoDefault.pdf")
-												<td class="text-center"><a method='get' href='/img/CertificadosEXT/{{$certificado->CertSrcExt}}' target='_blank' class='btn btn-warning'><i class='far fa-file-alt fa-lg'></a></td>
+												<td class="text-center"><a method='get' href='{{asset("storage/certificadosExpressEXT/".$certificado->CertSrcExt)}}' target='_blank' class='btn btn-warning'><i class='far fa-file-alt fa-lg'></a></td>
 											@else
-												<td class="text-center"><a disabled method='get' href='/img/CertificadoDefault.pdf' target='_blank' class='btn btn-default'><i class='far fa-file-alt fa-lg'></a></td>
+												<td class="text-center"><a disabled method='get' href='{{asset("storage/certificadoExpress/CertificadoDefault.pdf")}}' target='_blank' class='btn btn-default'><i class='far fa-file-alt fa-lg'></a></td>
 											@endif
 											@break
 										@default
