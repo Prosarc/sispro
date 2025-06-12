@@ -37,48 +37,75 @@ class clientExpressController extends Controller
     public function index()
     {
         switch (true) {
-            case(Auth::user()->email == 'asesorse2@prosarc.com.co'):
-            case(Auth::user()->email == 'asesorse1@prosarc.com.co'):
-            case(Auth::user()->email == 'coordinadorse@prosarc.com.co'):
-            case(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR)):
+        case Auth::user()->email == 'asesorse2@prosarc.com.co':
+        case Auth::user()->email == 'asesorse1@prosarc.com.co':
+        case Auth::user()->email == 'coordinadorse@prosarc.com.co':
+        case in_array(Auth::user()->UsRol, Permisos::USAQUEN):
+            $clientes = Cliente::with(['comercialAsignado'])
+                ->join('sedes', 'sedes.FK_SedeCli', '=', 'clientes.ID_Cli')
+                ->select('*')
+                ->where('CliCategoria', 'ClientePrepago')
+                ->where('sedes.SedeMapLocalidad', 'Usaquén')
+                ->where('CliDelete', 0)
+                ->get();
+                
+            $personals = DB::table('personals')
+                ->rightJoin('users', 'personals.ID_Pers', '=', 'users.FK_UserPers')
+                ->select('personals.*')
+                ->where('personals.PersDelete', 0)
+                ->where(function ($query) {
+                    $query->where('users.UsRol', 'Comercial')
+                        ->orWhere('users.UsRol2', 'Comercial');
+                })
+                ->get();
+              
+            return view('clientExpress.indexExpress', compact('clientes', 'personals'));
+        break;   
+        
+        case in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR):
+            $clientes = Cliente::with(['comercialAsignado'])
+                ->join('sedes', 'sedes.FK_SedeCli', '=', 'clientes.ID_Cli')
+                ->select('*')
+                ->where('CliCategoria', 'ClientePrepago')
+                ->where('sedes.SedeMapLocalidad', 'Usaquén')
+                ->where('CliDelete', 0)
+                ->get();
+                
+            $personals = DB::table('personals')
+                ->rightJoin('users', 'personals.ID_Pers', '=', 'users.FK_UserPers')
+                ->select('personals.*')
+                ->where('personals.PersDelete', 0)
+                ->where(function ($query) {
+                    $query->where('users.UsRol', 'Comercial')
+                        ->orWhere('users.UsRol2', 'Comercial');
+                })
+                ->get();
+              
+            return view('clientExpress.indexExpress', compact('clientes', 'personals'));
+        break;    
+        
+        case in_array(Auth::user()->UsRol, Permisos::TODOPROSARC):
                 $clientes = Cliente::with(['comercialAsignado'])
-                ->where('CliCategoria', 'ClientePrepago')
-                ->where('CliDelete', 0)
-                ->get();
-                // $clientes = DB::table('clientes')
-                //     ->leftjoin('personals', 'clientes.CliComercial', '=', 'personals.ID_Pers')
-                //     ->select('clientes.*', 'personals.PersFirstName','personals.PersLastName')
-                //     ->where('CliDelete', 0)
-                //     ->where('CliCategoria', 'ClientePrepago')
-                //     ->get();
-
-                 $personals = DB::table('personals')
-                        ->rightjoin('users', 'personals.ID_Pers', '=', 'users.FK_UserPers')
-                        ->select('personals.*')
-                        ->where('personals.PersDelete', 0)
-                        ->where('users.UsRol', 'Comercial')
-                        ->orWhere('users.UsRol2', 'Comercial')
-                        ->get();
-                return view('clientExpress.indexExpress', compact('clientes', 'personals'));
-                break;
-
-            case (in_array(Auth::user()->UsRol, Permisos::TODOPROSARC)):
-               $clientes = Cliente::with(['comercialAsignado'])
-                ->where('CliCategoria', 'ClientePrepago')
-                ->where('CliDelete', 0)
-                ->get();
+                    ->where('CliCategoria', 'ClientePrepago')
+                    ->where('CliDelete', 0)
+                    ->get();
+        
                 $personals = DB::table('personals')
-                        ->rightjoin('users', 'personals.ID_Pers', '=', 'users.FK_UserPers')
-                        ->select('personals.*')
-                        ->where('personals.PersDelete', 0)
-                        ->where('users.UsRol', 'Comercial')
-                        ->orWhere('users.UsRol2', 'Comercial')
-                        ->get();
+                    ->rightJoin('users', 'personals.ID_Pers', '=', 'users.FK_UserPers')
+                    ->select('personals.*')
+                    ->where('personals.PersDelete', 0)
+                    ->where(function ($query) {
+                        $query->where('users.UsRol', 'Comercial')
+                              ->orWhere('users.UsRol2', 'Comercial');
+                    })
+                    ->get();
+        
                 return view('clientExpress.indexExpress', compact('clientes', 'personals'));
-                break;
+        
             default:
                 abort(403);
         }
+        
     }
 
     /**
@@ -115,14 +142,14 @@ class clientExpressController extends Controller
             case(Auth::user()->email == 'asesorse2@prosarc.com.co'):
             case(Auth::user()->email == 'asesorse1@prosarc.com.co'):
             case(Auth::user()->email == 'coordinadorse@prosarc.com.co'):
-            case(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR)):
+            case(in_array(Auth::user()->UsRol, Permisos::TODOPROSARC)):
                 $Sedes = DB::table('sedes')
                 ->join('municipios', 'municipios.ID_Mun', '=', 'sedes.FK_SedeMun')
                 ->join('departamentos', 'departamentos.ID_Depart', '=', 'municipios.FK_MunCity')
                 ->select('sedes.*', 'municipios.MunName', 'departamentos.DepartName')
                 ->where('sedes.FK_SedeCli', $cliente->ID_Cli)
                 ->where(function($query){
-                    if (in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol2, Permisos::PROGRAMADOR)) {
+                    if (in_array(Auth::user()->UsRol, Permisos::TODOPROSARC) || in_array(Auth::user()->UsRol2, Permisos::TODOPROSARC)) {
                     }else{
                         $query->where('sedes.SedeDelete', '=', 0);
                     }

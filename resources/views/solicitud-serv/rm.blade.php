@@ -117,48 +117,25 @@ RM N° {{--{{$SolicitudServicio->ID_SolSer}}--}}
             </tr>
             <tr style='height:26.85pt'>
                 <td width=340 style='width:255.05pt;border:solid windowtext 1.0pt;
-                border-left:solid windowtext 1.0pt;border-bottom:none;border-right:none;
+                border-left:solid windowtext 1.0pt;border-bottom:solid windowtext 1.0pt;border-right:none;
                 background:white;padding:0cm 5.4pt 0cm 5.4pt;height:26.85pt'>
                 <p class=MsoNormal style='margin-bottom:0cm;line-height:normal'><b>CONDUCTOR ASIGNADO:</b></p>
                 </td>
-                <td width=340 style='width:255.05pt;border:none;border-top:solid windowtext 1.0pt;
+                <td width=340 style='width:255.05pt;border-bottom:solid windowtext 1.0pt;border-top:solid windowtext 1.0pt;
                 background:white;padding:0cm 5.4pt 0cm 5.4pt;height:26.85pt; border-right:solid windowtext 1.0pt'>
                 <p class=MsoNormal style='margin-bottom:0cm;line-height:normal'><span
-                style='color:black'>{{$SolSerConductor}}</span></p>
+                style='color:black'>{{$SolicitudServicio->SolSerConductor}}</span></p>
                 </td>
-                <td width=340 style='width:255.05pt;border:none;border-top:solid windowtext 1.0pt;
+                <td width=340 style='width:255.05pt;border-bottom:solid windowtext 1.0pt;border-top:solid windowtext 1.0pt;
                 background:white;padding:0cm 5.4pt 0cm 5.4pt;height:26.85pt'>
                 <p class=MsoNormal style='margin-bottom:0cm;line-height:normal'><b><span
                 style='color:black'>VEHÍCULO:</span></b></p>
                 </td>
                 <td width=340 style='width:255.05pt;border-top:solid windowtext 1.0pt;
-                border-left:none;border-bottom:none;border-right:solid windowtext 1.0pt;
-                background:white;padding:0cm 5.4pt 0cm 5.4pt;height:26.85pt'>
-                <p class=MsoNormal style='margin-bottom:0cm;line-height:normal'><span
-                style='color:black'>{{$SolicitudServicio->SolSerVehiculo}}</span></p>
-                </td>
-            </tr>
-            <tr style='height:26.85pt'>
-                <td width=340 style='width:255.05pt;border:solid windowtext 1.0pt;
-                border-left:solid windowtext 1.0pt;border-bottom:solid windowtext 1.0pt;border-right:none;
-                background:white;padding:0cm 5.4pt 0cm 5.4pt;height:26.85pt'>
-                <p class=MsoNormal style='margin-bottom:0cm;line-height:normal'><b>HORA DE RECOLECCIÓN:</b></p>
-                </td>
-                <td width=340 style='width:255.05pt;border:none;border-top:solid windowtext 1.0pt;
-                background:white;padding:0cm 5.4pt 0cm 5.4pt;height:26.85pt; border-bottom:solid windowtext 1.0pt; border-right:solid windowtext 1.0pt'>
-                <p class=MsoNormal style='margin-bottom:0cm;line-height:normal'><span
-                style='color:black'>{{'Prueba'}}</span></p>
-                </td>
-                <td width=340 style='width:255.05pt;border:none;border-top:solid windowtext 1.0pt;
-                background:white;padding:0cm 5.4pt 0cm 5.4pt;height:26.85pt; border-bottom:solid windowtext 1.0pt'>
-                <p class=MsoNormal style='margin-bottom:0cm;line-height:normal'><b><span
-                style='color:black'>HORA DE RECEPCIÓN:</span></b></p>
-                </td>
-                <td width=340 style='width:255.05pt;border-top:solid windowtext 1.0pt;
                 border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
                 background:white;padding:0cm 5.4pt 0cm 5.4pt;height:26.85pt'>
                 <p class=MsoNormal style='margin-bottom:0cm;line-height:normal'><span
-                style='color:black'>{{'Prueba'}}</span></p>
+                style='color:black'>{{$SolicitudServicio->SolSerVehiculo}}</span></p>
                 </td>
             </tr>
             </table>
@@ -301,12 +278,12 @@ RM N° {{--{{$SolicitudServicio->ID_SolSer}}--}}
                                         <td>{{$Residuo->SolResEmbalaje}}</td>
                                         <td style="text-align: center;">{{number_format($Residuo->SolResKgEnviado, $decimals = 2, $dec_point = ',', $thousands_sep = '.')}} Kilogramos</td>
                                         <td style="text-align: center;">
-                                            @if(in_array(Auth::user()->UsRol, Permisos::SolSer1) || in_array(Auth::user()->UsRol2, Permisos::SolSer1))
+                                            @if(in_array(Auth::user()->UsRol, Permisos::SolSer1) || in_array(Auth::user()->UsRol2, Permisos::RECIBOMATERIAL))
                                                 @if(($SolicitudServicio->SolSerStatus === 'Programado'||$SolicitudServicio->SolSerStatus === 'Notificado') && (count($Programaciones)>$ProgramacionesActivas))
                                                     @if($Residuo->SolResTypeUnidad == 'Litros' || $Residuo->SolResTypeUnidad == 'Unidad')
-                                                        <a onclick="addkg(`{{$Residuo->SolResSlug}}`, `{{$Residuo->SolResCantiUnidadRecibida}}`, `{{$Residuo->SolResCantiUnidadConciliada}}`, `{{$TypeUnidad}}`, `{{$Residuo->SolResKgRecibido == 0 ? '' : number_format($Residuo->SolResKgRecibido, $decimals = 2, $dec_point = ',', $thousands_sep = '.')}}`, null, `{!!json_encode($Residuo->SolResRM2, JSON_NUMERIC_CHECK)!!}`)">
+													<a onclick="addkg(`{{$Residuo->SolResSlug}}`, `{{$Residuo->SolResCantiUnidadRecibida}}`, `{{$Residuo->SolResCantiUnidadConciliada}}`, `{{$TypeUnidad}}`, `{{$Residuo->SolResKgRecibido == 0 ? '' : number_format($Residuo->SolResKgRecibido, $decimals = 2, $dec_point = ',', $thousands_sep = '.')}}`, null, `{!!json_encode($Residuo->SolResRM2, JSON_NUMERIC_CHECK)!!}`)">
                                                     @else
-                                                        <a onclick="addkg(`{{$Residuo->SolResSlug}}`, `{{number_format($Residuo->SolResKgRecibido, $decimals = 2, $dec_point = ',', $thousands_sep = '.')}}`, `{{number_format($Residuo->SolResKgConciliado, $decimals = 2, $dec_point = ',', $thousands_sep = '.')}}`, `{{$TypeUnidad}}`, `{{$Residuo->SolResKgRecibido == 0 ? '' : number_format($Residuo->SolResKgRecibido, $decimals = 2, $dec_point = ',', $thousands_sep = '.')}}`, null, `{!!json_encode($Residuo->SolResRM2, JSON_NUMERIC_CHECK)!!}`)"> 
+													<a onclick="addkg(`{{$Residuo->SolResSlug}}`, `{{$Residuo->SolResCantiUnidadRecibida}}`, `{{$Residuo->SolResCantiUnidadConciliada}}`, `{{$TypeUnidad}}`, `{{$Residuo->SolResKgRecibido == 0 ? '' : number_format($Residuo->SolResKgRecibido, $decimals = 2, $dec_point = ',', $thousands_sep = '.')}}`, null, `{!!json_encode($Residuo->SolResRM2, JSON_NUMERIC_CHECK)!!}`)"> 
                                                     @endif
                                                 @else
                                                     <a style="color: black">
@@ -326,19 +303,34 @@ RM N° {{--{{$SolicitudServicio->ID_SolSer}}--}}
                                 @endforeach
                             </tbody>
                         </table>
-                        <a onclick="ModalStatus('{{$SolicitudServicio->SolSerSlug}}', 'Programado')" style="margin: 10px 10px;" class='btn btn-info float-left'>
+                        <a onclick="ModalStatusFirmaCliente('{{$SolicitudServicio->SolSerSlug}}', '{{$generadores->FK_SGener}}')" style="margin: 10px 10px;" class='btn btn-info float-left'>
                             <i class="fas fa-signature"></i><b> Firma Cliente</b>
                         </a>
-                        <a onclick="ModalStatus('{{$SolicitudServicio->SolSerSlug}}', 'Programado')" style="margin: 10px 10px;" class='btn btn-info float-left'>
+                       {{--<a onclick="ModalStatusFirmaConductor('{{$SolicitudServicio->SolSerSlug}}', '{{$generadores->FK_SGener}}')" style="margin: 10px 10px;" class='btn btn-info float-left'>
                             <i class="fas fa-signature"></i><b> Firma Conductor</b>
-                        </a>
+                        </a>--}}
+                        <br>
+                        <a target="_blank" href="/solicitud-servicio/{{$generadores->FK_SGener}}/{{$SolicitudServicio->SolSerSlug}}/wordtemplate" class="btn btn-primary pull-right" style="margin-right: 1em"> <i class="fas fa-file-word"></i> <b>Recibo Material</b></a>
+					</td>
                         <br>
                         <br>   
                         <div id="addkgmodal"></div>
-                        <div id="ModalStatus"></div>
+                        <div id="ModalStatusFirmaCliente"></div>
+                        <div id="ModalStatusFirmaConductor"></div>
 
             </main>
         @endforeach
+        {{--<div style="display: flex;">
+            <a onclick="ModalStatusPDA('{{$SolicitudServicio->SolSerSlug}}', '{{$generadores->FK_SGener}}')" style="margin: 10px; margin-left: auto;" class='btn btn-info'>
+                <i class="fas fa-signature"></i><b> Firma Recepción PDA</b>
+            </a>
+        </div>--}}
+		<br>
+		<a href='#' onclick="ModalStatus('{{$SolicitudServicio->SolSerSlug}}', 'Recibida')" class="btn btn-success pull-right"><i class="fas fa-clipboard-check"></i> {{__('adminlte::message.solserstatusrecibido')}}</a>
+		</div>
+		<div id="ModalStatus"></div>
+        <div id="ModalStatusPDA"></div>
+        
 </div>        
 @endsection
 
@@ -467,9 +459,9 @@ RM N° {{--{{$SolicitudServicio->ID_SolSer}}--}}
         $('#FormKg').validator('update');
     };
 
-    function ModalStatus(slug, status){
-		$('#ModalStatus').empty();
-		$('#ModalStatus').append(`
+    function ModalStatusFirmaCliente(slug, FK_SGener){
+		$('#ModalStatusFirmaCliente').empty();
+		$('#ModalStatusFirmaCliente').append(`
 			<div class="modal modal-default fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 				<div class="modal-dialog" role="document">
 					<div class="modal-content">
@@ -479,18 +471,13 @@ RM N° {{--{{$SolicitudServicio->ID_SolSer}}--}}
 								<span style="font-size: 0.3em; color: black;"><p>¿Acepta marcar la solicitud de servicio como <b> Entregado</b>?</p></span>
 							</div>
 						</div>
-						<form action="/serviciosexpress/conciliarExpress" method="POST" enctype="multipart/form-data" data-toggle="validator" id="SolSer">
+						<form action="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/firmacliente" method="POST" enctype="multipart/form-data" data-toggle="validator" id="SolSer">
 							<div class="modal-header">
 								@csrf
-								<div class="form-group col-md-12">
-									<label  color: black; text-align: left;" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.solserstatusdescrip') }}</b>" data-content="{{ __('adminlte::message.solserstatusdescripdetaill') }}"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{__('adminlte::message.solserstatusdescrip')}}</label>
-									<small id="caracteresrestantes" class="help-block with-errors">`+(status == 'No Deacuerdo' ? '*' : '')+`</small>
-									<textarea onchange="updatecaracteres()" id="textDescription" rows ="5" style="resize: vertical;" maxlength="4000" class="form-control col-xs-12" `+(status == 'No Deacuerdo' ? 'required' : '')+` name="solserdescript"></textarea>
-								</div>
 								<div class="signature-container col-md-12">
 									<div id="signature-pad" class="signature-pad">
 										<div class="signature-pad--body">
-											<canvas width="540" height="180"></canvas>
+											<canvas id="firmaCanvas" width="540" height="180" style="border: 1px solid #000;"></canvas>
 										</div>
 										<div class="signature-pad--footer">
 											<div class="description">Firma del Cliente</div>
@@ -508,10 +495,24 @@ RM N° {{--{{$SolicitudServicio->ID_SolSer}}--}}
 										</div>
 									</div>
 								</div>
-								<input type="hidden" id="signature-data" name="solserFirma" />
+								<input type="hidden" id="FirmaCliente" name="FirmaCliente"/>
+                                <input type="hidden" name="ID_Gener" value="${FK_SGener}"/>
 								<input type="submit" id="Cambiar`+slug+`" style="display: none;">
 								<input type="text" name="solserslug" value="`+slug+`" style="display: none;">
-								<input type="text" name="solserstatus" value="`+status+`" style="display: none;">
+								<br>
+								<br>
+								<div class="form-group col-md-12">
+									<label  color: black; text-align: left;" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>Observación</b>" data-content="Describa la observación del servicio"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>Observación</label>					
+									<textarea id="Observacion" rows ="1" style="resize: vertical;" maxlength="4000" class="form-control col-xs-12" name="Observacion"></textarea>
+								</div>
+								<div class="form-group col-md-12">
+									<label  color: black; text-align: left;" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>Funcionario</b>" data-content="Ingrese el nombre de la persona que entrega los residuos"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>Nombre del Funcionario</label>					
+									<textarea id="NombreFuncionario" rows ="1" style="resize: vertical;" maxlength="4000" class="form-control col-xs-12" name="NombreFuncionario"></textarea>
+								</div>
+								<div class="form-group col-md-12">
+									<label  color: black; text-align: left;" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>Documento</b>" data-content="Ingrese el numero de documento de la persona que entrega los residuos"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>Numero de documento</label>					
+									<textarea id="CedulaFuncionario" rows ="1" style="resize: vertical;" maxlength="4000" class="form-control col-xs-12" name="CedulaFuncionario"></textarea>
+								</div>
 							</div>
 							<div class="modal-footer">
 								<button type="button" class="btn btn-warning pull-left" data-dismiss="modal">Cancelar</button>
@@ -617,7 +618,13 @@ RM N° {{--{{$SolicitudServicio->ID_SolSer}}--}}
 		function envsubmitconciliarExpress(){
 			$('form').on('submit', function(){
 				var data = signaturePad.toDataURL('image/png');
-  				var input = document.getElementById('signature-data');
+  				var input = document.getElementById('FirmaCliente');
+
+				if(signaturePad.isEmpty()){
+					alert("Debe de tomar la firma del cliente antes de continuar.");
+					event.preventDefault();
+					return false;
+				}
   				input.value = data;
 
 				var buttonsubmit = $(this).find('[type="submit"]');
@@ -645,6 +652,403 @@ RM N° {{--{{$SolicitudServicio->ID_SolSer}}--}}
 		envsubmitconciliarExpress();
 		$('#myModal').modal();
 	}
+
+    
+    function ModalStatusFirmaConductor(slug, FK_SGener){
+		$('#ModalStatusFirmaConductor').empty();
+		$('#ModalStatusFirmaConductor').append(`
+			<div class="modal modal-default fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<div style="font-size: 5em; color: #f39c12; text-align: center; margin: auto;">
+								<span style="font-size: 0.3em; color: black;"><p>¿Acepta marcar la solicitud de servicio como <b> Entregado</b>?</p></span>
+							</div>
+						</div>
+						<form action="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/firmaconductor" method="POST" enctype="multipart/form-data" data-toggle="validator" id="SolSer">
+							<div class="modal-header">
+								@csrf
+							    <div class="signature-container col-md-12">
+									<div id="signature-pad" class="signature-pad">
+										<div class="signature-pad--body">
+											<canvas width="540" height="180"></canvas>
+										</div>
+										<div class="signature-pad--footer">
+											<div class="description">Firma del Conductor</div>
+
+											<div class="signature-pad--actions">
+												<div>
+													<button type="button" class="button clear" data-action="clear">Nuevo</button>
+													<button type="button" class="button" data-action="undo">Borrar</button>
+												</div>
+												<div>
+													<button type="button" class="button save" data-action="save-png">PNG</button>
+													<button type="button" class="button save" data-action="save-svg">SVG</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<input type="hidden" id="FirmaConductor" name="FirmaConductor"/>
+                                <input type="hidden" name="ID_Gener" value="${FK_SGener}"/>
+								<input type="submit" id="Cambiar`+slug+`" style="display: none;">
+								<input type="text" name="solserslug" value="`+slug+`" style="display: none;">
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-warning pull-left" data-dismiss="modal">Cancelar</button>
+								<label for="Cambiar`+slug+`" class='btn btn-success'>Enviar</label>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		`);
+		var wrapper = document.getElementById("signature-pad");
+		var clearButton = wrapper.querySelector("[data-action=clear]");
+		var undoButton = wrapper.querySelector("[data-action=undo]");
+		var savePNGButton = wrapper.querySelector("[data-action=save-png]");
+		var saveSVGButton = wrapper.querySelector("[data-action=save-svg]");
+		var canvas = wrapper.querySelector("canvas");
+		var signaturePad = new SignaturePad(canvas, {
+			minWidth: 2,
+			maxWidth: 2,
+			penColor: "rgb(0, 0, 0)",
+		});
+		function resizeCanvas() {
+			var ratio = Math.max(window.devicePixelRatio || 1, 1);
+			canvas.width = canvas.offsetWidth * ratio;
+			canvas.height = canvas.offsetHeight * ratio;
+			canvas.getContext("2d").scale(ratio, ratio);
+			signaturePad.clear();
+		}
+		window.onresize = resizeCanvas;
+		resizeCanvas();
+
+		function download(dataURL, filename) {
+			if (navigator.userAgent.indexOf("Safari") > -1 && navigator.userAgent.indexOf("Chrome") === -1) {
+				window.open(dataURL);
+			} else {
+				var blob = dataURLToBlob(dataURL);
+				var url = window.URL.createObjectURL(blob);
+
+				var a = document.createElement("a");
+				a.style = "display: none";
+				a.href = url;
+				a.download = filename;
+
+				document.body.appendChild(a);
+				a.click();
+
+				window.URL.revokeObjectURL(url);
+			}
+		}
+		function dataURLToBlob(dataURL) {
+			var parts = dataURL.split(';base64,');
+			var contentType = parts[0].split(":")[1];
+			var raw = window.atob(parts[1]);
+			var rawLength = raw.length;
+			var uInt8Array = new Uint8Array(rawLength);
+			for (var i = 0; i < rawLength; ++i) {
+				uInt8Array[i] = raw.charCodeAt(i);
+			}
+			return new Blob([uInt8Array], { type: contentType });
+		}
+
+		clearButton.addEventListener("click", function (event) {
+			resizeCanvas();
+		});
+
+		undoButton.addEventListener("click", function (event) {
+			var data = signaturePad.toData();
+
+			if (data) {
+				data.pop(); // remove the last dot or line
+				signaturePad.fromData(data);
+			}
+		});
+
+		savePNGButton.addEventListener("click", function (event) {
+			if (signaturePad.isEmpty()) {
+				alert("Please provide a signature first.");
+			} else {
+				var dataURL = signaturePad.toDataURL();
+				download(dataURL, "signature.png");
+			}
+		});
+
+		saveSVGButton.addEventListener("click", function (event) {
+			if (signaturePad.isEmpty()) {
+				alert("Please provide a signature first.");
+			} else {
+				var dataURL = signaturePad.toDataURL('image/svg+xml');
+				download(dataURL, "signature.svg");
+			}
+		});
+
+		$('#SolSer').validator('update');
+		popover();
+		var area = document.getElementById("textDescription");
+		var message = document.getElementById("caracteresrestantes");
+		var maxLength = 4000;
+		$('#textDescription').keyup(function () {
+			message.innerHTML = (maxLength-area.value.length) + " caracteres restantes";
+			observacion = area.value;
+		});
+
+		function envsubmitconciliarExpress(){
+			$('form').on('submit', function(){
+				var data = signaturePad.toDataURL('image/png');
+  				var input = document.getElementById('FirmaConductor');
+  				input.value = data;
+
+				var buttonsubmit = $(this).find('[type="submit"]');
+				var idbutton = buttonsubmit[0].id;
+				if(buttonsubmit.hasClass('disabled')){
+					return false;
+				}
+				else{
+					if(idbutton != ''){
+						var label = $('label[for="'+idbutton+'"]');
+						$(label).empty();
+						$(label).append(`<i class="fas fa-sync fa-spin"></i> Enviando...`);
+						$(label).attr('disabled', true);
+					}
+					buttonsubmit.prop('disabled', true);
+					buttonsubmit.empty();
+					buttonsubmit.append(`<i class="fas fa-sync fa-spin"></i> Enviando...`);
+					$(this).submit(function(){
+						return false;
+					});
+					return true;
+				}
+			});
+		}
+		envsubmitconciliarExpress();
+		$('#myModal').modal();
+	}
+
+    function ModalStatusPDA(slug, FK_SGener){
+		$('#ModalStatusPDA').empty();
+		$('#ModalStatusPDA').append(`
+			<div class="modal modal-default fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<div style="font-size: 5em; color: #f39c12; text-align: center; margin: auto;">
+								<span style="font-size: 0.3em; color: black;"><p>¿Acepta marcar la solicitud de servicio como <b> RECIBIDO</b>?</p></span>
+							</div>
+						</div>
+						<form action="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/firmapda" method="POST" enctype="multipart/form-data" data-toggle="validator" id="SolSer">
+							<div class="modal-header">
+								@csrf
+								<div class="signature-container col-md-12">
+									<div id="signature-pad" class="signature-pad">
+										<div class="signature-pad--body">
+											<canvas width="540" height="180"></canvas>
+										</div>
+										<div class="signature-pad--footer">
+											<div class="description">Firma del área de PDA</div>
+
+											<div class="signature-pad--actions">
+												<div>
+													<button type="button" class="button clear" data-action="clear">Nuevo</button>
+													<button type="button" class="button" data-action="undo">Borrar</button>
+												</div>
+												<div>
+													<button type="button" class="button save" data-action="save-png">PNG</button>
+													<button type="button" class="button save" data-action="save-svg">SVG</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<input type="hidden" id="FirmaPDA" name="FirmaPDA"/>
+                                <input type="hidden" name="ID_Gener" value="${FK_SGener}"/>
+								<input type="submit" id="Cambiar`+slug+`" style="display: none;">
+								<input type="text" name="solserslug" value="`+slug+`" style="display: none;">
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-warning pull-left" data-dismiss="modal">Cancelar</button>
+								<label for="Cambiar`+slug+`" class='btn btn-success'>Enviar</label>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		`);
+		var wrapper = document.getElementById("signature-pad");
+		var clearButton = wrapper.querySelector("[data-action=clear]");
+		var undoButton = wrapper.querySelector("[data-action=undo]");
+		var savePNGButton = wrapper.querySelector("[data-action=save-png]");
+		var saveSVGButton = wrapper.querySelector("[data-action=save-svg]");
+		var canvas = wrapper.querySelector("canvas");
+		var signaturePad = new SignaturePad(canvas, {
+			minWidth: 2,
+			maxWidth: 2,
+			penColor: "rgb(0, 0, 0)",
+		});
+		function resizeCanvas() {
+			var ratio = Math.max(window.devicePixelRatio || 1, 1);
+			canvas.width = canvas.offsetWidth * ratio;
+			canvas.height = canvas.offsetHeight * ratio;
+			canvas.getContext("2d").scale(ratio, ratio);
+			signaturePad.clear();
+		}
+		window.onresize = resizeCanvas;
+		resizeCanvas();
+
+		function download(dataURL, filename) {
+			if (navigator.userAgent.indexOf("Safari") > -1 && navigator.userAgent.indexOf("Chrome") === -1) {
+				window.open(dataURL);
+			} else {
+				var blob = dataURLToBlob(dataURL);
+				var url = window.URL.createObjectURL(blob);
+
+				var a = document.createElement("a");
+				a.style = "display: none";
+				a.href = url;
+				a.download = filename;
+
+				document.body.appendChild(a);
+				a.click();
+
+				window.URL.revokeObjectURL(url);
+			}
+		}
+		function dataURLToBlob(dataURL) {
+			var parts = dataURL.split(';base64,');
+			var contentType = parts[0].split(":")[1];
+			var raw = window.atob(parts[1]);
+			var rawLength = raw.length;
+			var uInt8Array = new Uint8Array(rawLength);
+			for (var i = 0; i < rawLength; ++i) {
+				uInt8Array[i] = raw.charCodeAt(i);
+			}
+			return new Blob([uInt8Array], { type: contentType });
+		}
+
+		clearButton.addEventListener("click", function (event) {
+			resizeCanvas();
+		});
+
+		undoButton.addEventListener("click", function (event) {
+			var data = signaturePad.toData();
+
+			if (data) {
+				data.pop(); // remove the last dot or line
+				signaturePad.fromData(data);
+			}
+		});
+
+		savePNGButton.addEventListener("click", function (event) {
+			if (signaturePad.isEmpty()) {
+				alert("Please provide a signature first.");
+			} else {
+				var dataURL = signaturePad.toDataURL();
+				download(dataURL, "signature.png");
+			}
+		});
+
+		saveSVGButton.addEventListener("click", function (event) {
+			if (signaturePad.isEmpty()) {
+				alert("Please provide a signature first.");
+			} else {
+				var dataURL = signaturePad.toDataURL('image/svg+xml');
+				download(dataURL, "signature.svg");
+			}
+		});
+
+		$('#SolSer').validator('update');
+		popover();
+		var area = document.getElementById("textDescription");
+		var message = document.getElementById("caracteresrestantes");
+		var maxLength = 4000;
+		$('#textDescription').keyup(function () {
+			message.innerHTML = (maxLength-area.value.length) + " caracteres restantes";
+			observacion = area.value;
+		});
+
+		function envsubmitconciliarExpress(){
+			$('form').on('submit', function(){
+				var data = signaturePad.toDataURL('image/png');
+  				var input = document.getElementById('FirmaPDA');
+  				input.value = data;
+
+				var buttonsubmit = $(this).find('[type="submit"]');
+				var idbutton = buttonsubmit[0].id;
+				if(buttonsubmit.hasClass('disabled')){
+					return false;
+				}
+				else{
+					if(idbutton != ''){
+						var label = $('label[for="'+idbutton+'"]');
+						$(label).empty();
+						$(label).append(`<i class="fas fa-sync fa-spin"></i> Enviando...`);
+						$(label).attr('disabled', true);
+					}
+					buttonsubmit.prop('disabled', true);
+					buttonsubmit.empty();
+					buttonsubmit.append(`<i class="fas fa-sync fa-spin"></i> Enviando...`);
+					$(this).submit(function(){
+						return false;
+					});
+					return true;
+				}
+			});
+		}
+		envsubmitconciliarExpress();
+		$('#myModal').modal();
+	}
+
+	function ModalStatus(slug, status){
+		$('#ModalStatus').empty();
+		$('#ModalStatus').append(`
+			<div class="modal modal-default fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<div style="font-size: 5em; color: #f39c12; text-align: center; margin: auto;">
+								<i class="fas fa-exclamation-triangle"></i>
+								<span style="font-size: 0.3em; color: black;"><p>¿Acepta marcar la solicitud de servicio como <b>`+status+`</b>?</p></span>
+							</div>
+						</div>
+						<form action="/solicitud-servicio/changestatus" method="POST" data-toggle="validator" id="SolSer">
+							<div class="modal-header">
+								@csrf
+								<div class="form-group col-md-12">
+									<label  color: black; text-align: left;" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.solserstatusdescrip') }}</b>" data-content="{{ __('adminlte::message.solserstatusdescripdetaill') }}"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{__('adminlte::message.solserstatusdescrip')}}</label>
+									<small id="caracteresrestantes" class="help-block with-errors">`+(status == 'No Deacuerdo' ? '*' : '')+`</small>
+									<textarea onchange="updatecaracteres()" id="textDescription" rows ="5" style="resize: vertical;" maxlength="4000" class="form-control col-xs-12" `+(status == 'No Deacuerdo' ? 'required' : '')+` name="solserdescript"></textarea>
+								</div>
+								<input type="submit" id="Cambiar`+slug+`" style="display: none;">
+								<input type="text" name="solserslug" value="`+slug+`" style="display: none;">
+								<input type="text" name="solserstatus" value="`+status+`" style="display: none;">
+							</div> 
+							<div class="modal-footer">
+								<button type="button" class="btn btn-warning pull-left" data-dismiss="modal">Cancelar</button>
+								<label for="Cambiar`+slug+`" class='btn btn-success'>Enviar</label>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		`);
+		$('#SolSer').validator('update');
+		popover();
+		var area = document.getElementById("textDescription");
+		var message = document.getElementById("caracteresrestantes");
+		var maxLength = 4000;
+		$('#textDescription').keyup(function () {
+			message.innerHTML = (maxLength-area.value.length) + " caracteres restantes";
+			observacion = area.value;
+		});
+		envsubmit();
+		$('#myModal').modal();
+	}
+
 
 
 </script>    

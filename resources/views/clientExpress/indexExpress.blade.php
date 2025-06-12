@@ -15,6 +15,7 @@ Clientes Express
             <div class="box">
                 <div class="box-header">
                     <h3 class="box-title">{{ __('adminlte::message.clientindexboxtitle') }}</h3>
+                    <a href="{{ route('registroexpress') }}" class="btn btn-primary pull-right">{{ __('adminlte::message.create') }}</a>
                 </div>
                 <div class="box box-info">
                     <div class="box-body">
@@ -25,6 +26,8 @@ Clientes Express
                                     <th>{{ __('adminlte::message.clientNIT') }}</th>
                                     <th>{{ __('adminlte::message.clirazonsoc') }}</th>
                                     <th>Dirección</th>
+                                    <th>Localidad</th>
+                                    <th>Telefono</th>
                                     @if(in_array(Auth::user()->UsRol, Permisos::TODOPROSARCMenosComercial))
                                     <th>Comercial Asignado</th>
                                     @endif
@@ -38,10 +41,12 @@ Clientes Express
                                     <td>{{$cliente->CliNit}}</td>
                                     <td>{{$cliente->CliName}}</td>
                                     @if ($cliente->sedes()->count() > 0)
-                                    <td>{{$cliente->sedes()->first()->SedeAddress}}  {{$cliente->sedes()->first()->SedeMapLocalidad !== 'No Definida' ? 'Localidad: '.$cliente->sedes()->first()->SedeMapLocalidad : ''}}</td>
+                                    <td>{{$cliente->sedes()->first()->SedeAddress}}</td>
                                     @else
                                     <td>sin sede definida</td>
                                     @endif
+                                    <td>{{$cliente->sedes()->first()->SedeMapLocalidad }}</td>                                   
+                                    <td>{{$cliente->SedeCelular}}</td>                              
                                     @if(in_array(Auth::user()->UsRol, Permisos::TODOPROSARCMenosComercial))
                                     <td>
                                         @if(in_array(Auth::user()->UsRol, Permisos::AsigComercial) || in_array(Auth::user()->UsRol2, Permisos::AsigComercial))

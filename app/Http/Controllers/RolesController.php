@@ -184,7 +184,22 @@ class RolesController extends Controller
                 $rolDescripcion="Director Comercial";
                 $tipoUsuario="Interno";
                 break;   
-                
+            
+            case 'Comercialap':
+                $rolDescripcion="Comercial de aprovechables";
+                $tipoUsuario="Interno";
+                break;
+            
+            case 'usaquen':
+                $rolDescripcion="S.E. Aprovechables Usaquen";
+                $tipoUsuario="Interno";
+                break;   
+            
+            case 'AsistenteGerencia':
+                $rolDescripcion="Asistente de gerencia de Planta";
+                $tipoUsuario="Interno";
+                break;     
+                  
             case 'IngDeTurno':
                 $rolDescripcion="Ingeniero de turno";
                 $tipoUsuario="Interno";

@@ -114,5 +114,7 @@ class SolicitudServicio extends Model
 
 	protected $casts = [
         'SolSerRMs' => 'array',
+		'SolSerConductor' => 'array',
+        'SolSerVehiculo'  => 'array',
     ];
 }

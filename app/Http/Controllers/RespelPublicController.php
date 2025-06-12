@@ -122,7 +122,7 @@ class RespelPublicController extends Controller
             $Sedes = DB::table('clientes')
                 ->join('sedes', 'sedes.FK_SedeCli', '=', 'clientes.ID_Cli')
                 ->select('sedes.ID_Sede', 'clientes.CliName')
-                ->where('clientes.ID_Cli', '<>', 1) 
+                //->where('clientes.ID_Cli', '<>', 1) 
                 ->get();
             return view('publicrespel.create', compact('Sedes', 'categories', 'tratamientos'));
         }else{
@@ -230,8 +230,54 @@ class RespelPublicController extends Controller
             $log->save();
         }
 
+        $destinatario = 'dirtecnica@prosarc.com.co'; // Correo de la dirección técnica 
+        Mail::to($destinatario)->send(new RespelPublicMail($prespel));
+
         return redirect()->route('respelspublic.index');
     }
+
+
+    public function approve($id){
+    try {
+        // Iniciar el proceso de aprobación
+        Log::info("Iniciando aprobación para Respel ID: {$id}");
+        
+        $prespel = Respel::findOrFail($id);
+        $estadoAnterior = $prespel->RespelStatus;
+        Log::info("Estado anterior del Respel ID {$id}: {$estadoAnterior}");
+        
+        // Actualizar el estado a "Aprobado"
+        $prespel->RespelStatus = 'Aprobado';
+        $prespel->save();
+        Log::info("Estado actualizado a 'Aprobado' para Respel ID: {$id}");
+
+        // Verificar si el estado realmente cambió a "Aprobado"
+        if ($estadoAnterior !== 'Aprobado') {
+            // Correo del coordinador comercial
+            $coordinadorComercial = 'coordinadorcomercial@prosarc.com.co';
+            
+            // Registrar en el log antes de enviar el correo
+            Log::info("Intentando enviar correo de aprobación para Respel ID: {$id} a {$coordinadorComercial}");
+
+            // Enviar el correo de aprobación únicamente al coordinador comercial
+            Mail::to($coordinadorComercial)
+                ->send(new RespelPublicAprobadoMail($prespel));
+
+            // Registrar éxito en el log
+            Log::info("Correo de aprobación enviado exitosamente a {$coordinadorComercial}");
+        } else {
+            Log::info("El Respel ID: {$id} ya estaba aprobado previamente. No se envió ningún correo.");
+        }
+
+        // Redirigir con mensaje de éxito
+        return redirect()->route('publicrespel.index')->with('success', 'Residuo aprobado y notificación enviada.');
+    } catch (\Exception $e) {
+        // Registrar el error en el log
+        Log::error("Error al aprobar Respel ID: {$id}. Mensaje: " . $e->getMessage());
+
+        return redirect()->route('respelspublic.index');
+    }
+}
 
     /**
      * Display the specified resource.

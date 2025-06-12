@@ -483,7 +483,7 @@ class PersonalController extends Controller
 			$Persona->save();
 		} 
 		
-		return redirect()->route('personal.show',  ['PersSlug' => $slug]);
+		return redirect()->route('personal.show',  ['personal' => $slug]);
 	}	
 
 }

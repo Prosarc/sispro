@@ -1046,6 +1046,12 @@ class AjaxController extends Controller
 					case 'AdministradorPlanta':
 						($certificado->CertAuthDp == 0) ? $certificado->CertAuthDp = 1 : $certificado->CertAuthDp = 0;
 						break;
+					
+					case 'AsistenteGerencia':
+						$certificado->CertAuthJo = 3;
+						$certificado->CertAuthJl = 2;
+						$certificado->CertAuthDp = 1;
+						break;
 
 					case 'Supervisor':
 						if (($certificado->CertAuthDp == 0)&&($certificado->CertAuthJl == 0)&&($certificado->CertAuthJo == 0)) {
@@ -1145,6 +1151,12 @@ class AjaxController extends Controller
 						($certificado->CertAuthDp == 0) ? $certificado->CertAuthDp = 1 : $certificado->CertAuthDp = 0;
 						($certificado->CertAuthJl == 0) ? $certificado->CertAuthJl = 2 : $certificado->CertAuthJl = 0;
 						break;
+
+					case 'AsistenteGerencia':
+						$certificado->CertAuthJo = 3;
+						$certificado->CertAuthJl = 2;
+						$certificado->CertAuthDp = 1;
+						break;		
 
 					case 'Supervisor':
 						if (($certificado->CertAuthDp == 0)&&($certificado->CertAuthJl == 0)&&($certificado->CertAuthJo == 0)) {

@@ -28,7 +28,7 @@ class GroupCodeController extends Controller
      */
     public function create()
     {
-        return view('groupcodes.create', compact('groupCodes'));
+        return view('groupcodes.create');
     }
 
     /**

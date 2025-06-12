@@ -92,15 +92,18 @@ class PermisoUsuarioController extends Controller
 
              // Sede del usuario
             $SedeSlug = userController::IDSedeSegunUsuario();
-            $Sede = Sede::select('ID_Sede')->where('SedeSlug', $SedeSlug)->first();
-
+            $Sede = Sede::select('ID_Sede')
+                ->where('ID_Sede', 1)
+                ->orWhere('ID_Sede', 2)
+                ->get(); 
             // Usuarios que tienen personal
             $Users = DB::table('users')
                 ->join('personals', 'personals.ID_Pers', '=', 'users.FK_UserPers')
                 ->join('cargos', 'personals.FK_PersCargo', '=', 'cargos.ID_Carg')
                 ->join('areas', 'cargos.CargArea', '=', 'areas.ID_Area')
                 ->join('sedes', 'areas.FK_AreaSede', '=', 'sedes.ID_Sede')
-                ->where('sedes.ID_Sede', $Sede->ID_Sede)
+                ->where('sedes.ID_Sede', 1)
+                ->orWhere('sedes.ID_Sede', 2)
                 ->where('DeleteUser', 0)
                 ->select('users.FK_UserPers')
                 ->get();
@@ -110,7 +113,8 @@ class PermisoUsuarioController extends Controller
                 ->join('cargos', 'personals.FK_PersCargo', '=', 'cargos.ID_Carg')
                 ->join('areas', 'cargos.CargArea', '=', 'areas.ID_Area')
                 ->join('sedes', 'areas.FK_AreaSede', '=', 'sedes.ID_Sede')
-                ->where('sedes.ID_Sede', $Sede->ID_Sede)
+                ->where('sedes.ID_Sede', 1)
+                ->orWhere('sedes.ID_Sede', 2)
                 ->where(function ($query) use($Users){
                     foreach($Users as $User){
                         $query->where('personals.ID_Pers', '<>', $User->FK_UserPers);
@@ -118,7 +122,7 @@ class PermisoUsuarioController extends Controller
                 })
                 ->select('personals.PersFirstName', 'personals.PersLastName', 'personals.PersSlug')
                 ->get();
-                
+              
             return view('permisos.create', compact('Personals', 'Roles'));
         }else{
             abort(403);
@@ -319,7 +323,7 @@ class PermisoUsuarioController extends Controller
 
         AuditRequest::auditUpdate($this->table, $User->id, json_encode($request->all()));
 
-        return redirect()->route('permisos.show', compact('id'));
+        return redirect()->route('permisos.show',['permiso' => $id]);
     }
 
     public function editpassword($id){
@@ -329,7 +333,7 @@ class PermisoUsuarioController extends Controller
             if (!$User) {
                 abort(404);
             }
-            return view('permisos.editpassword', compact('User'));
+            return view('permisos.editpassword', ['permiso' => $User]);
         }else{
             abort(403);
         }
@@ -348,7 +352,7 @@ class PermisoUsuarioController extends Controller
 
         AuditRequest::auditUpdate($this->table, $User->id, json_encode($request->all()));
         
-        return redirect()->route('permisos.show', compact('id'));
+        return redirect()->route('permisos.show', ['permiso' => $id]);
     }
     /**
      * Remove the specified resource from storage.

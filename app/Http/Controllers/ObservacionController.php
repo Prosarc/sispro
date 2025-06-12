@@ -99,13 +99,12 @@ class ObservacionController extends Controller
         }
 
         $copy = ['asistentelogistica@prosarc.com.co',
-                    'auxiliarlogistico@prosarc.com.co',
-                    'auxiliarpda@prosarc.com.co',
-                    'asistentepda@prosarc.com.co'
-                    ];
+                'supervisordeoperaciones@prosarc.com.co',
+                'jefedetratamiento@prosarc.com.co',
+                'asistentepda@prosarc.com.co'
+                ];
 
-        $recipient = ['conciliaciones@prosarc.com.co',
-                            'recepcionpda@prosarc.com.co',
+        $recipient = ['logistica@prosarc.com.co',
                             $comercial->PersEmail
                         ];  
 
@@ -122,8 +121,7 @@ class ObservacionController extends Controller
             case 'Notificado':
             case 'Completado': 
                 break;
-            case 'Residuo Faltante':
-                array_push($copy, 'dirtecnica@prosarc.com.co');               
+            case 'Residuo Faltante':              
                 break;
             case 'No Conciliado':
             case 'Conciliado':

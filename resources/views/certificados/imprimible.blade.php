@@ -173,7 +173,7 @@
 </style>
 
 </head>
-<header>
+{{--<header>
 
   <div class= "encabezado">
     <div class="invoice-box header-footer">
@@ -194,7 +194,7 @@
       </table>
     </div>
   </div>
-</header>
+</header>--}}
 
     <body lang=ES-MX>
       

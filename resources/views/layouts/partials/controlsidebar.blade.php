@@ -54,6 +54,9 @@
 								<option {{ (Auth::user()->UsRol === 'Conductor' ? "selected" : "" )}} value="Conductor">Conductor</option>
 								<option {{ (Auth::user()->UsRol === 'JefeOperaciones' ? "selected" : "" )}} value="JefeOperaciones">JefeOperaciones</option>
 								<option {{ (Auth::user()->UsRol === 'IngDeTurno' ? "selected" : "" )}} value="IngDeTurno">IngenieroDeTurno</option>
+								<option {{ (Auth::user()->UsRol === 'Comercialap' ? "selected" : "" )}} value="Comercialap">Comercialap</option>
+								<option {{ (Auth::user()->UsRol === 'usaquen' ? "selected" : "" )}} value="usaquen">Usaquen</option>	
+								<option {{ (Auth::user()->UsRol === 'AsistenteGerencia' ? "selected" : "" )}} value="AsistenteGerencia">AsistenteGerencia</option>								
 								<option {{ (Auth::user()->UsRol === 'Supervisor' ? "selected" : "" )}} value="Supervisor">Supervisor</option>
 								<option {{ (Auth::user()->UsRol === 'AdministradorBogota' ? "selected" : "" )}} value="AdministradorBogota">AdministradorBogota</option>
 								<option {{ (Auth::user()->UsRol === 'JefeComercial' ? "selected" : "" )}} value="JefeComercial">JefeComercial</option>
@@ -72,6 +75,9 @@
 								<option {{ (Auth::user()->UsRol2 === 'Conductor' ? "selected" : "" )}} value="Conductor">Conductor</option>
 								<option {{ (Auth::user()->UsRol2 === 'JefeOperaciones' ? "selected" : "" )}} value="JefeOperaciones">JefeOperaciones</option>
 								<option {{ (Auth::user()->UsRol2 === 'IngDeTurno' ? "selected" : "" )}} value="IngDeTurno">IngenieroDeTurno</option>
+								<option {{ (Auth::user()->UsRol === 'Comercialap' ? "selected" : "" )}} value="Comercialap">Comercialap</option>
+								<option {{ (Auth::user()->UsRol === 'usaquen' ? "selected" : "" )}} value="usaquen">Usaquen</option>	
+								<option {{ (Auth::user()->UsRol === 'AsistenteGerencia' ? "selected" : "" )}} value="AsistenteGerencia">AsistenteGerencia</option>		
 								<option {{ (Auth::user()->UsRol2 === 'Supervisor' ? "selected" : "" )}} value="Supervisor">Supervisor</option>
 								<option {{ (Auth::user()->UsRol2 === 'AdministradorBogota' ? "selected" : "" )}} value="AdministradorBogota">AdministradorBogota</option>
 								<option {{ (Auth::user()->UsRol2 === 'JefeComercial' ? "selected" : "" )}} value="JefeComercial">JefeComercial</option>

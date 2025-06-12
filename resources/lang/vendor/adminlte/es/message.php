@@ -642,8 +642,8 @@ return [
     'solsertransaddress'      => 'Dirección de la Transportadora',
     'solsertransdepart'       => 'Departamento de la Transportadora',
     'solsertransmuni'         => 'Municipio de la Transportadora',
-    'solserconduc'            => 'Conductor Asignado',
-    'solservehic'             => 'Placa del Vehículo',
+    'solserconduc'            => 'Conductores Asignados',
+    'solservehic'             => 'Placas de los Vehículos',
     'solseraudi'              => 'Auditable',
     'solseraudidescrit'       => 'Seleccione si la solicitud tendrá algún tipo de auditoria (Presencial/Virtual), si no es el caso seleccione (No Auditable).',
     'solseraudiprese'         => 'Auditable Presencial',
@@ -720,6 +720,7 @@ return [
     'solserindexnumber'       => 'N° de Solicitud',
     'solserindextrans'        => 'Transportador',
     'solsershowprograma'      => 'La solicitud ha sido programada para:',
+    'solsershowrecibido'      => 'Los residuos han sido recibidos por nuestros vehiculo y se dirigen a nuestra planta de procesos',
     'solsershowcomple'        => 'La solicitud ha sido recibida, los residuos están en proceso de conciliación.',
     'solsershowconciliado'    => 'Los residuos han sido conciliados.',
     'solsershowtrata'         => 'Los residuos han sido tratados, están en proceso de certificación.',
@@ -831,4 +832,21 @@ return [
 
     // Name PDF
     'generatemanicargpdf'     => 'Manifiesto de Carga',
+
+    //Modulo de cotizaciones
+    'cotizaMenu'            => 'Cotizacion',
+    'fechasolicitud'        => 'Fecha de Cotizacion',
+    'nit'                   => 'NIT',
+    'rasonsocial'           => 'Razon Social',
+    'eliminar'              => 'Eliminar',
+    'descripcion'           => 'Descripcion del residuo',
+    'popoverdescript1'      => '<p>En este campo debe escribir el nombre del Pretramiento<br><br>También puede hacer click en el botón para <b>eliminar</b> este PreTratamiento del formulario</p>',
+    'popoverdescript2'      => 'este campo opcional sirve para ingresar información adicional acerca del pretratamiento',
+    'tratcreate'            => 'Crear Cotizacion',
+    'pretratcreate'         => 'Guardar',
+    'pretratadd'            => 'Añadir Pretratamiento',
+    'optionadd'             => 'Añadir Opción',
+    'status'                => 'Estado',
+    'MenuCotizaciones'      => 'Lista de cotizaciones',   
+    'MenuCotizacionesTitle' => 'Cotizaciones', 
 ];

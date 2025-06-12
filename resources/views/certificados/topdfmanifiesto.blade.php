@@ -245,7 +245,7 @@ footer {
             <td width=123 style='width:92.15pt;border-top:none;border-left:none;
             border-bottom:solid gray 0.5pt;border-right:solid gray 0.5pt;padding:0cm 5.4pt 0cm 5.4pt'>
             <p class=MsoNormal><span lang=ES style='font-size:7.5pt;font-family:"Arial",sans-serif'>Ciudad:
-            <b>{{$certificado->sedegenerador->municipio->Departamento->DepartName}}</b></span></p>
+            <b>{{$certificado->sedegenerador->municipio->MunName}}</b></span></p>
             </td>
            </tr>
           </table>
@@ -292,7 +292,7 @@ footer {
             <td width=113 valign=top style='width:3.0cm;border-top:none;border-left:none;
             border-bottom:solid gray 0.5pt;border-right:solid gray 0.5pt;padding:0cm 5.4pt 0cm 5.4pt'>
             <p class=MsoNormal><span lang=ES style='font-size:7.5pt;font-family:"Arial",sans-serif;
-            color:#0D0D0D'>Ciudad: <b>{{$certificado->transportador->sedes[0]->Municipios->Departamento->DepartName}}</b></span></p>
+            color:#0D0D0D'>Ciudad: <b>{{$certificado->transportador->sedes[0]->Municipios->MunName}}</b></span></p>
             </td>
            </tr>
           </table>
@@ -473,38 +473,6 @@ footer {
             {{$diarecepcion}} de {{$mesrecepciontexto}} del {{$añorecepcion}}</span></p>
             </td>
            </tr>
-           @php
-          $collection2 = collect([]);
-          @endphp
-          @foreach($certificado->SolicitudServicio->SolicitudResiduo as $Residuo)
-          @if($Residuo->requerimiento->FK_ReqTrata == $certificado->FK_CertTrat&&$Residuo->generespel->gener_sedes->ID_GSede == $certificado->FK_CertGenerSede)
-          @if($Residuo->SolResRM2 !== null && is_Array($Residuo->SolResRM2))
-          @foreach ($Residuo->SolResRM2 as $rm2 => $value2)
-          @php
-          $collection2 = $collection2->concat([$value2]);
-          @endphp
-          @endforeach
-          @else
-          @if (is_Array($Residuo->SolResRM))
-          @foreach ($Residuo->SolResRM as $rm => $value)
-          @php
-          $collection2 = $collection2->concat([$value]);
-          @endphp
-          @endforeach
-          @else
-          @php
-          $uniquestring = 'RM Invalido -> '.$Residuo->SolResRM;
-          @endphp
-          @endif
-          @endif
-          @endif
-          @endforeach
-          @php
-          if ($collection2->isNotEmpty()) {
-          $unicos = collect($collection2->unique());
-          $uniquestring = $unicos->values()->join(', ');
-          }
-          @endphp
            <tr width=35>
             <td width="40" nowrap style='border:solid gray 0.5pt;border-top:none;
             padding:0cm 5.4pt 0cm 5.4pt'>
@@ -515,7 +483,7 @@ footer {
             none;border-bottom:solid gray 0.5pt;border-right:solid gray 0.5pt;
             padding:0cm 5.4pt 0cm 5.4pt'>
             <p class=MsoNormal><b><span lang=ES style='font-size:7.5pt;font-family:"Arial",sans-serif;
-            color:#0D0D0D'>{{$uniquestring}}</span></b></p>
+            color:#0D0D0D'>{{$certificado->SolicitudServicio->ID_SolSer}}</span></b></p>
             </td>
            </tr>
           @php

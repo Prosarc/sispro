@@ -32,7 +32,7 @@ use App\Cliente;
 use App\Sede;
 use App\Requerimiento;
 use App\Observacion;
-use Permisos;
+use App\Permisos;
 
 class VehicProgController extends Controller
 {
@@ -54,7 +54,8 @@ class VehicProgController extends Controller
 					}
 					if(in_array(Auth::user()->UsRol, Permisos::CONDUCTOR)||in_array(Auth::user()->UsRol2, Permisos::CONDUCTOR)){
 						$query->where('progvehiculos.FK_ProgConductor', Auth::user()->FK_UserPers);
-						// $query->where('solicitud_servicios.SolSerStatus', 'Notificado');
+						$query->where('solicitud_servicios.SolSerStatus', 'Notificado');
+						$query->whereDate('progvehiculos.ProgVehFecha', Carbon::today());
 					}
 					if(in_array(Auth::user()->UsRol, Permisos::TESORERIA)||in_array(Auth::user()->UsRol2, Permisos::TESORERIA)){
 						$query->where('progvehiculos.ProgVehStatus', 'Pendiente');
@@ -142,7 +143,30 @@ class VehicProgController extends Controller
 				->where('vehiculos.FK_VehiSede', 1)
 				->where('VehicDelete', 0)
 				->get();
-			$serviciosnoprogramados = DB::table('solicitud_servicios')
+			
+			if(in_array(Auth::user()->UsRol, Permisos::JefeOperaciones) || in_array(Auth::user()->UsRol2, Permisos::SUPERVISOR)){
+				$serviciosnoprogramados = DB::table('solicitud_servicios')
+				->join('clientes', 'solicitud_servicios.FK_SolSerCliente', '=', 'clientes.ID_Cli')
+				->select('solicitud_servicios.ID_SolSer', 'solicitud_servicios.SolSerSlug', 'solicitud_servicios.SolSerTipo', 'clientes.CliName', 'clientes.CliCategoria')
+				->where('SolSerDelete', 0)
+				->where('SolSerStatus', 'Aprobado')
+				->where('clientes.CliCategoria', 'Cliente')
+				->whereIn('SolSerTipo', ['Cliente', 'Externo', 'Generador'])
+				->orderBy('solicitud_servicios.updated_at', 'asc')
+				->get();
+
+			}else if(in_array(Auth::user()->UsRol, Permisos::AREALOGISTICA) || in_array(Auth::user()->UsRol2, Permisos::AREALOGISTICA)){
+				$serviciosnoprogramados = DB::table('solicitud_servicios')
+				->join('clientes', 'solicitud_servicios.FK_SolSerCliente', '=', 'clientes.ID_Cli')
+				->select('solicitud_servicios.ID_SolSer', 'solicitud_servicios.SolSerSlug', 'solicitud_servicios.SolSerTipo', 'clientes.CliName', 'clientes.CliCategoria')
+				->where('SolSerDelete', 0)
+				->where('SolSerStatus', 'Aprobado')
+				->where('clientes.CliCategoria', 'Cliente')
+				->where('SolSerTipo', 'Interno')
+				->orderBy('solicitud_servicios.updated_at', 'asc')
+				->get();
+			}else{
+				$serviciosnoprogramados = DB::table('solicitud_servicios')
 				->join('clientes', 'solicitud_servicios.FK_SolSerCliente', '=', 'clientes.ID_Cli')
 				->select('solicitud_servicios.ID_SolSer', 'solicitud_servicios.SolSerSlug', 'solicitud_servicios.SolSerTipo', 'clientes.CliName', 'clientes.CliCategoria')
 				->where('SolSerDelete', 0)
@@ -150,6 +174,7 @@ class VehicProgController extends Controller
 				->where('clientes.CliCategoria', 'Cliente')
 				->orderBy('solicitud_servicios.updated_at', 'asc')
 				->get();
+			}	
 				/*return $programacions;*/
 			return view('ProgramacionVehicle.create', compact('programacions', 'conductors', 'ayudantes', 'vehiculos', 'serviciosnoprogramados', 'mantenimientos', 'transportadores'));
 		}
@@ -166,296 +191,152 @@ class VehicProgController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	public function store(Request $request)
-	{
-		$validate = $request->validate([
-			// 'ProgVehPrecintos'   =>   'max:16|min:1'
-		]);
-		// return $request;
-		$programacion = new ProgramacionVehiculo();
-		if(date('H', strtotime($request->input('ProgVehSalida'))) >= 12){
-			$turno = "0";
+    {$validate = $request->validate([
+		// 'ProgVehPrecintos'   =>   'max:16|min:1'
+	]);
+	// return $request;
+	$programacion = new ProgramacionVehiculo();
+	if(date('H', strtotime($request->input('ProgVehSalida'))) >= 12){
+		$turno = "0";
+	}
+	else{
+		$turno = "1";
+	}
+	$programacion->ProgVehTurno = $turno;
+	$programacion->ProgVehFecha = $request->input('ProgVehFecha');
+	$programacion->ProgVehSalida = $request->input('ProgVehFecha').' '.date('H:i:s', strtotime($request->input('ProgVehSalida')));
+	$programacion->ProgVehEntrada = now();
+
+	/*typetransportador = 0 -> transporte prosarc*/
+	/*typetransportador = 1 -> transporte alquilado*/
+	if(!is_null($request->input('typetransportador'))){
+		if($request->input('typetransportador') == 0){
+			/*ProgVehtipo = 0 -> transporte externo*/
+			/*ProgVehtipo = 1 -> transporte interno prosarc*/
+			/*ProgVehtipo = 2 -> transporte alquilado*/
+
+			$programacion->ProgVehtipo = 1;
+			$programacion->FK_ProgVehiculo = $request->input('FK_ProgVehiculo');
+
+			// Asignar color con validación
+			$color = $request->input('ProgVehColor');
+			if(empty($color) || !preg_match('/#[a-f0-9]{6}/i', $color)) {
+				$color = '#0000f6';
+			}
+			$programacion->ProgVehColor = $color;
+
+			$programacion->FK_ProgConductor = $request->input('FK_ProgConductor');
+			$programacion->FK_ProgAyudante = $request->input('FK_ProgAyudante');
+			$conductor = Personal::select('PersFirstName', 'PersLastName')->where('ID_Pers', $request->input('FK_ProgConductor'))->first();
+			$nomConduct = $conductor->PersFirstName." ".$conductor->PersLastName;
+			$vehiculo = Vehiculo::select('VehicPlaca')->where('ID_Vehic', $request->input('FK_ProgVehiculo'))->first()->VehicPlaca;
+			$transportador = DB::table('clientes')
+				->join('sedes', 'clientes.ID_Cli', '=', 'sedes.FK_SedeCli')
+				->join('municipios', 'sedes.FK_SedeMun', '=', 'municipios.ID_Mun')
+				->select('clientes.ID_Cli', 'clientes.CliNit', 'clientes.CliName', 'sedes.SedeAddress', 'municipios.MunName', 'municipios.ID_Mun')
+				->where('ID_Cli', 1)
+				->first();
 		}
 		else{
-			$turno = "1";
-		}
-		$programacion->ProgVehTurno = $turno;
-		$programacion->ProgVehFecha = $request->input('ProgVehFecha');
-		$programacion->ProgVehSalida = $request->input('ProgVehFecha').' '.date('H:i:s', strtotime($request->input('ProgVehSalida')));
-		$programacion->ProgVehEntrada = now();
+			$programacion->ProgVehtipo = 2;
+			$programacion->FK_ProgVehiculo = $request->input('vehicalqui');
+			$programacion->FK_ProgAyudante = $request->input('FK_ProgAyudante');
+			$programacion->ProgVehDocConductorEXT = $request->input('ProgVehDocConductorEXT');
+			$programacion->ProgVehNameConductorEXT = $request->input('ProgVehNameConductorEXT');
+			$programacion->ProgVehDocAuxiliarEXT = $request->input('ProgVehDocAuxiliarEXT');
+			$programacion->ProgVehNameAuxiliarEXT = $request->input('ProgVehNameAuxiliarEXT');
+			$programacion->ProgVehPlacaEXT = $request->input('ProgVehPlacaEXT');
+			$programacion->ProgVehTipoEXT = $request->input('ProgVehTipoEXT');
+			$programacion->ProgVehColor = '#FFFF00';
+			$programacion->ProgVehPrecintos = $request->input('ProgVehPrecintos');
+			if ($request->input('vehicalqui')!=null) {
+				$vehiculo = Vehiculo::select('VehicPlaca')
+				->where('ID_Vehic', $request->input('FK_ProgVehiculo'))
+				->first();
 
-		/*typetransportador = 0 -> transporte prosarc*/
-		/*typetransportador = 1 -> transporte alquilado*/
-		if(!is_null($request->input('typetransportador'))){
-			if($request->input('typetransportador') == 0){
-				/*ProgVehtipo = 0 -> transporte externo*/
-				/*ProgVehtipo = 1 -> transporte interno prosarc*/
-				/*ProgVehtipo = 2 -> transporte alquilado*/
-
-				$programacion->ProgVehtipo = 1;
-				$programacion->FK_ProgVehiculo = $request->input('FK_ProgVehiculo');
-				$programacion->ProgVehColor = $request->input('ProgVehColor');
-
-				$programacion->ProgVehPrecintos = $request->input('ProgVehPrecintos');
-
-				$programacion->FK_ProgConductor = $request->input('FK_ProgConductor');
-				$programacion->FK_ProgAyudante = $request->input('FK_ProgAyudante');
-				$conductor = Personal::select('PersFirstName', 'PersLastName')->where('ID_Pers', $request->input('FK_ProgConductor'))->first();
-				$nomConduct = $conductor->PersFirstName." ".$conductor->PersLastName;
-				$vehiculo = Vehiculo::select('VehicPlaca')->where('ID_Vehic', $request->input('FK_ProgVehiculo'))->first()->VehicPlaca;
-				$transportador = DB::table('clientes')
-					->join('sedes', 'clientes.ID_Cli', '=', 'sedes.FK_SedeCli')
-					->join('municipios', 'sedes.FK_SedeMun', '=', 'municipios.ID_Mun')
-					->select('clientes.ID_Cli', 'clientes.CliNit', 'clientes.CliName', 'sedes.SedeAddress', 'municipios.MunName', 'municipios.ID_Mun')
-					->where('ID_Cli', 1)
-					->first();
+			// Evitar error si no se encuentra el vehículo
+			$placaVehiculo = $vehiculo ? $vehiculo->VehicPlaca : "No definido";
 			}
 			else{
-				$programacion->ProgVehtipo = 2;
-				$programacion->FK_ProgVehiculo = $request->input('vehicalqui');
-				$programacion->FK_ProgAyudante = $request->input('FK_ProgAyudante');
-				$programacion->ProgVehDocConductorEXT = $request->input('ProgVehDocConductorEXT');
-				$programacion->ProgVehNameConductorEXT = $request->input('ProgVehNameConductorEXT');
-				$programacion->ProgVehDocAuxiliarEXT = $request->input('ProgVehDocAuxiliarEXT');
-				$programacion->ProgVehNameAuxiliarEXT = $request->input('ProgVehNameAuxiliarEXT');
-				$programacion->ProgVehPlacaEXT = $request->input('ProgVehPlacaEXT');
-				$programacion->ProgVehTipoEXT = $request->input('ProgVehTipoEXT');
-				$programacion->ProgVehColor = '#FFFF00';
-				$programacion->ProgVehPrecintos = $request->input('ProgVehPrecintos');
-				if ($request->input('vehicalqui')!=null) {
-					$vehiculo = Vehiculo::select('VehicPlaca')->where('ID_Vehic', $request->input('vehicalqui'))->first()->VehicPlaca;
-				}else{
-					$vehiculo = null;
-				}
-
-				$nomConduct = null;
-				$transportador = DB::table('clientes')
-					->join('sedes', 'clientes.ID_Cli', '=', 'sedes.FK_SedeCli')
-					->join('municipios', 'sedes.FK_SedeMun', '=', 'municipios.ID_Mun')
-					->select('clientes.ID_Cli', 'clientes.CliNit', 'clientes.CliName', 'sedes.SedeAddress', 'municipios.MunName', 'municipios.ID_Mun')
-					->where('CliSlug', $request->input('transport'))
-					->first();
+				$vehiculo = null;
 			}
-		}
-		else{
 			$nomConduct = null;
-			$vehiculo = null;
-			$programacion->ProgVehtipo = 0;
+			$transportador = DB::table('clientes')
+				->join('sedes', 'clientes.ID_Cli', '=', 'sedes.FK_SedeCli')
+				->join('municipios', 'sedes.FK_SedeMun', '=', 'municipios.ID_Mun')
+				->select('clientes.ID_Cli', 'clientes.CliNit', 'clientes.CliName', 'sedes.SedeAddress', 'municipios.MunName', 'municipios.ID_Mun')
+				->where('CliSlug', $request->input('transport'))
+				->first();
 		}
+		
+	}
+	else{
+		$nomConduct = null;
+		$vehiculo = null;
+		$programacion->ProgVehtipo = 0;
+		// Establecer color verde para vehículos externos
+		$programacion->ProgVehColor = '#00a65a';
+	}
+	
+	// Verificar que typetransportador existe y es un array antes de iterar
+	if ($request->has('typetransportador') && is_array($request->input('typetransportador'))) {
+		foreach ($request->input('typetransportador') as $key => $tipo) {
+			$programacion = new ProgramacionVehiculo();
+		
+			$programacion->ProgVehTurno = (date('H', strtotime($request->input('ProgVehSalida'))) >= 12) ? "0" : "1";
+			$programacion->ProgVehFecha = $request->input('ProgVehFecha');
+			$programacion->ProgVehSalida = $request->input('ProgVehFecha') . ' ' . date('H:i:s', strtotime($request->input('ProgVehSalida')));
+			$programacion->ProgVehEntrada = now();
+			$programacion->ProgVehtipo = ($tipo == 0) ? 1 : 2; // 1 = Prosarc, 2 = Alquilado
+			$programacion->FK_ProgServi = $request->input('FK_ProgServi');
+			$programacion->ProgVehStatus = 'Autorizado';
+		
+			if ($tipo == 0) { // Transporte interno Prosarc
+				$programacion->FK_ProgVehiculo = $request->input('FK_ProgVehiculo')[$key] ?? null;
+				$programacion->FK_ProgConductor = $request->input('FK_ProgConductor')[$key] ?? null;
+				$programacion->FK_ProgAyudante = $request->input('FK_ProgAyudante')[$key] ?? null;
+			} else { // Transporte alquilado
+				$programacion->ProgVehDocConductorEXT = $request->input('ProgVehDocConductorEXT')[$key] ?? null;
+				$programacion->ProgVehNameConductorEXT = $request->input('ProgVehNameConductorEXT')[$key] ?? null;
+				$programacion->ProgVehPlacaEXT = $request->input('ProgVehPlacaEXT')[$key] ?? null;
+			}
+		
+			$programacion->save();
+		}
+	} else {
+		// Si no hay typetransportador, guardamos el objeto programación para vehículos externos
 		$programacion->FK_ProgServi = $request->input('FK_ProgServi');
-		$programacion->ProgVehDelete = 0;
 		$programacion->ProgVehStatus = 'Autorizado';
-		$programacion->ProgVehExclusive = $request->input('ProgVehExclusive');
 		$programacion->save();
-		// return $request->input('FK_ProgServi');
+	}
 
-		$SolicitudServicio = SolicitudServicio::where('ID_SolSer', $programacion->FK_ProgServi)->first();
+	$SolicitudServicio = SolicitudServicio::where('ID_SolSer', $programacion->FK_ProgServi)->first();
 
-		if ($SolicitudServicio->SolSerStatus == 'Aprobado') {
+	if ($SolicitudServicio->SolSerStatus == 'Aprobado') {
 
-			$serviciovalidado = $request->input('FK_ProgServi');
-			/*cuenta los diferentes generadores*/
-			$generadoresdelasolicitud = GenerSede::whereHas('resgener.solres', function ($query) use ($serviciovalidado) {
-			    $query->where('solicitud_residuos.FK_SolResSolSer', $serviciovalidado);
-			})
-			->with(['resgener' => function ($query) use ($serviciovalidado){
-			    $query->with(['solres' => function ($query) use ($serviciovalidado){
-			    	$query->where('FK_SolResSolSer', $serviciovalidado);
-			    }]);
-			    $query->whereHas('solres', function ($query) use ($serviciovalidado){
-			    	$query->where('FK_SolResSolSer', $serviciovalidado);
-			    });
-			}])
-			->get();
-		}
-		// return $generadoresdelasolicitud;
-		/*$programacion->ProgVehtipo: 0 = externo; 1 = Prosarc; 2 = alquilado; */
-		/*SolSerTypeCollect: 99 = sedes generadores; 98 = sede cliente; 97 = direccion especifica; */
-		/*DocType: 0 = manifiesto de carga; 1 = certificado; 2 = manifiesto de envio*/
-		switch ($SolicitudServicio->SolSerTypeCollect) {
-			/*recolectar en sedes de los generadores*/
-			case '99':
-				foreach ($generadoresdelasolicitud as $sole) {
-					switch ($programacion->ProgVehtipo) {
-						/*externo*/
-						case '0':
-							$nuevodoc = new Documento;
-							$nuevodoc->DocType = 0;
-							$nuevodoc->DocNumero = 0;
-							$nuevodoc->DocEspName = 0;
-							$nuevodoc->DocEspValue = 0;
-							$nuevodoc->DocObservacion = "no deberia generar documentos";
-							$nuevodoc->DocSlug = hash('sha256', rand().time());
-							$nuevodoc->DocSrc = $nuevodoc->DocSlug.'.pdf';
-							$nuevodoc->DocNumRm = 0;
-							$nuevodoc->DocAuthHseq = 0;
-							$nuevodoc->DocAuthJl = 0;
-							$nuevodoc->DocAuthDp = 0;
-							$nuevodoc->DocAnexo = 0;
-							$nuevodoc->FK_CertSolser = $SolicitudServicio->ID_SolSer;
-							$nuevodoc->DocEspValue = 0;
-							// return $nuevodoc;
-
-							break;
-
-						/*Prosarc*/
-						case '1':
-							$nuevodoc = new Documento;
-							$nuevodoc->DocType = 0;
-							$nuevodoc->DocNumero = 1;
-							$nuevodoc->DocEspName = 1;
-							$nuevodoc->DocEspValue = 1;
-							$nuevodoc->DocObservacion = "ok generar varios documentos";
-							$nuevodoc->DocSlug = hash('sha256', rand().time());
-							$nuevodoc->DocSrc = $nuevodoc->DocSlug.'.pdf';
-							$nuevodoc->DocNumRm = 1;
-							$nuevodoc->DocAuthHseq = 0;
-							$nuevodoc->DocAuthJl = 0;
-							$nuevodoc->DocAuthDp = 0;
-							$nuevodoc->DocAnexo = 1;
-							$nuevodoc->FK_CertSolser = $SolicitudServicio->ID_SolSer;
-							$nuevodoc->DocEspValue = 1;
-							// return $nuevodoc;
-
-							break;
-
-						/*Alquilado*/
-						case '2':
-							$nuevodoc = new Documento;
-							$nuevodoc->DocType = 0;
-							$nuevodoc->DocNumero = 2;
-							$nuevodoc->DocEspName = 2;
-							$nuevodoc->DocEspValue = 2;
-							$nuevodoc->DocObservacion = "ok generar varios documentos";
-							$nuevodoc->DocSlug = hash('sha256', rand().time());
-							$nuevodoc->DocSrc = $nuevodoc->DocSlug.'.pdf';
-							$nuevodoc->DocNumRm = 2;
-							$nuevodoc->DocAuthHseq = 0;
-							$nuevodoc->DocAuthJl = 0;
-							$nuevodoc->DocAuthDp = 0;
-							$nuevodoc->DocAnexo = 2;
-							$nuevodoc->FK_CertSolser = $SolicitudServicio->ID_SolSer;
-							$nuevodoc->DocEspValue = 2;
-							// return $nuevodoc;
-
-							break;
-
-						default:
-							return "no encontro el tipo de servicio";
-							break;
-					}
-						$nuevodoc->save();
-
-						foreach ($sole->resgener as $resgener) {
-							foreach ($resgener->solres as $key) {
-								$nuevodocdato = new Docdato;
-								$nuevodocdato->FK_DatoDoc = $nuevodoc->ID_Doc;
-								$nuevodocdato->FK_DatoSolRes = $key->ID_SolRes;
-								$nuevodocdato->save();
-							}
-						}
-					$puntoderecoleccion = new Recolect;
-					$puntoderecoleccion->FK_ColectSgen = $sole->ID_GSede;
-					$puntoderecoleccion->FK_ColectProg = $programacion->ID_ProgVeh;
-					$puntoderecoleccion->save();
-
-					// return $puntoderecoleccion;
-
-				}
-				break;
-
-			/*recolectar en sede del cliente*/
-			case '98':
-					switch ($programacion->ProgVehtipo) {
-						/*externo*/
-						case '0':
-							$nuevodoc = new Documento;
-							$nuevodoc->DocType = 0;
-							$nuevodoc->DocNumero = 0;
-							$nuevodoc->DocEspName = 0;
-							$nuevodoc->DocEspValue = 0;
-							$nuevodoc->DocObservacion = "no deberia generar documentos";
-							$nuevodoc->DocSlug = hash('sha256', rand().time());
-							$nuevodoc->DocSrc = $nuevodoc->DocSlug.'.pdf';
-							$nuevodoc->DocNumRm = 0;
-							$nuevodoc->DocAuthHseq = 0;
-							$nuevodoc->DocAuthJl = 0;
-							$nuevodoc->DocAuthDp = 0;
-							$nuevodoc->DocAnexo = 0;
-							$nuevodoc->FK_CertSolser = $SolicitudServicio->ID_SolSer;
-							$nuevodoc->DocEspValue = 0;
-							// return $nuevodoc;
-
-							break;
-
-						/*Prosarc*/
-						case '1':
-							$nuevodoc = new Documento;
-							$nuevodoc->DocType = 0;
-							$nuevodoc->DocNumero = 1;
-							$nuevodoc->DocEspName = 1;
-							$nuevodoc->DocEspValue = 1;
-							$nuevodoc->DocObservacion = "documento con la sede del generador";
-							$nuevodoc->DocSlug = hash('sha256', rand().time());
-							$nuevodoc->DocSrc = $nuevodoc->DocSlug.'.pdf';
-							$nuevodoc->DocNumRm = 1;
-							$nuevodoc->DocAuthHseq = 0;
-							$nuevodoc->DocAuthJl = 0;
-							$nuevodoc->DocAuthDp = 0;
-							$nuevodoc->DocAnexo = 1;
-							$nuevodoc->FK_CertSolser = $SolicitudServicio->ID_SolSer;
-							$nuevodoc->DocEspValue = 1;
-							// return $nuevodoc;
-
-							break;
-
-						/*Alquilado*/
-						case '2':
-							$nuevodoc = new Documento;
-							$nuevodoc->DocType = 0;
-							$nuevodoc->DocNumero = 2;
-							$nuevodoc->DocEspName = 2;
-							$nuevodoc->DocEspValue = 2;
-							$nuevodoc->DocObservacion = "documento con la sede del generador";
-							$nuevodoc->DocSlug = hash('sha256', rand().time());
-							$nuevodoc->DocSrc = $nuevodoc->DocSlug.'.pdf';
-							$nuevodoc->DocNumRm = 2;
-							$nuevodoc->DocAuthHseq = 0;
-							$nuevodoc->DocAuthJl = 0;
-							$nuevodoc->DocAuthDp = 0;
-							$nuevodoc->DocAnexo = 2;
-							$nuevodoc->FK_CertSolser = $SolicitudServicio->ID_SolSer;
-							$nuevodoc->DocEspValue = 2;
-							// return $nuevodoc;
-
-							break;
-
-						default:
-							return "no encontro el tipo de servicio";
-							break;
-					}
-						$nuevodoc->save();
-
-					foreach ($generadoresdelasolicitud as $sole) {
-						foreach ($sole->resgener as $resgener) {
-							foreach ($resgener->solres as $key) {
-								$nuevodocdato = new Docdato;
-								$nuevodocdato->FK_DatoDoc = $nuevodoc->ID_Doc;
-								$nuevodocdato->FK_DatoSolRes = $key->ID_SolRes;
-								$nuevodocdato->save();
-							}
-						}
-					}
-					$puntoderecoleccion = new Recolect;
-					$puntoderecoleccion->FK_ColectProg = $programacion->ID_ProgVeh;
-					$puntoderecoleccion->save();
-
-
-
-					// return $puntoderecoleccion;
-				break;
-
-			/*recolectar en direccion especifica*/
-			case '97':
+		$serviciovalidado = $request->input('FK_ProgServi');
+		/*cuenta los diferentes generadores*/
+		$generadoresdelasolicitud = GenerSede::whereHas('resgener.solres', function ($query) use ($serviciovalidado) {
+			$query->where('solicitud_residuos.FK_SolResSolSer', $serviciovalidado);
+		})
+		->with(['resgener' => function ($query) use ($serviciovalidado){
+			$query->with(['solres' => function ($query) use ($serviciovalidado){
+				$query->where('FK_SolResSolSer', $serviciovalidado);
+			}]);
+			$query->whereHas('solres', function ($query) use ($serviciovalidado){
+				$query->where('FK_SolResSolSer', $serviciovalidado);
+			});
+		}])
+		->get();
+	}
+	// return $generadoresdelasolicitud;
+	/*$programacion->ProgVehtipo: 0 = externo; 1 = Prosarc; 2 = alquilado; */
+	/*SolSerTypeCollect: 99 = sedes generadores; 98 = sede cliente; 97 = direccion especifica; */
+	/*DocType: 0 = manifiesto de carga; 1 = certificado; 2 = manifiesto de envio*/
+	switch ($SolicitudServicio->SolSerTypeCollect) {
+		/*recolectar en sedes de los generadores*/
+		case '99':
+			foreach ($generadoresdelasolicitud as $sole) {
 				switch ($programacion->ProgVehtipo) {
 					/*externo*/
 					case '0':
@@ -464,7 +345,7 @@ class VehicProgController extends Controller
 						$nuevodoc->DocNumero = 0;
 						$nuevodoc->DocEspName = 0;
 						$nuevodoc->DocEspValue = 0;
-						$nuevodoc->DocObservacion = "no deberia generar documento";
+						$nuevodoc->DocObservacion = "no deberia generar documentos";
 						$nuevodoc->DocSlug = hash('sha256', rand().time());
 						$nuevodoc->DocSrc = $nuevodoc->DocSlug.'.pdf';
 						$nuevodoc->DocNumRm = 0;
@@ -485,7 +366,7 @@ class VehicProgController extends Controller
 						$nuevodoc->DocNumero = 1;
 						$nuevodoc->DocEspName = 1;
 						$nuevodoc->DocEspValue = 1;
-						$nuevodoc->DocObservacion = "documento con la direccion especifica";
+						$nuevodoc->DocObservacion = "ok generar varios documentos";
 						$nuevodoc->DocSlug = hash('sha256', rand().time());
 						$nuevodoc->DocSrc = $nuevodoc->DocSlug.'.pdf';
 						$nuevodoc->DocNumRm = 1;
@@ -506,7 +387,97 @@ class VehicProgController extends Controller
 						$nuevodoc->DocNumero = 2;
 						$nuevodoc->DocEspName = 2;
 						$nuevodoc->DocEspValue = 2;
-						$nuevodoc->DocObservacion = "documento con la direccion especifica";
+						$nuevodoc->DocObservacion = "ok generar varios documentos";
+						$nuevodoc->DocSlug = hash('sha256', rand().time());
+						$nuevodoc->DocSrc = $nuevodoc->DocSlug.'.pdf';
+						$nuevodoc->DocNumRm = 2;
+						$nuevodoc->DocAuthHseq = 0;
+						$nuevodoc->DocAuthJl = 0;
+						$nuevodoc->DocAuthDp = 0;
+						$nuevodoc->DocAnexo = 2;
+						$nuevodoc->FK_CertSolser = $SolicitudServicio->ID_SolSer;
+						$nuevodoc->DocEspValue = 2;
+						// return $nuevodoc;
+
+						break;
+
+					default:
+						return "no encontro el tipo de servicio";
+						break;
+				}
+					$nuevodoc->save();
+
+					foreach ($sole->resgener as $resgener) {
+						foreach ($resgener->solres as $key) {
+							$nuevodocdato = new Docdato;
+							$nuevodocdato->FK_DatoDoc = $nuevodoc->ID_Doc;
+							$nuevodocdato->FK_DatoSolRes = $key->ID_SolRes;
+							$nuevodocdato->save();
+						}
+					}
+				$puntoderecoleccion = new Recolect;
+				$puntoderecoleccion->FK_ColectSgen = $sole->ID_GSede;
+				$puntoderecoleccion->FK_ColectProg = $programacion->ID_ProgVeh;
+				$puntoderecoleccion->save();
+
+				// return $puntoderecoleccion;
+
+			}
+			break;
+
+		/*recolectar en sede del cliente*/
+		case '98':
+				switch ($programacion->ProgVehtipo) {
+					/*externo*/
+					case '0':
+						$nuevodoc = new Documento;
+						$nuevodoc->DocType = 0;
+						$nuevodoc->DocNumero = 0;
+						$nuevodoc->DocEspName = 0;
+						$nuevodoc->DocEspValue = 0;
+						$nuevodoc->DocObservacion = "no deberia generar documentos";
+						$nuevodoc->DocSlug = hash('sha256', rand().time());
+						$nuevodoc->DocSrc = $nuevodoc->DocSlug.'.pdf';
+						$nuevodoc->DocNumRm = 0;
+						$nuevodoc->DocAuthHseq = 0;
+						$nuevodoc->DocAuthJl = 0;
+						$nuevodoc->DocAuthDp = 0;
+						$nuevodoc->DocAnexo = 0;
+						$nuevodoc->FK_CertSolser = $SolicitudServicio->ID_SolSer;
+						$nuevodoc->DocEspValue = 0;
+						// return $nuevodoc;
+
+						break;
+
+					/*Prosarc*/
+					case '1':
+						$nuevodoc = new Documento;
+						$nuevodoc->DocType = 0;
+						$nuevodoc->DocNumero = 1;
+						$nuevodoc->DocEspName = 1;
+						$nuevodoc->DocEspValue = 1;
+						$nuevodoc->DocObservacion = "documento con la sede del generador";
+						$nuevodoc->DocSlug = hash('sha256', rand().time());
+						$nuevodoc->DocSrc = $nuevodoc->DocSlug.'.pdf';
+						$nuevodoc->DocNumRm = 1;
+						$nuevodoc->DocAuthHseq = 0;
+						$nuevodoc->DocAuthJl = 0;
+						$nuevodoc->DocAuthDp = 0;
+						$nuevodoc->DocAnexo = 1;
+						$nuevodoc->FK_CertSolser = $SolicitudServicio->ID_SolSer;
+						$nuevodoc->DocEspValue = 1;
+						// return $nuevodoc;
+
+						break;
+
+					/*Alquilado*/
+					case '2':
+						$nuevodoc = new Documento;
+						$nuevodoc->DocType = 0;
+						$nuevodoc->DocNumero = 2;
+						$nuevodoc->DocEspName = 2;
+						$nuevodoc->DocEspValue = 2;
+						$nuevodoc->DocObservacion = "documento con la sede del generador";
 						$nuevodoc->DocSlug = hash('sha256', rand().time());
 						$nuevodoc->DocSrc = $nuevodoc->DocSlug.'.pdf';
 						$nuevodoc->DocNumRm = 2;
@@ -539,29 +510,158 @@ class VehicProgController extends Controller
 				$puntoderecoleccion = new Recolect;
 				$puntoderecoleccion->FK_ColectProg = $programacion->ID_ProgVeh;
 				$puntoderecoleccion->save();
-				break;
 
-			default:
-				// return "el tipo de servicio es externo";
-				break;
-		}
 
-		$SolicitudServicio->SolSerStatus = 'Programado';
-		if(!is_null($request->input('typetransportador'))){
-			$SolicitudServicio->SolSerConductor = $nomConduct;
-			$SolicitudServicio->SolSerVehiculo = $vehiculo;
-			$SolicitudServicio->SolSerNameTrans = $transportador->CliName;
-			$SolicitudServicio->SolSerNitTrans = $transportador->CliNit;
-			$SolicitudServicio->SolSerAdressTrans = $transportador->SedeAddress;
-			$SolicitudServicio->SolSerCityTrans = $transportador->ID_Mun;
-		}
-		$SolicitudServicio->save();
 
-		// return redirect()->route('vehicle-programacion.create');
-		//return redirect()->route('vehicle-programacion.edit' , ['id' => $programacion->ID_ProgVeh]);
-		return redirect()->route('vehicle-programacion.edit', ['vehicle_programacion' => $programacion->ID_ProgVeh]);
+				// return $puntoderecoleccion;
+			break;
+
+		/*recolectar en direccion especifica*/
+		case '97':
+			switch ($programacion->ProgVehtipo) {
+				/*externo*/
+				case '0':
+					$nuevodoc = new Documento;
+					$nuevodoc->DocType = 0;
+					$nuevodoc->DocNumero = 0;
+					$nuevodoc->DocEspName = 0;
+					$nuevodoc->DocEspValue = 0;
+					$nuevodoc->DocObservacion = "no deberia generar documento";
+					$nuevodoc->DocSlug = hash('sha256', rand().time());
+					$nuevodoc->DocSrc = $nuevodoc->DocSlug.'.pdf';
+					$nuevodoc->DocNumRm = 0;
+					$nuevodoc->DocAuthHseq = 0;
+					$nuevodoc->DocAuthJl = 0;
+					$nuevodoc->DocAuthDp = 0;
+					$nuevodoc->DocAnexo = 0;
+					$nuevodoc->FK_CertSolser = $SolicitudServicio->ID_SolSer;
+					$nuevodoc->DocEspValue = 0;
+					// return $nuevodoc;
+
+					break;
+
+				/*Prosarc*/
+				case '1':
+					$nuevodoc = new Documento;
+					$nuevodoc->DocType = 0;
+					$nuevodoc->DocNumero = 1;
+					$nuevodoc->DocEspName = 1;
+					$nuevodoc->DocEspValue = 1;
+					$nuevodoc->DocObservacion = "documento con la direccion especifica";
+					$nuevodoc->DocSlug = hash('sha256', rand().time());
+					$nuevodoc->DocSrc = $nuevodoc->DocSlug.'.pdf';
+					$nuevodoc->DocNumRm = 1;
+					$nuevodoc->DocAuthHseq = 0;
+					$nuevodoc->DocAuthJl = 0;
+					$nuevodoc->DocAuthDp = 0;
+					$nuevodoc->DocAnexo = 1;
+					$nuevodoc->FK_CertSolser = $SolicitudServicio->ID_SolSer;
+					$nuevodoc->DocEspValue = 1;
+					// return $nuevodoc;
+
+					break;
+
+				/*Alquilado*/
+				case '2':
+					$nuevodoc = new Documento;
+					$nuevodoc->DocType = 0;
+					$nuevodoc->DocNumero = 2;
+					$nuevodoc->DocEspName = 2;
+					$nuevodoc->DocEspValue = 2;
+					$nuevodoc->DocObservacion = "documento con la direccion especifica";
+					$nuevodoc->DocSlug = hash('sha256', rand().time());
+					$nuevodoc->DocSrc = $nuevodoc->DocSlug.'.pdf';
+					$nuevodoc->DocNumRm = 2;
+					$nuevodoc->DocAuthHseq = 0;
+					$nuevodoc->DocAuthJl = 0;
+					$nuevodoc->DocAuthDp = 0;
+					$nuevodoc->DocAnexo = 2;
+					$nuevodoc->FK_CertSolser = $SolicitudServicio->ID_SolSer;
+					$nuevodoc->DocEspValue = 2;
+					// return $nuevodoc;
+
+					break;
+
+				default:
+					return "no encontro el tipo de servicio";
+					break;
+			}
+				$nuevodoc->save();
+
+			foreach ($generadoresdelasolicitud as $sole) {
+				foreach ($sole->resgener as $resgener) {
+					foreach ($resgener->solres as $key) {
+						$nuevodocdato = new Docdato;
+						$nuevodocdato->FK_DatoDoc = $nuevodoc->ID_Doc;
+						$nuevodocdato->FK_DatoSolRes = $key->ID_SolRes;
+						$nuevodocdato->save();
+					}
+				}
+			}
+			$puntoderecoleccion = new Recolect;
+			$puntoderecoleccion->FK_ColectProg = $programacion->ID_ProgVeh;
+			$puntoderecoleccion->save();
+			break;
+
+		default:
+			// return "el tipo de servicio es externo";
+			break;
 	}
 
+	$SolicitudServicio->SolSerStatus = 'Programado';
+	// Inicializar arreglos para almacenar múltiples valores
+$nombresConductores = [];
+$placasVehiculos = [];
+
+// Verificar si hay múltiples transportadores
+if(!is_null($request->input('typetransportador'))) {
+    foreach ($request->input('typetransportador') as $key => $tipo) {
+        if ($tipo == 0) {
+            // Transporte Prosarc
+            $conductor = Personal::select('PersFirstName', 'PersLastName')
+                ->where('ID_Pers', $request->input('FK_ProgConductor')[$key] ?? null)
+                ->first();
+            
+            $nombreConductor = $conductor ? $conductor->PersFirstName." ".$conductor->PersLastName : "No definido";
+            $vehiculo = Vehiculo::select('VehicPlaca')
+                ->where('ID_Vehic', $request->input('FK_ProgVehiculo')[$key] ?? null)
+                ->first();
+            
+            $placaVehiculo = $vehiculo ? $vehiculo->VehicPlaca : "No definido";
+        } elseif ($tipo == 1) {
+            // Transporte Alquilado
+            $nombreConductor = $request->input('ProgVehNameConductorEXT')[$key] ?? "No definido";
+            $placaVehiculo = $request->input('ProgVehPlacaEXT')[$key] ?? "No definido";
+        } else {
+            $nombreConductor = "No definido";
+            $placaVehiculo = "No definido";
+        }
+
+        // Agregar los valores al arreglo
+        $nombresConductores[] = $nombreConductor;
+        $placasVehiculos[] = $placaVehiculo;
+    }
+}
+
+// Concatenar los valores en una sola cadena, separada por comas
+$SolicitudServicio->SolSerConductor = implode(', ', $nombresConductores);
+$SolicitudServicio->SolSerVehiculo = implode(', ', $placasVehiculos);
+$SolicitudServicio->SolSerNameTrans = $transportador->CliName ?? "No asignado";
+$SolicitudServicio->SolSerNitTrans = $transportador->CliNit ?? "No asignado";
+$SolicitudServicio->SolSerAdressTrans = $transportador->SedeAddress ?? "No asignado";
+$SolicitudServicio->SolSerCityTrans = $transportador->ID_Mun ?? "No asignado";
+
+
+$SolicitudServicio = SolicitudServicio::where('ID_SolSer', $request->input('FK_ProgServi'))->first();
+$SolicitudServicio->SolSerConductor = json_encode($nombresConductores);
+$SolicitudServicio->SolSerVehiculo = json_encode($placasVehiculos);
+$SolicitudServicio->SolSerStatus = 'Programado';
+$SolicitudServicio->save();
+
+	// return redirect()->route('vehicle-programacion.create');
+	//return redirect()->route('vehicle-programacion.edit' , ['id' => $programacion->ID_ProgVeh]);
+	return redirect()->route('vehicle-programacion.edit', ['vehicle_programacion' => $programacion->ID_ProgVeh]);
+ }
 	/**
 	 * Display the specified resource.
 	 *
@@ -695,30 +795,44 @@ class VehicProgController extends Controller
 	public function edit($id)
 	{
 		if(in_array(Auth::user()->UsRol, Permisos::ProgVehic2) || in_array(Auth::user()->UsRol2, Permisos::ProgVehic2)){
+			
 			$programacion = ProgramacionVehiculo::where('ID_ProgVeh', $id)->with('servicio')->first();
 			if (!$programacion) {
 				abort(404);
 			}
+			
 			$vehiculos = DB::table('vehiculos')
 				->select('ID_Vehic','VehicPlaca')
 				->where('VehicDelete', 0)
 				->get();
+
+			//return $programacion;	
 			if($programacion->ProgVehtipo <> 0){
 				$SedeVehiculo = DB::table('sedes')
 					->join('vehiculos', 'sedes.ID_Sede', '=', 'vehiculos.FK_VehiSede')
 					->select('sedes.ID_Sede')
 					->where('vehiculos.ID_Vehic', $programacion->FK_ProgVehiculo)
 					->first();
-				$Vehiculos2 = DB::table('vehiculos')
-					->select('VehicPlaca', 'ID_Vehic')
-					->where('FK_VehiSede', $SedeVehiculo->ID_Sede)
-					->where('VehicDelete', 0)
-					->get();
-			}
-			else{
-				$SedeVehiculo = 0;
-				$Vehiculos2 = 0;
-			}
+					$Vehiculos2 = $SedeVehiculo 
+					? DB::table('vehiculos')
+						->select('VehicPlaca', 'ID_Vehic')
+						->where('FK_VehiSede', $SedeVehiculo->ID_Sede)
+						->where('VehicDelete', 0)
+						->get()
+					: collect();
+				} elseif ($programacion->ProgVehtipo == 2) { // Vehículo alquilado
+					// Para vehículos alquilados no se relaciona directamente la sede,
+					// así que se obtiene el vehículo por su ID
+					$Vehiculos2 = DB::table('vehiculos')
+						->select('VehicPlaca', 'ID_Vehic')
+						->where('ID_Vehic', $programacion->FK_ProgVehiculo)
+						->where('VehicDelete', 0)
+						->get();
+					$SedeVehiculo = null;
+				} else {
+					$SedeVehiculo = null;
+					$Vehiculos2 = collect();
+				}
 			/*conductores de prosarc*/
 			$conductors = DB::table('personals')
 				->join('cargos', 'personals.FK_PersCargo', '=', 'cargos.ID_Carg')
@@ -813,60 +927,70 @@ class VehicProgController extends Controller
 			// 'ProgVehPrecintos'   =>   'max:16|min:6'
 		]);
 
-		// return $request->input('ProgVehPrecintos');
 		$programacion = ProgramacionVehiculo::where('ID_ProgVeh', $id)->first();
 		if (!$programacion) {
 			abort(404);
 		}
-		// return $request;
+
 		$programacion->ProgVehFecha = $request->input('ProgVehFecha');
 		$programacion->ProgVehExclusive = $request->input('ProgVehExclusive');
 		$salida = date('H:i:s', strtotime($request->input('ProgVehSalida')));
 		$llegada = date('H:i:s', strtotime($request->input('ProgVehEntrada')));
-		if($salida >= 12){
-			$turno = "0";
-		}
-		else{
-			$turno = "1";
-		}
-		$programacion->ProgVehTurno = $turno;
+		
+		// Manejo del turno
+		$programacion->ProgVehTurno = ($salida >= 12) ? "0" : "1";
 		$programacion->ProgVehSalida = $request->input('ProgVehFecha').' '.$salida;
-		if($programacion->ProgVehtipo == 1){
-			if($request->input('ProgVehEntrada')){
+
+		// Para vehículos Prosarc (tipo 1)
+		if($programacion->ProgVehtipo == 1) {
+			// Solo actualizar el color si se proporciona uno nuevo y el estado no está cerrado
+			if($request->has('ProgVehColor') && $programacion->ProgVehStatus != 'Cerrada') {
+				$color = $request->input('ProgVehColor');
+				// Verificar que el color es válido, si no usar el azul predeterminado
+				if(empty($color) || !preg_match('/#[a-f0-9]{6}/i', $color)) {
+					$color = '#0000f6';
+				}
+				$programacion->ProgVehColor = $color;
+			}
+			
+			if($request->input('ProgVehEntrada')) {
 				$programacion->ProgVehEntrada = $request->input('ProgVehFecha').' '.$llegada;
 				$programacion->progVehKm = $request->input('progVehKm');
-
-
-
-				$programacion->ProgVehStatus = 'Cerrada';/*se cierra la programacion del vehiculo*/
+				$programacion->ProgVehStatus = 'Cerrada';
 
 				$vehiculo = Vehiculo::where('ID_Vehic', $request->input('FK_ProgVehiculo'))->first();
 				$vehiculo->VehicKmActual = $request->input('progVehKm');
 				$vehiculo->save();
-
-			}
-			else{
+			} else {
 				$programacion->ProgVehEntrada = null;
 				$programacion->progVehKm = null;
 			}
-			$conductor = Personal::select('PersFirstName', 'PersLastName')->where('ID_Pers', $request->input('FK_ProgConductor'))->first();
+
+			$conductor = Personal::select('PersFirstName', 'PersLastName')
+				->where('ID_Pers', $request->input('FK_ProgConductor'))
+				->first();
 			$nomConduct = $conductor->PersFirstName." ".$conductor->PersLastName;
-			$vehiculo = Vehiculo::select('VehicPlaca')->where('ID_Vehic', $request->input('FK_ProgVehiculo'))->first()->VehicPlaca;
+			
+			$vehiculo = Vehiculo::select('VehicPlaca')
+				->where('ID_Vehic', $request->input('FK_ProgVehiculo'))
+				->first()
+				->VehicPlaca;
+
 			$programacion->FK_ProgVehiculo = $request->input('FK_ProgVehiculo');
 			$programacion->FK_ProgConductor = $request->input('FK_ProgConductor');
 			$programacion->FK_ProgAyudante = $request->input('FK_ProgAyudante');
-
-
 			$programacion->ProgVehPrecintos = $request->input('ProgVehPrecintos');
-
-
-			$programacion->ProgVehColor = $request->input('ProgVehColor');
 		}
-		else if($programacion->ProgVehtipo == 2){
-			if($request->input('ProgVehEntrada')){
+		// Para vehículos alquilados (tipo 2)
+		else if($programacion->ProgVehtipo == 2) {
+			// Mantener el color amarillo para vehículos alquilados
+			$programacion->ProgVehColor = '#FFFF00';
+			
+			if($request->input('ProgVehEntrada')) {
 				$programacion->ProgVehEntrada = $request->input('ProgVehFecha').' '.$llegada;
-				$programacion->ProgVehStatus = 'Cerrada';/*se cierra la programacion del vehiculo*/
+				$programacion->ProgVehStatus = 'Cerrada';
 			}
+			
 			$programacion->ProgVehDocConductorEXT = $request->input('ProgVehDocConductorEXT');
 			$programacion->ProgVehNameConductorEXT = $request->input('ProgVehNameConductorEXT');
 			$programacion->ProgVehDocAuxiliarEXT = $request->input('ProgVehDocAuxiliarEXT');
@@ -875,49 +999,60 @@ class VehicProgController extends Controller
 			$programacion->ProgVehTipoEXT = $request->input('ProgVehTipoEXT');
 			$programacion->FK_ProgAyudante = $request->input('FK_ProgAyudante');
 			$programacion->FK_ProgVehiculo = $request->input('vehicalqui');
-
 			$programacion->ProgVehPrecintos = $request->input('ProgVehPrecintos');
-
-			$nomConduct = $programacion->ProgVehDocConductorEXT;
-			$vehiculo = $programacion->ProgVehPlacaEXT;
 		}
-		else{
-			if($request->input('ProgVehEntrada')){
+		// En el método update, añadir sección para vehículos tipo 0
+		else if($programacion->ProgVehtipo == 0) {
+			// Color verde predeterminado para vehículos externos
+			$programacion->ProgVehColor = '#00a65a';
+			
+			if($request->input('ProgVehEntrada')) {
 				$programacion->ProgVehEntrada = $request->input('ProgVehFecha').' '.$llegada;
-				$programacion->ProgVehStatus = 'Cerrada';/*se cierra la programacion del vehiculo*/
+				$programacion->ProgVehStatus = 'Cerrada';
 			}
-			$programacion->FK_ProgVehiculo = $request->input('vehicalqui');
-			$programacion->FK_ProgAyudante = $request->input('FK_ProgAyudante');
-			// $programacion->ProgVehPrecintos = $request->input('ProgVehPrecintos');
-
-			// $vehiculo = Vehiculo::select('VehicPlaca')->where('ID_Vehic', $request->input('vehicalqui'))->first()->VehicPlaca;
-			$nomConduct = null;
+			
+			// Si hay vehicalqui, actualizar
+			if($request->has('vehicalqui')) {
+				$programacion->FK_ProgVehiculo = $request->input('vehicalqui');
+			}
+			
+			// Si hay FK_ProgAyudante, actualizar
+			if($request->has('FK_ProgAyudante')) {
+				$programacion->FK_ProgAyudante = $request->input('FK_ProgAyudante');
+			}
+			
+			// Si hay precintos, actualizar
+			if($request->has('ProgVehPrecintos')) {
+				$programacion->ProgVehPrecintos = $request->input('ProgVehPrecintos');
+			}
 		}
-		$programacion->update();
-		// return $request->input('ProgGenerSedes');
-		$programacion->puntosderecoleccion()->sync($request->input('ProgGenerSedes'));
 
+		$programacion->update();
+		
+		// Actualizar puntos de recolección si existen
+		if($request->has('ProgGenerSedes')) {
+			$programacion->puntosderecoleccion()->sync($request->input('ProgGenerSedes'));
+		}
+
+		// Actualizar información en la solicitud de servicio
 		$SolicitudServicio = SolicitudServicio::where('ID_SolSer', $programacion->FK_ProgServi)->first();
-		// $SolicitudServicio->SolSerStatus = 'Programado';
-		if($programacion->ProgVehtipo <> 0){
-			$SolicitudServicio->SolSerConductor = $nomConduct;
-			$SolicitudServicio->SolSerVehiculo = $vehiculo;
+		if($programacion->ProgVehtipo != 0) {
+			$SolicitudServicio->SolSerConductor = isset($nomConduct) ? $nomConduct : null;
+			$SolicitudServicio->SolSerVehiculo = isset($vehiculo) ? $vehiculo : null;
 		}
 		$SolicitudServicio->save();
 
-		// if ($programacion->ProgVehStatus == 'Cerrada') {
-		// 	$destinatarios = ['recepcionpda@prosarc.com.co'];
-		// 	Mail::to($destinatarios)->send(new VehiculoRecibidoEmail($SolicitudServicio));
-		// }
-
+		// Registrar la auditoría
 		$log = new audit();
-		$log->AuditTabla="progvehiculos";
-		$log->AuditType="Modificado";
-		$log->AuditRegistro=$programacion->ID_ProgVeh;
-		$log->AuditUser=Auth::user()->email;
-		$log->Auditlog=$request->all();
+		$log->AuditTabla = "progvehiculos";
+		$log->AuditType = "Modificado";
+		$log->AuditRegistro = $programacion->ID_ProgVeh;
+		$log->AuditUser = Auth::user()->email;
+		$log->Auditlog = $request->all();
 		$log->save();
-		return redirect()->route('vehicle-programacion.edit',['id' => $id])->with('mensaje', __('adminlte::message.progvehceditsuccess'));
+
+		return redirect()->route('vehicle-programacion.edit', ['vehicle_programacion' => $id])
+			->with('mensaje', __('adminlte::message.progvehceditsuccess'));
 	}
 
 	/**
@@ -1312,7 +1447,14 @@ class VehicProgController extends Controller
 
 				$programacion->ProgVehtipo = 1;
 				$programacion->FK_ProgVehiculo = $request->input('FK_ProgVehiculo');
-				$programacion->ProgVehColor = $request->input('ProgVehColor');
+				
+				// Validar el color para vehículos de tipo 1 (prosarc)
+				$color = $request->input('ProgVehColor');
+				if(empty($color) || !preg_match('/#[a-f0-9]{6}/i', $color)) {
+					$color = '#0000f6'; // Azul por defecto para vehículos Prosarc
+				}
+				$programacion->ProgVehColor = $color;
+				
 				$programacion->FK_ProgConductor = $request->input('FK_ProgConductor');
 				$programacion->FK_ProgAyudante = $request->input('FK_ProgAyudante');
 				$conductor = Personal::select('PersFirstName', 'PersLastName')->where('ID_Pers', $request->input('FK_ProgConductor'))->first();
@@ -1335,7 +1477,7 @@ class VehicProgController extends Controller
 				$programacion->ProgVehNameAuxiliarEXT = $request->input('ProgVehNameAuxiliarEXT');
 				$programacion->ProgVehPlacaEXT = $request->input('ProgVehPlacaEXT');
 				$programacion->ProgVehTipoEXT = $request->input('ProgVehTipoEXT');
-				$programacion->ProgVehColor = '#FFFF00';
+				$programacion->ProgVehColor = '#FFFF00'; // Amarillo para vehículos alquilados
 				if ($request->input('vehicalqui')!=null) {
 					$vehiculo = Vehiculo::select('VehicPlaca')->where('ID_Vehic', $request->input('vehicalqui'))->first()->VehicPlaca;
 				}else{
@@ -1355,6 +1497,8 @@ class VehicProgController extends Controller
 			$nomConduct = null;
 			$vehiculo = null;
 			$programacion->ProgVehtipo = 0;
+			// Establecer color verde (#00a65a) para vehículos externos (tipo 0)
+			$programacion->ProgVehColor = '#00a65a';
 		}
 		$programacion->FK_ProgServi = $id;
 		$programacion->ProgVehDelete = 0;

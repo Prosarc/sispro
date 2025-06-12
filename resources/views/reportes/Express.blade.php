@@ -40,6 +40,7 @@
                                 <th>NIT Generador</th>
                                 <th>Dirección de servicio</th>
                                 <th>Municipio</th>
+                                <th>Localidad</th>
                                 <th>Nombre de residuo</th>
                                 <th>Corriente</th>
                                 <th>Tratamiento</th>
@@ -49,7 +50,6 @@
                                 <th>No. Certificado</th>
                                 <th>Peligrosidad</th>
                                 <th>Empresa Transportadora</th>
-                                <th></th>
                                 <th></th>
                                 <th></th>
                                 <th></th>
@@ -78,6 +78,7 @@
                                         <td>{{$solres->generespel->gener_sedes->generadors->GenerNit}}</td>
                                         <td>{{$solres->generespel->gener_sedes->GSedeAddress}}</td>
                                         <td>{{$solres->generespel->gener_sedes->municipio->MunName}}</td>
+                                        <td>{{$solres->generespel->gener_sedes->generadors->sedes->SedeMapLocalidad}}</td>
                                         <td>{{$solres->generespel->respels->RespelName}}</td>
                                         <td>
                                             @if($solres->generespel->respels->YRespelClasf4741 <> null)
@@ -102,8 +103,7 @@
                                         <td>Certificado no encontrado</td>
                                     @endif
                                         <td>{{$solres->generespel->respels->RespelIgrosidad}}</td>
-                                        <td>{{$servicio->SolSerNameTrans}}</td>
-                                        <td></td>
+                                        <td>{{$servicio->SolSerNameTrans}}</td>                                        
                                         <td></td>
                                         <td></td>
                                         <td></td>

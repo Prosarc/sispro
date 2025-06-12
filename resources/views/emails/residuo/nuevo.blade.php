@@ -14,12 +14,12 @@ Por favor revise la información  del residuo, usando el siguiente botón<br><br
 Ver Residuo
 @endcomponent
 
-Si tiene alguna duda comuníquese con el asesor comercial {{$respel['comercial']->PersFirstName.' '.$respel['comercial']->PersLastName}}. al teléfono {{$respel['comercial']->PersCellphone}} o con el personal del cliente usando los siguientes datos:<br>
+{{--Si tiene alguna duda comuníquese con el asesor comercial {{$respel['comercial']->PersFirstName.' '.$respel['comercial']->PersLastName}}. al teléfono {{$respel['comercial']->PersCellphone}} o con el personal del cliente usando los siguientes datos:<br>
 <ul>
     <li>Nombre: {{$respel['personalcliente']->PersFirstName.' '.$respel['personalcliente']->PersLastName}} </li>
     <li>teléfono: {{$respel['personalcliente']->PersCellphone}}</li>
     <li>correo: {{$respel['personalcliente']->PersEmail}}</li>
-</ul>
+</ul>--}}
 Saludos, Prosarc S.A. ESP.
 {{-- @component('mail::subcopy')
 @lang(

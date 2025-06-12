@@ -52,6 +52,16 @@
             $text = "esta lista para realizar una conciliación, el cliente $email->CliName, debe revisar los pesos y/o cantidades conciliadas en cada uno de los residuos, y luego usar el botón (Conciliado) para dar inicio al tratamiento de los residuos";
         @endphp
         @break
+    @case('Recepcionado')
+        @php
+            $text = "Ha sido recibida por PDA ";
+        @endphp
+        @break    
+    @case('Fallido')
+        @php
+            $text = "El cliente no entregó ningún residuo en la fecha programada";
+        @endphp
+        @break      
     @case('No Conciliado')
         @php
             $text = " ha sido rechazada por el cliente $email->CliName, ya que no esta de acuerdo con algunas de las cantidades enviadas a conciliación... se deben verificar las cantidades y enviar de nuevo a conciliación";

@@ -124,6 +124,7 @@ class genercontroller extends Controller
                 ->where('FK_SedeCli', $ID_Cli)
                 ->where('SedeDelete', 0)
                 ->get();
+                return $Sedes;
             $Cliente = Sede::where('SedeDelete', 0)->get();
             $Departamentos = Departamento::all();
 

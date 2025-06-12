@@ -102,6 +102,16 @@ Menu::macro('sidebar', function () {//COMIENZO DEL SIDEBAR EN VERSION DE MENU
 							->addClass('treeview-menu')
 						)
 					)
+					/*PESTAÑA DE Cotizaciones*/
+					->addIf(in_array(Auth::user()->UsRol, Permisos::COTIZACION) || in_array(Auth::user()->UsRol2, Permisos::COTIZACION),
+						(Menu::new()
+							->prepend('<a href="#"><i style="font-size: 1.2em; color: #cdf51b;" class="fas fa-receipt"></i> <span>'. __('adminlte::message.MenuCotizacionesTitle').'</span><i class="fas fa-angle-left pull-right" style="color:#FFFFFF;" width="18" height="18"></i></a>')
+							->addParentClass('treeview')
+							->add(Link::toUrl('/cotizacion','<i class="fas fa-list-alt"></i> '. __('adminlte::message.MenuCotizaciones')))
+							->addClass('treeview-menu')
+						)
+					)
+                
 					/*PESTAÑA DE PROGRAMACIONES DE SERVICIOS*/
 					->addIf(in_array(Auth::user()->UsRol, Permisos::TODOPROSARC) || in_array(Auth::user()->UsRol2, Permisos::TODOPROSARC),
 						(Menu::new()
@@ -113,6 +123,20 @@ Menu::macro('sidebar', function () {//COMIENZO DEL SIDEBAR EN VERSION DE MENU
 							->addIf(in_array(Auth::user()->UsRol, Permisos::ProgVehic1) || in_array(Auth::user()->UsRol2, Permisos::ProgVehic1), (Link::toUrl('/vehicle-programacion/create', '<i class="fas fa-calendar-alt"></i> <span>Calendario</span>')))
 							->addIf(in_array(Auth::user()->UsRol, Permisos::ALMACENAMIENTO) || in_array(Auth::user()->UsRol2, Permisos::ALMACENAMIENTO), (Link::toUrl('/almacenamiento', '<i class="fas fa-pallet"></i> <span>'.  __('adminlte::message.MenuAlmacenSidebar').'</span>')))
 							->addIf(in_array(Auth::user()->UsRol, Permisos::SEDECOMERCIAL) || in_array(Auth::user()->UsRol2, Permisos::SEDECOMERCIAL), (Link::toUrl('/prefacturas', '<i class="fas fa-receipt"></i> <span>Prefacturas</span>')))
+							->addClass('treeview-menu')
+						)
+					)
+					/*PESTAÑA DE INVENTARIO*/
+					->addIf(in_array(Auth::user()->UsRol, Permisos::TODOPROSARC) || in_array(Auth::user()->UsRol2, Permisos::TODOPROSARC),
+						(Menu::new()
+							->prepend('<a href="#"><i style="font-size: 1.2em; color: white;" class="fas fa-boxes"></i> <span>Inventario</span><i class="fas fa-angle-left pull-right" style="color:#FFFFFF;" width="18" height="18"></i></a>')
+							->addParentClass('treeview')
+							->addIf(in_array(Auth::user()->UsRol, Permisos::TODOPROSARC) || in_array(Auth::user()->UsRol2, Permisos::TODOPROSARC), (Link::toUrl('/inventario', '<i class="fas fa-file-invoice"></i> <span>Almacenamiento General</span>')))
+							->addIf(in_array(Auth::user()->UsRol, Permisos::TODOPROSARC) || in_array(Auth::user()->UsRol2, Permisos::TODOPROSARC), (Link::toUrl('/jaulas', '<i class="fas fa-bookmark"></i> <span>Jaulas</span>')))
+							->addIf(in_array(Auth::user()->UsRol, Permisos::TODOPROSARC) || in_array(Auth::user()->UsRol2, Permisos::TODOPROSARC), (Link::toUrl('/termodestruccion', '<i class="fas fa-calendar-alt"></i> <span>Termodestrucción</span>')))
+							->addIf(in_array(Auth::user()->UsRol, Permisos::SUPERVISOR) || in_array(Auth::user()->UsRol2, Permisos::SUPERVISOR), (Link::toUrl('/termodestruccion/programacion', '<i class="fas fa-calendar-alt"></i> <span>Turno</span>')))
+							->addIf(in_array(Auth::user()->UsRol, Permisos::TODOPROSARC) || in_array(Auth::user()->UsRol2, Permisos::TODOPROSARC), (Link::toUrl('/vehicle-programacion/create', '<i class="fas fa-calendar-alt"></i> <span>Gestores</span>')))
+							->addIf(in_array(Auth::user()->UsRol, Permisos::TODOPROSARC) || in_array(Auth::user()->UsRol2, Permisos::TODOPROSARC), (Link::toUrl('/almacenamiento', '<i class="fas fa-pallet"></i> <span>'.  __('adminlte::message.MenuAlmacenSidebar').'</span>')))
 							->addClass('treeview-menu')
 						)
 					)
@@ -134,6 +158,7 @@ Menu::macro('sidebar', function () {//COMIENZO DEL SIDEBAR EN VERSION DE MENU
 							->prepend('<a href="#"><i style="font-size: 1.2em; color: #A34B1F;" class="fas fa-file-pdf"></i> <span>Documentos</span><i class="fas fa-angle-left pull-right" style="color:#FFFFFF;" width="18" height="18"></i></a>')
 							->addParentClass('treeview')
 							->addIf(in_array(Auth::user()->UsRol, Permisos::TODOPROSARC) || in_array(Auth::user()->UsRol2, Permisos::TODOPROSARC), (Link::toUrl('/certificados', '<i class="fas fa-file-contract"></i> <span>'.  __('adminlte::message.MenuCertificados').'</span>')))
+							->addIf(in_array(Auth::user()->UsRol, Permisos::TODOPROSARC) || in_array(Auth::user()->UsRol2, Permisos::TODOPROSARC), (Link::toUrl('/recibomaterial', '<i style="color: #0000FF;" class="fas fa-file-contract"></i> <span>'. 'Recibos Material'.'</span>')))
 							->addIf(in_array(Auth::user()->UsRol, Permisos::TODOPROSARC) || in_array(Auth::user()->UsRol2, Permisos::TODOPROSARC), (Link::toUrl('/certificadosexpress', '<i style="color: #66B032;" class="fas fa-file-contract"></i> <span>Certificados Express</span>')))
 							->addIf(in_array(Auth::user()->UsRol, Permisos::ProgVehic2) || in_array(Auth::user()->UsRol2, Permisos::ProgVehic2), (Link::toUrl('/verifycodes', '<i class="fas fa-hashtag"></i> <span>Códigos de Verificación</span>')))
 							// ->addIf(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol2, Permisos::PROGRAMADOR), (Link::toUrl('/manifiestos', '<i class="fas fa-file-invoice"></i> <span>'.  __('adminlte::message.MenuManifiestos').'</span>')))
@@ -183,6 +208,7 @@ Menu::macro('sidebar', function () {//COMIENZO DEL SIDEBAR EN VERSION DE MENU
 							->prepend('<a href="#"><i style="font-size: 1.2em; color: #A34B1F;" class="fas fa-file-pdf"></i> <span>Documentos</span><i class="fas fa-angle-left pull-right" style="color:#FFFFFF;" width="18" height="18"></i></a>')
 							->addParentClass('treeview')
 							->addIf(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol2, Permisos::CLIENTE), (Link::toUrl('/certificados', '<i class="fas fa-file-contract"></i> <span>'.  __('adminlte::message.MenuCertificados').'</span>')))
+							->addIf(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol2, Permisos::CLIENTE), (Link::toUrl('/recibomaterial', '<i style="color: #0000FF;" class="fas fa-file-contract"></i> <span>'. 'Recibos Material'.'</span>')))
 							// ->addIf(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol2, Permisos::PROGRAMADOR), (Link::toUrl('/manifiestos', '<i class="fas fa-file-invoice"></i> <span>'.  __('adminlte::message.MenuManifiestos').'</span>')))
 							->addClass('treeview-menu')
 						)

@@ -1,336 +1,216 @@
 @extends('layouts.app')
 @section('htmlheader_title')
-{{ __('adminlte::message.home') }}
+{{ __('adminlte::message.MenuCotizacionesTitle') }}
+@endsection
+@section('htmlheader_title')
+Cotizacion N° {{$cotizacion->ID}}
+@endsection
+@section('contentheader_title')
+<span style="background-image: linear-gradient(40deg,rgb(194, 240, 251), #aa66cc); padding-right:30vw; position:relative; overflow:hidden;">
+	Cotizaciones
+  <div style="background-color:#ecf0f5; position:absolute; height:145%; width:40vw; transform:rotate(30deg); right:-20vw; top:-45%;"></div>
+</span>
 @endsection
 @section('main-content')
 <div class="container-fluid spark-screen">
-	{{-- seccion de prueba --}}
+	@component('layouts.partials.modal')
+		@slot('slug')
+			{{$cotizacion->id_cotizacion}}
+		@endslot
+		@slot('textModal')
+			la cotizacion <b>N° {{$cotizacion->id_cotizacion}}</b>
+		@endslot
+	@endcomponent
 	<div class="row">
-		<div class="col-md-3">
-			<!-- Profile Image -->
-			<div class="box box-primary">
-				<div class="box-body box-profile">
-					<img class="profile-user-img img-responsive img-circle" src="../../dist/img/user4-128x128.jpg" alt="User profile picture">
-					<h3 class="profile-username text-center">{{$sede->SedeName}}</h3>
-					<p class="text-muted text-center">{{$sede->SedeAddress}}</p>
-					<ul class="list-group list-group-unbordered">
-						<li class="list-group-item">
-							<b>sedes</b> <a class="pull-right">1,322</a>
-						</li>
-						<li class="list-group-item">
-							<b>Following</b> <a class="pull-right">543</a>
-						</li>
-						<li class="list-group-item">
-							<b>Friends</b> <a class="pull-right">13,287</a>
-						</li>
-					</ul>
-					<a href="/cotizacion/{{$cotizacion->ID_Coti}}/edit" class="btn btn-success btn-block"><b>Editar</b></a>
-					<br>
-					{{-- <form action="/sclientes/create" class="form-group" method="POST">
-						@csrf
-						<input type="text" name="CliSlug" value="{{$cliente->CliSlug}}" hidden="true">
-						<button type="submit" class="btn btn-primary btn-block">Agregar Sede</button>
-					</form> --}}
-					<form action="/cotizacion/{{$cotizacion->ID_Coti}}" class="form-group" method="POST">
-						@csrf
-						@method('DELETE')
-						<button type="submit" class="btn btn-danger btn-block">Borrar</button>
-					</form>
-				</div>
-				<!-- /.box-body -->
-			</div>
-			<!-- /.box -->
-			<!-- About Me Box -->
-			<div class="box box-primary">
+		<div class="col-md-16 col-md-offset-0">
+			<div class="box">
 				<div class="box-header with-border">
-					<h3 class="box-title">About Me</h3>
-				</div>
-				<!-- /.box-header -->
-				<div class="box-body">
-					<strong><i class="fa fa-book margin-r-5"></i> Education</strong>
-					<p class="text-muted">
-						B.S. in Computer Science from the University of Tennessee at Knoxville
-					</p>
-					<hr>
-					<strong><i class="fa fa-map-marker margin-r-5"></i> Location</strong>
-					<p class="text-muted">Malibu, California</p>
-					<hr>
-					<strong><i class="fa fa-pencil margin-r-5"></i> Skills</strong>
-					<p>
-						<span class="label label-danger">UI Design</span>
-						<span class="label label-success">Coding</span>
-						<span class="label label-info">Javascript</span>
-						<span class="label label-warning">PHP</span>
-						<span class="label label-primary">Node.js</span>
-					</p>
-					<hr>
-					<strong><i class="fa fa-file-text-o margin-r-5"></i> Notes</strong>
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim neque.</p>
-				</div>
-				<!-- /.box-body -->
-			</div>
-			<!-- /.box -->
-		</div>
-		<!-- /.col -->
-		<div class="col-md-9">
-			<div class="nav-tabs-custom">
-				<ul class="nav nav-tabs">
-					<li><a href="#timeline" data-toggle="tab">Cliente</a></li>
-					<li class="active"><a href="#activity" data-toggle="tab">Residuos</a></li>
-					<li><a href="#timeline" data-toggle="tab"></a>otra pestaña</li>
-					<li><a href="#settings" data-toggle="tab">Ordenes</a></li>
-					<li><a href="#settings" data-toggle="tab">Certificaciones</a></li>
-					<li><a href="#settings" data-toggle="tab">Manifiestos</a></li>
-				</ul>
-				<div class="tab-content">
-					<div class="active tab-pane" id="activity">
-						<!-- Post -->
-						<div class="post">
-							<div class="user-block">
-								<img class="img-circle img-bordered-sm" src="../../dist/img/user1-128x128.jpg" alt="user image">
-								<span class="username">
-									<a href="#">Jonathan Burke Jr.</a>
-									<a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>
-								</span>
-								<span class="description">Shared publicly - 7:30 PM today</span>
-							</div>
-							<!-- /.user-block -->
-							<p>
-								Lorem ipsum represents a long-held tradition for designers,
-								typographers and the like. Some people hate it and argue for
-								its demise, but others ignore the hate as they create awesome
-								tools to help create filler text for everyone from bacon lovers
-								to Charlie Sheen fans.
-							</p>
-							<ul class="list-inline">
-								<li><a href="#" class="link-black text-sm"><i class="fa fa-share margin-r-5"></i> Share</a></li>
-								<li><a href="#" class="link-black text-sm"><i class="fa fa-thumbs-o-up margin-r-5"></i> Like</a>
-								</li>
-								<li class="pull-right">
-									<a href="#" class="link-black text-sm"><i class="fa fa-comments-o margin-r-5"></i> Comments
-										(5)</a></li>
-							</ul>
-							<input class="form-control input-sm" type="text" placeholder="Type a comment">
-						</div>
-						<!-- /.post -->
-						<!-- Post -->
-						<div class="post clearfix">
-							<div class="user-block">
-								<img class="img-circle img-bordered-sm" src="../../dist/img/user7-128x128.jpg" alt="User Image">
-								<span class="username">
-									<a href="#">Sarah Ross</a>
-									<a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>
-								</span>
-								<span class="description">Sent you a message - 3 days ago</span>
-							</div>
-							<!-- /.user-block -->
-							<p>
-								Lorem ipsum represents a long-held tradition for designers,
-								typographers and the like. Some people hate it and argue for
-								its demise, but others ignore the hate as they create awesome
-								tools to help create filler text for everyone from bacon lovers
-								to Charlie Sheen fans.
-							</p>
-							<form class="form-horizontal">
-								<div class="form-group margin-bottom-none">
-									<div class="col-sm-9">
-										<input class="form-control input-sm" placeholder="Response">
-									</div>
-									<div class="col-sm-3">
-										<button type="submit" class="btn btn-danger pull-right btn-block btn-sm">Send</button>
-									</div>
-								</div>
-							</form>
-						</div>
-						<!-- /.post -->
-						<!-- Post -->
-						<div class="post">
-							<div class="user-block">
-								<img class="img-circle img-bordered-sm" src="../../dist/img/user6-128x128.jpg" alt="User Image">
-								<span class="username">
-									<a href="#">Adam Jones</a>
-									<a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>
-								</span>
-								<span class="description">Posted 5 photos - 5 days ago</span>
-							</div>
-							<!-- /.user-block -->
-							<div class="row margin-bottom">
-								<div class="col-sm-6">
-									<img class="img-responsive" src="../../dist/img/photo1.png" alt="Photo">
-								</div>
-								<!-- /.col -->
-								<div class="col-sm-6">
-									<div class="row">
-										<div class="col-sm-6">
-											<img class="img-responsive" src="../../dist/img/photo2.png" alt="Photo">
-											<br>
-											<img class="img-responsive" src="../../dist/img/photo3.jpg" alt="Photo">
-										</div>
-										<!-- /.col -->
-										<div class="col-sm-6">
-											<img class="img-responsive" src="../../dist/img/photo4.jpg" alt="Photo">
-											<br>
-											<img class="img-responsive" src="../../dist/img/photo1.png" alt="Photo">
-										</div>
-										<!-- /.col -->
-									</div>
-									<!-- /.row -->
-								</div>
-								<!-- /.col -->
-							</div>
-							<!-- /.row -->
-							<ul class="list-inline">
-								<li><a href="#" class="link-black text-sm"><i class="fa fa-share margin-r-5"></i> Share</a></li>
-								<li><a href="#" class="link-black text-sm"><i class="fa fa-thumbs-o-up margin-r-5"></i> Like</a>
-								</li>
-								<li class="pull-right">
-									<a href="#" class="link-black text-sm"><i class="fa fa-comments-o margin-r-5"></i> Comments
-										(5)</a></li>
-							</ul>
-							<input class="form-control input-sm" type="text" placeholder="Type a comment">
-						</div>
-						<!-- /.post -->
+					<form action='/cotizacion/{{$cotizacion->ID}}' method='POST'>
+						@method('DELETE')
+						@csrf
+						<input type="submit" id="Eliminar{{$cotizacion->ID}}" style="display: none;">
+					</form>
+					<div class="col-md-12" id="titulo" style="font-size: 1.2em; text-align:center;">
 					</div>
-					<!-- /.tab-pane -->
-					<div class="tab-pane" id="timeline">
-						<!-- The timeline -->
-						<ul class="timeline timeline-inverse">
-							<!-- timeline time label -->
-							<li class="time-label">
-								<span class="bg-red">
-									10 Feb. 2014
-								</span>
-							</li>
-							<!-- /.timeline-label -->
-							<!-- timeline item -->
-							<li>
-								<i class="fa fa-envelope bg-blue"></i>
-								<div class="timeline-item">
-									<span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
-									<h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>
-									<div class="timeline-body">
-										Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
-										weebly ning heekya handango imeem plugg dopplr jibjab, movity
-										jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
-										quora plaxo ideeli hulu weebly balihoo...
-									</div>
-									<div class="timeline-footer">
-										<a class="btn btn-primary btn-xs">Read more</a>
-										<a class="btn btn-danger btn-xs">Delete</a>
-									</div>
-								</div>
-							</li>
-							<!-- END timeline item -->
-							<!-- timeline item -->
-							<li>
-								<i class="fa fa-user bg-aqua"></i>
-								<div class="timeline-item">
-									<span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span>
-									<h3 class="timeline-header no-border"><a href="#">Sarah Young</a> accepted your friend request
-									</h3>
-								</div>
-							</li>
-							<!-- END timeline item -->
-							<!-- timeline item -->
-							<li>
-								<i class="fa fa-comments bg-yellow"></i>
-								<div class="timeline-item">
-									<span class="time"><i class="fa fa-clock-o"></i> 27 mins ago</span>
-									<h3 class="timeline-header"><a href="#">Jay White</a> commented on your post</h3>
-									<div class="timeline-body">
-										Take me to your leader!
-										Switzerland is small and neutral!
-										We are more like Germany, ambitious and misunderstood!
-									</div>
-									<div class="timeline-footer">
-										<a class="btn btn-warning btn-flat btn-xs">View comment</a>
-									</div>
-								</div>
-							</li>
-							<!-- END timeline item -->
-							<!-- timeline time label -->
-							<li class="time-label">
-								<span class="bg-green">
-									3 Jan. 2014
-								</span>
-							</li>
-							<!-- /.timeline-label -->
-							<!-- timeline item -->
-							<li>
-								<i class="fa fa-camera bg-purple"></i>
-								<div class="timeline-item">
-									<span class="time"><i class="fa fa-clock-o"></i> 2 days ago</span>
-									<h3 class="timeline-header"><a href="#">Mina Lee</a> uploaded new photos</h3>
-									<div class="timeline-body">
-										<img src="http://placehold.it/150x100" alt="..." class="margin">
-										<img src="http://placehold.it/150x100" alt="..." class="margin">
-										<img src="http://placehold.it/150x100" alt="..." class="margin">
-										<img src="http://placehold.it/150x100" alt="..." class="margin">
-									</div>
-								</div>
-							</li>
-							<!-- END timeline item -->
-							<li>
-								<i class="fa fa-clock-o bg-gray"></i>
-							</li>
-						</ul>
-					</div>
-					<!-- /.tab-pane -->
-					<div class="tab-pane" id="settings">
-						<form class="form-horizontal">
-							<div class="form-group">
-								<label for="inputName" class="col-sm-2 control-label">Name</label>
-								<div class="col-sm-10">
-									<input type="email" class="form-control" id="inputName" placeholder="Name">
-								</div>
-							</div>
-							<div class="form-group">
-								<label for="inputEmail" class="col-sm-2 control-label">Email</label>
-								<div class="col-sm-10">
-									<input type="email" class="form-control" id="inputEmail" placeholder="Email">
-								</div>
-							</div>
-							<div class="form-group">
-								<label for="inputName" class="col-sm-2 control-label">Name</label>
-								<div class="col-sm-10">
-									<input type="text" class="form-control" id="inputName" placeholder="Name">
-								</div>
-							</div>
-							<div class="form-group">
-								<label for="inputExperience" class="col-sm-2 control-label">Experience</label>
-								<div class="col-sm-10">
-									<textarea class="form-control" id="inputExperience" placeholder="Experience"></textarea>
-								</div>
-							</div>
-							<div class="form-group">
-								<label for="inputSkills" class="col-sm-2 control-label">Skills</label>
-								<div class="col-sm-10">
-									<input type="text" class="form-control" id="inputSkills" placeholder="Skills">
-								</div>
-							</div>
-							<div class="form-group">
-								<div class="col-sm-offset-2 col-sm-10">
-									<div class="checkbox">
-										<label>
-											<input type="checkbox"> I agree to the <a href="#">terms and conditions</a>
-										</label>
-									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<div class="col-sm-offset-2 col-sm-10">
-									<button type="submit" class="btn btn-danger">Submit</button>
-								</div>
-							</div>
-						</form>
-					</div>
-					<!-- /.tab-pane -->
 				</div>
-				<!-- /.tab-content -->
-			</div>
-			<!-- /.nav-tabs-custom -->
-		</div>
-		<!-- /.col -->
+				<div class="row">
+					<div class="col-md-12 ">
+						@if ($errors->any())
+							<div class="alert alert-danger" role="alert">
+								<ul>
+									@foreach ($errors->all() as $error)
+										<p>{{$error}}</p>
+									@endforeach
+								</ul>
+							</div>
+						@endif
+						<div class="box box-info">
+						<div class="container">
+						<h1>Detalle de Cotización N° {{$cotizacion->id_cotizacion}}</h1>
+					    <div style="text-align: right; margin-bottom: 20px;">
+						<button type="button" class="btn btn-primary" onclick= window.location="{{ route('cotizacion.edit', $cotizacion->id_cotizacion) }}">
+                        <i class="fas f-edit"></i> Editar Cotización
+                        </button>
+						</div>
+						<div class="row">
+							<div class="col-md-3">
+								<label>Fecha de Cotización:</label>
+								<span>{{$cotizacion->FechaCotizacion->format('Y-m-d') }}</span>
+							</div>
+							<div class="col-md-3">
+								<label>NIT:</label>
+								<span>{{ $cotizacion->Nit }}</span>
+							</div>
+							<div class="col-md-3">
+								<label>Cliente:</label>
+								<span>{{ $cotizacion->Razon_Social }}</span>
+							</div>							
+							<div>
+								<div class="col-md-3">
+								<label>Sede:</label>
+								<span>{{ $cotizacion->sede }}</span>
+							</div>
+							<div>
+								<div class="col-md-3">
+									<label>Correo:</label>
+									<span>{{ $cotizacion->Correo }}</span>
+								</div>
+							</div>	
+							<div class="col-md-3">
+								<label>Telefono:</label>
+								<span>{{ $cotizacion->Telefono }}</span>
+							</div>
+							<div class="col-md-3">
+									<label>Direccion:</label>
+									<span>{{ $cotizacion->Direccion }}</span>
+							</div>
+							
+							<div class="col-md-3">
+								<label>Frecuencia de Recoleccion:</label>
+								<span>{{ $cotizacion->frecuencia_recoleccion }}</span>
+							</div>
+							<div class="col-md-3">
+                              <label>Aprobacion del cliente:</label>
+							  <span>{{ $cotizacion->CoStatus }}</span>
+							</div>
+							<div class="col-md-3">
+								<label>Estado:</label>
+								<span>{{ $cotizacion->Status }}</span>
+							</div>
+							<div class="col-md-3">
+								<label>Tipo:</label>
+								<span>{{ $cotizacion->tipo_cotizacion}}</span>
+							</div>
+							<div class="col-md-3">
+								<label>Observaciones:</label>
+								<span>{{ $cotizacion->Observaciones }}</span>
+							</div>	
+						</div>
+						<hr>
+						<hr>
+						<hr>
+						<hr>
+						<hr>
+    
+    <div class="panel panel-primary">
+        <div class="panel-heading">Residuos Cotizados</div>
+        <div class="panel-body">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Residuo</th>
+						<th>Peligrosidad</th>
+						<th>Corriente</th>
+                        <th>Tratamiento</th>
+                        <th>Cantidad (kg)</th>
+                        <th>Precio/kg</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($cotizacion->coti_respel as $residuo)
+                    <tr>
+                        <td>{{ $residuo->respel->RespelName}}</td>
+						<td>{{ $residuo->peligrosidad}}</td>
+						<td>{{ $residuo->clasf4741}}</td>						
+                        <td>{{ $residuo->tratamiento->TratName }}</td>
+                        <td>{{ number_format($residuo->cantidad_kilos,1,'.',) }}</td>
+                        <td>${{ number_format($residuo->precio_kg, 0, ',', '.') }}</td>
+                        <td>${{ number_format($residuo->subtotal, 0, ',', '.') }}</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+                <tfoot>
+					<tr>
+						<th colspan="6" style="text-align:right;">Transporte</th>
+						<th>${{ number_format($cotizacion->Transporte, 0, ',', '.') }}</th>
+					</tr>
+                    <tr>
+                        <th colspan="6" style="text-align:right;">Total:</th>
+                        <th>${{ number_format($cotizacion->Total, 2, ',', '.') }}</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+	<div>
+	 <div>
+			<!-- Botón para abrir el modal -->
+			@if(in_array(Auth::user()->UsRol,['Programador','AdministradorBogota']))
+			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#aprobarModal">
+				Aprobar Cotización 
+			</button>
+			@endif
+			
+			<a href="{{ route('cotizacion.pdf', $cotizacion->id_cotizacion) }}" class="btn btn-success btn-sm">Generar PDF</a>
+			
+	 </div>
+	 <div style="text-align: right; margin-bottom: 20px;margin-top: -36px;">
+	    @if($cotizacion->Status == 'Aprobado')
+	       <a href="{{asset('storage/cotizacion/'.$cotizacion->id_cotizacion.'.pdf')}}" class="btn btn-success btn-md3">Descargar PDF</a>
+	     @else
+            <button class="btn btn-secondary btn-sm" disabled>PDF no disponible</button>
+         @endif   
+	 </div>
 	</div>
-	<!-- /.row -->
-	@endsection
+    <!-- Aquí podrías incluir más secciones, formularios o modales -->
+	 <!-- Modal -->
+<div class="modal fade" id="aprobarModal" tabindex="-1" role="dialog" aria-labelledby="aprobarModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <form action="{{ route('cotizacion.aprobar', $cotizacion->id_cotizacion) }}" method="POST">
+        @csrf
+        @method('PUT')
+		<input type="hidden" name="status" value="Aprobado">
+        <div class="modal-header">
+          <h5 class="modal-title" id="aprobarModalLabel">Aprobar Cotización #{{ $cotizacion->id_cotizacion }}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          ¿Está seguro de aprobar esta cotización?
+          <input type="hidden" name="status" value="Aprobado">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-success">Aprobar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</div>
+<script>
+	$(document).ready(function() {
+		$('#aprobarModal').on('show.bs.modal', function(event) {
+			var button = $(event.relatedTarget);
+			var modal = $(this);
+			modal.find('form').attr('action', button.data('action'));
+		});
+	});
+
+</script>
+@endsection
+
+                                

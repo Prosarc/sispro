@@ -11,7 +11,7 @@
      <!-- Dependencias -->
     <link href="{{ mix('/css/dependencias.css') }}" rel="stylesheet" type="text/css">
 
-    @if(Route::currentRouteName()=='vehicle-programacion.create'||Route::currentRouteName()=='programacion-express.create')
+    @if(Route::currentRouteName()=='vehicle-programacion.create'||Route::currentRouteName()=='programacion-express.create' ||Route::currentRouteName()=='termo')
         {{-- Full Calendar --}}
          <link href="{{ mix('/css/fullcalendar.css') }}" rel="stylesheet" type="text/css">
     @endif

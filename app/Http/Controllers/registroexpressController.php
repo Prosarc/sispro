@@ -58,8 +58,8 @@ class registroexpressController extends Controller
         ->rightjoin('users', 'personals.ID_Pers', '=', 'users.FK_UserPers')
         ->select('personals.*')
         ->where('personals.PersDelete', 0)
-        ->where('users.UsRol', 'Comercial')
-        ->orWhere('users.UsRol2', 'Comercial')
+        ->whereIn('users.UsRol', ['Comercial', 'usaquen'])
+        ->orWhereIn('users.UsRol2', ['Comercial', 'usaquen'])
         ->get();
 
         if (old('FK_SedeMun') !== null){

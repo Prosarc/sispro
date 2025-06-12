@@ -38,23 +38,25 @@
                                 <th>NIT Cliente</th>
                                 <th>Generador</th>
                                 <th>NIT Generador</th>
+                                <th>Telefono</th>
                                 <th>Dirección de servicio</th>
                                 <th>Municipio</th>
                                 <th>Nombre de residuo</th>
+                                <th>Estado</th>
                                 <th>Corriente</th>
                                 <th>Tratamiento</th>
-                                <th>Estado</th>
                                 <th>Gestor</th>
+                                <th>Cantidad Declarada</th>
                                 <th>Cantidad Recibida</th>
                                 <th>Cantidad Conciliada Kg</th>
                                 <th>No. Certificado</th>
                                 <th>Empresa Transportadora</th>
                                 <th>Dirección Empresa Transportadora</th>
                                 <th>Municipio Empresa Transportadora</th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
+                                <th>Tipo de Servicio</th>
+                                <th>Placa</th>
+                                <th>Conductor</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody id="readyTable">
@@ -70,16 +72,17 @@
                                         </td>
                                         <td>{{$servicio->ID_SolSer}}</td>
                                         <td>
-                                        {{date('Y/m/d', strtotime($servicio->ProgVehSalida))}}
+                                           {{date('Y/m/d', strtotime($servicio->ProgVehSalida))}}
                                         </td>
                                         <td>{{$servicio->cliente->CliName}}</td>
                                         <td>{{$servicio->cliente->CliNit}}</td>
                                         <td>{{$solres->generespel->gener_sedes->generadors->GenerName}} <br> ({{$solres->generespel->gener_sedes->GSedeName}})</td>
                                         <td>{{$solres->generespel->gener_sedes->generadors->GenerNit}}</td>
+                                        <td>{{$solres->generespel->gener_sedes->GSedeCelular}}</td>
                                         <td>{{$solres->generespel->gener_sedes->GSedeAddress}}</td>
                                         <td>{{$solres->generespel->gener_sedes->municipio->MunName}}</td>
                                         <td>{{$solres->generespel->respels->RespelName}}</td>
-                                        <td>{{$solres->generespel->respels->RespelEstado}}</td>   
+                                        <td>{{$solres->generespel->respels->RespelEstado}}</td>
                                         <td>
                                             @if($solres->generespel->respels->YRespelClasf4741 <> null)
                                                 {{$solres->generespel->respels->YRespelClasf4741}}
@@ -91,13 +94,14 @@
                                         </td>
                                         <td>{{$solres->requerimiento->tratamiento->TratName}}</td>
                                         <td>{{$solres->requerimiento->tratamiento->gestor->clientes->CliShortname}}</td>
+                                        <td>{{$solres->SolResKgEnviado}}</td>
                                         <td>{{$solres->SolResKgRecibido}}</td>
                                         <td>{{$solres->SolResKgConciliado}}</td>
                                         @if ($solres->certdato)
                                         @if($solres->certdato->certificado->CertType == 0)
-                                        <td>{{$solres->certdato->certificado->CertNumero}}</td>
+                                        <td>{{$solres->certdato->certificado->ID_Cert}}</td>
                                         @else
-                                        <td>M{{$solres->certdato->certificado->CertManifNumero}}</td>
+                                        <td>M{{$solres->certdato->certificado->ID_Cert}}</td>
                                         @endif
                                     @else
                                         <td>Certificado no encontrado</td>
@@ -105,10 +109,10 @@
                                         <td>{{$servicio->SolSerNameTrans}}</td>
                                         <td>{{$servicio->SolSerAdressTrans}}</td>
                                         <td>{{$servicio->Municipio->MunName}}</td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td>{{$servicio->SolSerTipo}}</td>
+                                        <td>{{$servicio->SolSerVehiculo}}</td>
+                                        <td>{{$servicio->SolSerConductor}}</td>
+                                        <td>{{$servicio->SolSerStatus}}</td>
                                     </tr>
                                 @endforeach
                             @endforeach
@@ -228,6 +232,93 @@
             });
         @break
         @case('Comercial')
+           $(document).ready(function() {
+                /*var rol defino el rol del usuario*/
+                var rol = "<?php echo Auth::user()->fk_rol; ?>";
+                /*var botoncito define los botones que se usaran si el usuario es programador*/
+                var botoncito = (rol == 1) ? [{extend: 'colvis', text: 'Columnas'}, {extend: 'copy', text: 'Copiar'}, {extend: 'excel', text: 'Excel'}, {extend: 'pdf', text: 'Pdf'}, {extend: 'collection', text: 'Selector', buttons: ['selectRows', 'selectCells']}] : [{extend: 'colvis', text: 'Columnas'}, {extend: 'excel', text: 'Excel'}];
+                /*inicializacion de datatable general*/
+                $('#reporteTable').DataTable({
+                    "dom":"<'row'<'col-md-12 collapse panels'P><'col-md-12 collapse filters'<'card'<'card-body'Q>>>>" +
+                        "<'row'<'col-md-3'l><'col-md-5'B><'col-md-4'f>>" +
+                        "<'row'<'col-md-12'<'pre-x-scrollable'rt>>>" +
+                        "<'row justify-content-center justify-content-md-between'<'col-md-12'<'align-self-center'i><''p>>>",
+                    "searchPanes": {
+                        cascadePanes: true,
+                        layout: 'columns-4',
+                        columns: [1,2,4,5,6,7,8,9,11,12,14,21,22],
+                        count: '{total}',
+                        countFiltered: '{shown} / {total}',
+                        viewTotal: true,
+                        dtOpts: {
+                            select: {
+                                style: 'multi'
+                            }
+                        }
+                    },
+                    "scrollX": false,
+                    "serverSide": false,
+                    "autoWidth": true,
+                    "select": true,
+                    "colReorder": true,
+                    "ordering": true,
+                    "order": [0, 'desc'],
+                    "searchHighlight": true,
+                    "responsive": false,
+                    "keys": true,
+                    "lengthChange": true,
+                    "searching": true,
+                    "buttons": [
+                        botoncito
+                    ],
+                    "language": {
+                        "sProcessing":     "Procesando...",
+                        "sLengthMenu":     "_MENU_ Filas",
+                        "sZeroRecords":    "No se encontraron resultados",
+                        "sEmptyTable":     "Ningún dato disponible en esta tabla",
+                        "sInfo":           "_START_ al _END_ de _TOTAL_",
+                        "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+                        "sInfoFiltered":   "",
+                        "sInfoPostFix":    "",
+                        "sSearch":         "_INPUT_",
+                        "sUrl":            "",
+                        "sInfoThousands":  ",",
+                        "sLoadingRecords": "Cargando...",
+                        "oPaginate": {
+                            "sFirst":    "Primero",
+                            "sLast":     "Último",
+                            "sNext":     "->",
+                            "sPrevious": "<-"
+                        },
+                        "oAria": {
+                            "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+                            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                        },
+                        "colvis": 'Columnas Visibles'
+                    },
+                    "columnDefs": [
+                        { "type": "num-fmt", "targets": [0,3,4,10,12,13]},
+                        { "type": "date", "targets": [2]},
+                        { "type": "html", "targets": '_all'},
+                        { "orderable": false, "targets": [4] },
+                        // { "className": "text-right", "targets": [2,3,5]},
+                        // { "className": "text-left", "targets": [1]},
+                        // { "visible": false, "targets": [4]}
+                    ],
+                    "drawCallback": function () {
+                        var api = this.api();
+                        $( api.table().footer() ).html(
+                            `<th  scope="col" colspan="11" class="text-right pr-3">`+formattermoney.format(api.column( 10, {filter:'applied'} ).data().sum())+`</th>
+                            <th scope="col" colspan="2" class="text-right pr-3">`+formatternumber.format(api.column( 12, {filter:'applied'} ).data().sum())+`</th>
+                            <th scope="col" class="text-right pr-3">`+formatternumber.format(api.column( 13, {filter:'applied'} ).data().sum())+`</th>
+                            <th scope="col" colspan="9"></th>`
+                        );
+                        // $('.dataTables_scrollFoot').empty();
+                    }
+                });
+            });
+        @break
+         @case('Comercialap')
            $(document).ready(function() {
                 /*var rol defino el rol del usuario*/
                 var rol = "<?php echo Auth::user()->fk_rol; ?>";

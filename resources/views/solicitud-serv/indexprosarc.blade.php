@@ -16,7 +16,7 @@
             <div class="box">
                 <div class="box-header">
 					<h3 class="box-title">{{ __('adminlte::message.solsertitleindex') }}</h3>
-					@if(in_array(Auth::user()->UsRol, Permisos::INGDETURNO) || in_array(Auth::user()->UsRol, Permisos::INGDETURNO))
+					@if(in_array(Auth::user()->UsRol, Permisos::COMERCIALEINGRURNO) || in_array(Auth::user()->UsRol, Permisos::COMERCIALEINGRURNO))
 							<a href="solicitud-servicio/createit" class="btn btn-primary pull-right">{{ __('adminlte::message.create') }}</a>
 					@endif
 				</div>
@@ -80,6 +80,10 @@
                                     </td>
                                     @break
                                     @case('Cancelado')
+                                    @case('Fallido')
+                                    <td class="text-center"><a class='btn fixed_widthbtn btn-danger'><i class='fas fa-lg fa-calendar-times'></i></a><br>{{$Servicio->SolSerStatus}}
+                                    </td>
+                                    @break
                                     @case('Recibido')
                                     <td class="text-center"><a class='btn fixed_widthbtn btn-danger'><i class='fas fa-lg fa-calendar-times'></i></a><br>{{$Servicio->SolSerStatus}}
                                     </td>

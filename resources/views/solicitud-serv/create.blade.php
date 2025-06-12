@@ -31,6 +31,20 @@
 						<div class="box-body">
 							<div class="col-md-12">
 								<div class="row">
+								    @if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol, Permisos::COMERCIALEINGRURNO))
+									<div class="form-group col-md-12">
+										<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.solserpersonal') }}</b>" data-content="{{ __('adminlte::message.solserpersonaldescript') }}">
+											<i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>
+											{{ trans('Confirme el cliente:') }}
+										</label>
+										<small class="help-block with-errors">*</small>
+										<select id="FK_SolSerCliente" name="FK_SolSerCliente" class="form-control" required>
+											@foreach ($Clientes as $Cliente)
+												<option value="{{ $Cliente->ID_Cli }}">{{ $Cliente->CliName }}</option>
+											@endforeach
+										</select>
+									</div>
+									@endif
 									<div class="form-group col-md-12">
 										<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.solserpersonal') }}</b>" data-content="{{ __('adminlte::message.solserpersonaldescript') }}"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{ __('adminlte::message.solserpersonal') }}</label>
 										<small class="help-block with-errors">*</small>
@@ -106,17 +120,16 @@
 										<input type="text" class="form-control placa" id="SolSerVehiculo" name="SolSerVehiculo" value="{{old('SolSerVehiculo')}}">
 									</div>
 									<div id="Fecha" class="form-group col-md-6" hidden="true">
-										<small class="help-block with-errors">*</small>
 										<label for="SolSerFecha">Fecha llegada a Planta</label>
-										<input type="date" class="form-control fecha" id="SolSerFecha" name="SolSerFecha" value="{{old('SolSerFecha')}}" >
+										<input type="date" class="form-control fecha" id="SolSerFecha" name="SolSerFecha" value="{{old('SolSerFecha')}}">
 									</div>
 									<div id="typeaditable" class="form-group col-md-6">
 										<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.solseraudi') }}</b>" data-content="{{ __('adminlte::message.solseraudidescrit') }}"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{ __('adminlte::message.solseraudi') }}</label>
 										<small class="help-block with-errors">*</small>
 										<select class="form-control" id="SolResAuditoriaTipo" name="SolResAuditoriaTipo" required="">
 											<option value="97">{{ __('adminlte::message.solsernoaudi') }}</option>
-											<option value="99">{{ __('adminlte::message.solseraudiprese') }}</option>
-											<option value="98">{{ __('adminlte::message.solseraudivirt') }}</option>
+											<option value="98">{{ __('adminlte::message.solseraudiprese') }}</option>
+											<option value="99">{{ __('adminlte::message.solseraudivirt') }}</option>
 										</select>
 									</div>
 									<div id="typecollect" class="form-group col-md-12">
@@ -238,7 +251,7 @@
 									<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.solserselectgener') }}</b>" data-content="{{ __('adminlte::message.solserselectgenerdescrit') }}"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{ __('adminlte::message.solserselectgener') }}</label>
 									<button type="button" class="btn btn-box-tool boton" style="color: #00a65a;" data-toggle="collapse" data-target=".Respel0" onclick="AnimationMenusForm('.Respel0')" title="Reducir/Ampliar"> <i class="fa fa-plus"></i> </button>
 									<small class="help-block with-errors">*</small>
-									<select name="SGenerador[]" id="SGenerador" class="form-control" required="">
+									<select name="SGenerador[0]" id="SGenerador" class="form-control" required="">
 										<option onclick="HiddenResiduosGener(0)" value="">{{ __('adminlte::message.select') }}</option>
 										@foreach($SGeneradors as $SGenerador)
 											<option onclick="ResiduosGener(0,'{{$SGenerador->GSedeSlug}}')" value="{{$SGenerador->GSedeSlug}}">{{$SGenerador->GenerName.' ('.$SGenerador->GSedeName.')'}}</option>

@@ -21,17 +21,21 @@
  
      .contenido {
          margin: auto;
-         width: 800px; /* Ancho del contenido del modal */
-         max-width: 600px; /* Ancho máximo del contenido */
-         height: 800px;
-         background: white;
+         width: 600px; /* Ancho del contenido del modal */
+         max-width: 500px; /* Ancho máximo del contenido */
+         height: 620px;
+         /*background: white;*/
          border-radius: 10px;
-         padding: 20px; /* Agrega un poco de espacio interno */
+         padding: 5px; /* Agrega un poco de espacio interno */
          position: relative; /* Añade posicionamiento relativo */
          z-index: 2;
          display: flex;
          justify-content: center;
          align-items: center;
+     }
+     .contenido a{
+        margin: -153px;
+    border-bottom: solid 1px;
      }
  
      #cerrar {
@@ -75,7 +79,7 @@
  
  <div class="modal">
      <div class="contenido">
-         <img src="/img/Comunicados/Mantenimiento.jpg" alt="" style="width: 100%; height: auto;">   
+         <img src="/img/Comunicados/certificados.jpg" alt="" style="width: 100%; height: auto;"> 
      </div>
  </div>
  {{-- End Modal --}}

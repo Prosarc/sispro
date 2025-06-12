@@ -116,19 +116,20 @@
 							</li>
 							<li class="list-group-item">
 								<b>Estado de aprobación</b>
-								<select name="RespelStatus" class="form-control">
-									<option {{(in_array(Auth::user()->UsRol, Permisos::JefeOperaciones)||in_array(Auth::user()->UsRol2, Permisos::JefeOperaciones))||($Respels->RespelStatus == 'Pendiente') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'Pendiente' ? 'selected' : '' }}>{{ __('adminlte::LangRespel.respelstatuspendiente') }}</option>
-									<option {{(in_array(Auth::user()->UsRol, Permisos::JefeOperaciones)||in_array(Auth::user()->UsRol2, Permisos::JefeOperaciones))||($Respels->RespelStatus == 'Evaluado') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'Evaluado' ? 'selected' : '' }}>{{ __('adminlte::LangRespel.respelstatusevaluated') }}</option>
-									<option {{(in_array(Auth::user()->UsRol, Permisos::COMERCIAL)||in_array(Auth::user()->UsRol2, Permisos::COMERCIAL))||($Respels->RespelStatus == 'Cotizado') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'Cotizado' ? 'selected' : '' }}>{{ __('adminlte::LangRespel.respelstatuscotizado') }}</option>
-									<option {{(in_array(Auth::user()->UsRol, Permisos::JefeOperaciones)||in_array(Auth::user()->UsRol2, Permisos::JefeOperaciones))||($Respels->RespelStatus == 'Aprobado') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'Aprobado' ? 'selected' : '' }}>{{ __('adminlte::LangRespel.respelstatusaprovado') }}</option>
-									{{-- <option {{(in_array(Auth::user()->UsRol, Permisos::JefeOperaciones)||in_array(Auth::user()->UsRol2, Permisos::JefeOperaciones))||($Respels->RespelStatus == 'Aceptado') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'Aceptado' ? 'selected' : '' }}>{{ __('adminlte::LangRespel.respelstatusaceptado') }}</option> --}}
-									<option {{(in_array(Auth::user()->UsRol, Permisos::AREALOGISTICA)||in_array(Auth::user()->UsRol2, Permisos::AREALOGISTICA))||($Respels->RespelStatus == 'Revisado') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'Revisado' ? 'selected' : '' }}>{{ __('adminlte::LangRespel.respelstatusrevisado') }}</option>
-									<option {{(in_array(Auth::user()->UsRol, Permisos::JefeOperaciones)||in_array(Auth::user()->UsRol2, Permisos::JefeOperaciones))||($Respels->RespelStatus == 'Rechazado') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'Rechazado' ? 'selected' : '' }}>{{ __('adminlte::LangRespel.respelstatusrechazado') }}</option>
-									<option {{(in_array(Auth::user()->UsRol, Permisos::AREALOGISTICA)||in_array(Auth::user()->UsRol2, Permisos::AREALOGISTICA))||($Respels->RespelStatus == 'Falta TDE') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'Falta TDE' ? 'selected' : '' }}>{{ __('adminlte::LangRespel.respelstatusfaltatde') }}</option>
-									<option {{(in_array(Auth::user()->UsRol, Permisos::JefeOperaciones)||in_array(Auth::user()->UsRol2, Permisos::JefeOperaciones))||($Respels->RespelStatus == 'Incompleto') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'Incompleto' ? 'selected' : '' }}>{{ __('adminlte::LangRespel.respelstatusincompleto') }}</option>
-									<option {{(in_array(Auth::user()->UsRol, Permisos::COMERCIAL)||in_array(Auth::user()->UsRol2, Permisos::COMERCIAL))||($Respels->RespelStatus == 'Vencido') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'Vencido' ? 'selected' : '' }}>{{ __('adminlte::LangRespel.respelstatusvencido') }}</option>
-									<option {{(in_array(Auth::user()->UsRol, Permisos::AREALOGISTICA)||in_array(Auth::user()->UsRol2, Permisos::AREALOGISTICA))||($Respels->RespelStatus == 'TDE actualizada') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'TDE actualizada' ? 'selected' : '' }}>{{ __('adminlte::LangRespel.respelstatustdeupdated') }}</option>
-								</select>
+									<select name="RespelStatus" class="form-control">
+										<option {{(in_array(Auth::user()->UsRol, Permisos::JefeOperaciones)||in_array(Auth::user()->UsRol2, Permisos::JefeOperaciones))||($Respels->RespelStatus == 'Pendiente') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'Pendiente' ? 'selected' : '' }}>{{ __('adminlte::LangRespel.respelstatuspendiente') }}</option>
+										<option {{(in_array(Auth::user()->UsRol, Permisos::COMERCIALAP)||in_array(Auth::user()->UsRol2, Permisos::COMERCIALAP))||($Respels->RespelStatus == 'Pendiente') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'Pendiente' ? 'selected' : '' }}>{{ 'Aprobado'}}</option>
+										<option {{(in_array(Auth::user()->UsRol, Permisos::JefeOperaciones)||in_array(Auth::user()->UsRol2, Permisos::JefeOperaciones))||($Respels->RespelStatus == 'Evaluado') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'Evaluado' ? 'selected' : '' }}>{{ __('adminlte::LangRespel.respelstatusevaluated') }}</option>
+										<option {{(in_array(Auth::user()->UsRol, Permisos::COMERCIAL)||in_array(Auth::user()->UsRol2, Permisos::COMERCIAL))||($Respels->RespelStatus == 'Cotizado') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'Cotizado' ? 'selected' : '' }}>{{ __('adminlte::LangRespel.respelstatuscotizado') }}</option>
+										<option {{(in_array(Auth::user()->UsRol, Permisos::JefeOperaciones)||in_array(Auth::user()->UsRol2, Permisos::JefeOperaciones))||($Respels->RespelStatus == 'Aprobado') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'Aprobado' ? 'selected' : '' }}>{{  __('adminlte::LangRespel.respelstatusaprovado') }}</option>
+										{{-- <option {{(in_array(Auth::user()->UsRol, Permisos::JefeOperaciones)||in_array(Auth::user()->UsRol2, Permisos::JefeOperaciones))||($Respels->RespelStatus == 'Aceptado') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'Aceptado' ? 'selected' : '' }}>{{ trans('adminlte_lang::LangRespel.respelstatusaceptado') }}</option> --}}
+										<option {{(in_array(Auth::user()->UsRol, Permisos::AREALOGISTICA)||in_array(Auth::user()->UsRol2, Permisos::AREALOGISTICA))||($Respels->RespelStatus == 'Revisado') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'Revisado' ? 'selected' : '' }}>{{  __('adminlte::LangRespel.respelstatusrevisado') }}</option>
+										<option {{(in_array(Auth::user()->UsRol, Permisos::JefeOperaciones)||in_array(Auth::user()->UsRol2, Permisos::JefeOperaciones))||($Respels->RespelStatus == 'Rechazado') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'Rechazado' ? 'selected' : '' }}>{{  __('adminlte::LangRespel.respelstatusrechazado') }}</option>
+										<option {{(in_array(Auth::user()->UsRol, Permisos::AREALOGISTICA)||in_array(Auth::user()->UsRol2, Permisos::AREALOGISTICA))||($Respels->RespelStatus == 'Falta TDE') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'Falta TDE' ? 'selected' : '' }}>{{  __('adminlte::LangRespel.respelstatusfaltatde') }}</option>
+										<option {{(in_array(Auth::user()->UsRol, Permisos::JefeOperaciones)||in_array(Auth::user()->UsRol2, Permisos::JefeOperaciones))||($Respels->RespelStatus == 'Incompleto') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'Incompleto' ? 'selected' : '' }}>{{  __('adminlte::LangRespel.respelstatusincompleto') }}</option>
+										<option {{(in_array(Auth::user()->UsRol, Permisos::COMERCIAL)||in_array(Auth::user()->UsRol2, Permisos::COMERCIAL))||($Respels->RespelStatus == 'Vencido') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'Vencido' ? 'selected' : '' }}>{{  __('adminlte::LangRespel.respelstatusvencido') }}</option>
+										<option {{(in_array(Auth::user()->UsRol, Permisos::AREALOGISTICA)||in_array(Auth::user()->UsRol2, Permisos::AREALOGISTICA))||($Respels->RespelStatus == 'TDE actualizada') ? '' : 'disabled'}} {{$Respels->RespelStatus == 'TDE actualizada' ? 'selected' : '' }}>{{  __('adminlte::LangRespel.respelstatustdeupdated') }}</option>
+									</select>		
 							</li>
 							<li class="list-group-item">
 								<label>Observaciones</label>
@@ -220,7 +221,7 @@
 							@if(in_array(Auth::user()->UsRol, Permisos::JefeOperaciones)||in_array(Auth::user()->UsRol2, Permisos::JefeOperaciones))
 							<button onclick="AgregarOption()" class="btn btn-primary pull-right" id="addOptionButton"> <i class="fa fa-plus"></i> {{ __('adminlte::LangTratamiento.optionadd') }}</button> 
 							@endif
-							@if(in_array(Auth::user()->UsRol, Permisos::JefeOperaciones)||in_array(Auth::user()->UsRol2, Permisos::JefeOperaciones))
+							@if(in_array(Auth::user()->UsRol, Permisos::JefeOperaciones)||in_array(Auth::user()->UsRol2, Permisos::JefeOperaciones) ||in_array(Auth::user()->UsRol, Permisos::COMERCIALAP)||in_array(Auth::user()->UsRol2, Permisos::COMERCIALAP))
 								@switch($Respels->RespelStatus)
 									@case('Revisado')
 									@case('Evaluado')
@@ -262,7 +263,7 @@
 								<li class="nav-item">
 									<a class="nav-link" href="#Requerimientospane" data-toggle="tab">{{ __('adminlte::LangRespel.requertabtittle') }}</a>
 								</li>
-								@if(in_array(Auth::user()->UsRol, Permisos::SEDECOMERCIAL) || in_array(Auth::user()->UsRol2, Permisos::SEDECOMERCIAL))
+								@if(in_array(Auth::user()->UsRol, Permisos::SEDECOMERCIAL) || in_array(Auth::user()->UsRol2, Permisos::SEDECOMERCIAL) ||in_array(Auth::user()->UsRol, Permisos::COMERCIALAP)||in_array(Auth::user()->UsRol2, Permisos::COMERCIALAP))
 								<li class="nav-item">
 									<a class="nav-link" href="#Tarifaspane" data-toggle="tab">{{ __('adminlte::LangRespel.tarifatabtittle') }}</a>
 								</li>
@@ -318,7 +319,7 @@
 								</div>
 								<!-- /.tab-pane fade -->
 								<!-- tab-pane fade -->
-								@if(in_array(Auth::user()->UsRol, Permisos::SEDECOMERCIAL) || in_array(Auth::user()->UsRol2, Permisos::SEDECOMERCIAL))
+								@if(in_array(Auth::user()->UsRol, Permisos::SEDECOMERCIAL) || in_array(Auth::user()->UsRol2, Permisos::SEDECOMERCIAL) ||in_array(Auth::user()->UsRol, Permisos::COMERCIALAP)||in_array(Auth::user()->UsRol2, Permisos::COMERCIALAP))
 								<div class="tab-pane fade" id="Tarifaspane">
 									<script type="text/javascript">
 										var contadorRango = [];
@@ -371,7 +372,7 @@
 @section('NewScript')
 	<script type="text/javascript">
 		var contador = {{isset($contadorphp)?$contadorphp:"0"}};
-		// var contadorRango = [];
+		 var contadorRango = [];
 
 		
 		function SelectsRangoTipo(id){
@@ -441,9 +442,15 @@
 			
 		}
 		function AgregarOption(){
+			if (typeof contadorRango === "undefined") {
+				contadorRango = [];
+			}
+			if (typeof contador === "undefined") {
+				contador = 0;
+			}
 			contadorRango[contador] = [];
 			contadorRango[contador][0] = 0;
-			var tratamiento = `@include('layouts.respel-comercial.respel-tratamiento')`;
+			var tratamiento = `@include('layouts.respel-comercial.respel-tratamiento-edit')`;
 			var pretratamiento = `@include('layouts.respel-comercial.respel-pretratEvaluacion')`;
 			var requerimiento = `@include('layouts.respel-comercial.respel-requerimiento')`;
 			var tarifas = `@include('layouts.respel-comercial.respel-tarifas')`;

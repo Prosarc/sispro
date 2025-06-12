@@ -381,7 +381,7 @@ function SustanciaControlada(id_div) {
             '<input name="SustanciaControlada[]" type="file" data-filesize="10240" class="form-control" accept=".pdf">' +
         '</div>'
     ).removeAttr('hidden'); 
-}
+}	
 
 function RequeRespel(id_div, contador, Id_Respel){
 	$.ajaxSetup({

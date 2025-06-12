@@ -1,217 +1,564 @@
 <?php
-
 namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
-use App\audit;
-use App\Sede;
+use App\Http\Requests\CotizacionStoreRequest;
+use App\Http\Requests\CotizacionUpdateRequest;
+use App\Permisos;
 use App\Cotizacion;
+use App\CotiRespel;
 use App\Respel;
+use App\Tratamiento;
+use App\Mail\CotizacionCreada;
+use App\Mail\CotizacionAprobada;
+use Illuminate\Support\Facades\Mail;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
+use Illuminate\Http\Request;    
+use Illuminate\Support\Facades\Log;
+//use PDF;
+use Illuminate\Support\Facades\Storage;
+            
+            class CotizacionController extends Controller
+            {
+                // Mostrar la lista de cotizaciones y el formulario
+                /**
+                 * Display a listing of the resource.
+                 *
+                 * @return \Illuminate\Http\Response
+                 */
+                public function index()
+            {
+                // Verificar que el usuario tenga los roles permitidos
+                    if (in_array(Auth::user()->UsRol, Permisos::COTIZACION) || 
+                    in_array(Auth::user()->UsRol, ['Comercial', 'AdministradorBogota']))
+                    {
+                     // Iniciar la consulta base
+                    $query = Cotizacion::with('coti_respel.respel', 'coti_respel.tratamiento');
 
-class CotizacionController extends Controller
-{
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        /*probando consultas con with*/
-        // $variable = Sede::with('clientes.sede') 
-        //         ->where('ID_Sede', '=', '38')
-        //         ->select('clientes')
-        //         ->get();
-        // return $variable;
+                    // Filtrar cotizaciones según el rol
+                    if (Auth::user()->UsRol === 'Comercial') {
+                        // Comerciales solo ven las cotizaciones donde son el usuario logueado
+                        $query->where('Auditlog', Auth::user()->email);
+                    }
+                    // Coordinador Comercial y Programador ven todas las cotizaciones
+                    
+                    // Ejecutar la consulta 
+                    $cotizaciones = $query->get();
 
-        if(Auth::user()->UsRol === "Programador"){
-            $cotizaciones = DB::table('cotizacions')
-                ->join('sedes', 'cotizacions.FK_Cotisede', '=', 'sedes.ID_Sede')
-                ->join('clientes', 'sedes.FK_SedeCli', '=', 'clientes.ID_Cli')
-                ->join('municipios', 'sedes.FK_SedeMun', '=', 'municipios.ID_Mun')
-                ->join('departamentos', 'municipios.FK_MunCity', '=', 'departamentos.ID_Depart')
-                ->select('cotizacions.*', 'sedes.*', 'clientes.*', 'municipios.*', 'departamentos.*')
-                ->get();
-        }
-        else{
-            // $cotizaciones = DB::table('cotizacions')
-            //     ->join('sedes', 'cotizacions.FK_Cotisede', '=', 'sedes.ID_Sede')
-            //     ->join('clientes', 'sedes.FK_SedeCli', '=', 'clientes.ID_Cli')
-            //     ->join('municipios', 'sedes.FK_SedeMun', '=', 'municipios.ID_Mun')
-            //     ->join('departamentos', 'municipios.FK_MunCity', '=', 'departamentos.ID_Depart')
-            //     ->select('cotizacions.*', 'sedes.*', 'clientes.*', 'clientes.*','municipios.*', 'departamentos.*')
-            //     ->get();
-        }
-        // return $cotizaciones;
-        return view('cotizacion.index', compact('cotizaciones'));
-    }
+                    // Obtener todos los residuos y tratamientos para el formulario
+                    $residuos = Respel::select('ID_Respel', 'RespelName', 'RespelIgrosidad', 'RespelPublic', 'YRespelClasf4741', 'ARespelClasf4741')->get();
+                    $tratamientos = Tratamiento::select('ID_Trat', 'TratName')->get();
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {   
-        $residuos = DB::table('respels')
-                ->join('cotizacions', 'respels.FK_RespelCoti', '=', 'cotizacions.ID_Coti')
-                ->join('sedes', 'cotizacions.FK_Cotisede', '=', 'sedes.ID_Sede')
-                ->join('clientes', 'sedes.FK_SedeCli', '=', 'clientes.ID_Cli')
-                ->join('municipios', 'sedes.FK_SedeMun', '=', 'municipios.ID_Mun')
-                ->join('departamentos', 'municipios.FK_MunCity', '=', 'departamentos.ID_Depart')
-                ->select('respels.*', 'cotizacions.*', 'sedes.*', 'clientes.*', 'municipios.*', 'departamentos.*')
-                ->where('RespelStatus', '=', 'Aprobado')
-                ->get();
+                    // Retornar la vista con los datos necesarios
+                    return view('cotizacion.index', compact('cotizaciones', 'residuos', 'tratamientos'));
+                }
 
-
-        // $residuos = Respel::with(['Cotizacion'])->get();
-
-         
-        $sedes=Sede::All();
-        // return $sedes;
-
-        // return $residuos;
-        // return $sql;
-        return view('cotizacion.create', compact('residuos', 'sedes'));
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $ultimo_aidi = Cotizacion::max('ID_Coti');
-
-        $cotizacion = new Cotizacion();        
-        $cotizacion->CotiNumero = $ultimo_aidi + 1;
-        $cotizacion->CotiFechaSolicitud = now();
-        $cotizacion->CotiVencida = 0;
-        $cotizacion->CotiDelete = 0;
-        $cotizacion->FK_CotiSede = $request->input('FK_CotiSede');
-        $cotizacion->CotiStatus = 'Pendiente';
-        $cotizacion->save();
-
-        $log = new audit();
-        $log->AuditTabla="cotizacion";
-        $log->AuditType="Creado";
-        $log->AuditRegistro=$ultimo_aidi + 1;
-        $log->AuditUser=Auth::user()->email;
-        $log->Auditlog=$request->all();
-        $log->save();
-        return redirect()->route('cotizacion.index');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $cotizacion = Cotizacion::where('ID_Coti', $id)->first();
-        
-        $sede = Sede::where('ID_Sede', $cotizacion->FK_CotiSede)->first();
-        
-        $residuos = Respel::where('FK_RespelCoti', $id)->get();  
-
-        return view('cotizacion.show', compact('cotizacion', 'sede', 'residuos'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {   
-        $cotizacion = Cotizacion::where('ID_Coti', $id)->first();
-        
-        $sedes = Sede::All();
-        
-        $residuos = Respel::where('FK_RespelCoti', $id)->get();     
-
-
-        return view('cotizacion.edit', compact('sedes', 'cotizacion', 'residuos'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id){   
-        // return $id;
-
-        // return $request;
-
-        $cotizacion = Cotizacion::where('ID_Coti', $id)->first();
-        $cotizacion->CotiNumero = $request->input('CotiNumero');
-        if ($request->input('CotiStatus')=='Aprobada'||$request->input('CotiStatus')=='Rechazada') {
-            $cotizacion->CotiFechaRespuesta = now();
-        }
-        $cotizacion->CotiFechaVencimiento = $request->input('CotiFechaVencimiento');
-        if (($request->input('CotiFechaVencimiento'))!=null && $request->input('CotiFechaVencimiento')<=now()) {
-            $cotizacion->CotiVencida = 1;
-        }
-        $cotizacion->CotiPrecioTotal = $request->input('CotiPrecioTotal');
-        $cotizacion->CotiPrecioSubtotal = $request->input('CotiPrecioSubtotal');
-        $cotizacion->FK_CotiSede = $request->input('FK_CotiSede');
-        $cotizacion->CotiStatus = $request->input('CotiStatus');
-        $cotizacion->CotiDelete = 0;
-        $cotizacion->update();
-
-        // return $cotizacion;
-
-        /*codigo para incluir la actualizacion en la tabla de auditoria*/
-        $log = new audit();
-        $log->AuditTabla="cotizacions";
-        $log->AuditType="Modificado";
-        $log->AuditRegistro=$cotizacion->ID_Coti;
-        $log->AuditUser=Auth::user()->email;
-        $log->Auditlog=json_encode($request->all());
-        $log->save();
-        // return $log->Auditlog;
-
-
-        return redirect()->route('cotizacion.index');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        $cotizacion = Cotizacion::where('ID_Coti', $id)->first();
-            if ($cotizacion->CotiDelete == 0) {
-                $cotizacion->CotiDelete = 1;
+                // Si el usuario no tiene el rol adecuado, redirigir
+                return redirect()->route('home')->with('error', 'No tienes permiso para acceder a esta sección.');
             }
-            else{
-                $cotizacion->CotiDelete = 0;
-            }
-        $cotizacion->save();
-        
+                       
+                // Mostrar el formulario de creación de cotización
+                /**
+                 * Display a listing of the resource.
+                 *
+                 * @return \Illuminate\Http\Response
+                 */
+                public function create(Request $request)
+                {
+                    $residuoscomunes = Respel::Where('RespelPublic', '1')
+                                ->select('ID_Respel','RespelName', 'YRespelClasf4741','ARespelClasf4741', 'RespelIgrosidad')
+                                ->get()
+                                ->map(function ($residuoscomunes) {
+                                    // Llama a obtenerClasificacion para cada residuo y almacena el resultado en el atributo clasificacion
+                                    $residuoscomunes->clasificacion = $this->obtenerClasificacion($residuoscomunes);
+                                    return $residuoscomunes;
+                                });
+                    $tratamientos = Tratamiento::all();
 
-        $log = new audit();
-        $log->AuditTabla="cotizacion";
-        $log->AuditType="Eliminado";
-        $log->AuditRegistro=$cotizacion->ID_Coti;
-        $log->AuditUser=Auth::user()->email;
-        $log->Auditlog = $cotizacion->CotiDelete;
-        $log->save();
+                    $clientes = DB::table('clientes')
+                        ->select('clientes.ID_Cli', 'clientes.CliName','clientes.CliNit')
+                        ->where('CliCategoria', 'Cliente')
+                        ->get();
+                    
+                    return view('cotizacion.create', compact('residuoscomunes', 'tratamientos', 'clientes'));
+                }
 
-        return redirect()->route('cotizacion.index');
-    }
-}
+                // Mostrar el formulario de creación de cotización
+                /**
+                 * Display a listing of the resource.
+                 *
+                 * @return \Illuminate\Http\Response
+                 */
+                public function clienteexistente(Request $request)
+                {
+                    $clienteId = intval($request->input('Cliente'));
+
+                    $residuoscomunes = Respel::Where('RespelPublic', '1')
+                                ->select('ID_Respel','RespelName', 'YRespelClasf4741','ARespelClasf4741', 'RespelIgrosidad')
+                                ->get()
+                                ->map(function ($residuoscomunes) {
+                                    // Llama a obtenerClasificacion para cada residuo y almacena el resultado en el atributo clasificacion
+                                    $residuoscomunes->clasificacion = $this->obtenerClasificacion($residuoscomunes);
+                                    return $residuoscomunes;
+                                });
+                    $tratamientos = Tratamiento::all();
+
+                    $Respels = DB::table('respels')
+                        ->join('cotizacions', 'cotizacions.ID_Coti', '=', 'respels.FK_RespelCoti')
+                        ->join('sedes', 'sedes.ID_Sede', '=', 'cotizacions.FK_CotiSede')
+                        ->join('clientes', 'clientes.ID_Cli', '=', 'sedes.FK_SedeCli')
+                        ->select('respels.ID_Respel', 'respels.RespelName', 'respels.RespelIgrosidad', 'respels.YRespelClasf4741', 'respels.ARespelClasf4741', 'respels.RespelStatus', 'respels.RespelPublic', 'respels.RespelHojaSeguridad', 'respels.RespelTarj', 'clientes.CliName', 'clientes.CliNit','clientes.ID_Cli', 'sedes.SedeAddress', 'sedes.SedePhone1', 'sedes.SedeEmail')
+                        ->where('clientes.ID_Cli', $clienteId)
+                        ->get()
+                        ->map(function ($Respels) {
+                            // Llama a obtenerClasificacion para cada residuo y almacena el resultado en el atributo clasificacion
+                            $Respels->clasificacion = $this->obtenerClasificacion($Respels);
+                            return $Respels;
+                        });
+
+                        
+                    $clientes = DB::table('clientes')
+                        ->join('sedes', 'sedes.FK_SedeCli', '=', 'clientes.ID_Cli')
+                        ->select('clientes.ID_Cli', 'clientes.CliName','clientes.CliNit', 'sedes.*')
+                        ->where('clientes.ID_Cli', $clienteId)
+                        ->first();    
+
+                    //return $clientes;
+
+                    return view('cotizacion.createclientexistente', compact('residuoscomunes', 'tratamientos', 'Respels', 'clientes'));
+                }
+
+                public function cliente(Request $request)
+                 {
+
+                   // return $request->all();
+                     // Depuración para mostrar todos los datos recibidos
+                     // dd($request->all());
+                     //$validatedData = $request->validated();
+                     
+                    //DB::beginTransaction();
+                    //try {
+                      //  $validatedData = $request->validated();
+
+                        // Crear la cotización principal
+                        $cotizacion = Cotizacion::create([
+                            'FechaCotizacion'         => now(),
+                            'Nit'                     => $request->input('Nit'),
+                            'Razon_Social'            => $request->input('Razon_Social'),
+                            'Telefono'                => $request->input('Telefono'),
+                            'Correo'                  => $request->input('Correo'),
+                            'Direccion'               => $request->input('Direccion'),
+                            'CoStatus'                => $request->input('CoStatus'),
+                            'Total'                   => $request->input('Total'),
+                            'transporte'              => $request->input('transporte'),
+                            'sede'                    => $request->input('sede'),
+                            'frecuencia_recoleccion'  => $request->input('frecuencia_recoleccion'),
+                            'tipo_cotizacion'         => $request->input('tipo_cotizacion'),
+                            'Observaciones'           => $request->input('Observaciones'),
+                            'Auditlog'=> Auth::user()->email,
+                            'status'                  => $request->input('status'), // Estado de aprobación 
+                        ]);
+
+                        // Ajustar campos extra si es necesario
+                        $cotizacion->Auditlog      = Auth::user()->email;
+                        $cotizacion->Observaciones = $request->input('Observaciones');
+                        $cotizacion->save();
+
+                        // Arrays enviados desde el formulario
+                        $residuos      = $request->input('residuos');
+                        $clasf4741     = $request->input('clasf4741');
+                        $peligrosidad  = $request->input('peligrosidad');
+                        $estadoFisico  = $request->input('estado_fisico');
+                        $tratamientos  = $request->input('tratamientos');
+                        $cantidadKilos = $request->input('cantidad_kilos');
+                        $precioKg      = $request->input('precio_kg');
+                        $subtotal      = $request->input('subtotal');
+
+                        // Verificar la longitud de los arreglos principales
+                        $cantidadItems = count($residuos);
+                        if (
+                            count($clasf4741)    !== $cantidadItems ||
+                            count($peligrosidad) !== $cantidadItems ||
+                            count($estadoFisico) !== $cantidadItems ||
+                            count($tratamientos) !== $cantidadItems
+                        ) {
+                            throw new \Exception('La cantidad de elementos de residuos no coincide con sus campos.');
+                        }
+
+                        // Verificar cada residuo y sus tratamientos dentro del mismo bucle
+                        for ($i = 0; $i < $cantidadItems; $i++) {
+                            // Asegurarse de que tratamientos y kilos sean arreglos reales
+                            if (!is_array($tratamientos[$i])) {
+                                throw new \Exception("El elemento en 'tratamientos[$i]' no es un array.");
+                            }
+                            if (!is_array($cantidadKilos[$i])) {
+                                throw new \Exception("El elemento en 'cantidadKilos[$i]' no es un array.");
+                            }
+                            if (!is_array($precioKg[$i])) {
+                                throw new \Exception("El elemento en 'precioKg[$i]' no es un array.");
+                            }
+                            if (!is_array($subtotal[$i])) {
+                                throw new \Exception("El elemento en 'subtotal[$i]' no es un array.");
+                            }
+
+                            // Comparar porcentajes de longitud en los subarreglos
+                            if (
+                                count($tratamientos[$i]) !== count($cantidadKilos[$i]) ||
+                                count($tratamientos[$i]) !== count($precioKg[$i])      ||
+                                count($tratamientos[$i]) !== count($subtotal[$i])
+                            ) {
+                                throw new \Exception('La cantidad de tratamientos no coincide con kilos o precios.');
+                            }
+
+                            // Guardar registros para cada tratamiento
+                            foreach ($tratamientos[$i] as $tIndex => $tratamientoId) {
+                                $cotizacion->coti_respel()->create([
+                                    'FK_ID_Respel'   => $residuos[$i],
+                                    'FK_Tratamiento' => $tratamientoId,
+                                    'cantidad_kilos' => $cantidadKilos[$i][$tIndex],
+                                    'precio_kg'      => $precioKg[$i][$tIndex],
+                                    'subtotal'       => $subtotal[$i][$tIndex],
+                                    'peligrosidad'   => $peligrosidad[$i],
+                                    'clasf4741'      => $clasf4741[$i],
+                                    'estado_fisico'  => $estadoFisico[$i],
+                                ]);
+                            }
+                        }
+                        $destinatarios = ['coordinadorcomercial@prosarc.com.co'];
+                        // Enviar correo de creación
+                        /* $this->enviarCorreoCotizacionCreada($cotizacion); */
+                        Mail::to($destinatarios)->send(new CotizacionCreada($cotizacion));
+
+                        DB::commit();
+                        return redirect()->route('cotizacion.show', $cotizacion->id_cotizacion)->with('success', 'Cotización creada correctamente.');
+                }
+
+                public function obtenerClasificacion($residuo)
+                {
+                    // Verifica que $residuo sea un objeto y no un string o null
+                    if (is_object($residuo)) {
+                        // Si YRespelClasf4741 tiene un valor, lo devuelve
+                        if (!empty($residuo->YRespelClasf4741)) {
+                            return $residuo->YRespelClasf4741;
+                        }
+                        // Si YRespelClasf4741 no tiene un valor pero ARespelClasf4741 sí, lo devuelve
+                        elseif (!empty($residuo->ARespelClasf4741)) {
+                            return $residuo->ARespelClasf4741;
+                        }
+                    }
+
+                    // Si ambas clasificaciones están vacías, retorna 'sin clasificación'
+                    return 'sin clasificación';
+                }
+                
+                // Almacenar una nueva cotización
+               /**
+                 * Store a newly created resource in storage.
+                 *
+                 * @param  \Illuminate\Http\Request  $request
+                 * @return \Illuminate\Http\Response
+                 */
+                
+                 public function store(CotizacionStoreRequest $request)
+                 {
+                     // Depuración para mostrar todos los datos recibidos
+                     // dd($request->all());
+                     $validatedData = $request->validated();
+                     
+                    DB::beginTransaction();
+                    try {
+                        $validatedData = $request->validated();
+
+                        // Crear la cotización principal
+                        $cotizacion = Cotizacion::create([
+                            'FechaCotizacion'         => now(),
+                            'Nit'                     => $validatedData['Nit'],
+                            'Razon_Social'            => $validatedData['Razon_Social'],
+                            'Telefono'                => $validatedData['Telefono'],
+                            'Correo'                  => $validatedData['Correo'],
+                            'Direccion'               => $validatedData['Direccion'],
+                            'CoStatus'                => $validatedData['CoStatus'],
+                            'Total'                   => $validatedData['Total'],
+                            'transporte'              => $validatedData['transporte'],
+                            'sede'                    => $validatedData['sede'],
+                            'frecuencia_recoleccion'  => $validatedData['frecuencia_recoleccion'],
+                            'tipo_cotizacion'         => $validatedData['tipo_cotizacion'],
+                            'Observaciones'           => $validatedData['Observaciones'] ?? null,
+                            'Auditlog'=> Auth::user()->email,
+                            'status'                  => $validatedData['status'], // Estado de aprobación 
+                        ]);
+
+                        // Ajustar campos extra si es necesario
+                        $cotizacion->Auditlog      = Auth::user()->email;
+                        $cotizacion->Observaciones = $validatedData['Observaciones'] ?? null;
+                        $cotizacion->save();
+
+                        // Arrays enviados desde el formulario
+                        $residuos      = $validatedData['residuos'];
+                        $clasf4741     = $validatedData['clasf4741'];
+                        $peligrosidad  = $validatedData['peligrosidad'];
+                        $estadoFisico  = $validatedData['estado_fisico'];
+                        $tratamientos  = $validatedData['tratamientos'];
+                        $cantidadKilos = $validatedData['cantidad_kilos'];
+                        $precioKg      = $validatedData['precio_kg'];
+                        $subtotal      = $validatedData['subtotal'];
+
+                        // Verificar la longitud de los arreglos principales
+                        $cantidadItems = count($residuos);
+                        if (
+                            count($clasf4741)    !== $cantidadItems ||
+                            count($peligrosidad) !== $cantidadItems ||
+                            count($estadoFisico) !== $cantidadItems ||
+                            count($tratamientos) !== $cantidadItems
+                        ) {
+                            throw new \Exception('La cantidad de elementos de residuos no coincide con sus campos.');
+                        }
+
+                        // Verificar cada residuo y sus tratamientos dentro del mismo bucle
+                        for ($i = 0; $i < $cantidadItems; $i++) {
+                            // Asegurarse de que tratamientos y kilos sean arreglos reales
+                            if (!is_array($tratamientos[$i])) {
+                                throw new \Exception("El elemento en 'tratamientos[$i]' no es un array.");
+                            }
+                            if (!is_array($cantidadKilos[$i])) {
+                                throw new \Exception("El elemento en 'cantidadKilos[$i]' no es un array.");
+                            }
+                            if (!is_array($precioKg[$i])) {
+                                throw new \Exception("El elemento en 'precioKg[$i]' no es un array.");
+                            }
+                            if (!is_array($subtotal[$i])) {
+                                throw new \Exception("El elemento en 'subtotal[$i]' no es un array.");
+                            }
+
+                            // Comparar porcentajes de longitud en los subarreglos
+                            if (
+                                count($tratamientos[$i]) !== count($cantidadKilos[$i]) ||
+                                count($tratamientos[$i]) !== count($precioKg[$i])      ||
+                                count($tratamientos[$i]) !== count($subtotal[$i])
+                            ) {
+                                throw new \Exception('La cantidad de tratamientos no coincide con kilos o precios.');
+                            }
+
+                            // Guardar registros para cada tratamiento
+                            foreach ($tratamientos[$i] as $tIndex => $tratamientoId) {
+                                $cotizacion->coti_respel()->create([
+                                    'FK_ID_Respel'   => $residuos[$i],
+                                    'FK_Tratamiento' => $tratamientoId,
+                                    'cantidad_kilos' => $cantidadKilos[$i][$tIndex],
+                                    'precio_kg'      => $precioKg[$i][$tIndex],
+                                    'subtotal'       => $subtotal[$i][$tIndex],
+                                    'peligrosidad'   => $peligrosidad[$i],
+                                    'clasf4741'      => $clasf4741[$i],
+                                    'estado_fisico'  => $estadoFisico[$i],
+                                ]);
+                            }
+                        }
+                        $destinatarios = ['notificaciones@prosarc.com.co'];
+                        // Enviar correo de creación
+                        /* $this->enviarCorreoCotizacionCreada($cotizacion); */
+                        Mail::to($destinatarios)->send(new CotizacionCreada($cotizacion));
+
+                        DB::commit();
+                        return redirect()->route('cotizacion.show', $cotizacion->id_cotizacion)->with('success', 'Cotización creada correctamente.');
+                    } catch (\Exception $e) {
+                        DB::rollBack();
+                        Log::error('Cotización Error:', ['error' => $e->getMessage()]);
+                        return back()->withErrors([
+                            'error' => 'Hubo un problema al crear la cotización: ' . $e->getMessage()
+                        ]);
+                    }
+                }
+                 public function edit($id)
+                 { 
+                     $cotizacion = Cotizacion::with('coti_respel')->findOrFail($id);
+                    
+                 
+                     return view('cotizacion.edit', compact('cotizacion' ));
+                 }
+                 /**
+                 * Actualiza la cotización en el almacenamiento.
+                 *
+                 * @param  \Illuminate\Http\Request  $request
+                 * @param  int  $id_cotizacion
+                 * @return \Illuminate\Http\Response
+                 */
+                public function update(CotizacionUpdateRequest $request, $id_cotizacion)
+                {
+                DB::beginTransaction();
+
+                try {
+                    // Verificar que el usuario tenga el rol adecuado
+                    if (Auth::user()->UsRol !== "Programador") {
+                        return redirect()->route('home')->with('error', 'No tienes permiso para acceder a esta sección.');
+                    }
+                    
+                    /* dd($request->all()); */
+                    // Validar los datos de la solicitud
+                    $validatedData = $request->validated();
+                    
+                    // Encontrar la cotización existente
+                    $cotizacion = Cotizacion::findOrFail($id_cotizacion);
+
+                    // Actualizar los campos principales de la cotización
+                    $cotizacion->FechaCotizacion = now();
+                    $cotizacion->Nit = $validatedData['Nit'];
+                    $cotizacion->Razon_Social = $validatedData['Razon_Social'];
+                    $cotizacion->Telefono = $validatedData['Telefono'];
+                    $cotizacion->Correo = $validatedData['Correo'];
+                    $cotizacion->Direccion = $validatedData['Direccion'];
+                    $cotizacion->CoStatus = $validatedData['CoStatus'];
+                    $cotizacion->Total = $validatedData['Total'];
+                    $cotizacion->transporte = $validatedData['transporte'];
+                    $cotizacion->sede = $validatedData['sede'];
+                    $cotizacion->frecuencia_recoleccion = $validatedData ['frecuencia_recoleccion'];
+                    /* $cotizacion->tipo_cotizacion = $validatedData'tipo_cotizacion'; */
+                    $cotizacion->Observaciones = $validatedData['Observaciones'] ?? null;
+                    $cotizacion->save();
+
+                    // Obtener los arreglos de datos de residuos
+                    $residuos = $validatedData['residuos'];
+                    $clasf4741 = $validatedData['clasf4741'];
+                    $tratamientos = $validatedData['tratamientos'];
+                    $cantidadKilos = $validatedData['cantidad_kilos'];
+                    $precioKg = $validatedData['precio_kg'];
+                    $subtotal = $validatedData['subtotal'];
+                    $peligrosidad = $validatedData['peligrosidad'];
+                    $estadoFisico = $validatedData['estado_fisico'];
+
+                    // Obtener los IDs de coti_respel desde el formulario
+                    $cotiRespelIds = $request->input('id');
+
+                    // Verificar que todos los arreglos tengan la misma longitud
+                    $cantidadItems = count($residuos);
+                    if (
+                        count($cotiRespelIds) !== $cantidadItems ||
+                        count($clasf4741) !== $cantidadItems ||
+                        count($tratamientos) !== $cantidadItems ||
+                        count($cantidadKilos) !== $cantidadItems ||
+                        count($precioKg) !== $cantidadItems ||
+                        count($subtotal) !== $cantidadItems ||
+                        count($peligrosidad) !== $cantidadItems ||
+                        count($estadoFisico) !== $cantidadItems
+                    ) {
+                        throw new \Exception('La cantidad de elementos en los campos no coincide.');
+                    }
+
+                    // Iterar sobre los arreglos para actualizar cada `coti_respel`
+                    for ($i = 0; $i < $cantidadItems; $i++) {
+                        $cotiRespelId = $cotiRespelIds[$i];
+
+                        // Buscar el coti_respel correspondiente
+                        $cotiRespel = CotiRespel::findOrFail($cotiRespelId);
+
+                        // Actualizar los campos necesarios
+                        $cotiRespel->cantidad_kilos = $cantidadKilos[$i];
+                        $cotiRespel->precio_kg = $precioKg[$i];
+                        $cotiRespel->subtotal = $subtotal[$i];
+                        // Si es necesario actualizar otros campos, descomenta y asigna
+                        // $cotiRespel->peligrosidad = $peligrosidad[$i];
+                        // $cotiRespel->clasf4741 = $clasf4741[$i];
+                        // $cotiRespel->estado_fisico = $estadoFisico[$i];
+                        // $cotiRespel->FK_ID_Respel = $residuos[$i];
+                         $cotiRespel->FK_Tratamiento = $tratamientos[$i];
+
+                        $cotiRespel->save();
+                    }
+
+                    DB::commit();
+
+                    // Redirigir con mensaje de éxito
+                    return redirect()->route('cotizacion.show', $cotizacion->id_cotizacion)->with('success', 'Cotización actualizada correctamente.');
+                } catch (\Exception $e) {
+                    // Revertir la transacción en caso de error
+                    DB::rollBack();
+                    Log::error('Error al actualizar cotización:', ['error' => $e->getMessage()]);
+                    return back()->withErrors(['error' => 'Hubo un problema al actualizar la cotización: ' . $e->getMessage()]);
+                }
+                }
+                // Otros métodos...
+                public function aprobar($id)
+                {
+                    try {
+                        DB::beginTransaction();
+
+                        $cotizacion = Cotizacion::findOrFail($id);
+                        $cotizacion->status = request('status');
+                        $cotizacion->save();
+
+                        // Verificar si el estado es "Aprobado" antes de enviar el correo
+                        if ($cotizacion->status === 'Aprobado') {
+                            $this->enviarCorreoCotizacionAprobada($cotizacion);
+                        }
+
+                        DB::commit();
+
+                        return redirect()
+                            ->route('cotizacion.show', $cotizacion->id_cotizacion)
+                            ->with('success', 'Cotización aprobada correctamente.');
+                    } catch (\Exception $e) {
+                        DB::rollBack();
+                        Log::error('Error al aprobar cotización:', ['error' => $e->getMessage()]);
+                        return back()->withErrors([
+                            'error' => 'Hubo un problema al aprobar la cotización: ' . $e->getMessage()
+                        ]);
+                    }
+                }
+                       /**
+                     * Método para enviar correo de cotización creada al Coordinador Comercial.
+                     */
+                     /**
+                     * Envía correo cuando se aprueba una cotización
+                     */
+                    private function enviarCorreoCotizacionAprobada($cotizacion)
+                    {
+                        if ($cotizacion->Auditlog) {
+                            try {
+                                Mail::to($cotizacion->Auditlog)->send(new CotizacionAprobada($cotizacion));
+                            } catch (\Exception $e) {
+                                Log::error('Error enviando correo de cotización aprobada:', ['error' => $e->getMessage()]);
+                            }
+                        }
+                    }
+            
+                    public function show($id)
+                    {
+                        $cotizacion = Cotizacion::with(['coti_respel'])
+                            ->where('id_cotizacion', $id)
+                            ->firstOrFail();
+
+                        return view('cotizacion.show', compact('cotizacion'));
+                    }
+                    
+                    /**
+                     * Genera y descarga un PDF de la cotización especificada.
+                     *
+                     * @param  int  $id
+                     * @return \Illuminate\Http\Response
+                     */
+                    public function downloadPDF($id)
+                    {
+                        // Cargar la cotización con las relaciones necesarias
+                        $cotizacion = Cotizacion::with(['coti_respel.respel', 'coti_respel.tratamiento'])->findOrFail($id);
+                        $usuario = Auth::user(); // Obtener el usuario autenticado (si es necesario)
+
+                        //return $usuario;
+                        // Generar el PDF utilizando la vista 'cotizacion.pdf' y pasando los datos necesarios
+                        //$pdf = PDF::loadView('cotizacion.pdf', compact('cotizacion', 'usuario'));
+
+                        $pdf = PDF::setPaper('letter', 'portrait')->loadView('cotizacion.pdf', compact('cotizacion', 'usuario'));
+                        $nombre = $cotizacion->id_cotizacion.'.pdf';
+                        $path = 'public/cotizacion/' . sprintf("%0s", $nombre);
+
+                        Storage::put($path, $pdf->output(), 'public');
+
+                        return redirect()
+                            ->route('cotizacion.show', $cotizacion->id_cotizacion)
+                            ->with('success', 'Cotización aprobada correctamente.');
+
+                        // Descargar el PDF con un nombre específico
+                        //return $pdf->stream('cotizacion_' . $cotizacion->id_cotizacion . '.pdf');
+                    }
+        }
+    ?>
+                    

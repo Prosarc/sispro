@@ -239,7 +239,7 @@ footer {
                     <p class="MsoNormal" style="text-align:justify"><span lang="ES" style="font-size: 7.5pt; font-family:'Arial',sans-serif; color:#0D0D0D">Dirección: <b>{{$certificado->sedegenerador->GSedeAddress}} (Municipio:{{$certificado->sedegenerador->municipio->MunName}}) ({{$certificado->sedegenerador->GSedeName}})</b></span></p>
                 </td>
                 <td width="130" style="width:92.15pt; border-top:none; border-left:none; border-bottom:solid gray 0.5pt; border-right:solid gray 0.5pt; padding:0cm 5.4pt 0cm 5.4pt;">
-                    <p class="MsoNormal"><span lang="ES" style="font-size:7.5pt; font-family:'Arial',sans-serif; color:#0D0D0D">Ciudad: <b>{{$certificado->sedegenerador->municipio->Departamento->DepartName}}</b></span></p>
+                    <p class="MsoNormal"><span lang="ES" style="font-size:7.5pt; font-family:'Arial',sans-serif; color:#0D0D0D">Ciudad: <b>{{$certificado->sedegenerador->municipio->MunName}}</b></span></p>
                 </td>
             </tr>
           </table>    
@@ -284,7 +284,7 @@ footer {
             <td width="113" valign=top style="width:3.0cm;border-top:none;border-left:none;
             border-bottom:solid gray 0.5pt;border-right:solid gray 0.5pt;padding:0cm 5.4pt 0cm 5.4pt">
             <p class=MsoNormal><span lang=ES style='font-size:7.5pt;font-family:"Arial",sans-serif;
-            color:#0D0D0D'>Ciudad: <b>{{$certificado->transportador->sedes[0]->Municipios->Departamento->DepartName}}</b></span></p>
+            color:#0D0D0D'>Ciudad: <b>{{$certificado->transportador->sedes[0]->Municipios->MunName}}</b></span></p>
             </td>
           </tr>
         </table>
@@ -317,7 +317,7 @@ footer {
           <td colspan="1" width=113 valign=top style='width:3.0cm;border-top:none;border-left:none;
           border-bottom:solid gray 0.5pt;border-right:solid gray 0.5pt;padding:0cm 5.4pt 0cm 5.4pt'>
           <p class=MsoNormal><span lang=ES style='font-size:7.5pt;font-family:"Arial",sans-serif;
-          color:#0D0D0D'>Ciudad: <b>{{$certificado->SolicitudServicio->municipio->Departamento->DepartName}}</b></span></p>
+          color:#0D0D0D'>Ciudad: <b>{{$certificado->SolicitudServicio->municipio->MunName}}</b></span></p>
           </td>
         </tr>
         </table>
@@ -415,42 +415,10 @@ footer {
         <p class=MsoNormal><span lang=ES style='font-size:7.5pt;font-family:"Arial",sans-serif;
         color:#0D0D0D'>Número de Recibo de Materiales </span></p>
         </td>
-        @php
-        $collection2 = collect([]);
-        @endphp
-        @foreach($certificado->SolicitudServicio->SolicitudResiduo as $Residuo)
-        @if($Residuo->requerimiento->FK_ReqTrata == $certificado->FK_CertTrat&&$Residuo->generespel->gener_sedes->ID_GSede == $certificado->FK_CertGenerSede)
-        @if($Residuo->SolResRM2 !== null && is_Array($Residuo->SolResRM2))
-        @foreach ($Residuo->SolResRM2 as $rm2 => $value2)
-        @php
-        $collection2 = $collection2->concat([$value2]);
-        @endphp
-        @endforeach
-        @else
-        @if (is_Array($Residuo->SolResRM))
-        @foreach ($Residuo->SolResRM as $rm => $value)
-        @php
-        $collection2 = $collection2->concat([$value]);
-        @endphp
-        @endforeach
-        @else
-        @php
-        $uniquestring = 'RM Invalido -> '.$Residuo->SolResRM;
-        @endphp
-        @endif
-        @endif
-        @endif
-        @endforeach
-        @php
-        if ($collection2->isNotEmpty()) {
-        $unicos = collect($collection2->unique());
-        $uniquestring = $unicos->values()->join(', ');
-        }
-        @endphp
         <td width= "76%" style='border-top:none;border-left:none;
         border-bottom:solid gray 0.5pt;border-right:solid gray 0.5pt;padding:0cm 5.4pt 0cm 5.4pt'>
         <p class=MsoNormal align=center style='text-align:center'><b><span lang=ES
-        style='font-size:7.5pt;font-family:"Arial",sans-serif;color:#0D0D0D'>{{$uniquestring}}</span></b></p>
+        style='font-size:7.5pt;font-family:"Arial",sans-serif;color:#0D0D0D'>{{$certificado->SolicitudServicio->ID_SolSer}}</span></b></p>
         </td>
         <td width= "198%" colspan=2 style='border-top:none;border-left:
         none;border-bottom:solid gray 0.5pt;border-right:solid gray 0.5pt;
@@ -462,7 +430,7 @@ footer {
         <td width= "66%"" style='border-top:none;border-left:none;border-bottom:
         solid gray 0.5pt;border-right:solid gray 0.5pt;padding:0cm 5.4pt 0cm 5.4pt'>
         <p class=MsoNormal align=center style='text-align:center'><b><span lang=ES
-        style='font-size:7.5pt;font-family:"Arial",sans-serif;color:#0D0D0D'>{{$uniquestring}}</span></b></p>
+        style='font-size:7.5pt;font-family:"Arial",sans-serif;color:#0D0D0D'>{{$certificado->SolicitudServicio->ID_SolSer}}</span></b></p>
         </td>
       </tr>
       <tr>
@@ -618,10 +586,14 @@ footer {
       <p class=MsoNormal style='text-align:justify'><span lang=ES style='font-size:
       7.5pt;font-family:"Arial",sans-serif;color:#0D0D0D'>&nbsp;</span></p>
       @php
-      $añofirma=date('Y', strtotime(now()));
-      $mesfirma=date('m', strtotime(now()));
-      $dia=date('d', strtotime(now()));
-      $diafirma = date('d', strtotime("+30 days", strtotime($dia)));
+      $fechaActual = new DateTime();
+
+      $fechaModificada = clone $fechaActual;
+      $fechaModificada->modify('+8 days');
+
+      $añofirma = $fechaModificada->format('Y');
+      $mesfirma = $fechaModificada->format('m');
+      $diafirma = $fechaModificada->format('d');
       $mesTexto = ""; 
       switch ($mesfirma) {
           case 1:
@@ -739,7 +711,7 @@ footer {
                         <table>
                           <tr>
                             <td style="text-align: left; font-size: 8px;">
-                             <img src="{{$qrCode->writeDataUri()}}"style="width: 75px;"  alt="" id="inputQrImg"><br>
+                            {{--}} <img src="{{$qrCode->writeDataUri()}}"style="width: 75px;"  alt="" id="inputQrImg"><br>---}}
                             </td>
                           </tr>
                         </table>

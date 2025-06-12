@@ -32,8 +32,7 @@
 						<div class="box-body" id="readyTable">
 							<div class="tab-pane" id="addRowWizz">
 								<div>
-
-                                    <form role="form" action="{{ route('solicitud-servicio.create') }}" method="POST" enctype="multipart/form-data" data-toggle="validator">
+                                    <form role="form" action="{{ route('solicitud-servicio.create') }}" method="GET" enctype="multipart/form-data" data-toggle="validator">
                                         @csrf
                                         <div>
                                             <div id="step-1" class="tab-pane step-content">

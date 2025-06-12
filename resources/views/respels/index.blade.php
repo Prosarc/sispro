@@ -14,14 +14,14 @@
 			<div class="box">
 				<div class="box-header">
 					<h3 class="box-title">{{ __('adminlte::LangRespel.Respellist') }}</h3 class="pull-left">
-				@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol2, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol, Permisos::INGDETURNO))
+				@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol2, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol, Permisos::INGDETURNO) ||in_array(Auth::user()->UsRol, Permisos::COMERCIALAP))
 						<a href="respels/create" class="btn btn-primary" style="float: right;">{{__('adminlte::LangRespel.CreaterespelButton')}}</a>
 				@endif
-				@if(in_array(Auth::user()->UsRol, Permisos::RESPELPUBLIC) || in_array(Auth::user()->UsRol2, Permisos::RESPELPUBLIC) || in_array(Auth::user()->UsRol, Permisos::INGDETURNO))
+				@if(in_array(Auth::user()->UsRol, Permisos::RESPELPUBLIC) || in_array(Auth::user()->UsRol2, Permisos::RESPELPUBLIC) || in_array(Auth::user()->UsRol, Permisos::INGDETURNO) ||in_array(Auth::user()->UsRol, Permisos::COMERCIALAP))
 						<a href="respelspublic/create" class="btn btn-primary" style="float: right; margin-right: 0.5em;">Crear Residuo Común</a>
 				@endif
 
-				@if(in_array(Auth::user()->UsRol, Permisos::TODOPROSARC))
+				@if(in_array(Auth::user()->UsRol, Permisos::TODOPROSARC)||in_array(Auth::user()->UsRol, Permisos::COMERCIALAP))
 					<a href="vencidos" class="btn btn-primary pull-right"  style="float: right; margin-right: 0.5em;">Vencidos</a>
 				@endif
 
@@ -120,7 +120,7 @@
 										<td class="text-center"><a disabled method='get' href='/img/{{$respel->RespelTarj}}' class='btn btn-default'><i class='fas fa-file-pdf fa-lg'></a></td>
 									@endif
 
-									@if(in_array(Auth::user()->UsRol, Permisos::TODOPROSARC))
+									@if(in_array(Auth::user()->UsRol, Permisos::TODOPROSARC) ||in_array(Auth::user()->UsRol, Permisos::COMERCIALAP))
 										<td class="text-center">{{$respel->CliName}}</td>
 									@endif
 									<td class="text-center">{{$respel->RespelStatus}}</td>
@@ -170,7 +170,7 @@
 											@default
 												<td class="text-center"><a method='get' href='/respels/{{$respel->RespelSlug}}' data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>Status Pendiente</b>" data-content="<p style='width: 50%'>La información de su residuo debe ser analizada para asignarle un tratamiento adecuado y las tarifas que les corresponden segun el tratamiento... <br>Para mas detalles comuníquese con su <b>Asesor Comercial</b> </p>" class='btn fixed_widthbtn btn-primary'><i class='fas fa-lg fa-ban'></i></a></td>
 										@endswitch
-									@elseif(in_array(Auth::user()->UsRol, Permisos::GrupoEvaluacionRespel)||in_array(Auth::user()->UsRol2, Permisos::GrupoEvaluacionRespel))
+									@elseif(in_array(Auth::user()->UsRol, Permisos::GrupoEvaluacionRespel)||in_array(Auth::user()->UsRol2, Permisos::GrupoEvaluacionRespel)||in_array(Auth::user()->UsRol, Permisos::COMERCIALAP))
 										@switch($respel->RespelStatus)
 											{{-- evaluación pendiente --}}
 											@case('Pendiente')

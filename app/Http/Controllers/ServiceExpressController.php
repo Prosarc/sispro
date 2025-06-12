@@ -152,9 +152,13 @@ class ServiceExpressController extends Controller
      */
     public function create()
     {
-        if(in_array(Auth::user()->UsRol, Permisos::COMERCIALEXPRESS) || in_array(Auth::user()->UsRol, Permisos::COMERCIALEXPRESS)){
+        if(in_array(Auth::user()->UsRol, Permisos::COMERCIALEXPRESS) || in_array(Auth::user()->UsRol, Permisos::USAQUEN)){
 
-			$Clientes = Cliente::with('sedes')->where('CliCategoria', 'ClientePrepago')->orderBy('created_at', 'desc')->get();
+			$Clientes = Cliente::with('sedes')
+			->where('CliCategoria', 'ClientePrepago')
+			->where('CliDelete', '0')
+			->orderBy('created_at', 'desc')
+			->get();
 
 			return view('serviciosexpress.create', compact('Clientes'));
 		}
@@ -304,12 +308,12 @@ class ServiceExpressController extends Controller
 		// se establece la lista de destinatarios
 		if ($Cliente->CliComercial <> null) {
 			$comercial = Personal::where('ID_Pers', $Cliente->CliComercial)->first();
-			$destinatarios = ['coordinadorse@prosarc.com.co',
+			$destinatarios = ['coordinadorse@prosarc.com.co','servicomercial@prosarc.com.co',
 								$comercial->PersEmail
 							];
 		}else{
 			$comercial = "";
-			$destinatarios = ['coordinadorse@prosarc.com.co'];
+			$destinatarios = ['coordinadorse@prosarc.com.co', 'asesorse1@prosarc.com.co', 'asesorse2@prossarc.com.co'];
 		}
 		$SolicitudServicio['comercial'] = $comercial;
 		$SolicitudServicio['personalcliente'] = Personal::where('ID_Pers', $SolicitudServicio->FK_SolSerPersona)->first();
@@ -485,10 +489,11 @@ class ServiceExpressController extends Controller
 			->join('clientes' , 'sedes.FK_SedeCli', '=', 'clientes.ID_Cli')
 			->select('solicitud_residuos.*','residuos_geners.FK_SGener', 'respels.*', 'requerimientos.ID_Req', 'tratamientos.TratName', 'tratamientos.ID_Trat', 'clientes.CliShortName')
 			->where('solicitud_residuos.FK_SolResSolSer', $SolicitudServicio->ID_SolSer)
+			->where('solicitud_residuos.SolResDelete', 0)
 			// ->where('requerimientos.ofertado', 1)
 	        // ->where('forevaluation', 0)
 			->get();
-
+return $Residuosoriginal;
 		$Residuos = $Residuosoriginal->map(function ($item) {
 		  $requerimientos = Requerimiento::with(['pretratamientosSelected'])
 	        ->where('ID_Req', $item->FK_SolResRequerimiento)
@@ -995,23 +1000,12 @@ class ServiceExpressController extends Controller
 			// se establece la lista de destinatarios
 			if ($SolicitudServicio['cliente']->CliComercial <> null) {
 				$comercial = Personal::where('ID_Pers', $SolicitudServicio['cliente']->CliComercial)->first();
-				$destinatarios = ['dirtecnica@prosarc.com.co',
-									'logistica@prosarc.com.co',
-									'asistentelogistica@prosarc.com.co',
-									'auxiliarlogistico@prosarc.com.co',
-									'gerenteplanta@prosarc.com.co',
-									'subgerencia@prosarc.com.co',
+				$destinatarios = ['serviciosexpress@prosarc.com.co',
 									$comercial->PersEmail
 								];
 			}else{
 				$comercial = "";
-				$destinatarios = ['dirtecnica@prosarc.com.co',
-									'logistica@prosarc.com.co',
-									'asistentelogistica@prosarc.com.co',
-									'auxiliarlogistico@prosarc.com.co',
-									'gerenteplanta@prosarc.com.co',
-									'subgerencia@prosarc.com.co'
-								];
+				$destinatarios = ['serviciosexpress@prosarc.com.co'];
 			}
 
 			$SolicitudServicio['comercial'] = $comercial;
@@ -1389,7 +1383,11 @@ class ServiceExpressController extends Controller
 			for ($y=0; $y < count($request['FK_SolResRg'][$Generador]); $y++) {
 				$SolicitudResiduo = new SolicitudResiduo();
 				$SolicitudResiduo->SolResKgEnviado = $request['SolResKgEnviado'][$Generador][$y];
-				$SolicitudResiduo->SolResKgRecibido = 0;
+				if(in_array(Auth::user()->UsRol, Permisos::CONDUCTOR)||in_array(Auth::user()->UsRol, Permisos::CONDUCTOR)){
+					$SolicitudResiduo->SolResKgRecibido = $request['SolResKgEnviado'][$Generador][$y];
+				} else {
+					$SolicitudResiduo->SolResKgRecibido = 0;
+				}
 				$SolicitudResiduo->SolResKgConciliado = 0;
 				$SolicitudResiduo->SolResKgTratado = 0;
 				$SolicitudResiduo->SolResDelete = 0;
@@ -1849,7 +1847,7 @@ class ServiceExpressController extends Controller
 
 		$SolicitudServicio['cliente'] = Cliente::where('ID_Cli', $SolicitudServicio->FK_SolSerCliente)->first();
 		// se establece la lista de destinatarios
-		$destinatarios = ['coordinadorse@prosarc.com.co'];
+		$destinatarios = ['coordinadorse@prosarc.com.co', 'asesorse1@prosarc.com.co', 'asesorse2@prosarc.com.co'];
 		$destinatarioscc = [];
 
 		if ($SolicitudServicio['cliente']->CliComercial <> null) {
@@ -1864,7 +1862,7 @@ class ServiceExpressController extends Controller
 
 		Mail::to($destinatarios)->cc($destinatarioscc)->send(new SolSerLeftRespel($SolicitudServicio));
 
-		return redirect()->route('serviciosexpress.show', ['id' => $id]);
+		return redirect()->route('serviciosexpress.show', ['serviciosexpress' => $id]);
 	}
 
 	/**
@@ -2349,7 +2347,7 @@ class ServiceExpressController extends Controller
 		$encoded_image = explode(",", $data_uri)[1];
 		$decoded_image = base64_decode($encoded_image);
 		$nombreDeFirma = $request->input('solserslug');
-		Storage::put('firmasClientes/'.$nombreDeFirma.'.png', $decoded_image, 'public');
+		Storage::put('public/firmasClientes/'.$nombreDeFirma.'.png', $decoded_image, 'public');
 		// return Storage::download('firmasClientes/'.$nombreDeFirma.'.png');
 
 		/**se cambia el status del servicio a conciliado */
@@ -2398,7 +2396,7 @@ class ServiceExpressController extends Controller
 			$comercialaddress = [];
 		}
 
-        Mail::to('coordinadorse@prosarc.com.co')->cc($comercialaddress)->send(new SolSerExpressConciliado($emailData));
+        Mail::to('coordinadorse@prosarc.com.co', 'asesorse1@prosarc.com.co', 'asesorse2@prosarc.com.co')->cc($comercialaddress)->send(new SolSerExpressConciliado($emailData));
 
 		return redirect()->route('serviciosexpress.show', ['serviciosexpress' => $Solicitud->SolSerSlug]);
 
@@ -2659,4 +2657,27 @@ class ServiceExpressController extends Controller
 
         return new SolSerExpressRecibo($pdf, $recibo, $asesor, $cliente, $sede);
 	}
+
+	public function getResiduosComunes()
+{
+    // Residuos comunes (tabla respels) donde RespelPublic = 1
+    $commonResidues = DB::table('respels')
+        ->leftJoin('requerimientos', 'requerimientos.FK_ReqRespel', '=', 'respels.ID_Respel')
+        ->leftJoin('tratamientos', 'requerimientos.FK_ReqTrata', '=', 'tratamientos.ID_Trat')
+        ->select('respels.ID_Respel', 'respels.RespelName', 'respels.RespelSlug', 
+                DB::raw('CONCAT("ComRes-", respels.ID_Respel) as SlugSGenerRes'), 
+                'tratamientos.TratName')
+        ->where('respels.RespelPublic', 1)
+        ->where('respels.RespelDelete', 0)
+        // Quitamos las condiciones restrictivas o las hacemos opcionales
+        ->where(function($query) {
+            $query->where('requerimientos.ofertado', 1)
+                  ->where('requerimientos.forevaluation', 1)
+                  ->orWhereNull('requerimientos.ofertado'); // Para incluir residuos sin requerimientos
+        })
+        ->distinct() // Para evitar duplicados
+        ->get();
+    
+    return response()->json($commonResidues);
+}
 }

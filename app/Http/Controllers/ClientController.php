@@ -57,6 +57,8 @@ class ClientController extends Controller
                         ->where('personals.PersDelete', 0)
                         ->where('users.UsRol', 'Comercial')
                         ->orWhere('users.UsRol2', 'Comercial')
+                        ->orWhere('users.UsRol2', 'Comercialap')
+                        ->orWhere('users.UsRol2', 'Programador')
                         ->get();
                 return view('clientes.index', compact('clientes', 'personals'));
                 break;
@@ -82,6 +84,8 @@ class ClientController extends Controller
                         ->select('personals.*')
                         ->where('personals.PersDelete', 0)
                         ->where('users.UsRol', 'Comercial')
+                        ->orWhere('users.UsRol2', 'Comercialap')
+                        ->orWhere('users.UsRol2', 'Programador')
                         ->get();
                 }
                 return view('clientes.index', compact('clientes', 'personals'));
@@ -132,6 +136,8 @@ class ClientController extends Controller
                 ->where('personals.PersDelete', 0)
                 ->where('users.UsRol', 'Comercial')
                 ->orWhere('users.UsRol2', 'Comercial')
+                ->orWhere('users.UsRol2', 'Comercialap')
+                ->orWhere('users.UsRol2', 'Programador')
                 ->get();
 
                 if (old('FK_SedeMun') !== null){
@@ -275,6 +281,7 @@ class ClientController extends Controller
             $user->save();
 
             return redirect()->route('cliente-show', [$Cliente->CliSlug]);
+           // return redirect()->route('cliente-show', ['cliente' => $Cliente->CliSlug]);
         }
     }
 
@@ -317,7 +324,7 @@ class ClientController extends Controller
 				->where('personals.PersDelete', 0)
 				->get();
 
-           // return $personal;
+           //return $Sedes;
            return view('clientes.show', compact('cliente', 'Sedes', 'SedeSlug', 'Requerimientos'));
           // return view('clientes.show', compact('personal_Cliente','cliente', 'Sedes', 'SedeSlug', 'Requerimientos'));
         }else{

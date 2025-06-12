@@ -97,7 +97,7 @@ Route::middleware(['web', 'auth', 'verified', 'bindings'])->group(function () {
 	Route::get('/generadores/createit', 'genercontroller@createit')->name('generadorprueba');
 
 	Route::get('/solicitud-servicio/createit', 'SolicitudServicioController@createit')->name('solicitudprueba');
-	//Route::post('/solicitud-servicio/create', 'SolicitudServicioController@create');
+	Route::post('/solicitud-servicio/create', 'SolicitudServicioController@create');
 
 	Route::post('/Soy-Gener/{id}', 'genercontroller@storeSoyGenerador');
 	Route::resource('/sgeneradores', 'sgenercontroller');
@@ -174,7 +174,8 @@ Route::middleware(['web', 'auth', 'verified', 'bindings'])->group(function () {
 	Route::put('/solicitud-residuo/{id}/Update', 'SolicitudResiduoController@updateSolRes');
 	Route::put('/solicitud-residuo/{id}/corregirSolRes', 'SolicitudResiduoController@corregirSolRes');
 	Route::put('/solicitud-residuo/{id}/corregirSolResExpress', 'SolicitudResiduoController@corregirSolResExpress');
-	Route::put('/solicitud-residuo/{id}/UpdatePrice', 'SolicitudResiduoController@updateSolResPrice');
+	Route::put('/solicitud-residuo/{id}/UpdatePrice', 'SolicitudResiduoController@updateSolResPrice');	
+	Route::get('/solicitud-serv/{id}/AñadirRespel', 'SolicitudResiduoController@Respelcliente') ->name('solicitud-serv.AñadirRespel');
 	//Rutas para reportes
 	//Route::get('/reportes.indextemp', 'SolicitudResiduoController@reportes');
 	Route::get('/reportes.indextemp',  ['as'=> 'reportes.indextemp', 'uses' =>'SolicitudResiduoController@reportes']);	
@@ -182,14 +183,46 @@ Route::middleware(['web', 'auth', 'verified', 'bindings'])->group(function () {
 	Route::get('/reportes.ReporteExpress', ['as'=> 'reportes.ReporteExpress', 'uses' => 'SolicitudResiduoController@reportesexpress']);
 	Route::post('/reportes/regular', 'SolicitudResiduoController@reportesRegulares');
 	Route::post('/reportes/express', 'SolicitudResiduoController@reportesExpr');
-	//Route::post('/guardar-datos', 'SolicitudResiduoController@GuardarDatosRegulares')->name('guardar.datos');	
+	Route::get('/reportes.Tiporeporte', ['as'=> 'reportes.Tiporeporte', 'uses' => 'SolicitudResiduoController@tiporeporte']);
+	Route::get('/reportes.refechas', ['as'=> 'reportes.refechas', 'uses' => 'SolicitudResiduoController@refechas']);
+	Route::get('/reportes.ventasfechas', ['as'=> 'reportes.ventasfechas', 'uses' => 'SolicitudResiduoController@ventasfechas']);
+	Route::post('/reportes/registroentrada', 'SolicitudResiduoController@registroentrada');
+	Route::post('/reportes/ventas', 'SolicitudResiduoController@ventas');
 	
+	//Rutas para Cotizaciones
+	Route::resource('/cotizacion', 'CotizacionController');
+	Route::get('cotizacion/{id}/pdf', [App\Http\Controllers\CotizacionController::class, 'downloadPDF'])->name('cotizacion.pdf');
+	Route::get('cotizacion/{cotizacion}', 'CotizacionController@show')->name('cotizacion.show');
+	//Route::put('cotizacion/{id}/aprobar', [CotizacionController::class, 'aprobar'])->name('cotizacion.aprobar');
+	Route::put('cotizacion/{id}/aprobar', 'CotizacionController@aprobar')->name('cotizacion.aprobar');
+	Route::post('/cotizacion/createclientext', 'CotizacionController@clienteexistente')->name('cotizacion.createclientext');
+	Route::post('/cotizacion/cliente', 'CotizacionController@cliente')->name('cotizacion.cliente');
+
+
+
+	//Rutas para Inventario
+	Route::get('/inventario', 'SolicitudServicioController@inventario')->name('inventario');
+	Route::post('inventario/almacenamientogeneral', 'SolicitudServicioController@almacenamientogeneral')->name('almacenamiento');
+	Route::get('/jaulas', 'SolicitudServicioController@jaulas')->name('jaulas');
+	Route::get('/jaulas/Asignar', 'SolicitudServicioController@asignar')->name('asignar');
+	Route::get('/jaulas/tratamiento/{id}', 'SolicitudServicioController@tratamiento')->name('tratamiento');
+	Route::get('/jaulas/MostrarJaula/{id}', 'SolicitudServicioController@MostrarJaula')->name('MostrarJaula');
+	Route::get('/jaulas/disponibles/{id}/{solicitud}', 'SolicitudServicioController@jaulasdisponibles')->name('jaulasdisponibles');
+	Route::post('/jaulas/disponibles/asignarJaulas', 'SolicitudServicioController@asignarJaulas')->name('asignar.jaulas');
+	Route::get('/termodestruccion', 'SolicitudServicioController@termodestruccion')->name('termo');
+	Route::post('/termodestruccion/programar', 'SolicitudServicioController@progincineracion')->name('progincineracion');
+	Route::get('/termodestruccion/programar/editar/{id}', 'SolicitudServicioController@editarprogamacion')->name('editarprogramacion');
+	Route::post('/termodestruccion/update/{id}', 'SolicitudServicioController@updateprogincineracion')->name('updateprogincineracion');
+	Route::get('/termodestruccion/programacion', 'solicitudServicioController@programacion')->name('programacion');
+	Route::get('/termodestruccion/informe', 'solicitudServicioController@informe')->name('informe');
+	Route::post('/termodestruccion/informe/{id}', 'solicitudServicioController@informepdf')->name('informepdf');
+	Route::get('/termodestruccion/incineracion', 'solicitudServicioController@incineracion')->name('incineracion');
+
 	//Route::post('/solicitud-servicio/{id}/NumFactura', [SolicitudServicioController::class, 'NumFactura'])->name('NumFactura.dato');
 	Route::put('/solicitud-servicio/{id}/NumFactura', 'SolicitudServicioController@NumFactura');
 	
 	Route::get('/reportes.ReporteDatos', ['as'=> 'reportes.ReporteDatos', 'uses' => 'SolicitudResiduoController@reportesRegularesDatos']);	
-	Route::resource('/solicitud-servicio', 'SolicitudServicioController');
-	Route::get('/solicitud-servicio/{id}/recibomaterial', 'SolicitudServicioController@recibomaterial')->name('recibo.material');;	
+	Route::resource('/solicitud-servicio', 'SolicitudServicioController');	
 	Route::post('/solicitud-servicio/changestatus', 'SolicitudServicioController@changestatus');
 	Route::post('/solicitud-servicio/reversarStatus', 'SolicitudServicioController@reversarStatus');
 	Route::post('/solicitud-servicio/cancelarServicio', 'SolicitudServicioController@cancelarServicio');
@@ -199,6 +232,22 @@ Route::middleware(['web', 'auth', 'verified', 'bindings'])->group(function () {
 	Route::put('/solicitud-servicio/{id}/update-respel', 'SolicitudServicioController@updateRespel');
 	Route::put('/solicitud-servicio/repeat/{id}', 'SolicitudServicioController@repeat');
 	Route::get('/solicitud-servicio/{id}/documentos', 'SolicitudServicioController@solservdocindex')->name('solicitud-servicio.documentos');
+	Route::get('/solicitud-servicio/{id}/recibomaterial', 'SolicitudServicioController@recibomaterial')->name('recibo.material');
+	Route::post('/solicitud-servicio/{id}/firmacliente', 'SolicitudServicioController@firmacliente');
+	Route::post('/solicitud-servicio/{id}/firmaconductor', 'SolicitudServicioController@firmaconductor');
+	Route::post('/solicitud-servicio/{id}/firmapda', 'SolicitudServicioController@firmapda');
+	Route::get('/solicitud-servicio/{id}/{slug}/wordtemplate', 'SolicitudServicioController@rmtemplate')->name('recibomaterial');
+	Route::get('/solicitud-servicio/{slug}/duplicarpesos', 'SolicitudServicioController@duplicarpesos')->name('duplicarpesos');
+	Route::post('/solicitud-servicio/{id}/NuevoRespel', 'SolicitudServicioController@NuevoRespel');
+
+	/*Rutas para ver las solicitudes por año*/
+	Route::get('solicitud-serv.2020', ['as' => 'solicitud-serv.2020', 'uses' => 'SolicitudServicioController@soli2020']);
+	Route::get('solicitud-serv.2021', ['as' => 'solicitud-serv.2021', 'uses' => 'SolicitudServicioController@soli2021']);
+	Route::get('solicitud-serv.2022', ['as' => 'solicitud-serv.2022', 'uses' => 'SolicitudServicioController@soli2022']);
+	Route::get('solicitud-serv.2023', ['as' => 'solicitud-serv.2023', 'uses' => 'SolicitudServicioController@soli2023']);
+	Route::get('solicitud-serv.2024', ['as' => 'solicitud-serv.2024', 'uses' => 'SolicitudServicioController@soli2024']);
+	Route::get('solicitud-serv.2025', ['as' => 'solicitud-serv.2025', 'uses' => 'SolicitudServicioController@soli2025']);
+	
 	Route::resource('/serviciosexpress', 'ServiceExpressController');
 	Route::post('/serviciosexpress/changestatus', 'ServiceExpressController@changestatus');
 	Route::post('/serviciosexpress/reversarStatus', 'ServiceExpressController@reversarStatus');
@@ -212,6 +261,7 @@ Route::middleware(['web', 'auth', 'verified', 'bindings'])->group(function () {
 	Route::post('/serviciosexpress/certificarExpress', 'ServiceExpressController@certificarExpress');
 	Route::post('/serviciosexpress/conciliarExpress', 'ServiceExpressController@conciliarExpress');
 	Route::get('/serviciosexpress/{id}/documentos', 'ServiceExpressController@solservdocindex')->name('solicitud-servicio.documentos');
+	Route::get('/ResiduosComunes', 'ServiceExpressController@getResiduosComunes');
 	Route::resource('/observacion', 'ObservacionController');
 	Route::resource('/recibosdepago', 'ReciboDePagoController');
 	Route::post('/recepcionerrada', 'ObservacionController@recepcionErrada');
@@ -229,6 +279,7 @@ Route::middleware(['web', 'auth', 'verified', 'bindings'])->group(function () {
 	Route::get('/certificados/{id}/firmar', 'CertificadoController@firmarindex');
 	Route::get('/certificados/{id}/wordtemplate', 'CertificadoController@wordtemplate');
 	Route::post('/certificados/{id}/independiente', 'CertificadoController@independiente');
+	Route::resource('/recibomaterial', 'recibomaterialController');
 	Route::resource('/verificationcodes', 'VerificationCodeController');
 	Route::resource('/groupcodes', 'GroupCodeController');
 	Route::resource('/verifycodes', 'VerificationCodeController');
@@ -282,11 +333,12 @@ Route::middleware(['web', 'auth', 'verified', 'bindings'])->group(function () {
 	Route::get('certificados.2022', ['as' => 'certificados.2022', 'uses' => 'CertificadoController@cert2022']);
 	Route::get('certificados.2023', ['as' => 'certificados.2023', 'uses' => 'CertificadoController@cert2023']);
 	Route::get('certificados.2024', ['as' => 'certificados.2024', 'uses' => 'CertificadoController@cert2024']);
+	Route::get('certificados.2025', ['as' => 'certificados.2025', 'uses' => 'CertificadoController@cert2025']);
 
 	Route::get('certificadosExpress.2023', ['as' => 'certificadosExpress.2023', 'uses' => 'CertificadoExpressController@certex2023']);
 	Route::get('certificadosExpress.2024', ['as' => 'certificadosExpress.2024', 'uses' => 'CertificadoExpressController@certex2024']);
 
-	Route::get('/solicitud-serv.Createrespel', 'RespelController@createrespelcliente') ->name('solicitud-serv.Createrespel');	
+	Route::get('/solicitud-serv.Createrespel', 'RespelController@createrespelcliente') ->name('solicitud-serv.Createrespel');
 	Route::post('/respel', 'RespelController@storenewrespel')->name('respel'); 
 	
 

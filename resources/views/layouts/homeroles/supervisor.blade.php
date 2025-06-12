@@ -107,8 +107,7 @@
                                             <td><a method='get' href='/vehicle-programacion/{{$programacion->ID_ProgVeh}}/edit' class='btn btn-warning btn-block'><i class="fas fa-edit"></i> <b>{{__('adminlte::message.edit')}}</b></a></td>
                                         @endif
                                         @if(in_array(Auth::user()->UsRol, Permisos::SolSerCertifi) || in_array(Auth::user()->UsRol2, Permisos::SolSerCertifi))
-                                        <td><a href="/vehicle-programacion/{{$programacion->ID_ProgVeh}}/updateStatus" class='btn btn-success btn-block' title="{{ 
-                                        'adminlte::message.progvehicserauth')}}"><i class="fas fa-sign-out-alt"></i></a></td>
+                                        <td><a href="/vehicle-programacion/{{$programacion->ID_ProgVeh}}/updateStatus" class='btn btn-success btn-block' title="{{ __('adminlte::message.progvehicserauth')}}"><i class="fas fa-sign-out-alt"></i></a></td>
                                         @endif
                                     </tr>
                                     @endforeach

@@ -15,7 +15,11 @@
 			<div class="box">
 				<div class="box-header with-border">
 					<h3 class="box-title">Añadir residuos adicionales</h3>
+					@if(in_array(Auth::user()->UsRol, Permisos::RECIBOMATERIAL) || in_array(Auth::user()->UsRol, Permisos::RECIBOMATERIAL))
+					<a href="/solicitud-serv/{{$Solicitud->SolSerSlug}}/AñadirRespel" class="btn btn-primary pull-right"><i class="fas fa-plus-square"></i> <b>Añadir Nuevo Residuo</b></a>
+					@else
 					<a href="{{ route('solicitud-serv.Createrespel')}}" class="btn btn-primary pull-right"><i class="fas fa-plus-square"></i> <b>{{ __('adminlte::message.respelscreate') }}</b></a>
+					@endif
 				</div>
 				<div class="box box-info">
 					<form role="form" id="EditSolSer" action="/solicitud-servicio/{{$Solicitud->SolSerSlug}}/update-respel" method="POST" enctype="multipart/form-data" data-toggle="validator">
@@ -65,8 +69,7 @@ $(document).ready(function(){
 })
 
 @switch($Solicitud->SolSerStatus)
-	@case('Programado')
-	@case('Notificado')
+	@case('Aprobado')
 	$("#requirimientos").remove();
 	$("#AddGenerador").remove();
 	$("#CrearResiduo").remove();

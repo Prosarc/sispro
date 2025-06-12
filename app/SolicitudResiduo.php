@@ -8,7 +8,7 @@ class SolicitudResiduo extends Model{
 
     protected $table = 'solicitud_residuos';
 
-    protected $fillable = ['SolResKgEnviado', 'SolResKgRecibido', 'SolResKgConciliado', 'SolResKgTratado', 'SolResDelete', 'SolResSlug', 'FK_SolResSolSer', 'SolResTypeUnidad', 'SolResCantiUnidad', 'SolResEmbalaje', 'SolResAlto', 'SolResAncho', 'SolResProfundo', 'SolResFotoDescargue_Pesaje', 'SolResFotoTratamiento', 'SolResVideoDescargue_Pesaje', 'SolResVideoTratamiento', 'SolResDevolucion', 'SolResDevolCantidad', 'FK_SolResRequerimiento', 'FK_SolResRg', 'SolResAuditoria', 'SolResAuditoriaTipo', 'SolResRM', 'SolResTypePrecio'];
+    protected $fillable = ['SolResKgEnviado', 'SolResKgRecibido', 'SolResKgConciliado', 'SolResKgTratado', 'SolResDelete', 'SolResSlug', 'FK_SolResSolSer', 'SolResTypeUnidad', 'SolResCantiUnidad', 'SolResEmbalaje', 'SolResAlto', 'SolResAncho', 'SolResProfundo', 'SolResFotoDescargue_Pesaje', 'SolResFotoTratamiento', 'SolResVideoDescargue_Pesaje', 'SolResVideoTratamiento', 'SolResDevolucion', 'SolResDevolCantidad', 'FK_SolResRequerimiento', 'FK_SolResRg', 'SolResAuditoria', 'SolResAuditoriaTipo', 'SolResRM', 'SolResTypePrecio', 'Jaula', 'FechaIngresoJaula'];
    
     protected $primaryKey = 'ID_SolRes';
 

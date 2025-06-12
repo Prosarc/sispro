@@ -1,70 +1,131 @@
-@extends('layouts.app')
+@extends('layouts.cotizaciones')
+
 @section('htmlheader_title')
-Cotizaciones
+    {{ __('adminlte::message.MenuCotizacionesTitle') }}
 @endsection
+
+@section('contentheader_title')
+<span style="background-image: linear-gradient(40deg, #469cfd, #a1ccfc); padding-right:30vw; position:relative; overflow:hidden;">
+    {{ __('adminlte::message.MenuCotizacionesTitle') }}
+    <div style="background-color:#ecf0f5; position:absolute; height:145%; width:40vw; transform:rotate(30deg); right:-20vw; top:-45%;"></div>
+</span>
+@endsection
+
 @section('main-content')
 <div class="container-fluid spark-screen">
-	<div class="row">
-		<div class="col-md-16 col-md-offset-0">
-			<div class="box">
-				<div class="box-header">
-					<h3 class="box-title">Cotizaciones</h3>
-					<a href="/cotizacion/create" class="btn btn-primary" style="float: right;">Crear</a>
-				</div>
-				<!-- /.box-header -->
-				<div class="box-body">
-					<table id="cotizacionesTable" class="table table-bordered table-striped" width="100%">
-						<thead>
-							<tr>
-								<th>#</th>
-								<th>Fecha de Solicitud</th>
-								<th>Fecha de Respuesta</th>
-								<th>Fecha de Vencimiento</th>
-								<th>Status</th>
-								<th>Dirección</th>
-								<th>Municipio</th>
-								<th>Cliente</th>
-								<th>Celular</th>
-								<th>Subtotal</th>
-								<th>Total</th>
-								<th>Sede Email</th>
-								<th>Telefono 1</th>
-								<th>Ver Mas</th>
-							</tr>
-						</thead>
-						<tbody id="readyTable">
-							@foreach($cotizaciones as $cotizacion)
-							<tr @if($cotizacion->CotiDelete === 1)
-								style="color: red;"
-								@endif
-								>
-								<td>{{$cotizacion->CotiNumero}}</td>
-								<td>{{$cotizacion->CotiFechaSolicitud}}</td>
-								<td>{{$cotizacion->CotiFechaRespuesta}}</td>
-								<td>{{$cotizacion->CotiFechaVencimiento}}</td>
-								<td>{{$cotizacion->CotiStatus}}</td>
-								<td>{{$cotizacion->SedeAddress}}</td>
-								@if($cotizacion->MunName=='Bogotá D.C.')
-									<td>{{$cotizacion->MunName}}</td>
-								@else()
-									<td>{{$cotizacion->MunName.' - '.$cotizacion->DepartName}}</td>
-								@endif
-								<td>{{$cotizacion->CliName}}</td>
-								<td>{{$cotizacion->SedeCelular}}</td>
-								<td>{{$cotizacion->CotiPrecioSubtotal}}</td>
-								<td>{{$cotizacion->CotiPrecioTotal}}</td>
-								{{-- <td>{{$cotizacion->CotiDelete}}</td> --}}
-								<td>{{$cotizacion->SedeEmail}}</td>
-								<td>{{$cotizacion->SedePhone1.' - '.$cotizacion->SedeExt1}}</td>
-								<td><a method='get' href='/cotizacion/{{$cotizacion->ID_Coti}}/' class='btn btn-primary btn-block'>Mas información</a></td>
-							</tr>
-							@endforeach
-						</tbody>
-					</table>
-				</div>
-				<!-- /.box-body -->
-			</div>
-		</div>
-	</div>
+    <div class="row">
+        <div class="col-md-16 col-md-offset-0">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">{{ __('adminlte::message.MenuCotizaciones') }}</h3>
+                    @if(in_array(Auth::user()->UsRol, Permisos::COTIZACION) || in_array(Auth::user()->UsRol2, Permisos::COTIZACION))
+                        <a href="/cotizacion/create" class="btn btn-primary" style="float: right;">{{ __('adminlte::message.create') }}</a>
+                    @else
+                        <a href="#" disabled class="btn btn-default pull-right" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>Crear Cotizacion</b>" data-content="<p style='width: 50%'> Unicamente comercial cuenta con la autorizacion para crear cotizacions">{{ __('adminlte::message.create') }}</a>
+                    @endif
+                </div>
+                <!-- /.box-header -->
+                <div class="box box-info">
+                    <div class="box-body">
+                    @if(session('error'))
+                            <div class="alert alert-danger">
+                                {{ session('error') }}
+                            </div>
+                        @endif
+
+                        <table id="cotizacionTable" class="table table-bordered table-striped" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>N°</th>
+                                    <th>{{ __('adminlte::langCotizacion.fechasolicitud') }}</th>
+                                    <th>{{ __('adminlte::langCotizacion.nit') }}</th>
+                                    <th>{{ __('adminlte::langcotizacion.rasonsocial') }}</th>
+                                    <th>{{ __('adminlte::message.email') }}</th>
+                                    <th>{{ __('adminlte::langrespel.respeltabtittle') }}</th>
+                                    <th>{{ __('adminlte::langrespel.trattabtittle') }}</th>
+                                    <th>{{ __('Clasificación 4741') }}</th>
+                                    <th>{{ __('Sede') }}</th>
+                                    <th>{{ __('Estado') }}</th>
+                                    <th>{{ __('Acciones') }}</th> <!-- Nueva columna para acciones -->
+                                </tr>
+                                </thead>
+                                <tbody id="readyTable">
+                                    @foreach($cotizaciones as $cotizacion)
+                                    <tr>
+                                        <td>{{ $cotizacion->id_cotizacion }}</td>
+                                        <td>{{ $cotizacion->FechaCotizacion }}</td>
+                                        <td>{{ $cotizacion->Nit }}</td>
+                                        <td>{{ $cotizacion->Razon_Social }}</td>
+                                        <td>{{ $cotizacion->Correo }}</td>
+
+                                        <!-- Columna de residuos -->
+                                        <td>
+                                            <ul>
+                                                @if($cotizacion->coti_respel->isNotEmpty())
+                                                @foreach($cotizacion->coti_respel as $residuo)
+                                                    <li>{{ $residuo->respel->RespelName ?? 'N/A' }}</li>
+                                                @endforeach
+                                                @else
+                                                    <li>No hay residuos asociados</li>
+                                                @endif
+                                            </ul>
+                                        </td>
+
+                                        <!-- Columna de tratamientos -->
+                                        <td>
+                                            <ul>
+                                                @if($cotizacion->coti_respel->isNotEmpty())
+                                                @foreach($cotizacion->coti_respel as $residuo)
+                                                    <li>{{ $residuo->tratamiento->TratName ?? 'N/A' }}</li>
+                                                @endforeach
+                                                @else
+                                                    <li>No hay tratamientos asociados</li>
+                                                @endif
+                                            </ul>
+                                        </td>
+
+                                        <!-- Columna de clasificación 4741 -->
+                                        <td>
+                                            <ul>
+                                                @if($cotizacion->coti_respel->isNotEmpty())
+                                                    @foreach($cotizacion->coti_respel as $residuo)
+                                                        <li>{{ $residuo->clasf4741 ?? 'N/A' }}</li>
+                                                    @endforeach
+                                                @else
+                                                    <li>No hay clasificaciones asociadas</li>
+                                                @endif
+                                            </ul>
+                                        </td>
+
+                                        <!-- Columna de sede -->
+                                        <td>{{ $cotizacion->Sede }}</td>
+
+                                        
+
+                                        <!-- Columna de estado -->
+                                        <td>{{ $cotizacion->CoStatus }}</td>
+
+                                        <!-- Columna de acciones -->
+                                        <td>
+                                            <a href="{{ route('cotizacion.edit', $cotizacion->id_cotizacion) }}" class="btn btn-primary btn-sm">Editar</a>
+                                            <a href="{{ route('cotizacion.show', $cotizacion->id_cotizacion) }}" class="btn btn-info btn-sm">🔍Ver</a>
+                                        </td>
+                                    @endforeach
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+    </div>
 </div>
+@endsection
+
+@section('js')
+    <script>
+        $(document).ready(function() {
+            $('#cotizacionTable').DataTable();
+        });
+    </script>
 @endsection

@@ -18,8 +18,15 @@
 					@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
 							<a href="/solicitud-servicio/createit" class="btn btn-primary pull-right">{{ __('adminlte::message.create') }}</a>
 						@else
+							@if($Cliente->CliStatus == "Bloqueado")
+								@section('contentheader_description')
+									@component('layouts.partials.modalecartera')
+									@endcomponent
+								@endsection
+							@else
 							<a href="/solicitud-servicio/create" class="btn btn-primary pull-right">{{ __('adminlte::message.create') }}</a>
-						@endif
+							@endif
+					@endif		
 				</div>
 				<div class="box box-info">
 					<div class="box-body">
@@ -37,6 +44,7 @@
 									@endif
 									<th>{{__('adminlte::message.solserindextrans')}}</th>
 									<th>{{__('adminlte::message.solseraddrescollect')}}</th>
+									<th>Generador</th>
 									<th>{{__('adminlte::message.seemore')}}</th>
 									@if(in_array(Auth::user()->UsRol, Permisos::SolSerCertifi) || in_array(Auth::user()->UsRol2, Permisos::SolSerCertifi))
 										<th>{{__('adminlte::message.solserstatuscertifi')}}</th>
@@ -100,6 +108,10 @@
 													<td class="text-center"><a data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 200}' title="<b>Status Cancelado</b>" data-content="<p style='width: 50%'>Ingrese en las Observaciones del Servicio para validar el motivo de la cancelación... <br>Para más detalles comuníquese con su <b>Asesor Comercial</b> </p>" class='btn fixed_widthbtn btn-danger'><i class='fas fa-lg fa-ban'></i></a><br>{{$Servicio->SolSerStatus}}</td>
 													@break
 												@default
+												@case('Fallido')
+												<td class="text-center"><a data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 200}' title="<b>Status Fallido</b>" data-content="<p style='width: 50%'>Ingrese en las Observaciones del Servicio para validar el motivo del servicio fallido <br>Para más detalles comuníquese con su <b>Asesor Comercial</b> </p>" class='btn fixed_widthbtn btn-danger'><i class='fas fa-lg fa-ban'></i></a><br>{{$Servicio->SolSerStatus}}</td>
+												</td>
+												@break
 													<td class="text-center"><a data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 200}' title="<b>Status Indefinido</b>" data-content="<p style='width: 50%'>Status Indefinido... <br>Para más detalles comuníquese con su <b>Asesor Comercial</b> </p>" class='btn fixed_widthbtn btn-primary'><i class='fas fa-lg fa-thumbs-up'></i></a><br>{{$Servicio->SolSerStatus}}</td>
 											@endswitch
 										@else
@@ -156,6 +168,7 @@
 										@endif
 										<td>{{$Servicio->SolSerNameTrans}}</td>
 										<td>{{$Servicio->SolSerCollectAddress == null ? 'N/A' : $Servicio->SolSerCollectAddress}}</td>
+										<td>{{$Servicio->GSedeName}}</td>
 										<td style="text-align: center;"><a href='/solicitud-servicio/{{$Servicio->SolSerSlug}}' class="btn btn-info" title="{{ __('adminlte::message.seemoredetails')}}"><i class="fas fa-search"></i></a></td>
 										@if(in_array(Auth::user()->UsRol, Permisos::SolSerCertifi) || in_array(Auth::user()->UsRol2, Permisos::SolSerCertifi))
 											@php

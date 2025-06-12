@@ -1,3 +1,9 @@
+@php
+    // Restamos un mes a la fecha actual
+    $mesAnterior = \Carbon\Carbon::now()->subMonth();
+    // Convertimos la fecha de creación de la solicitud a objeto Carbon
+    $fechaSolicitud = \Carbon\Carbon::parse($SolicitudServicio->created_at);
+@endphp
 @extends('layouts.app')
 @section('htmlheader_title')
 Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
@@ -146,11 +152,27 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 									@if($SolicitudServicio->SolSerTipo == 'Interno')
 										<div class="col-md-6">
 											<label>{{ __('adminlte::message.solserconduc') }}:</label><br>
-											<a>{{$SolSerConductor == null ? __('adminlte::message.solsernullprogram') : $SolSerConductor->PersFirstName." ".$SolSerConductor->PersLastName}}</a>
+											<a>
+												@if(empty($SolicitudServicio->SolSerConductor))
+													{{ __('adminlte::message.solsernullprogram') }}
+												@else
+													@foreach($SolicitudServicio->SolSerConductor as $conductor)
+														{{ trim($conductor) }}{{ $loop->last ? '' : ', ' }}
+													@endforeach
+												@endif
+											</a>
 										</div>
 										<div class="col-md-6">
 											<label>{{ __('adminlte::message.solservehic') }}:</label><br>
-											<a>{{$SolicitudServicio->SolSerVehiculo == null ? __('adminlte::message.solsernullprogram') : $SolicitudServicio->SolSerVehiculo}}</a>
+											<a>
+												@if(empty($SolicitudServicio->SolSerVehiculo))
+													{{ __('adminlte::message.solsernullprogram') }}
+												@else
+													@foreach($SolicitudServicio->SolSerVehiculo as $placa)
+														{{ trim($placa) }}{{ $loop->last ? '' : ', ' }}
+													@endforeach
+												@endif
+											</a>
 										</div>
 									@else
 									<div class="col-md-6">
@@ -159,7 +181,15 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 									</div>
 									<div class="col-md-6">
 										<label>{{ __('adminlte::message.solservehic') }}:</label><br>
-										<a>{{$SolicitudServicio->SolSerVehiculo == null ? 'N/A' : $SolicitudServicio->SolSerVehiculo}}</a>
+										<a>
+											@if($solicitud->SolSerVehiculo == null)
+												{{ __('adminlte::message.solsernullprogram') }}
+											@else
+												@foreach($solicitud->SolSerVehiculo as $key => $placa)
+													{{ $placa }}{{ $loop->last ? '' : ', ' }}
+												@endforeach
+											@endif
+										</a>
 									</div>
 									<div class="col-md-6">
 										<label>Fecha llegada a Planta:</label><br>
@@ -227,7 +257,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 								@endif
 								
 							@endif
-						  @if(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol, Permisos::ProgVehic1)|| in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
+						  @if(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol, Permisos::ProgVehic1)|| in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR)||in_array(Auth::user()->UsRol, Permisos::COMERCIALES) )
 							@if ($SolicitudServicio->Repetible == 0)
 							<label class="pull-right" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover"
 								data-delay='{"show": 200}' title="<b>Repetir Solicitud de Servicio</b>"
@@ -460,18 +490,18 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 													@endif
 														{{$Residuo->RespelName}}</td>
 												<td>
-													@if(in_array(Auth::user()->UsRol, Permisos::SolSer1) || in_array(Auth::user()->UsRol2, Permisos::SolSer1))
+													@if(in_array(Auth::user()->UsRol, Permisos::CambioTratamiento) || in_array(Auth::user()->UsRol2, Permisos::CambioTratamiento))
 														@switch($SolicitudServicio->SolSerStatus)
 															@case('Aprobado')
 															@case('Aceptado')
 															@case('Notificado')
 															@case('Completado')
+																<a onclick="changeTratamiento(`{{$Residuo->SolResSlug}}`, `{{$Residuo->ID_Trat}}`, `{{$Residuo->TratName}}`, `{{$Residuo->FK_SolResRequerimiento}}`, `{{$SolicitudServicio->SolSerSlug}}`, `{{$SolicitudServicio->ID_SolSer}}`)">
+																@break	
 															@case('No Conciliado')
 															@case('Conciliado')
 															@case('Certificacion')
-															@case('Certificado')
-																<a onclick="changeTratamiento(`{{$Residuo->SolResSlug}}`, `{{$Residuo->ID_Trat}}`, `{{$Residuo->TratName}}`, `{{$Residuo->FK_SolResRequerimiento}}`, `{{$SolicitudServicio->SolSerSlug}}`, `{{$SolicitudServicio->ID_SolSer}}`)">
-																@break															
+															@case('Certificado')						
 															@case('Tratado')
 															@case('Facturado')
 																<a style="color: black">
@@ -579,7 +609,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 															<i class="fas fa-marker"></i></a>
 														@endif
 														@if(in_array(Auth::user()->UsRol, Permisos::UpdateCantConciliada) || in_array(Auth::user()->UsRol2, Permisos::UpdateCantConciliada))
-															@if($SolicitudServicio->SolSerStatus === 'Certificacion' || $SolicitudServicio->SolSerStatus === 'Conciliado' || $SolicitudServicio->SolSerStatus === 'Facturado')
+															@if($SolicitudServicio->SolSerStatus === 'Completado')
 																@if($Residuo->SolResTypeUnidad == 'Litros' || $Residuo->SolResTypeUnidad == 'Unidad')
 																	<a onclick="editKgConciliado(`{{$Residuo->SolResSlug}}`, `{{$Residuo->SolResCantiUnidadRecibida}}`, `{{$Residuo->SolResCantiUnidadConciliada}}`, `{{$TypeUnidad}}`, `{{number_format($Residuo->SolResKgRecibido, $decimals = 2, $dec_point = ',', $thousands_sep = '.')}}`, null, `{!!json_encode($Residuo->SolResRM2, JSON_NUMERIC_CHECK)!!}`)">
 																@else
@@ -602,9 +632,9 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 															@if(($SolicitudServicio->SolSerStatus === 'Conciliado' || $SolicitudServicio->SolSerStatus === 'Certificacion' || $SolicitudServicio->SolSerStatus === 'Facturado') && $Residuo->SolResKgTratado != $Residuo->SolResKgConciliado)
 																{{-- <a class="kg" onclick="addkg(`{{$Residuo->SolResSlug}}`, `{{number_format($Residuo->SolResKgTratado, $decimals = 2, $dec_point = ',', $thousands_sep = '.')}}`, `{{number_format($Residuo->SolResKgConciliado, $decimals = 2, $dec_point = ',', $thousands_sep = '.')}}`)">  --}}
 																@if($Residuo->SolResTypeUnidad == 'Litros' || $Residuo->SolResTypeUnidad == 'Unidad')
-																	<a onclick="addkg(`{{$Residuo->SolResSlug}}`, `{{$Residuo->SolResCantiUnidadRecibida}}`, `{{$Residuo->SolResCantiUnidadConciliada}}`, `{{$TypeUnidad}}`, `{{number_format($Residuo->SolResKgTratado, $decimals = 2, $dec_point = ',', $thousands_sep = '.')}}`, `{{number_format($Residuo->SolResKgConciliado, $decimals = 2, $dec_point = ',', $thousands_sep = '.')}}`)">
+																<a onclick="addkg(`{{$Residuo->SolResSlug}}`, `{{number_format($Residuo->SolResKgRecibido, $decimals = 2, $dec_point = ',', $thousands_sep = '.')}}`, `{{number_format($Residuo->SolResKgConciliado, $decimals = 2, $dec_point = ',', $thousands_sep = '.')}}`, `{{$TypeUnidad}}`, null, null, `{!!json_encode($Residuo->SolResRM2, JSON_NUMERIC_CHECK)!!}`)">
 																@else
-																	<a onclick="addkg(`{{$Residuo->SolResSlug}}`, `{{$Residuo->SolResCantiUnidadRecibida}}`, `{{$Residuo->SolResCantiUnidadConciliada}}`, `{{$TypeUnidad}}`, `{{number_format($Residuo->SolResKgTratado, $decimals = 2, $dec_point = ',', $thousands_sep = '.')}}`, `{{number_format($Residuo->SolResKgConciliado, $decimals = 2, $dec_point = ',', $thousands_sep = '.')}}`)"> 
+																<a onclick="addkg(`{{$Residuo->SolResSlug}}`, `{{number_format($Residuo->SolResKgRecibido, $decimals = 2, $dec_point = ',', $thousands_sep = '.')}}`, `{{number_format($Residuo->SolResKgConciliado, $decimals = 2, $dec_point = ',', $thousands_sep = '.')}}`, `{{$TypeUnidad}}`, null, null, `{!!json_encode($Residuo->SolResRM2, JSON_NUMERIC_CHECK)!!}`)"> 
 																@endif
 															@else
 																<a style="color: black">
@@ -991,7 +1021,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 </script>
 
 {{--Funcion para ingreso de Numero de Factura--}}
-@if(in_array(Auth::user()->UsRol, Permisos::ADMINISTRADORBOGOTA) || in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR)){
+@if(in_array(Auth::user()->UsRol, Permisos::SEDECOMERCIAL) || in_array(Auth::user()->UsRol, Permisos::SEDECOMERCIAL)){
 <script>
 	function updateFVE(slug){	
 			$('#addFVEmodal').empty();
@@ -1235,7 +1265,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 @endif
 
 {{-- funciones para el modal de cambio de trtamiento --}}
-@if(in_array(Auth::user()->UsRol, Permisos::SolSer1) || in_array(Auth::user()->UsRol2, Permisos::SolSer1))
+@if(in_array(Auth::user()->UsRol, Permisos::CambioTratamiento) || in_array(Auth::user()->UsRol2, Permisos::CambioTratamiento))
 	<script>
 		function changeTratamiento(slug, idTrat, tratName, idReq, solServicio, ID_SolSer){
 			$('#changetratmodal').empty();
@@ -1394,28 +1424,15 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 											</div>
 												@break
 											@case('Conciliado')
-											@case('Certificacion')
-											@case('Facturado')
 											<div class="form-group col-md-12">	
-												<label for="SolResKgTratado">Cantidad Tratada (kg)</label>
-												<small class="help-block with-errors">*</small>
-												<div class="input-group">
-													<input type="number" step=".01" min="0" class="form-control cantidadmax" id="SolResKgTratado" name="SolResKg" maxlength="5" value="`+cantidadKG+`" max="`+KgConciliado+`" required>
-													<div class="input-group-btn">
-														<a title="Lo conciliado ya esta tratado" id="btn-consiliado" class="btn btn-success" `+(tipo != 'Kilogramos' ? 'onclick="submit('+cantidadmax+','+KgConciliado+',\''+tipo+'\')"' : 'onclick="submit('+null+','+KgConciliado+',\''+tipo+'\')"')+`>Tratado</a>
-														<div id="conciliadokg"></div>
-													</div>
-												</div>
+												<label for="SolResKgConciliado">Cantidad Tratada (kg)</label><small class="help-block with-errors">*</small><input type="number" step=".01" min="0" class="form-control" id="SolResKgConciliado" name="SolResKg" maxlength="5" value="`+cantidadKG+`" required>
 											</div>
 											<div class="form-group col-md-12">	
-												`+(tipo != 'Kilogramos' ? '<label for="SolResCantiUnidadTratada">Cantidad Tratada '+tipo+' </label><small class="help-block with-errors">*</small><input type="number" step=".1" min="0" class="form-control" id="SolResCantiUnidadTratada" name="SolResCantiUnidadTratada" maxlength="5" max="'+cantidadmax+'" value="'+cantidad+'" required>' : '')+`
-											</div>
-											<div class="col-md-12 form-group has-feedback">
-												<label for="SolResRM"># RM</label><small class="help-block with-errors">*</small>
-												<select id="SolResRMselect" class="form-control select-multiple" name="SolResRM[]" multiple required>
-												</select>
+													`+(tipo != 'Kilogramos' ? '<label for="SolResCantiUnidadConciliada">Cantidad Tratada '+tipo+' </label><small class="help-block with-errors">*</small><input type="number" step=".1" min="0" class="form-control" id="SolResCantiUnidadConciliada" name="SolResCantiUnidadConciliada" maxlength="5" value="'+cantidad+'" required>' : '')+`
 											</div>
 												@break
+											@case('Certificacion')
+											@case('Facturado')
 										@endswitch
 										<input type="text" hidden name="SolRes" value="`+slug+`">
 								</div>
@@ -1766,7 +1783,17 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 			$('#titulo').empty();
 			@if(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
 				$('#titulo').append(`
-					<a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/edit" class="btn btn-warning pull-right"><i class="fas fa-edit"></i><b> {{__('adminlte::message.edit')}}</b></a>
+					@if($fechaSolicitud->lessThan($mesAnterior))
+				<!-- Botón deshabilitado si la solicitud es del mes anterior -->
+				<a href="#" class="btn btn-warning pull-right disabled" style="pointer-events: none;">
+					<i class="fas fa-edit"></i><b> {{ __('adminlte::message.edit') }}</b>
+				</a>
+			@else
+				<!-- Botón de edición normal -->
+				<a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/edit" class="btn btn-warning pull-right">
+					<i class="fas fa-edit"></i><b> {{ __('adminlte::message.edit') }}</b>
+				</a>
+			@endif
 					<a method='get' href='#' data-toggle='modal' data-target='#myModal{{$SolicitudServicio->SolSerSlug}}' class='btn btn-danger pull-left'><i class="fas fa-trash-alt"></i> <b>{{__('adminlte::message.delete')}}</b></a>
 				`);
 			@endif
@@ -1799,8 +1826,18 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 			$('#titulo').empty();
 			@if(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
 				$('#titulo').append(`
-					<a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/edit" class="btn btn-warning pull-right"><i class="fas fa-edit"></i><b> {{__('adminlte::message.edit')}}</b></a>
-					<a method='get' href='#' data-toggle='modal' data-target='#myModal{{$SolicitudServicio->SolSerSlug}}' class='btn btn-danger pull-left'><i class="fas fa-trash-alt"></i> <b>{{__('adminlte::message.delete')}}</b></a>
+					@if($fechaSolicitud->lessThan($mesAnterior))
+				<!-- Botón deshabilitado si la solicitud es del mes anterior -->
+				<a href="#" class="btn btn-warning pull-right disabled" style="pointer-events: none;">
+					<i class="fas fa-edit"></i><b> {{ __('adminlte::message.edit') }}</b>
+				</a>
+			@else
+				<!-- Botón de edición normal -->
+				<a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/edit" class="btn btn-warning pull-right">
+					<i class="fas fa-edit"></i><b> {{ __('adminlte::message.edit') }}</b>
+				</a>
+			@endif
+			<a method='get' href='#' data-toggle='modal' data-target='#myModal{{$SolicitudServicio->SolSerSlug}}' class='btn btn-danger pull-left'><i class="fas fa-trash-alt"></i> <b>{{__('adminlte::message.delete')}}</b></a>
 				`);
 			@endif
 			@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || Auth::user()->email == 'logistica@prosarc.com.co')
@@ -1832,8 +1869,18 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 			$('#titulo').empty();
 			@if(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
 				$('#titulo').append(`
-					<a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/edit" class="btn btn-warning pull-right"><i class="fas fa-edit"></i><b> {{__('adminlte::message.edit')}}</b></a>
-					<a method='get' href='#' data-toggle='modal' data-target='#myModal{{$SolicitudServicio->SolSerSlug}}' class='btn btn-danger pull-left'><i class="fas fa-trash-alt"></i> <b>{{__('adminlte::message.delete')}}</b></a>
+					@if($fechaSolicitud->lessThan($mesAnterior))
+				<!-- Botón deshabilitado si la solicitud es del mes anterior -->
+				<a href="#" class="btn btn-warning pull-right disabled" style="pointer-events: none;">
+					<i class="fas fa-edit"></i><b> {{ __('adminlte::message.edit') }}</b>
+				</a>
+			@else
+				<!-- Botón de edición normal -->
+				<a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/edit" class="btn btn-warning pull-right">
+					<i class="fas fa-edit"></i><b> {{ __('adminlte::message.edit') }}</b>
+				</a>
+			@endif
+			<a method='get' href='#' data-toggle='modal' data-target='#myModal{{$SolicitudServicio->SolSerSlug}}' class='btn btn-danger pull-left'><i class="fas fa-trash-alt"></i> <b>{{__('adminlte::message.delete')}}</b></a>
 				`);
 			@endif
 			@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) )
@@ -1860,8 +1907,18 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 			$('#titulo').empty();
              @if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
                 $('#titulo').append(`
-                    <a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/edit" class="btn btn-warning pull-right"><i class="fas fa-edit"></i><b> {{__('adminlte::message.edit')}}</b></a>
-                    <a method='get' href='#' data-toggle='modal' data-target='#myModal{{$SolicitudServicio->SolSerSlug}}' class='btn btn-danger pull-left'><i class="fas fa-trash-alt"></i> <b>{{__('adminlte::message.delete')}}</b></a>
+                    @if($fechaSolicitud->lessThan($mesAnterior))
+				<!-- Botón deshabilitado si la solicitud es del mes anterior -->
+				<a href="#" class="btn btn-warning pull-right disabled" style="pointer-events: none;">
+					<i class="fas fa-edit"></i><b> {{ __('adminlte::message.edit') }}</b>
+				</a>
+			@else
+				<!-- Botón de edición normal -->
+				<a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/edit" class="btn btn-warning pull-right">
+					<i class="fas fa-edit"></i><b> {{ __('adminlte::message.edit') }}</b>
+				</a>
+			@endif
+			<a method='get' href='#' data-toggle='modal' data-target='#myModal{{$SolicitudServicio->SolSerSlug}}' class='btn btn-danger pull-left'><i class="fas fa-trash-alt"></i> <b>{{__('adminlte::message.delete')}}</b></a>
                 `);
             @endif
 			@if(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
@@ -1905,7 +1962,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 					`);
 				@endif
 			@endif
-			@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol2, Permisos::PROGRAMADOR))
+			@if(in_array(Auth::user()->UsRol, Permisos::RECIBOMATERIAL) || in_array(Auth::user()->UsRol2, Permisos::RECIBOMATERIAL))
 			$('#titulo').append(`
 					<a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/recibomaterial" class="btn btn-primary">Recibo Material</a>
                 `);
@@ -1949,6 +2006,11 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 					`);
 				@endif
 			@endif
+			@if(in_array(Auth::user()->UsRol, Permisos::RECIBOMATERIAL) || in_array(Auth::user()->UsRol2, Permisos::RECIBOMATERIAL))
+			$('#titulo').append(`
+					<a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/recibomaterial" class="btn btn-primary">Recibo Material</a>
+                `);
+			@endif
 
 			$('#titulo').append(`
 				<b>{{__('adminlte::message.solsershowprograma')}}</b><span>{{$TextProgramacion}}</span>
@@ -1963,8 +2025,18 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 			@endif
     			@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
                 $('#titulo').append(`
-                    <a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/edit" class="btn btn-warning pull-right"><i class="fas fa-edit"></i><b> {{__('adminlte::message.edit')}}</b></a>
-                    <a method='get' href='#' data-toggle='modal' data-target='#myModal{{$SolicitudServicio->SolSerSlug}}' class='btn btn-danger pull-left'><i class="fas fa-trash-alt"></i> <b>{{__('adminlte::message.delete')}}</b></a>
+                    @if($fechaSolicitud->lessThan($mesAnterior))
+				<!-- Botón deshabilitado si la solicitud es del mes anterior -->
+				<a href="#" class="btn btn-warning pull-right disabled" style="pointer-events: none;">
+					<i class="fas fa-edit"></i><b> {{ __('adminlte::message.edit') }}</b>
+				</a>
+			@else
+				<!-- Botón de edición normal -->
+				<a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/edit" class="btn btn-warning pull-right">
+					<i class="fas fa-edit"></i><b> {{ __('adminlte::message.edit') }}</b>
+				</a>
+			@endif>
+			<a method='get' href='#' data-toggle='modal' data-target='#myModal{{$SolicitudServicio->SolSerSlug}}' class='btn btn-danger pull-left'><i class="fas fa-trash-alt"></i> <b>{{__('adminlte::message.delete')}}</b></a>
                 `);
             @endif
 			@if(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol, Permisos::JEFELOGISTICA)|| in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR)|| Auth::user()->email == 'logistica@prosarc.com.co')
@@ -2014,8 +2086,17 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 			@endif
 			@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
                 $('#titulo').append(`
-                    <a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/edit" class="btn btn-warning pull-right"><i class="fas fa-edit"></i><b> {{__('adminlte::message.edit')}}</b></a>
-                    <a method='get' href='#' data-toggle='modal' data-target='#myModal{{$SolicitudServicio->SolSerSlug}}' class='btn btn-danger pull-left'><i class="fas fa-trash-alt"></i> <b>{{__('adminlte::message.delete')}}</b></a>
+                    @if($fechaSolicitud->lessThan($mesAnterior))
+				<!-- Botón deshabilitado si la solicitud es del mes anterior -->
+				<a href="#" class="btn btn-warning pull-right disabled" style="pointer-events: none;">
+					<i class="fas fa-edit"></i><b> {{ __('adminlte::message.edit') }}</b>
+				</a>
+			@else
+				<!-- Botón de edición normal -->
+				<a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/edit" class="btn btn-warning pull-right">
+					<i class="fas fa-edit"></i><b> {{ __('adminlte::message.edit') }}</b>
+				</a>
+			@endif                   <a method='get' href='#' data-toggle='modal' data-target='#myModal{{$SolicitudServicio->SolSerSlug}}' class='btn btn-danger pull-left'><i class="fas fa-trash-alt"></i> <b>{{__('adminlte::message.delete')}}</b></a>
                 `);
             @endif
 			@if(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol, Permisos::AREALOGISTICA))
@@ -2038,7 +2119,17 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 			$('#titulo').empty();
 			@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
                 $('#titulo').append(`
-                    <a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/edit" class="btn btn-warning pull-right"><i class="fas fa-edit"></i><b> {{__('adminlte::message.edit')}}</b></a>
+                    @if($fechaSolicitud->lessThan($mesAnterior))
+				<!-- Botón deshabilitado si la solicitud es del mes anterior -->
+				<a href="#" class="btn btn-warning pull-right disabled" style="pointer-events: none;">
+					<i class="fas fa-edit"></i><b> {{ __('adminlte::message.edit') }}</b>
+				</a>
+			@else
+				<!-- Botón de edición normal -->
+				<a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/edit" class="btn btn-warning pull-right">
+					<i class="fas fa-edit"></i><b> {{ __('adminlte::message.edit') }}</b>
+				</a>
+			@endif
                     <a method='get' href='#' data-toggle='modal' data-target='#myModal{{$SolicitudServicio->SolSerSlug}}' class='btn btn-danger pull-left'><i class="fas fa-trash-alt"></i> <b>{{__('adminlte::message.delete')}}</b></a>
                 `);
             @endif
@@ -2088,7 +2179,17 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 			@endif
 			@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
                 $('#titulo').append(`
-                    <a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/edit" class="btn btn-warning pull-right"><i class="fas fa-edit"></i><b> {{__('adminlte::message.edit')}}</b></a>
+                    @if($fechaSolicitud->lessThan($mesAnterior))
+				<!-- Botón deshabilitado si la solicitud es del mes anterior -->
+				<a href="#" class="btn btn-warning pull-right disabled" style="pointer-events: none;">
+					<i class="fas fa-edit"></i><b> {{ __('adminlte::message.edit') }}</b>
+				</a>
+			@else
+				<!-- Botón de edición normal -->
+				<a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/edit" class="btn btn-warning pull-right">
+					<i class="fas fa-edit"></i><b> {{ __('adminlte::message.edit') }}</b>
+				</a>
+			@endif
                     <a method='get' href='#' data-toggle='modal' data-target='#myModal{{$SolicitudServicio->SolSerSlug}}' class='btn btn-danger pull-left'><i class="fas fa-trash-alt"></i> <b>{{__('adminlte::message.delete')}}</b></a>
                 `);
             @endif
@@ -2137,7 +2238,17 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 			@endif
 			@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
                 $('#titulo').append(`
-                    <a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/edit" class="btn btn-warning pull-right"><i class="fas fa-edit"></i><b> {{__('adminlte::message.edit')}}</b></a>
+                    @if($fechaSolicitud->lessThan($mesAnterior))
+				<!-- Botón deshabilitado si la solicitud es del mes anterior -->
+				<a href="#" class="btn btn-warning pull-right disabled" style="pointer-events: none;">
+					<i class="fas fa-edit"></i><b> {{ __('adminlte::message.edit') }}</b>
+				</a>
+			@else
+				<!-- Botón de edición normal -->
+				<a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/edit" class="btn btn-warning pull-right">
+					<i class="fas fa-edit"></i><b> {{ __('adminlte::message.edit') }}</b>
+				</a>
+			@endif
                     <a method='get' href='#' data-toggle='modal' data-target='#myModal{{$SolicitudServicio->SolSerSlug}}' class='btn btn-danger pull-left'><i class="fas fa-trash-alt"></i> <b>{{__('adminlte::message.delete')}}</b></a>
                 `);
             @endif
@@ -2182,7 +2293,17 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 			@endif
 			@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
                 $('#titulo').append(`
-                    <a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/edit" class="btn btn-warning pull-right"><i class="fas fa-edit"></i><b> {{__('adminlte::message.edit')}}</b></a>
+                    @if($fechaSolicitud->lessThan($mesAnterior))
+				<!-- Botón deshabilitado si la solicitud es del mes anterior -->
+				<a href="#" class="btn btn-warning pull-right disabled" style="pointer-events: none;">
+					<i class="fas fa-edit"></i><b> {{ __('adminlte::message.edit') }}</b>
+				</a>
+			@else
+				<!-- Botón de edición normal -->
+				<a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/edit" class="btn btn-warning pull-right">
+					<i class="fas fa-edit"></i><b> {{ __('adminlte::message.edit') }}</b>
+				</a>
+			@endif
                     <a method='get' href='#' data-toggle='modal' data-target='#myModal{{$SolicitudServicio->SolSerSlug}}' class='btn btn-danger pull-left'><i class="fas fa-trash-alt"></i> <b>{{__('adminlte::message.delete')}}</b></a>
                 `);
             @endif
@@ -2226,7 +2347,17 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 			@endif
 			@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR))
                 $('#titulo').append(`
-                    <a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/edit" class="btn btn-warning pull-right"><i class="fas fa-edit"></i><b> {{__('adminlte::message.edit')}}</b></a>
+                    @if($fechaSolicitud->lessThan($mesAnterior))
+				<!-- Botón deshabilitado si la solicitud es del mes anterior -->
+				<a href="#" class="btn btn-warning pull-right disabled" style="pointer-events: none;">
+					<i class="fas fa-edit"></i><b> {{ __('adminlte::message.edit') }}</b>
+				</a>
+			@else
+				<!-- Botón de edición normal -->
+				<a href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/edit" class="btn btn-warning pull-right">
+					<i class="fas fa-edit"></i><b> {{ __('adminlte::message.edit') }}</b>
+				</a>
+			@endif
                     <a method='get' href='#' data-toggle='modal' data-target='#myModal{{$SolicitudServicio->SolSerSlug}}' class='btn btn-danger pull-left'><i class="fas fa-trash-alt"></i> <b>{{__('adminlte::message.delete')}}</b></a>
                 `);
             @endif

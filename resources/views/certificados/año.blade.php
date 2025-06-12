@@ -30,6 +30,7 @@ Lista de Certificados
                         <a href="{{ route('certificados.2022')}}" class="btn btn-primary btn-lg btn-block" style="float: right;">2022</a>
                         <a href="{{ route('certificados.2023')}}" class="btn btn-primary btn-lg btn-block" style="float: right;">2023</a>
 						<a href="{{ route('certificados.2024')}}" class="btn btn-primary btn-lg btn-block" style="float: right;">2024</a>
+						<a href="{{ route('certificados.2025')}}" class="btn btn-primary btn-lg btn-block" style="float: right;">2025</a>
 					    </center>
 					</div>
 				</div>

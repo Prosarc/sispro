@@ -22,6 +22,7 @@ use App\Docdato;
 use App\Tratamiento;
 use App\Generador;
 use App\Certificado;
+use App\incineracion;
 use Permisos;
 
 class SolicitudResiduoController extends Controller
@@ -76,11 +77,11 @@ class SolicitudResiduoController extends Controller
 	public function edit($id)
 	{
 		if(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR)){
-			$SolRes = SolicitudResiduo::where('SolResSlug', $id)->first();
-			if (!$SolRes) {
-				abort(404);
-			}
-			$SolSer = SolicitudServicio::where('ID_SolSer', $SolRes->FK_SolResSolSer)->first();
+				$SolRes = SolicitudResiduo::where('SolResSlug', $id)->first();
+				if (!$SolRes) {
+					abort(404);
+				}
+				$SolSer = SolicitudServicio::where('ID_SolSer', $SolRes->FK_SolResSolSer)->first();
 			$RespelSgener = ResiduosGener::where('ID_SGenerRes', $SolRes->FK_SolResRg)->first();
 			$Respel = DB::table('respels')
 				->join('residuos_geners', 'respels.ID_Respel', '=', 'residuos_geners.FK_Respel')
@@ -92,7 +93,7 @@ class SolicitudResiduoController extends Controller
 				->where('requerimientos.FK_ReqRespel', $Respel->ID_Respel)
 				->where('requerimientos.ofertado', '=', 1)
 				->first();
-			// return $Requerimientos;
+			//return $Requerimientos;
 			if($SolSer->SolSerStatus === 'Programado' || $SolSer->SolSerStatus === 'Completado' || $SolSer->SolSerStatus === 'Conciliado' || $SolSer->SolSerStatus === 'Tratado'  || $SolSer->SolSerStatus === 'Certificacion'){
 				abort(403);
 			}
@@ -151,6 +152,7 @@ class SolicitudResiduoController extends Controller
 					break;
 				case 'No Conciliado':
 				case 'Completado':
+				case 'Recepcionado':	
 					if($SolRes->SolResTypeUnidad == 'Litros' || $SolRes->SolResTypeUnidad == 'Unidad'){
 						$SolRes->SolResCantiUnidadConciliada = $request->input('SolResCantiUnidadConciliada');
 						$SolRes->SolResKgConciliado = $request->input('SolResKg');
@@ -220,6 +222,7 @@ class SolicitudResiduoController extends Controller
 					break;
 				case 'No Conciliado':
 				case 'Completado':
+				case 'Recepcionado':	
 					if($SolRes->SolResTypeUnidad == 'Litros' || $SolRes->SolResTypeUnidad == 'Unidad'){
 						$SolRes->SolResCantiUnidadConciliada = $request->input('SolResCantiUnidadConciliada');
 						$SolRes->SolResKgConciliado = $request->input('SolResKg');
@@ -248,6 +251,25 @@ class SolicitudResiduoController extends Controller
 			}
 			$SolRes->save();
 
+			if(in_array(Auth::user()->UsRol, Permisos::SUPERVISOR) || in_array(Auth::user()->UsRol2, Permisos::SUPERVISOR)){
+
+				$incineraciones = SolicitudResiduo::where('SolResSlug', $id)->first();
+
+				$incinerar = incineracion::where('FK_SolRes', $incineraciones->ID_SolRes)->first();
+
+				$ejecutado = intval($request->input('SolResKg'));
+
+				$porcentaje = ($incinerar->Cantidadprog * 100) / $ejecutado;
+
+				$incinerar->CantidadEje = $request->input('SolResKg');
+				
+				$incinerar->EjecutadovsProgramado = $porcentaje;
+
+				$incinerar->save();
+
+
+			}
+
 			if(isset($request['SupportPay'])){
 				if($SolSer->SolSerSupport <> null && file_exists(public_path().'/img/SupportPay/'.$SolSer->SolSerSupport)){
 					unlink(public_path().'/img/SupportPay/'.$SolSer->SolSerSupport);
@@ -268,12 +290,14 @@ class SolicitudResiduoController extends Controller
 			$log->save();
 
 			$id = $SolSer->SolSerSlug;
-
 			
-
-			if (in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR)) {
+			if (in_array(Auth::user()->UsRol, Permisos::RECIBOMATERIAL) || in_array(Auth::user()->UsRol, Permisos::RECIBOMATERIAL)) {
 				return redirect()->route('recibo.material', ['id' => $SolSer->SolSerSlug]);
-			}else{
+				
+			} else if(in_array(Auth::user()->UsRol, Permisos::SUPERVISOR) || in_array(Auth::user()->UsRol, Permisos::SUPERVISOR)) {
+				return redirect()->route('informe');
+			}
+			else{
 				return redirect()->route('solicitud-servicio.show', ['solicitud_servicio' => $id]);
 			}
 		}
@@ -597,10 +621,78 @@ class SolicitudResiduoController extends Controller
 	 */
 	public function reportesreg(Request $request)
 	{
-
 	return view('reportes.ReportRegular');
 
 	}
+
+	/**
+	 * Display a listing of the resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function tiporeporte(Request $request)
+	{
+		return view('reportes.Tiporeporte');
+
+	}
+
+	/**
+	 * Display a listing of the resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function refechas(Request $request)
+	{
+		return view('reportes.refechas');
+
+	}
+
+	/**
+	 * Display a listing of the resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function ventasfechas(Request $request)
+	{
+		return view('reportes.ventasfechas');
+
+	}
+
+	/**
+	 * Display a listing of the resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function ventas(Request $request)
+	{
+
+		$FechaInicial = $request->input('Fecha_Inicio');
+		$FechaFinal = $request->input('Fecha_Fin');	
+
+		$servicios = DB::table('solicitud_servicios')
+			->join('progvehiculos', 'progvehiculos.FK_ProgServi', '=', 'solicitud_servicios.ID_SolSer')
+			->join('clientes', 'clientes.ID_Cli', '=', 'solicitud_servicios.FK_SolSerCliente')
+			->join('personals', 'personals.ID_Pers', '=', 'CliComercial')
+			->join('solicitud_residuos', 'solicitud_residuos.FK_SolResSolSer', '=', 'solicitud_servicios.ID_SolSer')
+			->join('requerimientos', 'requerimientos.ID_Req', '=', 'solicitud_residuos.FK_SolResRequerimiento')
+			->join('respels', 'respels.ID_Respel', '=', 'requerimientos.FK_ReqRespel')
+			->join('tratamientos', 'tratamientos.ID_Trat', '=', 'requerimientos.FK_ReqTrata')
+			->whereBetween('progvehiculos.ProgVehSalida',[$FechaInicial, $FechaFinal])
+			->where('CliCategoria', 'Cliente')
+			->where('progvehiculos.ProgVehDelete', '=', 0)
+			->select('solicitud_servicios.SolSerRMs', 'solicitud_servicios.ID_SolSer', 'solicitud_servicios.SolNumeroFactura', 'progvehiculos.ProgVehSalida', 'clientes.CliName', 'clientes.CliNit', 'solicitud_servicios.SolSerCollectAddress', 'respels.RespelName', 'respels.RespelEstado', 'respels.YRespelClasf4741', 'respels.ARespelClasf4741', 'tratamientos.TratName', 'solicitud_residuos.SolResKgEnviado', 'solicitud_residuos.SolResKgRecibido', 'solicitud_residuos.SolResKgConciliado', 'personals.PersFirstName', 'personals.PersSecondName', 'personals.PersLastName')
+			->get();
+
+			//return $servicios;
+
+
+
+		return view('reportes.ventas', compact('servicios'));
+
+	}
+
+
+
 
 	/**
 	 * Display a listing of the resource.
@@ -717,7 +809,7 @@ class SolicitudResiduoController extends Controller
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function reportesRegulares(Request $request)
+	public function registroentrada(Request $request)
 	{
 	
 		$FechaInicial = $request->input('Fecha_Inicio');
@@ -738,6 +830,7 @@ class SolicitudResiduoController extends Controller
 					
 					$servicios = SolicitudServicio::with([
 						'SolicitudResiduo.generespel.respels',
+						'SolicitudResiduo.generespel.gener_sedes',
 						'SolicitudResiduo.generespel.gener_sedes.generadors',
 						'SolicitudResiduo.certdato.certificado',
 						'cliente.comercialAsignado',
@@ -747,17 +840,19 @@ class SolicitudResiduoController extends Controller
 						'programacionesrealizadas',
 					])
 					->join('progvehiculos', 'solicitud_servicios.ID_SolSer', '=', 'progvehiculos.FK_ProgServi')
+					->join('personals', 'personals.ID_Pers', '=', 'progvehiculos.FK_ProgConductor')
 					//->select('progvehiculos.ProgVehSalida')
 					->whereBetween('progvehiculos.ProgVehSalida',[$FechaInicial, $FechaFinal])
-					->select('*')
 					->where('progvehiculos.ProgVehDelete', '=', 0)
 					->get();
+					
 					break;	
 
 				case ('Comercial'):
 					$idcomercial = Auth::user()->persona->ID_Pers;
 					$servicios = SolicitudServicio::with([
 						'SolicitudResiduo.generespel.respels',
+						'SolicitudResiduo.generespel.gener_sedes',
 						'SolicitudResiduo.generespel.gener_sedes.generadors',
 						'SolicitudResiduo.certdato.certificado',
 						'cliente.comercialAsignado',
@@ -767,16 +862,22 @@ class SolicitudResiduoController extends Controller
 						'programacionesrealizadas',
 					])
 					->join('progvehiculos', 'solicitud_servicios.ID_SolSer', '=', 'progvehiculos.FK_ProgServi')
+					->join('personals', 'personals.ID_Pers', '=', 'progvehiculos.FK_ProgConductor')
 					//->select('progvehiculos.ProgVehSalida')
 					->whereBetween('progvehiculos.ProgVehSalida',[$FechaInicial, $FechaFinal])
-					->select('*')
+					->where('progvehiculos.ProgVehDelete', '=', 0)
+					->whereHas('cliente', function ($query) use ($idcomercial) {
+							$query->where('CliComercial', $idcomercial);
+						}
+					)
 					->get();
-					break;	
-					
+
+					break;
 
 				default:
-				$servicios = SolicitudServicio::with([
+					$servicios = SolicitudServicio::with([
 					'SolicitudResiduo.generespel.respels',
+					'SolicitudResiduo.generespel.gener_sedes',
 					'SolicitudResiduo.generespel.gener_sedes.generadors',
 					'SolicitudResiduo.certdato.certificado',
 					'cliente.comercialAsignado',
@@ -786,9 +887,9 @@ class SolicitudResiduoController extends Controller
 					'programacionesrealizadas',
 				])
 				->join('progvehiculos', 'solicitud_servicios.ID_SolSer', '=', 'progvehiculos.FK_ProgServi')
+				->join('personals', 'personals.ID_Pers', '=', 'progvehiculos.FK_ProgConductor')
 				//->select('progvehiculos.ProgVehSalida')
 				->whereBetween('progvehiculos.ProgVehSalida',[$FechaInicial, $FechaFinal])
-				->select('*')
 				->get();
 				break;	
 			}
@@ -881,4 +982,36 @@ class SolicitudResiduoController extends Controller
 
 		return redirect()->route('serviciosexpress.show', compact('id'));
 	}
+
+	/**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+
+	 public function Respelcliente($id)
+	 {
+		$SolicitudServicio = SolicitudServicio::where('SolSerSlug', $id)->first();
+
+		$Generadors = DB::table('generadors')
+        ->join('sedes', 'generadors.FK_GenerCli', '=', 'sedes.ID_Sede')
+        ->join('clientes', 'clientes.ID_Cli', '=', 'sedes.FK_SedeCli')
+		->where('clientes.ID_Cli', $SolicitudServicio->FK_SolSerCliente)
+		->select('*')
+		->get();
+
+		$Respels = DB::table('respels')
+		->where('RespelStatus', '=', 'Aprobado')
+		->where('SustanciaControlada', '=', 0)
+		->where('AceiteUsado', '=', 0)
+		->where('RespelDelete', '=', 0)
+		->whereBetween('respels.created_at',['2024-01-01 00:00:00','2024-12-31 23:59:00'])
+		->select('*')
+		->get();
+		
+		
+		//return $SolicitudServicio->ID_SolSer;
+		return view('solicitud-serv.AñadirNuevoRespel', compact('Generadors', 'Respels', 'SolicitudServicio'));
+		 
+	 }
 }

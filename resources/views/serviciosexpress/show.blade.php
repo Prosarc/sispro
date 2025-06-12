@@ -1407,7 +1407,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 					</div>
 				`);
 			@endif
-			@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol2, Permisos::PROGRAMADOR))
+			@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol2, Permisos::USAQUEN))
 				$('#titulo').append(`
 					<a href='#' onclick="ModalCertificar('{{$SolicitudServicio->SolSerSlug}}', 'Certificacion')" style="float: right;" class="btn btn-success"><i class="fas fa-clipboard-check"></i>Certificar</a>
 				`);

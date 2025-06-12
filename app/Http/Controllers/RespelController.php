@@ -45,79 +45,77 @@ class RespelController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(){
-        // $UserSedeID = DB::table('personals')
-        //                 ->join('cargos', 'cargos.ID_Carg', 'personals.FK_PersCargo')
-        //                 ->join('areas', 'areas.ID_Area', 'cargos.CargArea')
-        //                 ->join('sedes', 'sedes.ID_Sede', 'areas.FK_AreaSede')
-        //                 ->where('personals.ID_Pers', Auth::user()->FK_UserPers)
-        //                 ->value('sedes.ID_Sede');
-        //                 return $UserSedeID;
-        $Respels = DB::table('respels')
-            ->join('cotizacions', 'cotizacions.ID_Coti', '=', 'respels.FK_RespelCoti')
-            ->join('sedes', 'sedes.ID_Sede', '=', 'cotizacions.FK_CotiSede')
-            ->join('clientes', 'clientes.ID_Cli', '=', 'sedes.FK_SedeCli')
-            ->join('personals', 'personals.ID_Pers', '=', 'clientes.CliComercial')
-            ->select('respels.*', 'clientes.CliName', 'clientes.CliComercial', 'clientes.CliCategoria', 'personals.PersEmail', 'personals.PersFirstName', 'personals.PersLastName', 'personals.PersCellphone')
-            ->where(function($query){
-                switch (Auth::user()->UsRol) {
-                    case 'Cliente':
-                        /*se define la sede del usuario actual*/
-                        $UserSedeID = DB::table('personals')
-                        ->join('cargos', 'cargos.ID_Carg', 'personals.FK_PersCargo')
-                        ->join('areas', 'areas.ID_Area', 'cargos.CargArea')
-                        ->join('sedes', 'sedes.ID_Sede', 'areas.FK_AreaSede')
-                        ->join('clientes', 'clientes.ID_Cli', 'sedes.FK_SedeCli')
-                        ->where('personals.ID_Pers', Auth::user()->FK_UserPers)
-                        ->value('clientes.ID_Cli');
-                        // return $UserSedeID;
-                        $query->where('respels.RespelDelete',0);
-                        $query->where('respels.RespelPublic',0);
-                        $query->where('clientes.ID_Cli', $UserSedeID);
-                        break;
-
-                    case 'Comercial':
-                        /*se define la sede del usuario actual*/
-                        $ComercialAsignado = DB::table('personals')
-                        ->where('personals.ID_Pers', Auth::user()->FK_UserPers)
-                        ->value('personals.ID_Pers');
-
-                        $query->where('respels.RespelDelete',0);
-                        $query->where('respels.RespelPublic',0);
-                        $query->where('clientes.CliComercial', $ComercialAsignado);
-                        break;
-
-                    default:
-                        $query->where('respels.RespelDelete',0);
-                        $query->where('respels.RespelPublic',0);
-                        break;
-                }
-            })
-            ->where('clientes.CliCategoria', 'Cliente')
-            ->get();
-
+    public function index()
+    {
+            $Respels = DB::table('respels')
+                ->join('cotizacions', 'cotizacions.ID_Coti', '=', 'respels.FK_RespelCoti')
+                ->join('sedes', 'sedes.ID_Sede', '=', 'cotizacions.FK_CotiSede')
+                ->join('clientes', 'clientes.ID_Cli', '=', 'sedes.FK_SedeCli')
+                ->join('personals', 'personals.ID_Pers', '=', 'clientes.CliComercial')
+                ->select('respels.*', 'clientes.CliName', 'clientes.CliComercial', 'clientes.CliCategoria', 'personals.PersEmail', 'personals.PersFirstName', 'personals.PersLastName', 'personals.PersCellphone')
+                ->where(function($query){
+                    switch (Auth::user()->UsRol) {
+                        case 'Cliente':
+                            $UserSedeID = DB::table('personals')
+                                ->join('cargos', 'cargos.ID_Carg', 'personals.FK_PersCargo')
+                                ->join('areas', 'areas.ID_Area', 'cargos.CargArea')
+                                ->join('sedes', 'sedes.ID_Sede', 'areas.FK_AreaSede')
+                                ->join('clientes', 'clientes.ID_Cli', 'sedes.FK_SedeCli')
+                                ->where('personals.ID_Pers', Auth::user()->FK_UserPers)
+                                ->value('clientes.ID_Cli');
+    
+                            $query->where('respels.RespelDelete', 0)
+                                  ->where('respels.RespelPublic', 0)
+                                  ->where('clientes.ID_Cli', $UserSedeID);
+                            break;
+    
+                        case 'Comercial':
+                            $ComercialAsignado = DB::table('personals')
+                                ->where('personals.ID_Pers', Auth::user()->FK_UserPers)
+                                ->value('personals.ID_Pers');
+    
+                            $query->where('respels.RespelDelete', 0)
+                                  ->where('respels.RespelPublic', 0)
+                                  ->where('clientes.CliComercial', $ComercialAsignado);
+                            break;
+    
+                        default:
+                            $query->where('respels.RespelDelete', 0)
+                                  ->where('respels.RespelPublic', 0);
+                            break;
+                    }
+                })
+                ->where('clientes.CliCategoria', 'Cliente')
+                ->get();
+    
             foreach ($Respels as $key => $value) {
                 $requerimiento = Requerimiento::where('FK_ReqRespel', $Respels[$key]->ID_Respel)
-                ->where('forevaluation', 1)
-                ->where('ofertado', 1)
-                ->first();
-
+                    ->where('forevaluation', 1)
+                    ->where('ofertado', 1)
+                    ->first();
+    
                 if (isset($requerimiento->FK_ReqTrata) && $requerimiento->ofertado == 1) {
                     $tratamiento = Tratamiento::where('ID_Trat', $requerimiento->FK_ReqTrata)->first('TratName');
                     if (isset($tratamiento->TratName)) {
                         $Respels[$key]->TratName = $tratamiento->TratName;
-                    }else{
+                    } else {
                         $Respels[$key]->TratName = '';
                     }
-                }else{
+                } else {
                     $Respels[$key]->TratName = '';
                 }
-
             }
-           // return $Respels->pluck('RespelIgrosidad');
-
+        
+    
+        
+        foreach ($Respels as $respel) {
+            if (!isset($respel->TratName)) {
+                $respel->TratName = '';
+            }
+        }
+    
         return view('respels.index', compact('Respels'));
-    }
+    } 
     /**
      * Show the form for creating a new resource.
      *
@@ -140,7 +138,8 @@ class RespelController extends Controller
             $Sedes = DB::table('clientes')
                 ->join('sedes', 'sedes.FK_SedeCli', '=', 'clientes.ID_Cli')
                 ->select('sedes.ID_Sede', 'clientes.CliName')
-                ->where('clientes.ID_Cli', '<>', 1)
+                //->where('clientes.ID_Cli', '<>', 1)
+                ->where('CliDelete', '0')
                 ->get();
                 $tratamientos = Tratamiento::select('*')->get();
             $categories = Categoryrespelpublic::all();
@@ -169,24 +168,41 @@ class RespelController extends Controller
         }else{
             $UserSedeID = $request->input('Sede');
         }
-        // return $request;
-        if ($request['FK_SubCategoryRP'] != 1) {
-            $subcategoria = Subcategoryrespelpublic::where('ID_SubCategoryRP',  $request['FK_SubCategoryRP'])->first();
-        }else{
-            $subcategoria->SubCategoryRpName = '';
+        //return $request['FK_SubCategoryRP'];
+        if ($request['FK_SubCategoryRP'] == 2) {
+            $subcategoria = new Subcategoryrespelpublic();
+            $subcategoria->SubCategoryRpName = 'Agregado-Manual';
+        }else if ($request['FK_SubCategoryRP'] == 3) {
+            $subcategoria = new Subcategoryrespelpublic();
+            $subcategoria->SubCategoryRpName = 'Comun';
+        } else {
+            $subcategoria = new Subcategoryrespelpublic();
+            $subcategoria->SubCategoryRpName = 'No Definida';
         }
 
 
-        if (in_array(Auth::user()->UsRol, Permisos::CLIENTE)||$subcategoria->SubCategoryRpName == 'Agregado-Manual') {
+        //if (in_array(Auth::user()->UsRol, Permisos::CLIENTE)||$subcategoria->SubCategoryRpName == 'Agregado-Manual') {
             /*se crea un nueva cotizacion solo si el cliente no tiene cotizaciones pendientes*/
-            $Cotizacion = new Cotizacion();
+          //  $Cotizacion = new Cotizacion();
+          //  $Cotizacion->CotiNumero = 7;
+          //  $Cotizacion->CotiFechaSolicitud = now();
+          //  $Cotizacion->CotiDelete = 0;
+          //  $Cotizacion->CotiStatus = "Aprobada";
+          //  $Cotizacion->FK_CotiSede = $UserSedeID;
+           // $Cotizacion->save();
+        //} else if (in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR)||$subcategoria->SubCategoryRpName == 'No Definida'){
+            /*se crea un nueva cotizacion solo si el cliente no tiene cotizaciones pendientes*/
+          /*  $Cotizacion = new Cotizacion();
             $Cotizacion->CotiNumero = 7;
             $Cotizacion->CotiFechaSolicitud = now();
             $Cotizacion->CotiDelete = 0;
             $Cotizacion->CotiStatus = "Aprobada";
             $Cotizacion->FK_CotiSede = $UserSedeID;
             $Cotizacion->save();
-        }
+        } else {
+
+        }*/
+
 
 
         for ($x=0; $x < count($request['RespelName']); $x++) {
@@ -272,12 +288,16 @@ class RespelController extends Controller
             $respel->RespelTarj = $tarj;
             $respel->RespelFoto = $foto;
             if (in_array(Auth::user()->UsRol, Permisos::CLIENTE)||$subcategoria->SubCategoryRpName == 'Agregado-Manual') {
-                $respel->FK_RespelCoti = $Cotizacion->ID_Coti;
+              //  $respel->FK_RespelCoti = $Cotizacion->ID_Coti;
                 $respel->RespelPublic = 0;
-            }else{
-                $respel->FK_RespelCoti = 1;
+                $respel->FK_SubCategoryRP = 1;
+            } else if(in_array(Auth::user()->UsRol, Permisos::CLIENTE)||$subcategoria->SubCategoryRpName == 'Comun'){
+              //  $respel->FK_RespelCoti = 1;
                 $respel->RespelPublic = 1;
                 $respel->FK_SubCategoryRP = $request['FK_SubCategoryRP'];
+            }else{
+               // $respel->FK_RespelCoti = $Cotizacion->ID_Coti;
+                $respel->RespelPublic = 0;
             }
             $respel->RespelSlug = hash('sha256', rand().time().$respel->RespelName);
             $respel->RespelDelete = 0;
@@ -327,18 +347,30 @@ class RespelController extends Controller
                 // se establece la lista de destinatarios
                 if ($respel['cliente']->CliComercial <> null) {
                     $comercial = Personal::where('ID_Pers', $respel['cliente']->CliComercial)->first();
-                    $destinatarios = ['gerenteplanta@prosarc.com.co', 'dirtecnica@prosarc.com.co', $comercial->PersEmail];
+                    $destinatarios = ['gerenteplanta@prosarc.com.co', 'dirtecnica@prosarc.com.co', 'jefedetratamiento@prosarc.com.co', $comercial->PersEmail];
+                    $destinatariosaprov = ['gerenteplanta@prosarc.com.co', 'supervisordeoperaciones@prosarc.com.co', 'jefedetratamiento@prosarc.com.co', $comercial->PersEmail];
                 }else{
                     $comercial = "";
-                    $destinatarios = ['gerenteplanta@prosarc.com.co', 'dirtecnica@prosarc.com.co'];
+                    $destinatarios = ['gerenteplanta@prosarc.com.co', 'dirtecnica@prosarc.com.co', 'jefedetratamiento@prosarc.com.co'];
+                    $destinatariosaprov = ['gerenteplanta@prosarc.com.co', 'supervisordeoperaciones@prosarc.com.co', 'jefedetratamiento@prosarc.com.co'];
                 }
 
                 $respel['comercial'] = $comercial;
                 $respel['personalcliente'] = Personal::where('ID_Pers', Auth::user()->FK_UserPers)->first();
 
-
-                // se envia un correo por cada residuo registrado
-                Mail::to($destinatarios)->send(new ResiduoNuevo($respel));
+                if (isset($subcategoria->SubCategoryRpName)) {
+                    if ($subcategoria->SubCategoryRpName == 'Agregado-Manual') {
+                       
+                    }else{
+                        if($tratamiento->TratName == 'Aprovechamiento') {
+                             // se envia un correo por cada residuo registrado
+                            Mail::to($destinatariosaprov)->send(new ResiduoNuevo($respel));
+                        } else{
+                            // se envia un correo por cada residuo registrado
+                            Mail::to($destinatarios)->send(new ResiduoNuevo($respel));
+                        }
+                    }   
+                }    
                 // return new ResiduoNuevo($respel);
             }
         }
@@ -354,7 +386,9 @@ class RespelController extends Controller
         if (isset($subcategoria->SubCategoryRpName)) {
             if ($subcategoria->SubCategoryRpName == 'Agregado-Manual') {
                 return redirect()->route('respels.indexExpress')->with('success', 'Residuo creado satisfactoriamente');
-            }else{
+            }else if($subcategoria->SubCategoryRpName == 'No Definida'){
+                return redirect()->route('respels.index')->with('success', 'Residuo creado satisfactoriamente');
+            } else {
                 return redirect()->route('respels.index')->with('success', 'Residuo creado satisfactoriamente');
             }
         }else{
@@ -537,7 +571,7 @@ class RespelController extends Controller
                     ->select('sedes.ID_Sede', 'sedes.SedeName')
                     ->where('clientes.ID_Cli', '<>', 1)
                     ->get();
-                // return $requerimientos;
+                
                 return view('respels.edit', compact('Respels', 'Sedes', 'requerimientos', 'tratamientos', 'tratamientosViables'));
             }
         }else{
@@ -554,7 +588,7 @@ class RespelController extends Controller
     public function editADP($id)
     {
         /*se verifican el rol del usuario para dar acceso a la edicion de respel o evaluacion de respel*/
-        if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR)){
+        if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol2, Permisos::JefeOperaciones)){
 
             $Respels = Respel::where('RespelSlug', $id)->first();
 
@@ -714,7 +748,7 @@ class RespelController extends Controller
         $log->Auditlog=json_encode($request->all());
         $log->save();
 
-        if (in_array(Auth::user()->UsRol, Permisos::CLIENTE) && $originalAttributes['RespelStatus'] === 'Incompleto' && $respel->RespelStatus === 'Pendiente') {
+        if (in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol, Permisos::INGTURNO) && $originalAttributes['RespelStatus'] === 'Incompleto' && $respel->RespelStatus === 'Pendiente') {
             /*se verifican los datos de las sede y y cliente segun el usuarios que registra el residuo*/
             $respel['cliente'] = DB::table('personals')
                 ->join('cargos', 'cargos.ID_Carg', 'personals.FK_PersCargo')
@@ -799,7 +833,7 @@ class RespelController extends Controller
         $respel = Respel::where('RespelSlug', $id)->first();
         $opciones = $request->Opcion;
 
-        if (in_array(Auth::user()->UsRol, Permisos::JefeOperaciones)||in_array(Auth::user()->UsRol2, Permisos::JefeOperaciones)||in_array(Auth::user()->UsRol, Permisos::COMERCIAL)||in_array(Auth::user()->UsRol2, Permisos::COMERCIAL)) {
+        if (in_array(Auth::user()->UsRol, Permisos::JefeOperaciones)||in_array(Auth::user()->UsRol2, Permisos::SUPERVISOR)||in_array(Auth::user()->UsRol, Permisos::COMERCIALAP)||in_array(Auth::user()->UsRol2, Permisos::COMERCIALAP)) {
             /*se eliminan los requerimientos relacionados*/
             $requerimientosparaBorrar = Requerimiento::where('FK_ReqRespel', $respel->ID_Respel)
             ->where('forevaluation', 1)
@@ -1342,7 +1376,7 @@ class RespelController extends Controller
 
             $tratamientos = Tratamiento::select('*')->get();
             $categories = Categoryrespelpublic::all();
-
+            //return $Sede;
             return view('solicitud-serv.Createrespel', compact('Sede', 'tratamientos', 'categories'));
          }
  }

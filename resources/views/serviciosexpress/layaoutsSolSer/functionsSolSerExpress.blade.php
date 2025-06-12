@@ -44,6 +44,23 @@ $("#FK_SolSerCliente").change(function(e){
 					$("#FK_SolResRg"+id_div+contadorRespel[id_div]).append(`<option onclick="RequeRespel(`+id_div+`,`+contadorRespel[id_div]+`,'`+res.respels[i].RespelSlug+`')" value="${res.respels[i].SlugSGenerRes}">${res.respels[i].RespelName} (${res.respels[i].TratName})</option>`);
 					residuos.push(res.respels[i].SlugSGenerRes);
 				}
+
+				
+			// Agregar residuos comunes después de los del cliente
+			$.ajax({
+				url: "{{url('/ResiduosComunes')}}",
+				method: 'GET',
+				success: function(comunesRes){
+					if(comunesRes && Array.isArray(comunesRes)){
+						for(var j = 0; j < comunesRes.length; j++){
+							if ($.inArray(comunesRes[j].SlugSGenerRes, residuos) < 0) {
+								$("#FK_SolResRg"+id_div+contadorRespel[id_div]).append(`<option onclick="RequeRespel(`+id_div+`,`+contadorRespel[id_div]+`,'`+comunesRes[j].RespelSlug+`')" value="${comunesRes[j].SlugSGenerRes}">${comunesRes[j].RespelName} (${comunesRes[j].TratName})</option>`);
+								residuos.push(comunesRes[j].SlugSGenerRes);
+							}
+						}
+					}
+				}
+			});
 			}
 
             var sedes = new Array();
@@ -356,6 +373,22 @@ $("#SolServTypeRecolection").change(function(e){
                         $("#FK_SolResRg"+id_div+contadorRespel[id_div]).append(`<option onclick="RequeRespel(`+id_div+`,`+contadorRespel[id_div]+`,'`+res.respels[i].RespelSlug+`')" value="${res.respels[i].SlugSGenerRes}">${res.respels[i].RespelName} (${res.respels[i].TratName})</option>`);
                         residuos.push(res.respels[i].SlugSGenerRes);
                     }
+										
+					// Agregar residuos comunes después de los del cliente
+					$.ajax({
+						url: "{{url('/ResiduosComunes')}}",
+						method: 'GET',
+						success: function(comunesRes){
+							if(comunesRes && Array.isArray(comunesRes)){
+								for(var j = 0; j < comunesRes.length; j++){
+									if ($.inArray(comunesRes[j].SlugSGenerRes, residuos) < 0) {
+										$("#FK_SolResRg"+id_div+contadorRespel[id_div]).append(`<option onclick="RequeRespel(`+id_div+`,`+contadorRespel[id_div]+`,'`+comunesRes[j].RespelSlug+`')" value="${comunesRes[j].SlugSGenerRes}">${comunesRes[j].RespelName} (${comunesRes[j].TratName})</option>`);
+										residuos.push(comunesRes[j].SlugSGenerRes);
+									}
+								}
+							}
+						}
+					});
                 }
 
                 var sedes = new Array();

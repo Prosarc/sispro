@@ -25,6 +25,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('contrato:mail')->daily();
+        $schedule->command('notify:unprogrammed-services')->weekdays('06:00'); 
     }
 
     /**

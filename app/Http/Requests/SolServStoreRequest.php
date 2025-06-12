@@ -60,16 +60,20 @@ class SolServStoreRequest extends FormRequest
                     'SolSerNitTrans'     => 'required|max:20',
                     'SolSerAdressTrans'  => 'required|max:255',
                     'SolSerCityTrans'    => ['required',Rule::exists('municipios', 'ID_Mun')],
-                    'SolSerConductor'     => 'max:255',
-                    'SolSerVehiculo'      => 'max:7',
+                    'SolSerConductor'    => 'nullable|array',
+                    'SolSerConductor.*'  => 'string|max:255',
+                    'SolSerVehiculo'     => 'nullable|array',
+                    'SolSerVehiculo.*'   => 'string|max:255',
                 ];
                 break;
             case 97:
             case 98:
                 $rules = [
                     'SolSerTransportador' => 'required',
-                    'SolSerConductor'     => 'max:255',
-                    'SolSerVehiculo'      => 'max:7',
+                    'SolSerConductor'    => 'nullable|array',
+                    'SolSerConductor.*'  => 'string|max:255',
+                    'SolSerVehiculo'     => 'nullable|array',
+                    'SolSerVehiculo.*'   => 'string|max:255',
                 ];
                 break;
             case 99:

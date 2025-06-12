@@ -13,7 +13,8 @@
 			<div class="box">
 				<div class="box-header">
                     <div>
-                         <center><a href="{{ route('reportes.ReporteRegular')}}"><img src="img/LogoProsarc.png" class="img-circle" alt="Cinque Terre" width="240" height="236"></a>
+                         {{--<center><a href="{{ route('reportes.ReporteRegular')}}"><img src="img/LogoProsarc.png" class="img-circle" alt="Cinque Terre" width="240" height="236"></a>--}}
+                         <center><a href="{{ route('reportes.Tiporeporte')}}"><img src="img/LogoProsarc.png" class="img-circle" alt="Cinque Terre" width="240" height="236"></a>   
                         <br>
                         <h1><center>Servicios Regulares</center></h1></center>     
                      </div>

@@ -65,7 +65,7 @@ Calendario
 							<div class="box-body">
 								<div class="form-group col-xs-12 col-md-6">
 									<label for="ProgVehFecha">{{ __('adminlte::message.progvehicfech') }}</label>
-									<input  class="form-control ProgVehFecha" type="date" id="ProgVehFecha" name="ProgVehFecha" min="{{date('Y-m-d', strtotime("1 months ago"))}}" value="{{old('ProgVehFecha')}}">
+									<input  class="form-control ProgVehFecha" type="date" id="ProgVehFecha" name="ProgVehFecha" min="{{date('Y-m-d', strtotime('1 months ago'))}}" value="{{old('ProgVehFecha')}}">
 									<small class="help-block with-errors"></small>
 								</div>
 								<div class="form-group col-xs-12 col-md-6">
@@ -75,7 +75,7 @@ Calendario
 								</div>
 								<div class="form-group col-md-12">
 									<label>Tipo de Servicio</label>
-									<select name="ProgVehExclusive" id="progVehExclusive" class="form-control" required>
+									<select name="ProgVehExclusive[]" id="progVehExclusive" class="form-control" required>
 										{{-- <option value="">Seleccione...</option> --}}
 										<option selected value="0">Recorrido</option>
 										<option value="1">Exclusivo</option>
@@ -83,15 +83,13 @@ Calendario
 								</div>
 								<div class="form-group col-md-12">
 									<label>Tipo de Transportador</label>
-									<select name="typetransportador" id="typetransportador" class="form-control">
+									<select name="typetransportador[]" id="typetransportador" class="form-control">
 										<option value="">Seleccione...</option>
 										<option onclick="TranspotadorProsarc()" value="0">Prosarc S.A. ESP</option>
 										<option onclick="TranspotadorAlquilado()" value="1">Alquilado</option>
 									</select>
 								</div>
-
 								{{-- Div correspondiente a el campo de precintos --}}
-
 								<div class="form-group col-md-12" id="containerDePrecintos">
 									<div class="row" id="precintos0">
 										<div class="col-md-12">
@@ -108,11 +106,11 @@ Calendario
 										</div>
 									</div>
 								</div>
-
+					
 								<div class="form-group col-md-12 vehiculoAlquilado" hidden="true">
 									<label>Transportador</label>
 									<small class="help-block with-errors">*</small>
-									<select name="transport" id="transport" class="form-control">
+									<select name="transport[]" id="transport" class="form-control">
 										<option value="">Seleccione...</option>
 										@foreach($transportadores as $transportador)
 											<option value="{{$transportador->CliSlug}}">{{$transportador->CliName}}</option>
@@ -123,39 +121,39 @@ Calendario
 
 								<div class="form-group col-md-12 vehiculoAlquilado" hidden="true">
 									<label for="ProgVehDocConductorEXT">{{ __('adminlte::message.progvehdocext') }}</label>
-									<input type="text" maxlength="15" data-minlength="6" class="form-control document" id="ProgVehDocConductorEXT"  name="ProgVehDocConductorEXT">
+									<input type="text" maxlength="15" data-minlength="6" class="form-control document" id="ProgVehDocConductorEXT"  name="ProgVehDocConductorEXT[]">
 								</div>
 								<div class="form-group col-md-12 vehiculoAlquilado" hidden="true">
 									<label for="ProgVehNameConductorEXT">{{ __('adminlte::message.progvehnameext') }}</label>
-									<input type="text" maxlength="50" class="form-control" id="ProgVehNameConductorEXT"  name="ProgVehNameConductorEXT" >
+									<input type="text" maxlength="50" class="form-control" id="ProgVehNameConductorEXT"  name="ProgVehNameConductorEXT[]" >
 								</div>
 								<div class="form-group col-md-12 vehiculoAlquilado" hidden="true">
 									<label for="ProgVehDocAuxiliarEXT">{{ __('adminlte::message.progvehdocauxext') }}</label>
-									<input type="text" maxlength="15" data-minlength="6" class="form-control document" id="ProgVehDocAuxiliarEXT"  name="ProgVehDocAuxiliarEXT" >
+									<input type="text" maxlength="15" data-minlength="6" class="form-control document" id="ProgVehDocAuxiliarEXT"  name="ProgVehDocAuxiliarEXT[]" >
 								</div>
 								<div class="form-group col-md-12 vehiculoAlquilado" hidden="true">
 									<label for="ProgVehNameAuxiliarEXT">{{ __('adminlte::message.progvehnameauxext') }}</label>
-									<input type="text" maxlength="50" class="form-control" id="ProgVehNameAuxiliarEXT"  name="ProgVehNameAuxiliarEXT" >
+									<input type="text" maxlength="50" class="form-control" id="ProgVehNameAuxiliarEXT"  name="ProgVehNameAuxiliarEXT[]" >
 								</div>
 								<div class="form-group col-md-12 vehiculoAlquilado" hidden="true">
 									<label for="ProgVehPlacaEXT">{{ __('adminlte::message.progvehplacaext') }}</label>
-									<input type="text" class="form-control placa" id="ProgVehPlacaEXT"  name="ProgVehPlacaEXT" data-minlength="7">
+									<input type="text" class="form-control placa" id="ProgVehPlacaEXT"  name="ProgVehPlacaEXT[]" data-minlength="7">
 								</div>
 								<div class="form-group col-md-12 vehiculoAlquilado" hidden="true">
 									<label for="ProgVehTipoEXT">{{ __('adminlte::message.progvehtipoext') }}</label>
-									<input type="text" maxlength="16" class="form-control" id="ProgVehTipoEXT"  name="ProgVehTipoEXT">
+									<input type="text" maxlength="16" class="form-control" id="ProgVehTipoEXT"  name="ProgVehTipoEXT[]">
 								</div>
 								<div class="form-group col-md-12 vehiculoAlquilado" hidden="true">
 									<label>Placa Vehiculo Provicional</label><a class="loadvehicalqui"></a>
 									<small class="help-block with-errors">*</small>
-									<select name="vehicalqui" id="vehicalqui" class="form-control">
+									<select name="vehicalqui[]" id="vehicalqui" class="form-control">
 										<option value="">Seleccione...</option>
 									</select>
 								</div>
 								<div class="form-group col-xs-12 col-md-12 vehiculoProsarc" hidden="true">
 									<label for="FK_ProgVehiculo">{{ __('adminlte::message.progvehicvehic') }}</label>
 									<small class="help-block with-errors">*</small>
-									<select name="FK_ProgVehiculo" id="FK_ProgVehiculo" class="form-control" required>
+									<select name="FK_ProgVehiculo[]" id="FK_ProgVehiculo" class="form-control" required>
 										<option value="">{{ __('adminlte::message.select') }}</option>
 										@foreach($vehiculos as $vehiculo)
 											<option value="{{$vehiculo->ID_Vehic}}" {{old('FK_ProgVehiculo') == $vehiculo->ID_Vehic ? 'selected' : ''}}>{{$vehiculo->VehicPlaca}}</option>
@@ -165,7 +163,7 @@ Calendario
 								<div class="form-group col-xs-12 col-md-12 vehiculoProsarc" hidden="true">
 									<label for="FK_ProgConductor">{{ __('adminlte::message.progvehicconduc') }}</label>
 									<small class="help-block with-errors">*</small>
-									<select name="FK_ProgConductor" id="FK_ProgConductor" class="form-control" required>
+									<select name="FK_ProgConductor[]" id="FK_ProgConductor" class="form-control" required>
 										<option value="">{{ __('adminlte::message.select') }}</option>
 										@foreach($conductors as $conductor)
 											<option value="{{$conductor->ID_Pers}}" {{old('FK_ProgConductor') == $conductor->ID_Pers ? 'selected' : ''}}>{{$conductor->PersFirstName.' '.$conductor->PersLastName}}</option>
@@ -175,7 +173,7 @@ Calendario
 								<div class="form-group col-xs-12 col-md-12 ambos" hidden="true">
 									<label for="FK_ProgAyudante">{{ __('adminlte::message.progvehicayudan') }}</label>
 									<small class="help-block with-errors">*</small>
-									<select name="FK_ProgAyudante" id="FK_ProgAyudante" class="form-control" required>
+									<select name="FK_ProgAyudante[]" id="FK_ProgAyudante" class="form-control" required>
 										<option value="">{{ __('adminlte::message.select') }}</option>
 										@foreach($ayudantes as $ayudante)
 											<option value="{{$ayudante->ID_Pers}}" {{old('FK_ProgAyudante') == $ayudante->ID_Pers ? 'selected' : ''}}>{{$ayudante->PersFirstName.' '.$ayudante->PersLastName}}</option>
@@ -186,6 +184,20 @@ Calendario
 									<label for="ProgVehColor">{{ __('adminlte::message.progvehiccolor') }}</label>
 									<input class="form-control" type="color" style="height: 34px;" id="ProgVehColor" name="ProgVehColor" value="{{old('ProgVehColor') == null ? '#0000f6' : old('ProgVehColor')}}">
 								</div>
+								<hr>
+								
+								<div id="vehiculoContainer">
+								<h3 id="tituloVehiculo"> </h3>
+									<!-- Espacio para agregar los modulos -->
+								</div>
+								<hr>
+								<!-- Agregar Vehiculos al solicitud --> 
+								<div>
+									<a class="btn btn-success addvehicule" type="button" id="addVehiculoBtn" >
+									Agregar Vehiculo
+									</a>
+								</div>
+
 								<input type="submit" hidden="true" id="submit1" name="submit1">
 							</div>
 						</form>
@@ -200,7 +212,7 @@ Calendario
 		</div>
 	</div>
 </div>
-{{-- END Modal
+{{-- END Modal }}
 
 {{--  Modal --}}
 <div class="modal modal-default fade in" id="CrearProgVehic2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -269,7 +281,7 @@ Calendario
 									<div class="form-group col-xs-12 col-md-6">
 										<label for="FK_VehMan">{{ __('adminlte::message.mantvehivehic') }}</label>
 										<select name="FK_VehMan" class="form-control" required id="FK_VehMan">
-											<option value="" >{{ __('adminlte::message.select') }}</option>
+											<option value="" >'{{ __('adminlte::message.select') }}</option>
 											@foreach($vehiculos as $vehiculo)
 											<option value="{{$vehiculo->ID_Vehic}}" {{old('FK_VehMan') == $vehiculo->ID_Vehic ? 'selected' : ''}}>{{$vehiculo->VehicPlaca}}</option>
 											@endforeach
@@ -638,17 +650,192 @@ Calendario
 		</div>`)
 	};
 
-
-
 	function dropPrecinto(id){
 		var id = $('#precintos'+id).remove();
 	};
+	$(document).ready(function () {
+    let contadorVehiculos = 0;
+    // Agregar un nuevo vehículo
+    $('#addVehiculoBtn').on('click', function () {
+        contadorVehiculos++;
 
+        // Crear un nuevo bloque de vehículo con IDs únicos
+        const newVehiculo = `<div class="row vehiculo-block" id="vehiculos${contadorVehiculos}">
+                <div class="form-group col-md-12">
+                    <label>Tipo de Servicio</label>
+                    <select name="ProgVehExclusive[]" id="progVehExclusive${contadorVehiculos}" class="form-control tipo-servicio" required>
+                        <option selected value="0">Recorrido</option>
+                        <option value="1">Exclusivo</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-12">
+                    <label>Tipo de Transportador</label>
+                    <select name="typetransportador[]" id="typetransportador${contadorVehiculos}" class="form-control transportador-select">
+                        <option value="">Seleccione...</option>
+                        <option value="0">Prosarc S.A. ESP</option>
+                        <option value="1">Alquilado</option>
+                    </select>
+                </div>		
+				<div class="form-group col-md-12" id="containerDePrecintos${contadorVehiculos}">
+                    <div class="row precinto-row">
+                        <div class="col-md-12">
+                            <label>Precintos</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" name="ProgVehPrecintos[]" class="form-control">
+                        </div>
+                        <div class="col-md-2">
+                            <a class="btn btn-success addprecinto" id="addprecinto${contadorVehiculos}" data-block-id="${contadorVehiculos}">Añadir Precinto</a>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-danger dropprecinto" type="button">Borrar</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-md-12 vehiculoAlquilado" hidden="true">
+                    <label>Transportador</label>
+                    <small class="help-block with-errors">*</small>
+                    <select name="transport[]" id="transport${contadorVehiculos}" class="form-control">
+                        <option value="">Seleccione...</option>
+                        @foreach($transportadores as $transportador)
+                            <option value="{{$transportador->CliSlug}}">{{$transportador->CliName}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group col-md-12 vehiculoAlquilado" hidden="true">
+                    <label for="ProgVehDocConductorEXT${contadorVehiculos}">{{ __('adminlte::message.progvehdocext') }}</label>
+                    <input type="text" maxlength="15" data-minlength="6" class="form-control document" id="ProgVehDocConductorEXT${contadorVehiculos}" name="ProgVehDocConductorEXT[]">
+                </div>
+                <div class="form-group col-md-12 vehiculoAlquilado" hidden="true">
+                    <label for="ProgVehNameConductorEXT${contadorVehiculos}">{{ __('adminlte::message.progvehnameext') }}</label>
+                    <input type="text" maxlength="50" class="form-control" id="ProgVehNameConductorEXT${contadorVehiculos}" name="ProgVehNameConductorEXT[]">
+                </div>
+                <div class="form-group col-md-12 vehiculoAlquilado" hidden="true">
+                    <label for="ProgVehDocAuxiliarEXT${contadorVehiculos}">{{ __('adminlte::message.progvehdocauxext') }}</label>
+                    <input type="text" maxlength="15" data-minlength="6" class="form-control document" id="ProgVehDocAuxiliarEXT${contadorVehiculos}" name="ProgVehDocAuxiliarEXT[]">
+                </div>
+                <div class="form-group col-md-12 vehiculoAlquilado" hidden="true">
+                    <label for="ProgVehNameAuxiliarEXT${contadorVehiculos}">{{ __('adminlte::message.progvehnameauxext') }}</label>
+                    <input type="text" maxlength="50" class="form-control" id="ProgVehNameAuxiliarEXT${contadorVehiculos}" name="ProgVehNameAuxiliarEXT[]">
+                </div>
+                <div class="form-group col-md-12 vehiculoAlquilado" hidden="true">
+                    <label for="ProgVehPlacaEXT${contadorVehiculos}">{{ __('adminlte::message.progvehplacaext') }}</label>
+                    <input type="text" class="form-control placa" id="ProgVehPlacaEXT${contadorVehiculos}" name="ProgVehPlacaEXT" data-minlength="7">
+                </div>
+				<div class="form-group col-md-12 vehiculoAlquilado" hidden="true">
+				 <label for="vehicalqui[]${contadorVehiculos}">Placa Vehiculo Provicional</label><a class="loadvehicalqui"></a>
+					<small class="help-block with-errors">*</small>
+					<select name="vehicalqui[]" id="vehicalqui${contadorVehiculos}" class="form-control dynamic-transport">
+					<option value="">Seleccione...</option>
+					</select>
+				</div>
+                <div class="form-group col-md-12 vehiculoAlquilado" hidden="true">
+                    <label for="ProgVehTipoEXT${contadorVehiculos}">{{ __('adminlte::message.progvehtipoext') }}</label>
+                    <input type="text" maxlength="16" class="form-control" id="ProgVehTipoEXT${contadorVehiculos}" name="ProgVehTipoEXT">
+                </div>			
+				<div class="form-group col-xs-12 col-md-12 vehiculoProsarc" hidden="true">
+					<label for="FK_ProgConductor${contadorVehiculos}">{{ __('adminlte::message.progvehicconduc') }}</label>
+					<small class="help-block with-errors">*</small>
+					<select name="FK_ProgConductor[]" id="FK_ProgConductor${contadorVehiculos}" class="form-control" required>
+						<option value="">{{ __('adminlte::message.select') }}</option>
+						@foreach($conductors as $conductor)
+							<option value="{{$conductor->ID_Pers}}" {{old('FK_ProgConductor') == $conductor->ID_Pers ? 'selected' : ''}}>{{$conductor->PersFirstName.' '.$conductor->PersLastName}}</option>
+						@endforeach
+					</select>
+				</div>
+				<div class="form-group col-xs-12 col-md-12 vehiculoProsarc" hidden="true">
+				<label for="FK_ProgVehiculo${contadorVehiculos}">{{ __('adminlte::message.progvehicvehic') }}</label>
+					<small class="help-block with-errors">*</small>
+					<select name="FK_ProgVehiculo[]" id="FK_ProgVehiculo${contadorVehiculos}" class="form-control" required>
+						<option value="">{{ __('adminlte::message.select') }}</option>
+						@foreach($vehiculos as $vehiculo)
+							<option value="{{$vehiculo->ID_Vehic}}" {{old('FK_ProgVehiculo') == $vehiculo->ID_Vehic ? 'selected' : ''}}>{{$vehiculo->VehicPlaca}}</option>
+						@endforeach
+					</select>
+				</div>
+				<div class="form-group col-xs-12 col-md-12 ambos" hidden="true">
+					<label for="FK_ProgAyudante${contadorVehiculos}">{{ __('adminlte::message.progvehicayudan') }}</label>
+					<small class="help-block with-errors">*</small>
+					<select name="FK_ProgAyudante[]" id="FK_ProgAyudante${contadorVehiculos}" class="form-control" required>
+						<option value="">{{ __('adminlte::message.select') }}</option>
+						@foreach($ayudantes as $ayudante)
+							<option value="{{$ayudante->ID_Pers}}" {{old('FK_ProgAyudante') == $ayudante->ID_Pers ? 'selected' : ''}}>{{$ayudante->PersFirstName.' '.$ayudante->PersLastName}}</option>
+						@endforeach
+					</select>
+				</div>
+				<div class="form-group col-xs-12 col-md-12 vehiculoProsarc" hidden="true">
+					<label for="ProgVehColor${contadorVehiculos}">{{ __('adminlte::message.progvehiccolor') }}</label>
+					<input class="form-control" type="color" style="height: 34px;" id="ProgVehColor" name="ProgVehColor" value="{{old('ProgVehColor') == null ? '#0000f6' : old('ProgVehColor')}}">
+				</div>		
+        `;
 
+        // Añadir el nuevo bloque al contenedor
+        $('#vehiculoContainer').append(newVehiculo);		
+    });
 	
 
+    // Delegación de eventos: Añadir precinto
+    $(document).on('click', '.addprecinto', function () {
+        const blockId = $(this).data('block-id');
+        const container = $(`#containerDePrecintos${blockId}`);
+        const rowBase = container.find('.precinto-row').first().clone();
+        rowBase.find('input').val(''); // Limpiar el input
+        container.append(rowBase);
+    });
 
+    // Delegación de eventos: Eliminar precinto
+    $(document).on('click', '.dropprecinto', function () {
+        $(this).closest('.precinto-row').remove();
+    });
 
+    // Delegación de eventos: Eliminar vehículo
+    $(document).on('click', '.remove-vehiculo', function () {
+        $(this).closest('.vehiculo-block').remove();
+    });
+     // Delegación para bloques dinámicos (transportador dinámico)
+$(document).on('change', '.dynamic-transport', function () {
+    const block = $(this).closest('.vehiculo-block');
+    const value = $(this).val();
+
+    if (value == '0') {
+        block.find('.vehiculoAlquilado').hide();
+        block.find('.vehiculoProsarc').show();
+        block.find('.ambos').show();
+    } else if (value == '1') {
+        block.find('.vehiculoProsarc').hide();
+        block.find('.vehiculoAlquilado').show();
+        block.find('.ambos').show();
+    }
+});
+    // Delegación de eventos: Cambiar transportador
+    $(document).on('change', '.transportador-select', function () {
+        const block = $(this).closest('.vehiculo-block');
+        const value = $(this).val();
+
+        if (value == '0') {
+            block.find('.vehiculoAlquilado').hide();
+            block.find('.vehiculoProsarc').show();
+			block.find('.ambos').show();
+        } else if (value == '1') {
+            block.find('.vehiculoProsarc').hide();
+            block.find('.vehiculoAlquilado').show();
+			block.find('.ambos').show();
+        }
+    });
+	// Delegación de eventos: Eliminar vehículo
+    $(document).on('click', '.remove-vehiculo', function () {
+        $(this).closest('.vehiculo-block').remove();
+});
+});
+$(document).ready(function() {
+    // Actualiza la URL cuando cambia el ID del servicio
+    $('.FK_ProgServi').on('change', function() {
+        var id = $(this).val();
+        var form = $('#formularioCreate');
+        var newAction = "{{ url('vehicle-programacion') }}/" + id + "/añadirVehiculo";
+        form.attr('action', newAction);
+    });
+});
 </script>
 
 @endsection

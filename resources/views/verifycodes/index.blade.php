@@ -22,7 +22,7 @@ Códigos de Verificación
                 </div>
                 <div class="box-body">
                     <div id="ModalStatus"></div>
-                    <table class="table table-compact table-bordered table-striped">
+                    <table  table-compact table-bordered table-striped">
                         <thead>
                             <th>id</th>
                             <th>empresa</th>
