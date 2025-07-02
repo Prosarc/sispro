@@ -49,6 +49,7 @@ return [
     'estadofisico2'         => 'Sólido',
     'estadofisico3'         => 'Gaseoso',
     'estadofisico4'         => 'SemiSólido',
+    'estadofisico5'         => 'Aerosol',
     'respelstatuspendiente' => 'Pendiente',
     'respelstatusevaluated' => 'Evaluado',
     'respelstatusaprovado'  => 'Aprobado',

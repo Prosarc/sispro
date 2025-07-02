@@ -4,7 +4,15 @@ This is a starter template page. Use this page to start your new project from
 scratch. This page gets rid of all links and provides the needed markup only.
 -->
 <html lang="es">
-
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <!-- Incluir jQuery antes de tus scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    @section('htmlheader')
+        @include('layouts.partials.htmlheader')
+    @show
 @section('htmlheader')
     @include('layouts.partials.htmlheader')
 @show

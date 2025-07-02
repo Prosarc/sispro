@@ -352,6 +352,11 @@ class Permisos{
 	const CambioTratamiento = ['Programador','JefeOperaciones','Supervisor', 'AdministradorPlanta'];
 	/*Using ->solicitud-serv/show  cambio-tratamiento*/
 
+	// Permisos personalizados para roles con nombres exactos de la base de datos
+	const LOGISTICAEXACTA = ['Jefe de area Logistica', 'Asistente de area Logistica', 'JefeLogistica', 'AsistenteLogistica'];
+	const TURNOEXACTO = ['Ingeniero de turno', 'Supervisor de Turno', 'IngDeTurno', 'Supervisor'];
+	const EJECUTIVOCOMERCIAL = ['Ejecutivo Comercial', 'Comercial', 'Comercialap', 'usaquen'];
+
 }
 
 /*

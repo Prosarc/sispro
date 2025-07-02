@@ -314,7 +314,7 @@
 
                             case 'Aprovechamiento':
                                 $TratName = 'APROVECHAMIENTO';
-                                $gestor = 'RHEMACOL';
+                                $gestor = 'aprovechamiento';
                                 break;
 
                             case 'Fisico-Quimico':
@@ -344,7 +344,7 @@
 
                             case 'Aprovechamiento y valorización de llantas':
                                 $TratName = 'APROVECHAMIENTO Y VALORIZACIÓN DE LLANTAS';
-                                $gestor = 'GESTORES DE CAUCHO RECICLADO';
+                                $gestor = 'aprovechamiento';
                                 break;
 
                             case 'Compostaje':
@@ -357,6 +357,45 @@
                                 $gestor = 'AGREGADOS Y RELLENOS TERRENA';
                                 break;
 
+                            case 'APROVECHAMIENTO - METALES (CHATARRA, COBRE, BRONCE...)':
+                                $TratName = 'APROVECHAMIENTO - METALES (CHATARRA, COBRE, BRONCE...)';
+                                $gestor = 'aprovechamiento';
+                                break;
+
+                            case 'APROVECHAMIENTO - PLASTICOS RIGIDOS':
+                                $TratName = 'APROVECHAMIENTO - PLASTICOS RIGIDOS';
+                                $gestor = 'aprovechamiento';
+                                break;
+
+                            case 'APROVECHAMIENTO - CARTON Y PLEGADIZA':
+                                $TratName = 'APROVECHAMIENTO - CARTON Y PLEGADIZA';
+                                $gestor = 'aprovechamiento';
+                                break;
+
+                            case 'APROVECHAMIENTO - PLASTICOS FLEXIBLES':
+                                $TratName = 'APROVECHAMIENTO - PLASTICOS FLEXIBLES';
+                                $gestor = 'aprovechamiento';
+                                break;
+
+                            case 'APROVECHAMIENTO - ACEITES USADOS':
+                                $TratName = 'APROVECHAMIENTO - ACEITES USADOS';
+                                $gestor = 'aprovechamiento';
+                                break;
+
+                            case 'APROVECHAMIENTO - ENVASES (REACONDICIONAMIENTO)':
+                                $TratName = 'APROVECHAMIENTO - ENVASES (REACONDICIONAMIENTO)';
+                                $gestor = 'aprovechamiento';
+                                break;
+
+                            case 'APROVECHAMIENTO':
+                                $TratName = 'APROVECHAMIENTO';
+                                $gestor = 'aprovechamiento';
+                                break;
+
+                            case 'APROVECHAMIENTO - ACEITES USADOS':
+                                $TratName = 'APROVECHAMIENTO - ACEITES USADOS';
+                                $gestor = 'aprovechamiento';
+                                break;
 
                             default:
                                 # code...

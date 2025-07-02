@@ -1,5 +1,5 @@
 <style>
-    .modal {
+    .modal-emergente {
      width: 100%;
      height: 100%;
      background: rgba(0, 0, 0, 0.8);
@@ -61,7 +61,7 @@
      }
  
      #cerrar:checked + label,
-     #cerrar:checked ~ .modal {
+     #cerrar:checked ~ .modal-emergente {
          display: none;
      }
  
@@ -77,9 +77,9 @@
  <input type="checkbox" id="cerrar">
  <label for="cerrar" id="btn-cerrar">X</label>
  
- <div class="modal">
+ <div class="modal-emergente">
      <div class="contenido">
-         <img src="/img/Comunicados/certificados.jpg" alt="" style="width: 100%; height: auto;"> 
+         <img src="/img/Comunicados/residuos.jpg" alt="" style="width: 100%; height: auto;"> 
      </div>
  </div>
  {{-- End Modal --}}

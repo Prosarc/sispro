@@ -515,7 +515,10 @@ function NotifiFalse(Mensaje) {
 		/*var botoncito define los botones que se usaran si el usuario es programador*/
 		var botoncito = [{extend: 'colvis', text: 'Columnas Visibles'}, {extend: 'excel', text: 'Excel'}];
 		/*inicializacion de datatable general*/      
-		$('.table').DataTable({
+		$('.table:not(.no-datatable)').each(function() {
+			// Solo inicializar DataTable si la tabla tiene al menos un thead con th
+			if ($(this).find('thead th').length > 0) {
+				$(this).DataTable({
 			"dom": "<'row'<'col-md-3'l><'col-md-5'B><'col-md-4'f>>" +
 				"<'row'<'col-md-12'tr>>" +
 				"<'row'<'col-md-6'i><'col-md-6'p>>",
@@ -560,12 +563,13 @@ function NotifiFalse(Mensaje) {
 					"sSortDescending": ": Activar para ordenar la columna de manera descendente"
 				},
 				"colvis": 'Ajouté au presse-papiers'
+			});
 			}
 		});
 	});
 	/*funcion para actualizar elplugin responsive in chrome*/
 	function recalcularwitdth() {
-	var table = $('.table').DataTable();
+	var table = $('.table:not(.no-datatable)').DataTable();
 	table.columns.adjust();
 	table.responsive.recalc();
 	// console.log('tabla recalculada');

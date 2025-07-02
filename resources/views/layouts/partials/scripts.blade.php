@@ -654,7 +654,10 @@ function NotifiFalse(Mensaje) {
 					buttons: ['selectRows', 'selectCells']
 				}] : [{extend: 'colvis', text: 'Columnas Visibles'}, {extend: 'excel', text: 'Excel'}];
 		/*inicializacion de datatable general*/      
-		$('.table').DataTable({
+		$('.table:not(.no-datatable)').each(function() {
+			// Solo inicializar DataTable si la tabla tiene al menos un thead con th
+			if ($(this).find('thead th').length > 0) {
+				$(this).DataTable({
 			"dom": "<'row'<'col-md-3'l><'col-md-5'B><'col-md-4'f>>" +
 				"<'row'<'col-md-12'tr>>" +
 				"<'row'<'col-md-6'i><'col-md-6'p>>",
@@ -699,12 +702,13 @@ function NotifiFalse(Mensaje) {
 					"sSortDescending": ": Activar para ordenar la columna de manera descendente"
 				},
 				"colvis": 'Ajouté au presse-papiers'
+			});
 			}
 		});
 	});
 	/*funcion para actualizar elplugin responsive in chrome*/
 	function recalcularwitdth() {
-	var table = $('.table').DataTable();
+	var table = $('.table:not(.no-datatable)').DataTable();
 	table.columns.adjust();
 	table.responsive.recalc();
 	// console.log('tabla recalculada');
@@ -802,12 +806,9 @@ var currentScrollPos = window.pageYOffset;
 <script>
 	function deleteRespelGener(slug, RespelName, name){
 		$('.deleterespelgener').empty();
+		var formAction = '@if(Route::currentRouteName() === "sgeneradores.show")/respelSGener/@else/respelGener/@endif';
 		$('.deleterespelgener').append(`
-			@if(Route::currentRouteName() === 'sgeneradores.show')
-				<form action='/respelSGener/`+slug+`' method='POST' role="form">
-			@else
-				<form action='/respelGener/`+slug+`' method='POST' role="form">
-			@endif
+				<form action='`+formAction+slug+`' method='POST' role="form">
 				@method('DELETE')
 				@csrf
 				<div class="modal modal-default fade in" id="eliminar`+slug+`" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -819,11 +820,7 @@ var currentScrollPos = window.pageYOffset;
 									<i class="fas fa-exclamation-triangle"></i>
 									<span style="font-size: 0.3em; color: black;">
 										<p>{{ __('adminlte::message.modaldeletegener') }} <b><i>`+RespelName+`</i></b> 
-										@if(Route::currentRouteName() === 'sgeneradores.show')
-											{{ __('adminlte::message.modalsgener') }} <b>
-										@else
-											{{ __('adminlte::message.modalgener') }} <b>
-										@endif
+										{{ __('adminlte::message.modalgener') }} <b>
 											<i> `+name+`</i></b>{{ __('adminlte::message.?') }} </p>
 									</span>
 								</div> 

@@ -19,6 +19,10 @@ use App\Mail\ServicioReversado;
 use App\Mail\CertUpdated;
 use App\Mail\SolSerRM;
 use App\Mail\SolserAuditar;
+use App\Mail\SustanciaControladaProgramada;
+use App\Mail\AceiteUsadoProgramado;
+use App\Mail\SustanciaControladaCreada;
+use App\Mail\AceiteUsadoCreado;
 use App\SolicitudServicio;
 use App\SolicitudResiduo;
 use App\audit;
@@ -1781,7 +1785,6 @@ class SolicitudServicioController extends Controller
 		$SolicitudServicio['personalcliente'] = Personal::where('ID_Pers', $SolicitudServicio->FK_SolSerPersona)->first();
 
 		$destinatariorecepciom = ['jefedetratamiento@prosarc.com.co',
-								'asistentepda@prosarc.com.co',
 								'supervisordeoperaciones@prosarc.com.co'];
 		// se envia un correo por cada residuo registrado
 		Mail::to($destinatarios)->send(new NewSolServEmail($SolicitudServicio));
@@ -1794,6 +1797,52 @@ class SolicitudServicioController extends Controller
 
 		if($SolicitudServicio->SolSerTipo = 'Cliente' || $SolicitudServicio->SolSerAuditable = 'Externo'){
 			Mail::to($destinatariorecepciom)->send(new NewSolServEmail($SolicitudServicio));
+		}
+
+		// Verificar si hay sustancias controladas o aceites usados en la solicitud
+		$SolicitudServicio = SolicitudServicio::with(['SolicitudResiduo.requerimiento.respel'])
+			->where('ID_SolSer', $SolicitudServicio->ID_SolSer)->first();
+
+		$cantidadDeResiduosControlados = 0;
+		$cantidadDeAceitesUsados = 0;
+
+		foreach ($SolicitudServicio->SolicitudResiduo as $residuo) {
+			$respel = $residuo->requerimiento->respel;
+			if ($respel->SustanciaControlada == 1) {
+				$cantidadDeResiduosControlados++;
+			}
+			if ($respel->AceiteUsado == 1) {
+				$cantidadDeAceitesUsados++;
+			}
+		}
+
+		// Enviar notificaciones específicas si hay sustancias controladas o aceites usados
+		if ($cantidadDeResiduosControlados > 0) {
+			// Preparar datos para el email (similar a como se hace en VehicProgController)
+			$email = DB::table('solicitud_servicios')
+				->join('personals', 'personals.ID_Pers', '=', 'solicitud_servicios.FK_SolSerPersona')
+				->join('clientes', 'clientes.ID_Cli', '=', 'solicitud_servicios.FK_SolSerCliente')
+				->select('personals.*', 'solicitud_servicios.*', 'clientes.CliName', 'clientes.CliComercial')
+				->where('solicitud_servicios.SolSerSlug', '=', $SolicitudServicio->SolSerSlug)
+				->first();
+
+			// Enviar notificación de sustancia controlada creada
+			Mail::to('dirtecnica@prosarc.com.co')->cc(['sistemas@prosarc.com.co', 'logistica@prosarc.com.co', 'jefedetratamiento@prosarc.com.co', 'asistentelogistica@prosarc.com.co', 'auxiliarlogistico@prosarc.com.co', 'conciliaciones@prosarc.com.co'])->send(new SustanciaControladaCreada($email, $SolicitudServicio));
+		}
+
+		if ($cantidadDeAceitesUsados > 0) {
+			// Preparar datos para el email si no se hizo antes
+			if (!isset($email)) {
+				$email = DB::table('solicitud_servicios')
+					->join('personals', 'personals.ID_Pers', '=', 'solicitud_servicios.FK_SolSerPersona')
+					->join('clientes', 'clientes.ID_Cli', '=', 'solicitud_servicios.FK_SolSerCliente')
+					->select('personals.*', 'solicitud_servicios.*', 'clientes.CliName', 'clientes.CliComercial')
+					->where('solicitud_servicios.SolSerSlug', '=', $SolicitudServicio->SolSerSlug)
+					->first();
+			}
+
+			// Enviar notificación de aceite usado creado
+			Mail::to('dirtecnica@prosarc.com.co')->cc(['sistemas@prosarc.com.co', 'logistica@prosarc.com.co', 'asistentelogistica@prosarc.com.co', 'auxiliarlogistico@prosarc.com.co'])->send(new AceiteUsadoCreado($email, $SolicitudServicio));
 		}
 
 		
@@ -2587,7 +2636,7 @@ foreach ($certificados as $certificado) {
                                         'gerenteplanta@prosarc.com.co',
                                         'conciliaciones@prosarc.com.co',
                                         'auxiliarlogistico@prosarc.com.co',
-                                        'asistentepda@prosarc.com.co'
+                                        
                                         ];
 
                 $cliente = Cliente::where('ID_Cli', $servicio->FK_SolSerCliente)->first();
@@ -2623,7 +2672,7 @@ foreach ($certificados as $certificado) {
                                 $collection2 = $collection2->concat([$value]);
                             }
                         } else {
-                            $uniquestring = 'RM Invalido -> '.$Residuo->SolResRM;
+                            $uniquestring = 'RM Invalido -> '.$Residuo->SolSerRM;
                         }
                     }
                 }
@@ -2645,8 +2694,7 @@ foreach ($certificados as $certificado) {
                                         'logistica@prosarc.com.co',
                                         'gerenteplanta@prosarc.com.co',
                                         'conciliaciones@prosarc.com.co',
-                                        'auxiliarlogistico@prosarc.com.co',
-                                        'asistentepda@prosarc.com.co'
+                                        'auxiliarlogistico@prosarc.com.co'
                                         ];
 
                 $cliente = Cliente::where('ID_Cli', $servicio->FK_SolSerCliente)->first();
@@ -4835,11 +4883,10 @@ foreach ($certificados as $certificado) {
             case 'Corregido':
             case 'Completado':
             default:
+                return view('solicitud-serv.rm', compact('SolicitudServicio','Residuos', 'GenerResiduos', 'Cliente', 'SolSerConductor', 'Programaciones', 'ProgramacionesActivas', 'total', 'cantidadesXtratamiento', 'tratamientos', 'PublicRespels'));
                 break;
-
-		}
+        }
 	 }
-	}
 
 	 /**
 	 * ingresa el numero de factura a la base de datos.
@@ -5021,18 +5068,277 @@ foreach ($certificados as $certificado) {
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
+	/**
+	 * Valida y crea firmas faltantes según el tipo de servicio
+	 * Basado en la documentación de errores comunes en emisión de recibos de material
+	 */
+	private function validateAndCreateMissingFirmas($solicitudId) {
+		$solicitud = DB::table('solicitud_servicios')->where('ID_SolSer', $solicitudId)->first();
+		
+		if (!$solicitud) {
+			return false;
+		}
+
+		// Determinar tipo de servicio según SolSerCity y SolSerTypeCollect
+		$isRecepcion = $solicitud->SolSerCity === null;
+		
+		if ($isRecepcion) {
+			// SERVICIO DE RECEPCIÓN - Cliente lleva residuos a la planta
+			$existingFirma = DB::table('firmas_servicio')
+				->where('FK_SolSer', $solicitudId)
+				->where('FK_Gener', $solicitud->FK_SolSerCliente)
+				->where('FK_SGener', 0)
+				->first();
+
+			if (!$existingFirma) {
+				DB::table('firmas_servicio')->insert([
+					'FK_SolSer' => $solicitudId,
+					'FK_Gener' => $solicitud->FK_SolSerCliente,
+					'FK_SGener' => 0, // Para recepción siempre es 0
+					'FirmaCliente' => '0',
+					'FirmaConductor' => '0',
+					'FirmaPDA' => '0',
+					'SlugFirmas' => hash('md5', rand() . time() . $solicitudId),
+					'NombreFuncionario' => '',
+					'Cedula' => '0',
+					'Observaciones' => '',
+					'created_at' => now(),
+					'updated_at' => now()
+				]);
+			}
+		} else {
+			// SERVICIO DE RECOLECCIÓN - Ir a buscar residuos
+			switch($solicitud->SolSerTypeCollect) {
+				case 97: // Dirección específica
+					$existingFirma = DB::table('firmas_servicio')
+						->where('FK_SolSer', $solicitudId)
+						->where('FK_Gener', $solicitud->FK_SolSerCliente)
+						->whereNull('FK_SGener')
+						->first();
+					
+					if (!$existingFirma) {
+						DB::table('firmas_servicio')->insert([
+							'FK_SolSer' => $solicitudId,
+							'FK_Gener' => $solicitud->FK_SolSerCliente,
+							'FK_SGener' => null,
+							'FirmaCliente' => '0',
+							'FirmaConductor' => '0',
+							'FirmaPDA' => '0',
+							'SlugFirmas' => hash('md5', rand() . time() . $solicitudId),
+							'NombreFuncionario' => '',
+							'Cedula' => '0',
+							'Observaciones' => '',
+							'created_at' => now(),
+							'updated_at' => now()
+						]);
+					}
+					break;
+
+				case 98: // Sede del cliente
+					$existingFirma = DB::table('firmas_servicio')
+						->where('FK_SolSer', $solicitudId)
+						->where('FK_SGener', $solicitud->SolSerCollectAddress)
+						->first();
+					
+					if (!$existingFirma) {
+						$sede = DB::table('sedes')->where('ID_Sede', $solicitud->SolSerCollectAddress)->first();
+						if ($sede) {
+							DB::table('firmas_servicio')->insert([
+								'FK_SolSer' => $solicitudId,
+								'FK_Gener' => $sede->FK_SedeCli,
+								'FK_SGener' => $sede->ID_Sede,
+								'FirmaCliente' => '0',
+								'FirmaConductor' => '0',
+								'FirmaPDA' => '0',
+								'SlugFirmas' => hash('md5', rand() . time() . $solicitudId . $sede->ID_Sede),
+								'NombreFuncionario' => '',
+								'Cedula' => '0',
+								'Observaciones' => '',
+								'created_at' => now(),
+								'updated_at' => now()
+							]);
+						}
+					}
+					break;
+
+				case 99: // Sede de cada generador
+					$sedesGeneradores = DB::table('solicitud_residuos')
+						->distinct()
+						->join('residuos_geners', 'residuos_geners.ID_SGenerRes', '=', 'solicitud_residuos.FK_SolResRg')
+						->join('gener_sedes', 'gener_sedes.ID_GSede', '=', 'residuos_geners.FK_SGener')
+						->join('generadors', 'generadors.ID_Gener', '=', 'gener_sedes.FK_GSede')
+						->select('gener_sedes.ID_GSede', 'generadors.ID_Gener')
+						->where('solicitud_residuos.FK_SolResSolSer', $solicitudId)
+						->get();
+
+					foreach($sedesGeneradores as $sede) {
+						$existingFirma = DB::table('firmas_servicio')
+							->where('FK_SolSer', $solicitudId)
+							->where('FK_SGener', $sede->ID_GSede)
+							->first();
+						
+						if (!$existingFirma) {
+							DB::table('firmas_servicio')->insert([
+								'FK_SolSer' => $solicitudId,
+								'FK_Gener' => $sede->ID_Gener,
+								'FK_SGener' => $sede->ID_GSede,
+								'FirmaCliente' => '0',
+								'FirmaConductor' => '0',
+								'FirmaPDA' => '0',
+								'SlugFirmas' => hash('md5', rand() . time() . $sede->ID_GSede . $solicitudId),
+								'NombreFuncionario' => '',
+								'Cedula' => '0',
+								'Observaciones' => '',
+								'created_at' => now(),
+								'updated_at' => now()
+							]);
+						}
+					}
+					break;
+			}
+		}
+		
+		return true;
+	}
+
+	/**
+	 * Función para diagnosticar problemas de firmas (solo para administradores)
+	 * Ruta: /solicitud-servicio/{slug}/diagnosticar-firmas
+	 */
+	public function diagnosticarFirmas($slug)
+	{
+		$solicitud = DB::table('solicitud_servicios')->where('SolSerSlug', $slug)->first();
+		
+		if (!$solicitud) {
+			return response()->json(['error' => 'Solicitud no encontrada'], 404);
+		}
+
+		$firmasExistentes = DB::table('firmas_servicio')
+			->where('FK_SolSer', $solicitud->ID_SolSer)
+			->get();
+
+		$isRecepcion = $solicitud->SolSerCity === null;
+		
+		$diagnostico = [
+			'solicitud_id' => $solicitud->ID_SolSer,
+			'slug' => $slug,
+			'es_recepcion' => $isRecepcion,
+			'tipo_collect' => $solicitud->SolSerTypeCollect,
+			'firmas_existentes' => $firmasExistentes->count(),
+			'firmas_details' => $firmasExistentes,
+			'recomendaciones' => []
+		];
+
+		if ($isRecepcion) {
+			$diagnostico['tipo_servicio'] = 'Recepción - Cliente lleva residuos a la planta';
+			$diagnostico['firmas_necesarias'] = [
+				'FK_Gener' => $solicitud->FK_SolSerCliente,
+				'FK_SGener' => 0
+			];
+		} else {
+			switch($solicitud->SolSerTypeCollect) {
+				case 97:
+					$diagnostico['tipo_servicio'] = 'Recolección - Dirección específica';
+					$diagnostico['firmas_necesarias'] = [
+						'FK_Gener' => $solicitud->FK_SolSerCliente,
+						'FK_SGener' => null
+					];
+					break;
+				case 98:
+					$diagnostico['tipo_servicio'] = 'Recolección - Sede del cliente';
+					$diagnostico['firmas_necesarias'] = [
+						'FK_SGener' => $solicitud->SolSerCollectAddress
+					];
+					break;
+				case 99:
+					$diagnostico['tipo_servicio'] = 'Recolección - Sede de cada generador';
+					$sedesGeneradores = DB::table('solicitud_residuos')
+						->distinct()
+						->join('residuos_geners', 'residuos_geners.ID_SGenerRes', '=', 'solicitud_residuos.FK_SolResRg')
+						->join('gener_sedes', 'gener_sedes.ID_GSede', '=', 'residuos_geners.FK_SGener')
+						->join('generadors', 'generadors.ID_Gener', '=', 'gener_sedes.FK_GSede')
+						->select('gener_sedes.ID_GSede', 'generadors.ID_Gener', 'generadors.GenerName', 'gener_sedes.GSedeName')
+						->where('solicitud_residuos.FK_SolResSolSer', $solicitud->ID_SolSer)
+						->get();
+					
+					$diagnostico['sedes_generadores'] = $sedesGeneradores;
+					$diagnostico['firmas_necesarias'] = $sedesGeneradores->map(function($sede) {
+						return [
+							'FK_Gener' => $sede->ID_Gener,
+							'FK_SGener' => $sede->ID_GSede,
+							'generador' => $sede->GenerName,
+							'sede' => $sede->GSedeName
+						];
+					});
+					break;
+			}
+		}
+
+		// Verificar qué firmas faltan
+		$firmasFaltantes = [];
+		if (is_array($diagnostico['firmas_necesarias'])) {
+			foreach ($diagnostico['firmas_necesarias'] as $firmaNecesaria) {
+				$existe = $firmasExistentes->first(function($firma) use ($firmaNecesaria) {
+					return $firma->FK_Gener == $firmaNecesaria['FK_Gener'] && 
+						   $firma->FK_SGener == $firmaNecesaria['FK_SGener'];
+				});
+				
+				if (!$existe) {
+					$firmasFaltantes[] = $firmaNecesaria;
+				}
+			}
+		}
+
+		$diagnostico['firmas_faltantes'] = $firmasFaltantes;
+		$diagnostico['puede_crear_automaticamente'] = count($firmasFaltantes) > 0;
+
+		return response()->json($diagnostico, 200);
+	}
+
 	public function rmtemplate($id, $slug)
 	{
+		// Primero obtenemos la solicitud para validar y crear firmas si es necesario
+		$solicitud = DB::table('solicitud_servicios')->where('SolSerSlug', $slug)->first();
+		
+		if (!$solicitud) {
+			abort(404, 'Solicitud de servicio no encontrada.');
+		}
+
+		// Intentar validar y crear firmas faltantes
+		$this->validateAndCreateMissingFirmas($solicitud->ID_SolSer);
 		
 		$firmas = DB::table('firmas_servicio')
 			->join('solicitud_servicios', 'solicitud_servicios.ID_SolSer', '=', 'firmas_servicio.FK_SolSer')
 			->join('clientes', 'clientes.ID_Cli', '=', 'solicitud_servicios.FK_SolSerCliente')
 			->join('generadors' , 'generadors.ID_Gener', '=', 'firmas_servicio.FK_Gener')
-			//->where('firmas_servicio.FK_SGener', $id)
+			->where('firmas_servicio.FK_SGener', $id)
 			->where('solicitud_servicios.SolSerSlug',$slug )
 			->select('firmas_servicio.*', 'clientes.CliName', 'generadors.ID_Gener', 'generadors.GenerNit', 'generadors.GenerName', 'generadors.GenerShortname', 'generadors.GenerCode', 'generadors.GenerType', 'generadors.GenerSlug', 'generadors.FK_GenerCli', 'generadors.GenerDelete')
 			->first();
-		//return $firmas;
+
+		// Si no se encuentra la firma específica, buscar por solicitud solamente
+		if (!$firmas) {
+			$firmas = DB::table('firmas_servicio')
+				->join('solicitud_servicios', 'solicitud_servicios.ID_SolSer', '=', 'firmas_servicio.FK_SolSer')
+				->join('clientes', 'clientes.ID_Cli', '=', 'solicitud_servicios.FK_SolSerCliente')
+				->join('generadors' , 'generadors.ID_Gener', '=', 'firmas_servicio.FK_Gener')
+				->where('solicitud_servicios.SolSerSlug',$slug )
+				->select('firmas_servicio.*', 'clientes.CliName', 'generadors.ID_Gener', 'generadors.GenerNit', 'generadors.GenerName', 'generadors.GenerShortname', 'generadors.GenerCode', 'generadors.GenerType', 'generadors.GenerSlug', 'generadors.FK_GenerCli', 'generadors.GenerDelete')
+				->first();
+		}
+
+		// Si aún no hay firmas después de la validación, mostrar error específico
+		if (!$firmas) {
+			$errorMsg = "No se encontró la firma para este servicio.\n\n";
+			$errorMsg .= "Información del servicio:\n";
+			$errorMsg .= "- Solicitud: {$solicitud->ID_SolSer}\n";
+			$errorMsg .= "- Tipo de recolección: " . ($solicitud->SolSerTypeCollect ?? 'Recepción') . "\n";
+			$errorMsg .= "- ID Sede buscada: {$id}\n\n";
+			$errorMsg .= "Contacte al administrador para resolver este problema.";
+			
+			abort(404, $errorMsg);
+		}
+
 		$SolicitudServicio = DB::table('solicitud_servicios')
 			->join('personals', 'personals.ID_Pers', '=', 'solicitud_servicios.FK_SolSerPersona')
 			->join('cargos', 'personals.FK_PersCargo', '=', 'ID_Carg')

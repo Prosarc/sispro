@@ -44,6 +44,9 @@ $("#FK_SolSerCliente").change(function(e){
 			$.ajax({
 				url: "{{url('/ResiduosComunes')}}",
 				method: 'GET',
+				data: {
+					generador: ID_Gener
+				},
 				success: function(allResidues){
 					if(allResidues && Array.isArray(allResidues)){
 						for(var j = 0; j < allResidues.length; j++){
@@ -53,6 +56,10 @@ $("#FK_SolSerCliente").change(function(e){
 							}
 						}
 					}
+				},
+				error: function(xhr, status, error) {
+					console.error("Error al cargar residuos:", error);
+					NotifiFalse("Error al cargar los residuos");
 				}
 			});
 
@@ -365,6 +372,9 @@ $("#SolServTypeRecolection").change(function(e){
                 $.ajax({
                     url: "{{url('/ResiduosComunes')}}",
                     method: 'GET',
+                    data: {
+                        generador: ID_Gener
+                    },
                     success: function(allResidues){
                         if(allResidues && Array.isArray(allResidues)){
                             for(var j = 0; j < allResidues.length; j++){
@@ -374,6 +384,10 @@ $("#SolServTypeRecolection").change(function(e){
                                 }
                             }
                         }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error al cargar residuos:", error);
+                        NotifiFalse("Error al cargar los residuos");
                     }
                 });
 

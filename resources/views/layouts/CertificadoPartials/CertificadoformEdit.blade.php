@@ -1,5 +1,6 @@
 @php
 $collection2 = collect([]);
+$uniquestring = '';
 @endphp
 @foreach($certificado->SolicitudServicio->SolicitudResiduo as $Residuo)
 	@if($Residuo->requerimiento->FK_ReqTrata == $certificado->FK_CertTrat&&$Residuo->generespel->gener_sedes->ID_GSede == $certificado->FK_CertGenerSede)

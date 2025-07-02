@@ -21,6 +21,7 @@
 				<option value="{{ __('adminlte::LangRespel.estadofisico2') }}">{{ __('adminlte::LangRespel.estadofisico2') }}</option>
 				<option value="{{ __('adminlte::LangRespel.estadofisico4') }}">{{ __('adminlte::LangRespel.estadofisico4') }} (lodos y similares)</option>
 				<option value="{{ __('adminlte::LangRespel.estadofisico3') }}">{{ __('adminlte::LangRespel.estadofisico3') }}</option>
+				<option value="{{ __('adminlte::LangRespel.estadofisico5') }}">{{ __('adminlte::LangRespel.estadofisico5') }}</option>
 			</select>
 		</div>
 		<div class="col-md-6 form-group has-feedback">

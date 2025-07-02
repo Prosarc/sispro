@@ -669,7 +669,7 @@ footer {
           
           <p class=MsoNormal style='margin-left:60.4pt;margin-right:60.4pt;text-align:justify'><span lang=ES style='font-size:
           7.5pt;font-family:"Arial",sans-serif;color:#0D0D0D'>
-          El material fue entregado al gestor (<b>{{$certificado->gestor->ID_Cli == 1 ? $certificado->gestor->CliShortname : $certificado->gestor->CliName}}</b>), empresa autorizada para el tratamiento <b>{{$certificado->tratamiento->TratName}}</b> de acuerdo con los requerimientos técnicos y ambientales establecidos.
+          El material fue entregado al gestor (<b>@if(strpos(strtolower($certificado->tratamiento->TratName), 'aprovechamiento') !== false) aprovechamiento @else {{$certificado->gestor->ID_Cli == 1 ? $certificado->gestor->CliShortname : $certificado->gestor->CliName}} @endif</b>), empresa autorizada para el tratamiento <b>{{$certificado->tratamiento->TratName}}</b> de acuerdo con los requerimientos técnicos y ambientales establecidos.
           </span></p>
           
           <p class=MsoNormal style='text-align:justify'><b><span lang=ES

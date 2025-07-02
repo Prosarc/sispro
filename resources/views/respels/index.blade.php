@@ -14,13 +14,33 @@
 			<div class="box">
 				<div class="box-header">
 					<h3 class="box-title">{{ __('adminlte::LangRespel.Respellist') }}</h3 class="pull-left">
-				@if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol2, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol, Permisos::INGDETURNO) || Auth::user()->UsRol == 'Usaquen' || Auth::user()->UsRol == 'JefeComercial')
-						<a href="respels/create" class="btn btn-primary" style="float: right;">{{__('adminlte::LangRespel.CreaterespelButton')}}</a>
+				@if(
+							in_array(Auth::user()->UsRol, array_merge(
+								Permisos::RESPELPUBLIC,
+								Permisos::INGDETURNO,
+								Permisos::PROGRAMADOR,
+								Permisos::JEFELOGISTICA,
+								Permisos::ASISTENTELOGISTICA,
+								Permisos::COMERCIALEINGRURNO,
+								Permisos::ProgVehic1
+							)) ||
+							in_array(Auth::user()->UsRol2, array_merge(
+								Permisos::RESPELPUBLIC,
+								Permisos::INGDETURNO,
+								Permisos::PROGRAMADOR,
+								Permisos::JEFELOGISTICA,
+								Permisos::ASISTENTELOGISTICA,
+								Permisos::COMERCIALEINGRURNO,
+								Permisos::ProgVehic1
+							))
+						)
+						<div class="pull-right">
+							<a href="respel/import" class="btn btn-success" style="margin-right: 5px;">
+								<i class="fas fa-file-import"></i> Importar Residuos
+							</a>
+							<a href="respels/create" class="btn btn-primary">{{__('adminlte::LangRespel.CreaterespelButton')}}</a>
+						</div>
 				@endif
-				@if(in_array(Auth::user()->UsRol, Permisos::RESPELPUBLIC) || in_array(Auth::user()->UsRol2, Permisos::RESPELPUBLIC) || in_array(Auth::user()->UsRol, Permisos::INGDETURNO) || Auth::user()->UsRol == 'Usaquen' || Auth::user()->UsRol == 'JefeComercial')
-						<a href="respelspublic/create" class="btn btn-primary" style="float: right; margin-right: 0.5em;">Crear Residuo Común</a>
-				@endif
-
 				@if(in_array(Auth::user()->UsRol, Permisos::TODOPROSARC)||in_array(Auth::user()->UsRol, Permisos::COMERCIALAP))
 					<a href="vencidos" class="btn btn-primary pull-right"  style="float: right; margin-right: 0.5em;">Vencidos</a>
 				@endif

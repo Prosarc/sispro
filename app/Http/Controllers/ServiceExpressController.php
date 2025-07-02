@@ -341,6 +341,14 @@ class ServiceExpressController extends Controller
 			abort(404);
 		}
 
+		// Asegurar que la propiedad 'recepcion' siempre exista
+		$fechaRecepcion = SolicitudServicio::find($SolicitudServicio->ID_SolSer)->programacionesrecibidas()->first();
+		if($fechaRecepcion){
+			$SolicitudServicio->recepcion = $fechaRecepcion->ProgVehSalida;
+		}else{
+			$SolicitudServicio->recepcion = null;
+		}
+
 		$Observaciones = Observacion::where('FK_ObsSolSer', $SolicitudServicio->ID_SolSer)->orderBy('ObsDate', 'desc')->get();
 
 		if($SolicitudServicio->SolSerStatus == 'Completado'||$SolicitudServicio->SolSerStatus == 'Corregido'){
@@ -493,7 +501,7 @@ class ServiceExpressController extends Controller
 			// ->where('requerimientos.ofertado', 1)
 	        // ->where('forevaluation', 0)
 			->get();
-return $Residuosoriginal;
+
 		$Residuos = $Residuosoriginal->map(function ($item) {
 		  $requerimientos = Requerimiento::with(['pretratamientosSelected'])
 	        ->where('ID_Req', $item->FK_SolResRequerimiento)
@@ -513,8 +521,6 @@ return $Residuosoriginal;
 		$rms = SolicitudServicio::where('SolSerSlug', $SolicitudServicio->SolSerSlug)->first('SolSerRMs');
 		$SolicitudServicio->SolSerRMs = $rms->SolSerRMs;
 
-		// return $Residuos;
-
 		foreach ($Residuos as $residuo => $value) {
 			$requerimientos = Requerimiento::with(['pretratamientosSelected'])
 	        ->where('ID_Req', $value->FK_SolResRequerimiento)
@@ -524,75 +530,58 @@ return $Residuosoriginal;
 			->where('forevaluation', 1)
 	        ->first();
 
-
 			if ($residuoSinTratamiento == null) {
 				$SolicitudServicio->Repetible++;
 			}
 		}
 
-		$SolicitudesServicioscount = SolicitudServicio::with(['Personal', 'cliente', 'municipio', 'SolicitudResiduo'])
-			->where('ID_SolSer', $SolicitudServicio->ID_SolSer)
-			->orderBy('created_at', 'desc')
-			->get();
+		$recibo = ReciboDePago::where('ID_Recibo', $SolicitudServicio->FK_ReciboSolserv)->first();
 
-		/*se inicializan las variables para el calculo de totales */
-		$total['estimado'] = 0;
-		$total['recibido'] = 0;
-		$total['conciliado'] = 0;
-		$total['tratado'] = 0;
+		// Calcular totales por tratamiento
+		$total = [
+			'estimado' => 0,
+			'recibido' => 0,
+			'conciliado' => 0,
+			'tratado' => 0
+		];
 		$cantidadesXtratamiento = [];
-
-
-		/* se itera sobre todos los residuos de las solicitudes de servicio */
-		foreach ($SolicitudesServicioscount as $servicio) {
-			foreach ($servicio->SolicitudResiduo as $residuo) {
-				$collection = collect($cantidadesXtratamiento);
-
-				/* si el tratamiento existe en la lista se suman las cantidadesxtratamiento y los totales correspondientes */
-				if ($collection->has($residuo->requerimiento->tratamiento->TratName)) {
-					$cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['estimado'] = $cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['estimado'] + $residuo->SolResKgEnviado;
-					$cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['recibido'] = $cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['recibido'] + $residuo->SolResKgRecibido;
-					$cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['conciliado'] = $cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['conciliado'] + $residuo->SolResKgConciliado;
-					$cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['tratado'] = $cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['tratado'] + $residuo->SolResKgTratado;
-					$total['estimado'] = $total['estimado'] + $residuo->SolResKgEnviado;
-					$total['recibido'] = $total['recibido'] + $residuo->SolResKgRecibido;
-					$total['conciliado'] = $total['conciliado'] + $residuo->SolResKgConciliado;
-					$total['tratado'] = $total['tratado'] + $residuo->SolResKgTratado;
-				}else{
-					$cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['estimado'] = $residuo->SolResKgEnviado;
-					$cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['recibido'] = $residuo->SolResKgRecibido;
-					$cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['conciliado'] = $residuo->SolResKgConciliado;
-					$cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['tratado'] = $residuo->SolResKgTratado;
-					$total['estimado'] = $total['estimado'] + $residuo->SolResKgEnviado;
-					$total['recibido'] = $total['recibido'] + $residuo->SolResKgRecibido;
-					$total['conciliado'] = $total['conciliado'] + $residuo->SolResKgConciliado;
-					$total['tratado'] = $total['tratado'] + $residuo->SolResKgTratado;
-				}
+		foreach ($Residuos as $residuo) {
+			$tratamiento = $residuo->TratName ?? 'Sin Tratamiento';
+			if (!isset($cantidadesXtratamiento[$tratamiento])) {
+				$cantidadesXtratamiento[$tratamiento] = [
+					'estimado' => 0,
+					'recibido' => 0,
+					'conciliado' => 0,
+					'tratado' => 0
+				];
 			}
-		}
-		if (in_array(Auth::user()->UsRol, Permisos::SolSer1) || in_array(Auth::user()->UsRol, Permisos::SolSer1)) {
-			$tratamientos = Tratamiento::where('FK_TratProv', 1)->get();
-		}else{
-			$tratamientos = 'NoAutorizado';
+			$cantidadesXtratamiento[$tratamiento]['estimado'] += $residuo->SolResKgEnviado ?? 0;
+			$cantidadesXtratamiento[$tratamiento]['recibido'] += $residuo->SolResKgRecibido ?? 0;
+			$cantidadesXtratamiento[$tratamiento]['conciliado'] += $residuo->SolResKgConciliado ?? 0;
+			$cantidadesXtratamiento[$tratamiento]['tratado'] += $residuo->SolResKgTratado ?? 0;
+
+			$total['estimado'] += $residuo->SolResKgEnviado ?? 0;
+			$total['recibido'] += $residuo->SolResKgRecibido ?? 0;
+			$total['conciliado'] += $residuo->SolResKgConciliado ?? 0;
+			$total['tratado'] += $residuo->SolResKgTratado ?? 0;
 		}
 
-		/* validacion para encontrar la fecha de recepción en planta del servicio */
-		$fechaRecepcion = SolicitudServicio::find($servicio->ID_SolSer)->programacionesrecibidas()->first();
-		if($fechaRecepcion){
-			$SolicitudServicio->recepcion = $fechaRecepcion->ProgVehSalida;
-		}else{
-			$SolicitudServicio->recepcion = null;
-		}
-        switch ($SolicitudServicio->SolSerStatus) {
-            case 'Aprobado':
-                return view('serviciosexpress.show', compact('SolicitudServicio','Residuos', 'GenerResiduos', 'Cliente', 'SolSerCollectAddress', 'SolSerConductor', 'TextProgramacion', 'ProgramacionesActivas', 'Municipio', 'Programaciones', 'total', 'cantidadesXtratamiento', 'tratamientos', 'Observaciones'));
-                break;
-
-                default:
-                return view('serviciosexpress.show', compact('SolicitudServicio','Residuos', 'GenerResiduos', 'Cliente', 'SolSerCollectAddress', 'SolSerConductor', 'TextProgramacion', 'ProgramacionesActivas', 'Programacion','Municipio', 'Programaciones', 'total', 'cantidadesXtratamiento', 'tratamientos', 'Observaciones'));
-                break;
-        }
-
+		return view('serviciosexpress.show', compact(
+			'SolicitudServicio',
+			'Observaciones',
+			'Cliente',
+			'GenerResiduos',
+			'Residuos',
+			'SolSerCollectAddress',
+			'SolSerConductor',
+			'Municipio',
+			'TextProgramacion',
+			'Programaciones',
+			'ProgramacionesActivas',
+			'recibo',
+			'cantidadesXtratamiento',
+			'total'
+		));
     }
 
 	public function changestatus(Request $request)
@@ -1459,40 +1448,64 @@ return $Residuosoriginal;
 				$SolicitudResiduo->FK_SolResRg = ResiduosGener::select('ID_SGenerRes')->where('SlugSGenerRes',$request['FK_SolResRg'][$Generador][$y])->first()->ID_SGenerRes;
 				/*validar el residuo para saber el tratamiento*/
 				$respelref = ResiduosGener::select('FK_Respel')->where('SlugSGenerRes',$request['FK_SolResRg'][$Generador][$y])->first()->FK_Respel;
-				/*asignar el requerimiento segun el tratamiento ofertado actualmente*/
-				// $SolicitudResiduo->FK_SolResRequerimiento = Requerimiento::select('ID_Req')
-				// ->where('FK_ReqRespel', $respelref)
-				// ->where('ofertado', 1)
-				// ->first()->ID_Req;
-				// $SolicitudResiduo->save();
+
+				// Primero intentamos encontrar un requerimiento con todas las condiciones
 				$requerimientoparacopiar = Requerimiento::with(['pretratamientosSelected'])
-				->where('FK_ReqRespel', $respelref)
-				->where('ofertado', 1)
-				->where('forevaluation', 1)
-				->first();
-				$nuevorequerimiento = $requerimientoparacopiar->replicate();
-                $nuevorequerimiento->ReqSlug= hash('md5', rand().time().$respelref);
-                $nuevorequerimiento->forevaluation=0;
-                $nuevorequerimiento->ofertado=0;
-                $nuevorequerimiento->save();
-                $nuevorequerimiento->pretratamientosSelected()->attach($requerimientoparacopiar['pretratamientosSelected']);
+					->where('FK_ReqRespel', $respelref)
+					->where('ofertado', 1)
+					->where('forevaluation', 1)
+					->first();
 
-                $tarifaparacopiar = Tarifa::with(['rangos'])
-                ->where('FK_TarifaReq', $requerimientoparacopiar->ID_Req)->first();
-                $nuevatarifa = $tarifaparacopiar->replicate();
-                $nuevatarifa->FK_TarifaReq=$nuevorequerimiento->ID_Req;
-                $nuevatarifa->save();
+				// Si no encontramos uno con todas las condiciones, buscamos cualquier requerimiento para ese respel
+				if (!$requerimientoparacopiar) {
+					$requerimientoparacopiar = Requerimiento::with(['pretratamientosSelected'])
+						->where('FK_ReqRespel', $respelref)
+						->first();
+				}
 
-                foreach ($tarifaparacopiar->rangos as $rango) {
-                	$rangoparacopiar = Rango::find($rango->ID_Rango);
-                	$nuevarango = $rangoparacopiar->replicate();
-                	$nuevarango->FK_RangoTarifa = $nuevatarifa->ID_Tarifa;
-                	$nuevarango->save();
-                }
+				// Si aún no encontramos un requerimiento, creamos uno nuevo
+				if (!$requerimientoparacopiar) {
+					$nuevorequerimiento = new Requerimiento();
+					$nuevorequerimiento->FK_ReqRespel = $respelref;
+					$nuevorequerimiento->ReqSlug = hash('md5', rand().time().$respelref);
+					$nuevorequerimiento->forevaluation = 0;
+					$nuevorequerimiento->ofertado = 0;
+					$nuevorequerimiento->save();
+				} else {
+					$nuevorequerimiento = $requerimientoparacopiar->replicate();
+					$nuevorequerimiento->ReqSlug = hash('md5', rand().time().$respelref);
+					$nuevorequerimiento->forevaluation = 0;
+					$nuevorequerimiento->ofertado = 0;
+					$nuevorequerimiento->save();
 
+					if ($requerimientoparacopiar->pretratamientosSelected) {
+						$nuevorequerimiento->pretratamientosSelected()->attach($requerimientoparacopiar->pretratamientosSelected);
+					}
+				}
 
-                $SolicitudResiduo->FK_SolResRequerimiento = $nuevorequerimiento->ID_Req;
-                $SolicitudResiduo->save();
+				// Intentamos copiar la tarifa si existe
+				$tarifaparacopiar = null;
+				if ($requerimientoparacopiar) {
+					$tarifaparacopiar = Tarifa::with(['rangos'])
+						->where('FK_TarifaReq', $requerimientoparacopiar->ID_Req)
+						->first();
+				}
+
+				if ($tarifaparacopiar) {
+					$nuevatarifa = $tarifaparacopiar->replicate();
+					$nuevatarifa->FK_TarifaReq = $nuevorequerimiento->ID_Req;
+					$nuevatarifa->save();
+
+					foreach ($tarifaparacopiar->rangos as $rango) {
+						$rangoparacopiar = Rango::find($rango->ID_Rango);
+						$nuevarango = $rangoparacopiar->replicate();
+						$nuevarango->FK_RangoTarifa = $nuevatarifa->ID_Tarifa;
+						$nuevarango->save();
+					}
+				}
+
+				$SolicitudResiduo->FK_SolResRequerimiento = $nuevorequerimiento->ID_Req;
+				$SolicitudResiduo->save();
 			}
 		}
 	}
@@ -2701,7 +2714,8 @@ return $Residuosoriginal;
                 'respels.ID_Respel', 
                 'respels.RespelName', 
                 'respels.RespelSlug',
-                DB::raw('COALESCE(tratamientos.TratName, "Sin Tratamiento") as TratName')
+                DB::raw('COALESCE(tratamientos.TratName, "Sin Tratamiento") as TratName'),
+                'requerimientos.ID_Req as RequerimientoID'
             )
             ->where('respels.RespelPublic', 1)
             ->where('respels.RespelDelete', 0)
@@ -2715,6 +2729,7 @@ return $Residuosoriginal;
                 // Verificar si ya existe el registro
                 $existingRecord = ResiduosGener::where('FK_SGener', $generador->ID_GSede)
                     ->where('FK_Respel', $residue->ID_Respel)
+                    ->where('DeleteSGenerRes', 0)
                     ->first();
 
                 if (!$existingRecord) {
@@ -2728,6 +2743,40 @@ return $Residuosoriginal;
 
                     // Asignar el SlugSGenerRes al objeto de residuo
                     $residue->SlugSGenerRes = $ResiduoSedeGener->SlugSGenerRes;
+
+                    // Si el residuo tiene un requerimiento, copiarlo
+                    if ($residue->RequerimientoID) {
+                        $requerimientoparacopiar = Requerimiento::with(['pretratamientosSelected'])
+                            ->where('ID_Req', $residue->RequerimientoID)
+                            ->first();
+
+                        if ($requerimientoparacopiar) {
+                            $nuevorequerimiento = $requerimientoparacopiar->replicate();
+                            $nuevorequerimiento->ReqSlug = hash('md5', rand().time().$residue->ID_Respel);
+                            $nuevorequerimiento->forevaluation = 1;
+                            $nuevorequerimiento->ofertado = 1;
+                            $nuevorequerimiento->save();
+                            $nuevorequerimiento->pretratamientosSelected()->attach($requerimientoparacopiar['pretratamientosSelected']);
+
+                            // Copiar la tarifa si existe
+                            $tarifaparacopiar = Tarifa::with(['rangos'])
+                                ->where('FK_TarifaReq', $requerimientoparacopiar->ID_Req)
+                                ->first();
+
+                            if ($tarifaparacopiar) {
+                                $nuevatarifa = $tarifaparacopiar->replicate();
+                                $nuevatarifa->FK_TarifaReq = $nuevorequerimiento->ID_Req;
+                                $nuevatarifa->save();
+
+                                foreach ($tarifaparacopiar->rangos as $rango) {
+                                    $rangoparacopiar = Rango::find($rango->ID_Rango);
+                                    $nuevarango = $rangoparacopiar->replicate();
+                                    $nuevarango->FK_RangoTarifa = $nuevatarifa->ID_Tarifa;
+                                    $nuevarango->save();
+                                }
+                            }
+                        }
+                    }
                 } else {
                     // Usar el registro existente
                     $residue->SlugSGenerRes = $existingRecord->SlugSGenerRes;
@@ -2736,7 +2785,7 @@ return $Residuosoriginal;
         } else {
             // Si no hay generador, usar un slug temporal
             foreach ($expressResidues as $residue) {
-                $residue->SlugSGenerRes = "ComRes-".$residue->ID_Respel;
+                $residue->SlugSGenerRes = DB::raw('CONCAT("ComRes-", '.$residue->ID_Respel.')');
             }
         }
         
@@ -2747,7 +2796,6 @@ return $Residuosoriginal;
             'message' => $e->getMessage()
         ], 500);
     }
-	return view('serviciosexpress.show', compact('expressResidues'));
 }
 
 }

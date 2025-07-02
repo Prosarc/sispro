@@ -128,8 +128,18 @@ class RespelController extends Controller
             abort(403, 'Los clientes no pueden crear residuos directamente. Por favor envíe la información por correo electrónico para evaluación técnica.');
         }
 
-        // Solo personal autorizado puede crear residuos
-        if(in_array(Auth::user()->UsRol, Permisos::RESPELPUBLIC) || in_array(Auth::user()->UsRol2, Permisos::RESPELPUBLIC)|| in_array(Auth::user()->UsRol, Permisos::INGDETURNO)){
+        // Permitir a usuarios de conciliaciones, PDA y gerente de planta crear residuos
+        $rolesPermitidos = array_merge(
+            Permisos::RESPELPUBLIC,
+            Permisos::INGDETURNO,
+            Permisos::PROGRAMADOR,
+            Permisos::JEFELOGISTICA,
+            Permisos::ASISTENTELOGISTICA,
+            Permisos::ProgVehic1,
+            Permisos::COMERCIALEINGRURNO,
+            Permisos::ADMINISTRADORPLANTA
+        );
+        if(in_array(Auth::user()->UsRol, $rolesPermitidos) || in_array(Auth::user()->UsRol2, $rolesPermitidos)){
             $Sedes = DB::table('clientes')
                 ->join('sedes', 'sedes.FK_SedeCli', '=', 'clientes.ID_Cli')
                 ->select('sedes.ID_Sede', 'clientes.CliName')
@@ -156,8 +166,18 @@ class RespelController extends Controller
             abort(403, 'Los clientes no pueden crear residuos directamente. Por favor envíe la información por correo electrónico para evaluación técnica.');
         }
 
-        // Solo personal autorizado puede crear residuos
-        if(!(in_array(Auth::user()->UsRol, Permisos::RESPELPUBLIC) || in_array(Auth::user()->UsRol2, Permisos::RESPELPUBLIC)|| in_array(Auth::user()->UsRol, Permisos::INGDETURNO))){
+        // Permitir a usuarios de conciliaciones, PDA y gerente de planta crear residuos
+        $rolesPermitidos = array_merge(
+            Permisos::RESPELPUBLIC,
+            Permisos::INGDETURNO,
+            Permisos::PROGRAMADOR,
+            Permisos::JEFELOGISTICA,
+            Permisos::ASISTENTELOGISTICA,
+            Permisos::ProgVehic1,
+            Permisos::COMERCIALEINGRURNO,
+            Permisos::ADMINISTRADORPLANTA
+        );
+        if(!(in_array(Auth::user()->UsRol, $rolesPermitidos) || in_array(Auth::user()->UsRol2, $rolesPermitidos))){
             abort(403);
         }
 

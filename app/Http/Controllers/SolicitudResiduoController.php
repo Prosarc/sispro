@@ -621,7 +621,17 @@ class SolicitudResiduoController extends Controller
 	 */
 	public function reportesreg(Request $request)
 	{
-	return view('reportes.ReportRegular');
+		if (in_array(Auth::user()->UsRol, Permisos::CLIENTE)) {
+			$cliente_id = userController::IDClienteSegunUsuario();
+			$clientes = Cliente::where('ID_Cli', $cliente_id)
+				->where('CliDelete', 0)
+				->get();
+		} else {
+			$clientes = Cliente::where('CliDelete', 0)
+				->where('CliCategoria', 'Cliente')
+				->get();
+		}
+		return view('reportes.ReportRegular', compact('clientes'));
 
 	}
 

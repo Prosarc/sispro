@@ -40,6 +40,8 @@
 									<th nowrap>Status</th>
 									@if(in_array(Auth::user()->UsRol, Permisos::TODOPROSARC))
 										<th>{{__('adminlte::message.clientcliente')}}</th>
+									@endif
+									@if(in_array(Auth::user()->UsRol, Permisos::TODOPROSARC) || Auth::user()->email == 'comercial1@prosarc.com.co')
 										<th>Comercial Asignado</th>
 									@endif
 									<th>{{__('adminlte::message.solserindextrans')}}</th>
@@ -161,9 +163,9 @@
 											@endswitch
 										@endif
 										@if(in_array(Auth::user()->UsRol, Permisos::TODOPROSARC))
-												<td><a data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 200}' title="<b>Persona de Contacto</b>" data-content="<p>Datos de la persona de Contacto para esta Solicitud de Servicio</p><ul><li>{{$Servicio->PersFirstName}} {{$Servicio->PersLastName}}</li><li>{{$Servicio->PersEmail}}</li><li>{{$Servicio->PersCellphone}}</li></ul><p>Haga click para ver detalles adicionales de este cliente..." href="/clientes/{{$Servicio->CliSlug}}" target="_blank"><i class="fas fa-user"></i></a>{{$Servicio->CliName}}</td>
+											<td><a data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" data-delay='{"show": 200}' title="<b>Persona de Contacto</b>" data-content="<p>Datos de la persona de Contacto para esta Solicitud de Servicio</p><ul><li>{{$Servicio->PersFirstName}} {{$Servicio->PersLastName}}</li><li>{{$Servicio->PersEmail}}</li><li>{{$Servicio->PersCellphone}}</li></ul><p>Haga click para ver detalles adicionales de este cliente..." href="/clientes/{{$Servicio->CliSlug}}" target="_blank"><i class="fas fa-user"></i></a>{{$Servicio->CliName}}</td>
 										@endif
-										@if(in_array(Auth::user()->UsRol, Permisos::TODOPROSARC))
+										@if(in_array(Auth::user()->UsRol, Permisos::TODOPROSARC) || Auth::user()->email == 'comercial1@prosarc.com.co')
 											<td>{{$Servicio->ComercialPersFirstName.' '.$Servicio->ComercialPersLastName}}</td>
 										@endif
 										<td>{{$Servicio->SolSerNameTrans}}</td>

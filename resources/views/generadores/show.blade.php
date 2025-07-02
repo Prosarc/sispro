@@ -170,11 +170,16 @@
 				</ul>
 				<div class="tab-content">
 					<div class="active tab-pane" id="residuos">
-						@if (in_array(Auth::user()->UsRol, Permisos::CLIENTE) ||in_array(Auth::user()->UsRol, Permisos::AREALOGISTICA) || in_array(Auth::user()->UsRol, Permisos::INGDETURNO))
-							{{-- BOTONES DE CREAR RESIDUOS Y ASIGNARLOS --}}
-							<a href="/respels/create" class="btn btn-primary mx-auto"><i class="fas fa-plus-square"></i> <b>{{ __('adminlte::message.respelscreate') }}</b></a>
-							<a method='get' href='#' data-toggle='modal' data-target='#add'  class="btn btn-success mx-auto pull-right"><i class="fas fa-plus-circle"></i><b> {{ __('adminlte::message.assignrespels') }}</b></a>
-						@endif
+						<div class="d-flex justify-content-between mb-2">
+							@if (!in_array(Auth::user()->UsRol, Permisos::CLIENTE))
+								<a href="/respels/create" class="btn btn-primary">
+									<i class="fas fa-plus-square"></i> <b>{{ __('adminlte::message.respelscreate') }}</b>
+								</a>
+							@endif
+							<a method='get' href='#' data-toggle='modal' data-target='#add' class="btn btn-success">
+								<i class="fas fa-plus-circle"></i><b> {{ __('adminlte::message.assignrespels') }}</b>
+							</a>
+						</div>
 						<div style='overflow-y:auto; max-height:503px;'>
 							@foreach ($Respels as $Respel)
 								<ul class="list-group" style="list-style:none; margin-top:10px;">

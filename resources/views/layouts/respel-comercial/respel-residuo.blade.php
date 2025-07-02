@@ -55,6 +55,7 @@
 		<option {{$Respels->RespelEstado == 'Solido' ? 'selected' : '' }}>Solido</option>
 		<option {{$Respels->RespelEstado == 'Gaseoso' ? 'selected' : '' }}>Gaseoso</option>
 		<option {{$Respels->RespelEstado == 'Mezcla' ? 'selected' : '' }}>Mezcla</option>
+		<option {{$Respels->RespelEstado == 'Aerosol' ? 'selected' : '' }}>Aerosol</option>
 	</select>
 </div>
 <div class="col-md-5">

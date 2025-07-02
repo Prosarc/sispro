@@ -51,6 +51,7 @@
 							<tbody id="readyTable">
 								@foreach($programacions as $programacion)
 								@php
+									$vehiculoPlaca = 'No definido';
 									if($programacion->ProgVehtipo == 1){
 										foreach($personals as $personal){
 											if($programacion->FK_ProgAyudante == $personal->ID_Pers){

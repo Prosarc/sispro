@@ -101,7 +101,8 @@ class ObservacionController extends Controller
         $copy = ['asistentelogistica@prosarc.com.co',
                 'supervisordeoperaciones@prosarc.com.co',
                 'jefedetratamiento@prosarc.com.co',
-                'asistentepda@prosarc.com.co'
+                'asistentepda@prosarc.com.co',
+                'recepcionpda@prosarc.com.co'
                 ];
 
         $recipient = ['logistica@prosarc.com.co',
@@ -113,7 +114,6 @@ class ObservacionController extends Controller
         }
 
         switch ($Solicitud->SolSerStatus) {
-
             case 'Aprobado':
                 array_push($copy, 'gerenteplanta@prosarc.com.co');
                 break;
@@ -135,7 +135,6 @@ class ObservacionController extends Controller
                 array_push($copy, $value);
             }
         }
-
 
         if (Auth::user()->UsRol === __('adminlte::message.Cliente')) {
             Mail::to($recipient)->cc($copy)->send(new NewObservationClient($email, $Observacion));
@@ -255,6 +254,7 @@ class ObservacionController extends Controller
         if ($Observacion->ObsRepeat > 2) {
             $copy = ['recepcionpda@prosarc.com.co',
                     'conciliaciones@prosarc.com.co',
+                    'asistentepda@prosarc.com.co',
                     'logistica@prosarc.com.co',
                     $comercial->PersEmail
                 ];

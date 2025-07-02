@@ -158,6 +158,7 @@ Route::middleware(['web', 'auth', 'verified', 'bindings'])->group(function () {
 	Route::post('/vehicle-programacion/{id}/añadirVehiculo','VehicProgController@añadirVehiculo');
 	Route::post('/vehicle-programacion/{id}/sendParafiscales','VehicProgController@sendParafiscales');
 	Route::resource('/vehicle-mantenimiento','VehicManteController');
+	Route::put('/vehicle-programacion/{id}/updateTransportador','VehicProgController@updateTransportador')->name('vehicle-programacion.updateTransportador');
 	Route::resource('/tratamiento','TratamientoController');
 	Route::resource('/pretratamiento','PretratamientoController');
 	Route::resource('/asistencia', 'AssistancesController');
@@ -181,7 +182,7 @@ Route::middleware(['web', 'auth', 'verified', 'bindings'])->group(function () {
 	Route::get('/reportes.indextemp',  ['as'=> 'reportes.indextemp', 'uses' =>'SolicitudResiduoController@reportes']);	
 	Route::get('/reportes.ReporteRegular', ['as'=> 'reportes.ReporteRegular', 'uses' => 'SolicitudResiduoController@reportesreg']);
 	Route::get('/reportes.ReporteExpress', ['as'=> 'reportes.ReporteExpress', 'uses' => 'SolicitudResiduoController@reportesexpress']);
-	Route::post('/reportes/regular', 'SolicitudResiduoController@reportesRegulares');
+	Route::post('/reportes/regular', 'SolicitudResiduoController@reportesreg');
 	Route::post('/reportes/express', 'SolicitudResiduoController@reportesExpr');
 	Route::get('/reportes.Tiporeporte', ['as'=> 'reportes.Tiporeporte', 'uses' => 'SolicitudResiduoController@tiporeporte']);
 	Route::get('/reportes.refechas', ['as'=> 'reportes.refechas', 'uses' => 'SolicitudResiduoController@refechas']);
@@ -350,3 +351,9 @@ Route::middleware(['web', 'auth', 'verified', 'bindings'])->group(function () {
 });
 
 Route::get('/muni-depart/{id}', 'AjaxController@MuniDepart');
+
+Route::get('/vehicle-transport/{slug}', [VehicProgController::class, 'getVehiculosTransportador']);
+
+// Rutas para importación de residuos
+Route::get('respel/import', 'RespelImportController@index')->name('respel.import.index');
+Route::post('respel/import', 'RespelImportController@import')->name('respel.import');

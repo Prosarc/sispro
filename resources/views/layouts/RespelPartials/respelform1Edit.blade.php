@@ -12,11 +12,12 @@
 			<div class="col-md-6 form-group has-feedback">
 				<label>{{ __('adminlte::LangRespel.estadofisico') }}</label>
 				<select name="RespelEstado" class="form-control" required>
-					<option value="">{{ __('adminlte::LangRespel.select') }}</option>
+					<option value="">{{ __('adminlte::LangRespel.select')}}</option>
 					<option {{ ($Respels->RespelEstado === __('adminlte::LangRespel.estadofisico1') ? "selected" : "" )}} value="{{ __('adminlte::LangRespel.estadofisico1') }}">{{ __('adminlte::LangRespel.estadofisico1') }}</option>
 					<option {{ ($Respels->RespelEstado === __('adminlte::LangRespel.estadofisico2') ? "selected" : "" )}} value="{{ __('adminlte::LangRespel.estadofisico2') }}">{{ __('adminlte::LangRespel.estadofisico2') }}</option>
 					<option {{ ($Respels->RespelEstado === __('adminlte::LangRespel.estadofisico4') ? "selected" : "" )}} value="{{ __('adminlte::LangRespel.estadofisico4') }}">{{ __('adminlte::LangRespel.estadofisico4') }} (lodos y similares)</option>
 					<option {{ ($Respels->RespelEstado === __('adminlte::LangRespel.estadofisico3') ? "selected" : "" )}} value="{{ __('adminlte::LangRespel.estadofisico3') }}">{{ __('adminlte::LangRespel.estadofisico3') }}</option>
+					<option {{ ($Respels->RespelEstado === __('adminlte::LangRespel.estadofisico5') ? "selected" : "" )}} value="{{ __('adminlte::LangRespel.estadofisico5') }}">{{ __('adminlte::LangRespel.estadofisico5') }}</option>
 				</select>
 			</div>
 			<div class="col-md-6 form-group has-feedback">

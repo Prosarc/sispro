@@ -142,6 +142,7 @@ Crear Cotizacion
                                                     <option value="Solido">Solido</option>
                                                     <option value="Liquido">Liquido</option>
                                                     <option value="Gaseoso">Gaseoso</option>
+                                                    <option value="Aerosol">Aerosol</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -352,6 +353,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <option value="Solido">Solido</option>
                         <option value="Liquido">Liquido</option>
                         <option value="Gaseoso">Gaseoso</option>
+                        <option value="Aerosol">Aerosol</option>
                     </select>
                 </div>
             </div>
