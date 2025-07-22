@@ -160,7 +160,7 @@
 							<a data-placement="bottom" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>Eliminar Deshabilitado</b>" data-content="<p style='width: 50%'> el <b>Cliente</b> solo puede Eliminar la información del Residuo cuando aun no ha sido evaluado por <b>Prosarc S.A. ESP</b>... <br>Para mas detalles comuníquese con su <b>Asesor Comercial</b> </p>" disabled class="btn btn-default">{{ __('adminlte::message.delete') }}</a>
 					@endif
 					@if($editButton == 'Editable')
-							@if(in_array(Auth::user()->UsRol, Permisos::CLIENTE)||in_array(Auth::user()->UsRol, Permisos::ASISTENTELOGISTICA)||in_array(Auth::user()->UsRol2, Permisos::ASISTENTELOGISTICA))
+							@if(in_array(Auth::user()->UsRol, Permisos::CLIENTE)||in_array(Auth::user()->UsRol, Permisos::ASISTENTELOGISTICA)||in_array(Auth::user()->UsRol2, Permisos::ASISTENTELOGISTICA)||in_array(Auth::user()->UsRol, Permisos::GrupoEdicionRespel))
 								<a href="/respels/{{$Respels->RespelSlug}}/edit" class="btn btn-warning">{{ __('adminlte::message.edit') }}</a>
 							@else
 								<a disabled href="#" class="btn btn-default">{{ __('adminlte::message.edit') }}</a>

@@ -42,10 +42,15 @@ class RecibomaterialController extends Controller
                 $rms = DB::table('firmas_servicio')    
                 ->join('solicitud_servicios', 'solicitud_servicios.ID_SolSer', '=', 'firmas_servicio.FK_SolSer')
                 ->join('clientes', 'clientes.ID_Cli', '=', 'solicitud_servicios.FK_SolSerCliente')
-                ->join('progvehiculos', 'progvehiculos.FK_ProgServi', '=', 'solicitud_servicios.ID_SolSer')
-                ->select('*')
-                ->where('clientes.ID_Cli', $UserSedeID)
+                ->leftJoin('progvehiculos', 'progvehiculos.FK_ProgServi', '=', 'solicitud_servicios.ID_SolSer')
+                ->select('firmas_servicio.*', 'solicitud_servicios.SolSerSlug', 'clientes.CliName', 
+                    'progvehiculos.ProgVehEntrada as ProgVehFecha')
                 ->where('firmas_servicio.FirmaCliente', '!=', 0)
+                ->orderBy('firmas_servicio.created_at', 'desc')
+                ->groupBy('firmas_servicio.FK_SolSer', 'firmas_servicio.created_at', 'firmas_servicio.ID_FirmaServ', 
+                    'firmas_servicio.FirmaDriver', 'firmas_servicio.FirmaCliente', 'firmas_servicio.FirmaAuxiliar', 
+                    'firmas_servicio.SlugFirmas', 'firmas_servicio.updated_at', 'solicitud_servicios.SolSerSlug', 
+                    'clientes.CliName', 'progvehiculos.ProgVehEntrada')
                 ->get();
          } else {
 
@@ -53,8 +58,10 @@ class RecibomaterialController extends Controller
                 ->join('solicitud_servicios', 'solicitud_servicios.ID_SolSer', '=', 'firmas_servicio.FK_SolSer')
                 ->join('clientes', 'clientes.ID_Cli', '=', 'solicitud_servicios.FK_SolSerCliente')
                 ->join('progvehiculos', 'progvehiculos.FK_ProgServi', '=', 'solicitud_servicios.ID_SolSer')
-                ->select('*')
+                ->select('firmas_servicio.*', 'solicitud_servicios.SolSerSlug', 'clientes.CliName', 'progvehiculos.ProgVehFecha')
                 ->where('firmas_servicio.FirmaCliente', '!=', 0)
+                ->orderBy('firmas_servicio.created_at', 'desc')
+                ->groupBy('firmas_servicio.FK_SolSer', 'firmas_servicio.created_at', 'firmas_servicio.ID_FirmaServ', 'firmas_servicio.FK_SolSer', 'firmas_servicio.FirmaDriver', 'firmas_servicio.FirmaCliente', 'firmas_servicio.FirmaAuxiliar', 'firmas_servicio.SlugFirmas', 'firmas_servicio.updated_at', 'solicitud_servicios.SolSerSlug', 'clientes.CliName', 'progvehiculos.ProgVehFecha')
                 ->get();
          }
                 return view('recibomaterial.index', compact('rms'));

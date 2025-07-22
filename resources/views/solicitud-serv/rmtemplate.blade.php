@@ -235,7 +235,7 @@ footer {
                         @else 
                             <td width=30% style='width:30.0%;padding:0cm 3.5pt 0cm 3.5pt;height:19.5pt'>
                                 <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center;
-                                line-height:normal'><span style='font-size:10.0pt;font-family:"Arial",sans-serif'><b>FECHA RECOLECCIÓN</b>: {{$Programaciones->ProgVehFecha}}&nbsp;</span></p>
+                                line-height:normal'><span style='font-size:10.0pt;font-family:"Arial",sans-serif'><b>FECHA RECOLECCIÓN</b>: {{ now()->format('d/m/Y') }}&nbsp;</span></p>
                             </td>
                         @endif    
                         <td width=30% style='width:30.0%;padding:0cm 3.5pt 0cm 3.5pt;height:19.5pt'>
@@ -473,7 +473,8 @@ footer {
                         <td width=10% nowrap colspan=1 style='width:10pt;border:solid windowtext 1.0pt; border-left:solid windowtext 1.0pt;padding:0cm 3.5pt 0cm 3.5pt;height:19.5pt'> 
                             <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center; line-height:normal'><b><span style='font-size:8.0pt;font-family:"Arial",sans-serif'>Hora de Registro: 
                             <br>
-                            {{$firmas->created_at}} </span></b></p>
+                            {{ now()->format('d/m/Y H:i') }}
+                                &nbsp;</span></b>
                         </td>
                     </tr>  
                     <tr width=100% style='height:19.5pt'>
@@ -482,7 +483,7 @@ footer {
                         </td>
                         @if($SolicitudServicio->SolSerTypeCollect === Null )
                             <td width=10% nowrap colspan=1 style='width:10pt;border:solid windowtext 1.0pt; border-left:solid windowtext 1.0pt;padding:0cm 3.5pt 0cm 3.5pt;height:19.5pt'> 
-                                <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center; line-height:normal'><b><span style='font-size:8.0pt;font-family:"Arial",sans-serif'>Ayudante: {{$firmas->NombreFuncionario}} </span></b></p>
+                                <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center; line-height:normal'><b><span style='font-size:8.0pt;font-family:"Arial",sans-serif'>Ayudante: {{$user->UsName}} </span></b></p>
                             </td>
                         @else
                         <td width=10% nowrap colspan=1 style='width:10pt;border:solid windowtext 1.0pt; border-left:solid windowtext 1.0pt;padding:0cm 3.5pt 0cm 3.5pt;height:19.5pt'> 

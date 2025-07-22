@@ -23,11 +23,18 @@ class Respel extends Model
 	}
 
      public function SolicitudResiduo(){
-         return $this->hasMany('App\SolicitudResiduo', 'ID_SolRes', 'id');//como solicitud de servicio tiene muchas solicitud de residuos
+         return $this->hasManyThrough(
+             'App\SolicitudResiduo',
+             'App\ResiduosGener',
+             'FK_Respel',     // Clave foránea en residuos_geners
+             'FK_SolResRg',   // Clave foránea en solicitud_residuos
+             'ID_Respel',     // Clave local en respels
+             'ID_SGenerRes'   // Clave local en residuos_geners
+         );
     }
     
     public function ResiduosGener(){
-		return $this->hasMany('App\ResiduosGener', 'ID_SGenerRes', 'id');
+		return $this->hasMany('App\ResiduosGener', 'FK_Respel', 'ID_Respel');
 	}
 
     // lista los requerimientos de un residuo 1 a muchos

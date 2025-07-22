@@ -36,6 +36,41 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 					<div class="col-md-12" id="titulo" style="font-size: 1.2em; text-align:center;">
 					</div>
 				</div>
+
+				@if((in_array(Auth::user()->UsRol, Permisos::TODOPROSARC) || in_array(Auth::user()->UsRol2, Permisos::TODOPROSARC)) && in_array($SolicitudServicio->SolSerStatus, ['Conciliado', 'Certificacion', 'Facturado']))
+				<div class="box-header with-border">
+					<button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#modalSubirFotos">
+						<i class="fas fa-camera"></i> Subir Fotos
+					</button>
+				</div>
+
+				<!-- Modal para subir fotos -->
+				<div class="modal fade" id="modalSubirFotos" tabindex="-1" role="dialog" aria-labelledby="modalSubirFotosLabel">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+								<h4 class="modal-title" id="modalSubirFotosLabel">Subir Fotos de Descargue/Pesaje</h4>
+							</div>
+							<form action="{{ route('fotos-cliente.store', $SolicitudServicio->SolSerSlug) }}" method="POST" enctype="multipart/form-data">
+								@csrf
+								<div class="modal-body">
+									<div class="form-group">
+										<label for="fotos">Seleccionar Fotos</label>
+										<input type="file" class="form-control" name="fotos[]" accept="image/jpeg,image/png,image/jpg" multiple required>
+										<small class="text-muted">Puede seleccionar múltiples archivos. Máximo 5MB por archivo.</small>
+									</div>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+									<button type="submit" class="btn btn-primary">Subir Fotos</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+				@endif
+
 				<div class="row">
 					<div class="col-md-12 ">
 						@if ($errors->any())
@@ -182,10 +217,10 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 									<div class="col-md-6">
 										<label>{{ __('adminlte::message.solservehic') }}:</label><br>
 										<a>
-											@if($solicitud->SolSerVehiculo == null)
+											@if($SolicitudServicio->SolSerVehiculo == null)
 												{{ __('adminlte::message.solsernullprogram') }}
 											@else
-												@foreach($solicitud->SolSerVehiculo as $key => $placa)
+												@foreach($SolicitudServicio->SolSerVehiculo as $key => $placa)
 													{{ $placa }}{{ $loop->last ? '' : ', ' }}
 												@endforeach
 											@endif
@@ -630,7 +665,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 													@if(in_array(Auth::user()->UsRol, Permisos::SolSer1) || in_array(Auth::user()->UsRol2, Permisos::SolSer1))
 														<td style="text-align: center;">
 															@if(($SolicitudServicio->SolSerStatus === 'Conciliado' || $SolicitudServicio->SolSerStatus === 'Certificacion' || $SolicitudServicio->SolSerStatus === 'Facturado') && $Residuo->SolResKgTratado != $Residuo->SolResKgConciliado)
-																{{-- <a class="kg" onclick="addkg(`{{$Residuo->SolResSlug}}`, `{{number_format($Residuo->SolResKgTratado, $decimals = 2, $dec_point = ',', $thousands_sep = '.')}}`, `{{number_format($Residuo->SolResKgConciliado, $decimals = 2, $dec_point = ',', $thousands_sep = '.')}}`)">  --}}
+																{-- <a class="kg" onclick="addkg(`{{$Residuo->SolResSlug}}`, `{{number_format($Residuo->SolResKgTratado, $decimals = 2, $dec_point = ',', $thousands_sep = '.')}}`, `{{number_format($Residuo->SolResKgConciliado, $decimals = 2, $dec_point = ',', $thousands_sep = '.')}}`)">  --}}
 																@if($Residuo->SolResTypeUnidad == 'Litros' || $Residuo->SolResTypeUnidad == 'Unidad')
 																<a onclick="addkg(`{{$Residuo->SolResSlug}}`, `{{number_format($Residuo->SolResKgRecibido, $decimals = 2, $dec_point = ',', $thousands_sep = '.')}}`, `{{number_format($Residuo->SolResKgConciliado, $decimals = 2, $dec_point = ',', $thousands_sep = '.')}}`, `{{$TypeUnidad}}`, null, null, `{!!json_encode($Residuo->SolResRM2, JSON_NUMERIC_CHECK)!!}`)">
 																@else

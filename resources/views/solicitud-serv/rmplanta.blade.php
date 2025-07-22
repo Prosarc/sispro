@@ -146,8 +146,8 @@ RM N° {{--{{$SolicitudServicio->ID_SolSer}}--}}
                 </td>
                 <td width=340 style='width:255.05pt;border:none;border-top:solid windowtext 1.0pt;
                 background:white;padding:0cm 5.4pt 0cm 5.4pt;height:26.85pt; border-bottom:solid windowtext 1.0pt; border-right:solid windowtext 1.0pt'>
-                <p class=MsoNormal style='margin-bottom:0cm;line-height:normal'><span
-                style='color:black'>{{'Prueba'}}</span></p>
+                <p class=MsoNormal style='margin-bottom:0cm;line-height:normal'>
+                    <span style='color:black'>{{$Programaciones->ProgVehFecha}}</span></p>
                 </td>
                 <td width=340 style='width:255.05pt;border:none;border-top:solid windowtext 1.0pt;
                 background:white;padding:0cm 5.4pt 0cm 5.4pt;height:26.85pt; border-bottom:solid windowtext 1.0pt'>
@@ -158,7 +158,7 @@ RM N° {{--{{$SolicitudServicio->ID_SolSer}}--}}
                 border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
                 background:white;padding:0cm 5.4pt 0cm 5.4pt;height:26.85pt'>
                 <p class=MsoNormal style='margin-bottom:0cm;line-height:normal'><span
-                style='color:black'>{{'Prueba'}}</span></p>
+                style='color:black'>{{$SolicitudServicio->recepcion ?? 'N/A'}}</span></p>
                 </td>
             </tr>
             </table>
@@ -264,7 +264,11 @@ RM N° {{--{{$SolicitudServicio->ID_SolSer}}--}}
                             <i class="fas fa-signature"></i><b> Firma Cliente</b>
                         </a>
                         <br>
-                        <a target="_blank" href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/duplicarpesos" class="btn btn-warning" style="margin-right: 1em"> <b>Duplicar pesos - Recibido</b></a>
+                        @if(in_array(Auth::user()->UsRol, Permisos::SolSer1) || in_array(Auth::user()->UsRol2, Permisos::SolSer1))
+                            @if(($SolicitudServicio->SolSerStatus === 'Programado'||$SolicitudServicio->SolSerStatus === 'Notificado') && (count($Programaciones)>$ProgramacionesActivas))
+                                <a target="_blank" href="/solicitud-servicio/{{$SolicitudServicio->SolSerSlug}}/duplicarpesos" class="btn btn-warning" style="margin-right: 1em"> <b>Duplicar pesos - Recibido</b></a>
+                            @endif
+                        @endif
                         <a target="_blank" href="/solicitud-servicio/{{$generadores->SlugFirmas}}/{{$SolicitudServicio->SolSerSlug}}/wordtemplate" class="btn btn-primary pull-right" style="margin-right: 1em"> <i class="fas fa-file-word"></i> <b>Recibo Material</b></a>
 					</td>
                         <br>

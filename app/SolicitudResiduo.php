@@ -17,7 +17,14 @@ class SolicitudResiduo extends Model{
     }
 
      public function Respel(){
-     	return $this->belogsTo('App\Respel', 'ID_Respel');
+     	return $this->hasOneThrough(
+            'App\Respel',
+            'App\ResiduosGener',
+            'ID_SGenerRes',
+            'ID_Respel',
+            'FK_SolResRg',
+            'FK_Respel'
+        );
     }
 
     public function generespel(){
@@ -65,8 +72,8 @@ class SolicitudResiduo extends Model{
             'Respel'
         ])
         ->where('FK_SolResSolSer', $solServId)
-        ->whereHas('generespel.gener_sede.generador', function($q) use ($generId) {
-            $q->where('ID_Gener', $generId);
+        ->whereHas('generespel.gener_sede', function($q) use ($generId) {
+            $q->where('FK_GSede', $generId);
         });
     }
 }

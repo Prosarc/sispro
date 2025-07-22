@@ -111,6 +111,18 @@ Menu::macro('sidebar', function () {//COMIENZO DEL SIDEBAR EN VERSION DE MENU
 							->addClass('treeview-menu')
 						)
 					)
+
+					/*PESTAÑA DE CRM*/
+					->addIf(in_array(Auth::user()->UsRol, Permisos::TODOPROSARC) || in_array(Auth::user()->UsRol2, Permisos::TODOPROSARC),
+						(Menu::new()
+							->prepend('<a href="#"><i style="font-size: 1.2em; color: #00C851;" class="fas fa-handshake"></i> <span>CRM</span><i class="fas fa-angle-left pull-right" style="color:#FFFFFF;" width="18" height="18"></i></a>')
+							->addParentClass('treeview')
+							->add(Link::toUrl('/crm/dashboard', '<i class="fas fa-chart-line"></i> Dashboard'))
+							->add(Link::toUrl('/crm/oportunidades', '<i class="fas fa-lightbulb"></i> Oportunidades'))
+							->add(Link::toUrl('/crm/interacciones', '<i class="fas fa-comments"></i> Interacciones'))
+							->addClass('treeview-menu')
+						)
+					)
                 
 					/*PESTAÑA DE PROGRAMACIONES DE SERVICIOS*/
 					->addIf(in_array(Auth::user()->UsRol, Permisos::TODOPROSARC) || in_array(Auth::user()->UsRol2, Permisos::TODOPROSARC),
@@ -160,6 +172,7 @@ Menu::macro('sidebar', function () {//COMIENZO DEL SIDEBAR EN VERSION DE MENU
 							->addIf(in_array(Auth::user()->UsRol, Permisos::TODOPROSARC) || in_array(Auth::user()->UsRol2, Permisos::TODOPROSARC), (Link::toUrl('/certificados', '<i class="fas fa-file-contract"></i> <span>'.  __('adminlte::message.MenuCertificados').'</span>')))
 							->addIf(in_array(Auth::user()->UsRol, Permisos::TODOPROSARC) || in_array(Auth::user()->UsRol2, Permisos::TODOPROSARC), (Link::toUrl('/recibomaterial', '<i style="color: #0000FF;" class="fas fa-file-contract"></i> <span>'. 'Recibos Material'.'</span>')))
 							->addIf(in_array(Auth::user()->UsRol, Permisos::TODOPROSARC) || in_array(Auth::user()->UsRol2, Permisos::TODOPROSARC), (Link::toUrl('/certificadosexpress', '<i style="color: #66B032;" class="fas fa-file-contract"></i> <span>Certificados Express</span>')))
+							->addIf(in_array(Auth::user()->UsRol, Permisos::TODOPROSARC) || in_array(Auth::user()->UsRol2, Permisos::TODOPROSARC), (Link::toUrl('/fotos-cliente', '<i style="color: #ff6b6b;" class="fas fa-images"></i> <span>Fotos Adicionales</span>')))
 							->addIf(in_array(Auth::user()->UsRol, Permisos::ProgVehic2) || in_array(Auth::user()->UsRol2, Permisos::ProgVehic2), (Link::toUrl('/verifycodes', '<i class="fas fa-hashtag"></i> <span>Códigos de Verificación</span>')))
 							// ->addIf(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol2, Permisos::PROGRAMADOR), (Link::toUrl('/manifiestos', '<i class="fas fa-file-invoice"></i> <span>'.  __('adminlte::message.MenuManifiestos').'</span>')))
 							->addClass('treeview-menu')
@@ -194,7 +207,7 @@ Menu::macro('sidebar', function () {//COMIENZO DEL SIDEBAR EN VERSION DE MENU
 				    ->addIf(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol, Permisos::INGDETURNO),
 					(Link::toUrl('/generadores', '<i style="font-size: 1.2em; color: #33b5e5;" class="fa fa-industry"></i> <span>'.  __('adminlte::message.MenuGenerClientitle').'</span>')))
 					/*PESTAÑA DE RESIDUOS COMUNES*/
-					->addif(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol, Permisos::INGDETURNO),(Link::toUrl('/respelspublic', '<i style="font-size: 1.2em; color: #00C851;" class="fas fa-globe-americas"></i> <span>'. __('adminlte::message.RPList').'</span>')))
+					/* ->addif(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol, Permisos::INGDETURNO),(Link::toUrl('/respelspublic', '<i style="font-size: 1.2em; color: #00C851;" class="fas fa-globe-americas"></i> <span>'. __('adminlte::message.RPList').'</span>'))) */
 					/*PESTAÑA DE PERSONAL*/
 					// ->addif(in_array(Auth::user()->UsRol, Permisos::CLIENTE), Link::toUrl('/areas', '<i style="font-size: 1.2em; color: #FB9902;" class="fas fa-archive"></i> <span>'. __('adminlte::message.MenuPersAreas').'</span>'))
 					// ->addif(in_array(Auth::user()->UsRol, Permisos::CLIENTE), Link::toUrl('/cargos', '<i style="font-size: 1.2em; color: #8601AF;" class="fas fa-tools"></i> <span>'. __('adminlte::message.MenuPersCarg').'</span>'))
@@ -209,6 +222,7 @@ Menu::macro('sidebar', function () {//COMIENZO DEL SIDEBAR EN VERSION DE MENU
 							->addParentClass('treeview')
 							->addIf(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol2, Permisos::CLIENTE), (Link::toUrl('/certificados', '<i class="fas fa-file-contract"></i> <span>'.  __('adminlte::message.MenuCertificados').'</span>')))
 							->addIf(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol2, Permisos::CLIENTE), (Link::toUrl('/recibomaterial', '<i style="color: #0000FF;" class="fas fa-file-contract"></i> <span>'. 'Recibos Material'.'</span>')))
+							->addIf(in_array(Auth::user()->UsRol, Permisos::CLIENTE) || in_array(Auth::user()->UsRol2, Permisos::CLIENTE), (Link::toUrl('/fotos-cliente', '<i style="color: #ff6b6b;" class="fas fa-images"></i> <span>Fotos Adicionales</span>')))
 							// ->addIf(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol2, Permisos::PROGRAMADOR), (Link::toUrl('/manifiestos', '<i class="fas fa-file-invoice"></i> <span>'.  __('adminlte::message.MenuManifiestos').'</span>')))
 							->addClass('treeview-menu')
 						)

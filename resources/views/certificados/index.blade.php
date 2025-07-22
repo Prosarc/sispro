@@ -83,7 +83,7 @@ Lista de Certificados
 									@switch($certificado->CertType)
 										@case(0)
 											@if($certificado->CertSrc!=="CertificadoDefault.pdf")
-												<td class="text-center"><a method='get' href='/img/Certificados/{{$certificado->CertSrc}}' target='_blank' class='btn btn-success'><i class='fas fa-file-contract fa-lg'></a></td>
+												<td class="text-center"><a method='get' href='/img/Certificados/{{$certificadoExpress->CertSrc}}' target='_blank' class='btn btn-success'><i class='fas fa-file-contract fa-lg'></a></td>
 											@else
 												<td class="text-center"><a disabled method='get' href='/img/CertificadoDefault.pdf' class='btn btn-default'><i class='fas fa-file-contract fa-lg'></a></td>
 											@endif

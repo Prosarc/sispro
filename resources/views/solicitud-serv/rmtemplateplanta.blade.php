@@ -458,9 +458,13 @@ footer {
                         <td width="10%" nowrap colspan="1" style="width: 10pt; border: solid windowtext 1.0pt; border-left: solid windowtext 1.0pt; padding: 0cm 3.5pt 0cm 3.5pt; height: 19.5pt; text-align: center; vertical-align: middle;">
                             <img width="118" height="76" id="Imagen6" src="{{ asset('img/'.$user->UsSlug.'.png') }}" style="display: block; margin: auto;">
                         </td>                        
-                        <td width=10% nowrap colspan=1 style='width:10pt;border:solid windowtext 1.0pt; border-left:solid windowtext 1.0pt;padding:0cm 3.5pt 0cm 3.5pt;height:19.5pt'>                                                   <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center; line-height:normal'><b><span style='font-size:8.0pt;font-family:"Arial",sans-serif'>Hora de Registro: 
-                        <br>
-                        {{$firmas->created_at}} </span></b></p>
+                        <td width=10% nowrap colspan=1 style='width:10pt;border:solid windowtext 1.0pt; border-left:solid windowtext 1.0pt;padding:0cm 3.5pt 0cm 3.5pt;height:19.5pt'>                                                   
+                            <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center; line-height:normal'>
+                                <b><span style='font-size:8.0pt;font-family:"Arial",sans-serif'>Fecha de Registro: 
+                                <br>
+                                {{ now()->format('d/m/Y H:i') }}
+                                &nbsp;</span></b>
+                            </p>
                         </td>
                     </tr>  
                     <tr width=100% style='height:19.5pt'>

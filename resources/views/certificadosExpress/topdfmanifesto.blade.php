@@ -465,7 +465,7 @@
 							<table>
 								<tr>
 									<td style="text-align: justify; font-size: 10px; line-height: 10px;">
-										El material será entregado al gestor <b>{{$gestor}}</b>, Empresa autorizada para el tratamiento <b>{{$TratName}}</b> de acuerdo con los requerimientos técnicos y ambientales establecidos<br><br>
+										El material será entregado al gestor <b>{{ $certificado->gestor->CliName }}</b>, Empresa autorizada para el tratamiento <b>{{ $certificado->tratamiento->TratName }}</b> de acuerdo con los requerimientos técnicos y ambientales establecidos<br><br>
 										<br><br>
                                         {{-- <b>Para constancia se firma en Mosquera, el dia 19 de agosto de 2021</b> --}}
 									</td>

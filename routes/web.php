@@ -33,6 +33,15 @@ Route::get('/preguntas-frecuentes', function () {
     return view('preguntas.index');
 });
 
+// Rutas para fotos de cliente
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/fotos-cliente', 'FotosClienteController@index')->name('fotos-cliente.index');
+    Route::get('/fotos-cliente/download/{id}', 'FotosClienteController@download')->name('fotos-cliente.download');
+    Route::get('/fotos-cliente/download-all', 'FotosClienteController@downloadAll')->name('fotos-cliente.download-all');
+});
+
+Route::post('fotos-cliente/{solserslug}', 'FotosClienteController@store')->name('fotos-cliente.store');
+
 Route::get('qr-code', function ()
 {
 
@@ -357,3 +366,22 @@ Route::get('/vehicle-transport/{slug}', [VehicProgController::class, 'getVehicul
 // Rutas para importación de residuos
 Route::get('respel/import', 'RespelImportController@index')->name('respel.import.index');
 Route::post('respel/import', 'RespelImportController@import')->name('respel.import');
+
+/*
+|--------------------------------------------------------------------------
+| Rutas del CRM
+|--------------------------------------------------------------------------
+*/
+
+Route::group(['prefix' => 'crm', 'as' => 'crm.', 'middleware' => ['auth']], function () {
+    // Rutas para oportunidades
+    Route::resource('oportunidades', 'CrmOportunidadController');
+    
+    // Rutas para interacciones
+    Route::resource('interacciones', 'CrmInteraccionController');
+    Route::get('interacciones/cliente/{cliente}', 'CrmInteraccionController@porCliente')->name('interacciones.por-cliente');
+    Route::get('interacciones/oportunidad/{oportunidad}', 'CrmInteraccionController@porOportunidad')->name('interacciones.por-oportunidad');
+    
+    // Dashboard del CRM
+    Route::get('dashboard', 'CrmDashboardController@index')->name('dashboard');
+});

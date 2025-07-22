@@ -85,7 +85,7 @@ Certificados Express
 											@if($certificado->CertSrc!=="CertificadoDefault.pdf")
 												<td class="text-center"><a method='get' href='{{asset('storage/certificadoExpress'.'/E-'.sprintf("%07s", $certificado->ID_Cert).'.pdf')}}' target='_blank' class='btn btn-success'><i class='fas fa-file-contract fa-lg'></a></td>
 											@else
-												<td class="text-center"><a disabled method='get' href='{{asset('storage/certificadoExpress'.'/E-'.sprintf("%07s", $certificado->ID_Cert).'.pdf')}}' class='btn btn-default'><i class='fas fa-file-contract fa-lg'></a></td>
+												<td class="text-center"><a disabled method='get' href='{{asset('storage/app/certificadoExpress'.'/E-'.sprintf("%07s", $certificado->ID_Cert).'.pdf')}}' class='btn btn-default'><i class='fas fa-file-contract fa-lg'></a></td>
 											@endif
 											@break
 										@case(1)
