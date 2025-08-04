@@ -291,7 +291,7 @@ class Permisos{
 		respelcontroller::edit
 	 */
 
-	const GrupoEvaluacionRespel = ['Programador','JefeOperaciones','AdministradorBogota','JefeComercial','Comercial','Comercialap', 'Supervisor', 'AdministradorPlanta'];
+	const GrupoEvaluacionRespel = ['Programador','JefeOperaciones','AdministradorBogota','JefeComercial','Comercial','Comercialap', 'Supervisor', 'AdministradorPlanta', 'usaquen'];
 	/* Using->
 		respelcontroller::edit
 	 */

@@ -478,7 +478,7 @@ class RespelController extends Controller
     public function edit($id)
     {
         /*se verifican el rol del usuario para dar acceso a la edicion de respel o evaluacion de respel*/
-        if(in_array(Auth::user()->UsRol, Permisos::GrupoEdicionRespel) || in_array(Auth::user()->UsRol2, Permisos::GrupoEvaluacionRespel)){
+        if(in_array(Auth::user()->UsRol, Permisos::GrupoEdicionRespel) || in_array(Auth::user()->UsRol2, Permisos::GrupoEvaluacionRespel)|| Auth::user()->UsRol == 'usaquen'){
 
             $Respels = Respel::where('RespelSlug', $id)->first();
 
@@ -602,7 +602,7 @@ class RespelController extends Controller
     public function editADP($id)
     {
         /*se verifican el rol del usuario para dar acceso a la edicion de respel o evaluacion de respel*/
-        if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol2, Permisos::JefeOperaciones)){
+        if(in_array(Auth::user()->UsRol, Permisos::PROGRAMADOR) || in_array(Auth::user()->UsRol2, Permisos::JefeOperaciones)|| in_array(Auth::user()->UsRol,Permisos::GrupoEdicionRespel)){
 
             $Respels = Respel::where('RespelSlug', $id)->first();
 
@@ -638,8 +638,18 @@ class RespelController extends Controller
                     ->select('sedes.ID_Sede')
                     ->where('personals.ID_Pers', Auth::user()->FK_UserPers)
                     ->get();
-
-                return view('respels.editADP', compact('Respels', 'Sede',   'tratamientos'));
+                    
+                    $cliente = null;
+                    if ($Respels && $Respels->FK_RespelCoti) {
+                        $cotizacion = \App\Cotizacion::find($Respels->FK_RespelCoti);
+                        if ($cotizacion && $cotizacion->FK_CotiSede) {
+                            $sede = \App\Sede::find($cotizacion->FK_CotiSede);
+                            if ($sede && $sede->FK_SedeCli) {
+                                $cliente = \App\Cliente::find($sede->FK_SedeCli);
+                            }
+                        }
+                    }
+                    return view('respels.editADP', compact('Respels', 'Sede', 'cliente', 'tratamientos'));
                        
                 
             }
@@ -847,7 +857,7 @@ class RespelController extends Controller
         $respel = Respel::where('RespelSlug', $id)->first();
         $opciones = $request->Opcion;
 
-        if (in_array(Auth::user()->UsRol, Permisos::JefeOperaciones)||in_array(Auth::user()->UsRol2, Permisos::SUPERVISOR)||in_array(Auth::user()->UsRol, Permisos::COMERCIALAP)||in_array(Auth::user()->UsRol2, Permisos::COMERCIALAP)) {
+        if (in_array(Auth::user()->UsRol, Permisos::JefeOperaciones)||in_array(Auth::user()->UsRol2, Permisos::SUPERVISOR)||in_array(Auth::user()->UsRol, Permisos::COMERCIALAP)||in_array(Auth::user()->UsRol2, Permisos::COMERCIALAP)||Auth::user()->UsRol == 'usaquen') {
             /*se eliminan los requerimientos relacionados*/
             $requerimientosparaBorrar = Requerimiento::where('FK_ReqRespel', $respel->ID_Respel)
             ->where('forevaluation', 1)

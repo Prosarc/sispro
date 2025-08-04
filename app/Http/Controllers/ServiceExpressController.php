@@ -2236,18 +2236,19 @@ class ServiceExpressController extends Controller
 		//loop over $certificados
 		foreach ($certificados as $certificado) {
 
-			$fecharecepcionenplanta = $certificado->SolicitudServicio->programacionesrecibidas()->first('ProgVehSalida');
-			if ($fecharecepcionenplanta != null) {
-				$certificado->recepcion = $fecharecepcionenplanta->ProgVehSalida;
-			}else{
-				$certificado->recepcion = "";
-			}
+			// Comentado porque las columnas 'recepcion' y 'solserRecepcionDate' no existen en la tabla certificadosexpress
+			// $fecharecepcionenplanta = $certificado->SolicitudServicio->programacionesrecibidas()->first('ProgVehSalida');
+			// if ($fecharecepcionenplanta != null) {
+			// 	$certificado->recepcion = $fecharecepcionenplanta->ProgVehSalida;
+			// }else{
+			// 	$certificado->recepcion = "";
+			// }
 
-            if ($request->input('solserRecepcionDate')) {
-                $certificado->solserRecepcionDate = $request->input('solserRecepcionDate');
-            }else {
-                $certificado->solserRecepcionDate = $certificado->created_at;
-            }
+            // if ($request->input('solserRecepcionDate')) {
+            //     $certificado->solserRecepcionDate = $request->input('solserRecepcionDate');
+            // }else {
+            //     $certificado->solserRecepcionDate = $certificado->created_at;
+            // }
 
 			$Solicitud->nombreDeFirma = 'firmasClientes/'.$nombreDeFirma.'.png';
 
@@ -2260,14 +2261,46 @@ class ServiceExpressController extends Controller
 
 			switch ($certificado->tratamiento->TratName) {
 				case 'TermoDestrucción':
+                                    // Si CertNumero está vacío o es 0, obtener el último número
+                if (empty($certificado->CertNumero) || $certificado->CertNumero == 0) {
+                    $ultimoCertificado = CertificadoExpress::where('CertType', 0)->orderBy('CertNumero', 'desc')->first();
+                    if ($ultimoCertificado && $ultimoCertificado->CertNumero) {
+                        $certificado->CertNumero = $ultimoCertificado->CertNumero + 1;
+                        $certificado->save();
+                    } else {
+                        $certificado->CertNumero = 1;
+                        $certificado->save();
+                    }
+                }
+                    
                     $pdf = PDF::setPaper('letter', 'portrait')->loadView('certificadosExpress.topdf', compact(['certificado','Solicitud','qrCode']));
-                    Storage::put('certificadoExpress'.'/E-'.sprintf("%07s", $certificado->ID_Cert).'.pdf', $pdf->output(), 'public');
+                    $nombreArchivo = 'E-'.sprintf("%07s", $certificado->CertNumero).'.pdf';
+                    Storage::disk('public')->put('certificadoExpress/'.$nombreArchivo, $pdf->output());
+                    
+                    // Actualizar el campo CertSrc en la base de datos
+                    $certificado->update(['CertSrc' => $nombreArchivo]);
 
 					break;
 
 				default:
+                                    // Si CertManifNumero está vacío o es 0, obtener el último número
+                if (empty($certificado->CertManifNumero) || $certificado->CertManifNumero == 0) {
+                    $ultimoManifiesto = CertificadoExpress::where('CertType', 1)->orderBy('CertManifNumero', 'desc')->first();
+                    if ($ultimoManifiesto && $ultimoManifiesto->CertManifNumero) {
+                        $certificado->CertManifNumero = $ultimoManifiesto->CertManifNumero + 1;
+                        $certificado->save();
+                    } else {
+                        $certificado->CertManifNumero = 1;
+                        $certificado->save();
+                    }
+                }
+                    
 					$pdf = PDF::setPaper('letter', 'portrait')->loadView('certificadosExpress.topdfmanifesto', compact(['certificado','Solicitud','qrCode']));
-					Storage::put('manifiestosExpress'.'/ME-'.sprintf("%07s", $certificado->CertManifNumero).'.pdf', $pdf->output(), 'public');
+                    $nombreArchivo = 'ME-'.sprintf("%07s", $certificado->CertManifNumero).'.pdf';
+					Storage::disk('public')->put('manifiestosExpress/'.$nombreArchivo, $pdf->output());
+					
+					// Actualizar el campo CertSrcManif en la base de datos
+					$certificado->update(['CertSrcManif' => $nombreArchivo]);
 
 					break;
 			}
@@ -2449,6 +2482,9 @@ class ServiceExpressController extends Controller
 
                                 //check CertManifNumero previous counter
                                 $manifiestoprevio = CertificadoExpress::where('CertType', 1)->orderBy('ID_Cert','desc')->first();
+                                
+                                //check CertNumero previous counter for certificates
+                                $certificadoprevioNumero = CertificadoExpress::where('CertType', 0)->orderBy('ID_Cert','desc')->first();
 
 								$certificadoprevio = CertificadoExpress::where('FK_CertTrat', $key->requerimiento->tratamiento->ID_Trat)
 								->where('FK_CertSolser', $id)
@@ -2473,6 +2509,13 @@ class ServiceExpressController extends Controller
 										$certificado->CertAnexo = "anexo de certificado ".$key->requerimiento->tratamiento->TratName.$key->requerimiento->tratamiento->FK_TratProv;
 										$certificado->CertManifPrepend = "";
 										$certificado->CertManifNumero = 0;
+										
+										// Asignar número consecutivo para certificados
+										if ($certificadoprevioNumero && $certificadoprevioNumero->CertNumero) {
+											$certificado->CertNumero = $certificadoprevioNumero->CertNumero + 1;
+										} else {
+											$certificado->CertNumero = 1;
+										}
 									}else{
 										$certificado->CertType = 1;
 										$certificado->CertObservacion = "manifiesto Express con observacion generica";
@@ -2484,7 +2527,6 @@ class ServiceExpressController extends Controller
                                             $certificado->CertManifNumero = 1;
                                         }
 									}
-									$certificado->CertNumero = "";
 									$certificado->CertiEspName = "";
 									$certificado->CertiEspValue = "";
 									$certificado->CertSlug = hash('sha256', rand().time());

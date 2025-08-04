@@ -82,15 +82,15 @@ Lista de Certificados
 									<td>{{$certificado->CertObservacion}}</td>
 									@switch($certificado->CertType)
 										@case(0)
-											@if($certificado->FK_CertSolser!=="CertificadoDefault.pdf")
-												<td class="text-center"><a method='get' href='/public/certificadoExpress/{{$certificado->CertSrc}}' target='_blank' class='btn btn-success'><i class='fas fa-file-contract fa-lg'></a></td>
+											@if($certificado->CertSrc!=="CertificadoDefault.pdf")
+												<td class="text-center"><a method='get' href='/storage/certificadoExpress/{{$certificado->CertSrc}}' target='_blank' class='btn btn-success'><i class='fas fa-file-contract fa-lg'></a></td>
 											@else
 												<td class="text-center"><a disabled method='get' href='/img/CertificadoDefault.pdf' class='btn btn-default'><i class='fas fa-file-contract fa-lg'></a></td>
 											@endif
 											@break
 										@case(1)
-											@if($certificado->FK_CertSolser!=="CertificadoDefault.pdf")
-												<td class="text-center"><a method='get' href='/public/manifiestosExpress/{{$certificado->CertSrc}}' target='_blank' class='btn btn-primary'><i class='far fa-file-alt fa-lg'></a></td>
+											@if($certificado->CertSrcManif!=="CertificadoDefault.pdf")
+												<td class="text-center"><a method='get' href='/storage/manifiestosExpress/{{$certificado->CertSrcManif}}' target='_blank' class='btn btn-primary'><i class='far fa-file-alt fa-lg'></a></td>
 											@else
 												<td class="text-center"><a disabled method='get' href='/img/CertificadoDefault.pdf' target='_blank' class='btn btn-default'><i class='far fa-file-alt fa-lg'></a></td>
 											@endif

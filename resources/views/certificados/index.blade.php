@@ -89,8 +89,8 @@ Lista de Certificados
 											@endif
 											@break
 										@case(1)
-											@if($certificado->CertSrcManif!=="CertificadoDefault.pdf")
-												<td class="text-center"><a method='get' href='/img/Manifiestos/{{$certificado->CertSrcManif}}' target='_blank' class='btn btn-primary'><i class='far fa-file-alt fa-lg'></a></td>
+											@if($certificado->CertSrc!=="CertificadoDefault.pdf")
+												<td class="text-center"><a method='get' href='/storage/manifiestosRegular/{{$certificado->CertSrc}}' target='_blank' class='btn btn-primary'><i class='far fa-file-alt fa-lg'></a></td>
 											@else
 												<td class="text-center"><a disabled method='get' href='/img/CertificadoDefault.pdf' target='_blank' class='btn btn-default'><i class='far fa-file-alt fa-lg'></a></td>
 											@endif

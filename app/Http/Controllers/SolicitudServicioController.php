@@ -3032,7 +3032,7 @@ foreach ($certificados as $certificado) {
 				foreach ($resgener->solres as $key) {
 					if ($key->SolResKgConciliado > 0) {
 						switch ($key->requerimiento->tratamiento->TratTipo) {
-							case '0':
+							case 0:
 								// "tratamiento tipo: interno; Certificado";
 
 								$certificadoprevio = Certificado::where('FK_CertTrat', $key->requerimiento->tratamiento->ID_Trat)
@@ -3119,7 +3119,7 @@ foreach ($certificados as $certificado) {
 
 								break;
 
-							case '1':
+							case 1:
 								// "tratamiento tipo: externo ; manifiesto";
 								/*se verifica si ya existe un documento con ese tratamiento para esa solicitud de servicio*/
 								$manifiestoprevio = Manifiesto::where('FK_ManifTrat', $key->requerimiento->tratamiento->ID_Trat)
@@ -3179,6 +3179,36 @@ foreach ($certificados as $certificado) {
 									}
 									$manifiesto->save();
 
+									// Generar PDF inmediatamente para manifiestos de aprovechamiento
+									if (stripos($key->requerimiento->tratamiento->TratName, 'APROVECHAMIENTO') !== false) {
+										try {
+											// Generar QR Code
+											$qrCode = new QrCode(route('manifiestos.show', ['manifiesto' => $manifiesto->ManifSlug]));
+											$qrCode->setLogoPath(asset('img/LogoQR.png'));
+											$qrCode->setLogoSize(60, 60);
+											$qrCode->setSize(300);
+											$qrCode->setMargin(0);
+											$qrCode->setRoundBlockSize(true, QrCode::ROUND_BLOCK_SIZE_MODE_SHRINK);
+
+											// Generar PDF - usar plantilla específica para aprovechamiento
+											$view = (stripos($key->requerimiento->tratamiento->TratName, 'APROVECHAMIENTO') !== false) 
+												? 'certificados.topdfmanifiesto-aprovechamiento' 
+												: 'certificados.topdfmanifiesto';
+											$pdf = PDF::setPaper('letter', 'portrait')->loadView($view, compact(['manifiesto', 'qrCode']));
+											$nombre = $manifiesto->ManifSlug . '.pdf';
+											$path = 'public/manifiestosRegular/' . $nombre;
+
+											Storage::put($path, $pdf->output(), 'public');
+
+											// Actualizar ManifSrc
+											$manifiesto->update(['ManifSrc' => $nombre]);
+
+										} catch (Exception $e) {
+											// Log error but continue
+											Log::error('Error generando PDF para manifiesto ID: ' . $manifiesto->ID_Manif . ' - ' . $e->getMessage());
+										}
+									}
+
 									$dato = new Manifdato;
 									$dato->FK_DatoManif = $manifiesto->ID_Manif;
 									$dato->FK_DatoManifSolRes = $key->ID_SolRes;
@@ -3197,6 +3227,77 @@ foreach ($certificados as $certificado) {
 		}
 
 		/*ajuste de los precios para facturacion en cada residuo de la solicitud segun los rangos de tarifas */
+
+		// Generar PDFs automáticamente para certificados y manifiestos de aprovechamiento
+		
+		// 1. Certificados de aprovechamiento (CertType = 1)
+		$certificados = Certificado::with(['tratamiento', 'SolicitudServicio', 'cliente', 'sedegenerador', 'gestor'])
+			->where('FK_CertSolser', $id)
+			->where('CertType', 1) // Solo manifiestos (aprovechamiento)
+			->get();
+
+		foreach ($certificados as $certificado) {
+			try {
+				// Generar QR Code
+				$qrCode = new QrCode(route('certificados.show', ['certificado' => $certificado->CertSlug]));
+				$qrCode->setLogoPath(asset('img/LogoQR.png'));
+				$qrCode->setLogoSize(60, 60);
+				$qrCode->setSize(300);
+				$qrCode->setMargin(0);
+				$qrCode->setRoundBlockSize(true, QrCode::ROUND_BLOCK_SIZE_MODE_SHRINK);
+				
+				// Generar PDF - usar plantilla específica para aprovechamiento
+				$view = (stripos($certificado->tratamiento->TratName, 'APROVECHAMIENTO') !== false) 
+					? 'certificados.topdfmanifiesto-aprovechamiento' 
+					: 'certificados.topdfmanifiesto';
+				$pdf = PDF::setPaper('letter', 'portrait')->loadView($view, compact(['certificado', 'qrCode']));
+				$nombre = $certificado->CertSlug . '.pdf';
+				$path = 'public/manifiestosRegular/' . $nombre;
+				
+				Storage::put($path, $pdf->output(), 'public');
+				
+				// Actualizar CertSrc
+				$certificado->update(['CertSrc' => $nombre]);
+				
+			} catch (Exception $e) {
+				// Log error but continue with other certificates
+				Log::error('Error generando PDF para certificado ID: ' . $certificado->ID_Cert . ' - ' . $e->getMessage());
+			}
+		}
+		
+		// 2. Manifiestos de aprovechamiento (tabla manifiestos)
+		$manifiestos = Manifiesto::with(['tratamiento', 'SolicitudServicio', 'cliente', 'sedegenerador', 'gestor'])
+			->where('FK_ManifSolser', $id)
+			->get();
+
+		foreach ($manifiestos as $manifiesto) {
+			try {
+				// Verificar si es un tratamiento de aprovechamiento
+				if (stripos($manifiesto->tratamiento->TratName, 'APROVECHAMIENTO') !== false) {
+					// Generar QR Code
+					$qrCode = new QrCode(route('manifiestos.show', ['manifiesto' => $manifiesto->ManifSlug]));
+					$qrCode->setLogoPath(asset('img/LogoQR.png'));
+					$qrCode->setLogoSize(60, 60);
+					$qrCode->setSize(300);
+					$qrCode->setMargin(0);
+					$qrCode->setRoundBlockSize(true, QrCode::ROUND_BLOCK_SIZE_MODE_SHRINK);
+					
+					// Generar PDF
+					$pdf = PDF::setPaper('letter', 'portrait')->loadView('certificados.topdfmanifiesto', compact(['manifiesto', 'qrCode']));
+					$nombre = $manifiesto->ManifSlug . '.pdf';
+					$path = 'public/manifiestosRegular/' . $nombre;
+					
+					Storage::put($path, $pdf->output(), 'public');
+					
+					// Actualizar ManifSrc
+					$manifiesto->update(['ManifSrc' => $nombre]);
+				}
+				
+			} catch (Exception $e) {
+				// Log error but continue with other manifests
+				Log::error('Error generando PDF para manifiesto ID: ' . $manifiesto->ID_Manif . ' - ' . $e->getMessage());
+			}
+		}
 
 		foreach ($SolicitudServicio->SolicitudResiduo as $key => $solres) {
 			switch ($solres->SolResTypeUnidad) {
@@ -4152,6 +4253,7 @@ foreach ($certificados as $certificado) {
                 break;
             case 'Corregido':
             case 'Completado':
+                break;
             default:
                 break;
 
@@ -4567,13 +4669,34 @@ foreach ($certificados as $certificado) {
 
 			Mail::to($SolicitudServicio->PersEmail)->cc($destinatarios)->send(new SolSerRM($pdf, $pdfPath, $Cliente, $GenerResiduos, $firmas));
 		
+			// Si el usuario es conductor, abrir el PDF en una nueva pestaña
+			if (Auth::user()->UsRol == 'Conductor') {
+				return response($pdf->output(), 200, [
+					'Content-Type' => 'application/pdf',
+					'Content-Disposition' => 'inline; filename="Recibo_Material_' . $SolicitudServicio->ID_SolSer . '.pdf"'
+				]);
+			}
+			
 			return redirect()->route('recibo.material', ['id' => $SolicitudServicio->SolSerSlug]);
 			//return view ('solicitud-serv.rmtemplate', compact('SolicitudServicio','Residuos', 'GenerResiduos', 'Cliente',  'SolSerConductor',  'Programaciones', 'totales', 'tratamientos', 'PublicRespels', 'precintosString', 'firmas'));
 
 		} else {
 
 		$SolSerCollectAddress = $SolicitudServicio->SolSerCollectAddress;
-		$SolSerConductor = $SolicitudServicio->SolSerConductor;
+		
+		// Verificar si es conductor alquilado o de Prosarc
+		$programacion = DB::table('progvehiculos')
+			->where('FK_ProgServi', $SolicitudServicio->ID_SolSer)
+			->where('ProgVehDelete', 0)
+			->first();
+		
+		if ($programacion && $programacion->ProgVehtipo == 2) {
+			// Es conductor alquilado, usar el nombre guardado en la programación
+			$SolSerConductor = $programacion->ProgVehNameConductorEXT ?: $SolicitudServicio->SolSerConductor;
+		} else {
+			// Es conductor de Prosarc, ya tiene el nombre completo
+			$SolSerConductor = $SolicitudServicio->SolSerConductor;
+		}
 				
 		$Programaciones = DB::table('progvehiculos')
 			->join('personals', 'personals.ID_Pers', '=', 'progvehiculos.FK_ProgAyudante')
@@ -4777,6 +4900,14 @@ foreach ($certificados as $certificado) {
 
 		Mail::to($SolicitudServicio->PersEmail)->cc($destinatarios)->send(new SolSerRM($pdf, $pdfPath, $Cliente, $GenerResiduos, $firmas));
 	
+		// Si el usuario es conductor, abrir el PDF en una nueva pestaña
+		if (Auth::user()->UsRol == 'Conductor') {
+			return response($pdf->output(), 200, [
+				'Content-Type' => 'application/pdf',
+				'Content-Disposition' => 'inline; filename="Recibo_Material_' . $SolicitudServicio->ID_SolSer . '.pdf"'
+			]);
+		}
+		
 		return redirect()->route('recibo.material', ['id' => $SolicitudServicio->SolSerSlug]);
 		//return view ('solicitud-serv.rmtemplate', compact('SolicitudServicio','Residuos', 'GenerResiduos', 'Cliente',  'SolSerConductor',  'Programaciones', 'totales', 'tratamientos', 'PublicRespels', 'precintosString', 'firmas'));
 		}

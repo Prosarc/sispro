@@ -45,7 +45,7 @@
 											</ul>
 										</div>
 									@endif
-									@if(Auth::user()->UsRol === 'PROGRAMADOR')
+									@if(Auth::user()->UsRol === 'PROGRAMADOR' || Auth::user()->UsRol === 'Usaquen')
                                     <input type="text" name="Sede" style="display: none;" value="{{$cliente->sede}}">
                                     @endif
 									@include('layouts.RespelPartials.respelform1Edit')
