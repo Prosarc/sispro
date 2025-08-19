@@ -18,17 +18,24 @@ class CreateClientesTable extends Migration
             $table->string('CliNit', 20);
             $table->string('CliName');
             $table->string('CliShortname');
+            $table->string('CliCategoria', 32);
+            $table->string('CliRut');
+            $table->string('CliCamaraComercio');
+            $table->string('CliRepresentanteLegal');
+            $table->string('CliCertificaionBancaria');
+            $table->string('CliCertificaionComercial');
+            $table->string('CliCertificaionComercial2');
             $table->string('CliType', 32)->nullable();
-            $table->string('CliCategoria',32);
             $table->boolean('CliAuditable');
             $table->timestamps();
             $table->string('CliSlug')->unique();
+            $table->string('CliStatus');
+            $table->string('TipoFacturacion')->default('Contado');
             $table->engine = 'InnoDB';
             $table->charset = 'utf8';
             $table->collation = 'utf8_unicode_ci';
         });
     }
-
     /**
      * Reverse the migrations.
      *

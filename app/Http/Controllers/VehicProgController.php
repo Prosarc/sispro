@@ -227,17 +227,38 @@ public function index()
 				/*ProgVehtipo = 1 -> transporte interno prosarc*/
 				/*ProgVehtipo = 2 -> transporte alquilado*/
 
-				$programacion->ProgVehtipo = 1;
-				$programacion->FK_ProgVehiculo = $request->input('FK_ProgVehiculo');
+                $programacion->ProgVehtipo = 1;
+                $fkVehiculoInput = $request->input('FK_ProgVehiculo');
+                $fkVehiculoId = is_array($fkVehiculoInput)
+                    ? (count($fkVehiculoInput) ? $fkVehiculoInput[0] : null)
+                    : $fkVehiculoInput;
+                $programacion->FK_ProgVehiculo = $fkVehiculoId;
 				$programacion->ProgVehColor = $request->input('ProgVehColor');
 
-				$programacion->ProgVehPrecintos = $request->input('ProgVehPrecintos');
+                // Normaliza precintos a JSON o null para evitar "Array to string conversion"
+                $precintos = $request->input('ProgVehPrecintos');
+                if (is_array($precintos)) {
+                    $precintos = array_values(array_filter($precintos, function ($v) { return $v !== null && $v !== ''; }));
+                    $programacion->ProgVehPrecintos = count($precintos) ? json_encode($precintos) : null;
+                } elseif (is_string($precintos) && trim($precintos) !== '') {
+                    $programacion->ProgVehPrecintos = json_encode([$precintos]);
+                } else {
+                    $programacion->ProgVehPrecintos = null;
+                }
 
-				$programacion->FK_ProgConductor = $request->input('FK_ProgConductor');
-				$programacion->FK_ProgAyudante = $request->input('FK_ProgAyudante');
-				$conductor = Personal::select('PersFirstName', 'PersLastName')->where('ID_Pers', $request->input('FK_ProgConductor'))->first();
+                $programacion->FK_ProgConductor = is_array($request->input('FK_ProgConductor'))
+                    ? (count($request->input('FK_ProgConductor')) ? $request->input('FK_ProgConductor')[0] : null)
+                    : $request->input('FK_ProgConductor');
+                $programacion->FK_ProgAyudante = is_array($request->input('FK_ProgAyudante'))
+                    ? (count($request->input('FK_ProgAyudante')) ? $request->input('FK_ProgAyudante')[0] : null)
+                    : $request->input('FK_ProgAyudante');
+                $conductor = Personal::select('PersFirstName', 'PersLastName')->where('ID_Pers', $programacion->FK_ProgConductor)->first();
 				$nomConduct = $conductor->PersFirstName." ".$conductor->PersLastName;
-				$vehiculo = Vehiculo::select('VehicPlaca')->where('ID_Vehic', $request->input('FK_ProgVehiculo'))->first()->VehicPlaca;
+                $vehiculo = null;
+                if (!is_null($fkVehiculoId)) {
+                    $vehiculoObj = Vehiculo::select('VehicPlaca')->where('ID_Vehic', $fkVehiculoId)->first();
+                    $vehiculo = $vehiculoObj ? $vehiculoObj->VehicPlaca : null;
+                }
 				$transportador = DB::table('clientes')
 					->join('sedes', 'clientes.ID_Cli', '=', 'sedes.FK_SedeCli')
 					->join('municipios', 'sedes.FK_SedeMun', '=', 'municipios.ID_Mun')
@@ -247,18 +268,44 @@ public function index()
 			}
 			else{
 				$programacion->ProgVehtipo = 2;
-				$programacion->FK_ProgVehiculo = $request->input('vehicalqui');
-				$programacion->FK_ProgAyudante = $request->input('FK_ProgAyudante');
-				$programacion->ProgVehDocConductorEXT = $request->input('ProgVehDocConductorEXT');
-				$programacion->ProgVehNameConductorEXT = $request->input('ProgVehNameConductorEXT');
-				$programacion->ProgVehDocAuxiliarEXT = $request->input('ProgVehDocAuxiliarEXT');
-				$programacion->ProgVehNameAuxiliarEXT = $request->input('ProgVehNameAuxiliarEXT');
-				$programacion->ProgVehPlacaEXT = $request->input('ProgVehPlacaEXT');
-				$programacion->ProgVehTipoEXT = $request->input('ProgVehTipoEXT');
+                $programacion->FK_ProgVehiculo = is_array($request->input('vehicalqui'))
+                    ? (count($request->input('vehicalqui')) ? $request->input('vehicalqui')[0] : null)
+                    : $request->input('vehicalqui');
+                $programacion->FK_ProgAyudante = is_array($request->input('FK_ProgAyudante'))
+                    ? (count($request->input('FK_ProgAyudante')) ? $request->input('FK_ProgAyudante')[0] : null)
+                    : $request->input('FK_ProgAyudante');
+                $programacion->ProgVehDocConductorEXT = is_array($request->input('ProgVehDocConductorEXT'))
+                    ? (count($request->input('ProgVehDocConductorEXT')) ? $request->input('ProgVehDocConductorEXT')[0] : null)
+                    : $request->input('ProgVehDocConductorEXT');
+                $programacion->ProgVehNameConductorEXT = is_array($request->input('ProgVehNameConductorEXT'))
+                    ? (count($request->input('ProgVehNameConductorEXT')) ? $request->input('ProgVehNameConductorEXT')[0] : null)
+                    : $request->input('ProgVehNameConductorEXT');
+                $programacion->ProgVehDocAuxiliarEXT = is_array($request->input('ProgVehDocAuxiliarEXT'))
+                    ? (count($request->input('ProgVehDocAuxiliarEXT')) ? $request->input('ProgVehDocAuxiliarEXT')[0] : null)
+                    : $request->input('ProgVehDocAuxiliarEXT');
+                $programacion->ProgVehNameAuxiliarEXT = is_array($request->input('ProgVehNameAuxiliarEXT'))
+                    ? (count($request->input('ProgVehNameAuxiliarEXT')) ? $request->input('ProgVehNameAuxiliarEXT')[0] : null)
+                    : $request->input('ProgVehNameAuxiliarEXT');
+                $programacion->ProgVehPlacaEXT = is_array($request->input('ProgVehPlacaEXT'))
+                    ? (count($request->input('ProgVehPlacaEXT')) ? $request->input('ProgVehPlacaEXT')[0] : null)
+                    : $request->input('ProgVehPlacaEXT');
+                $programacion->ProgVehTipoEXT = is_array($request->input('ProgVehTipoEXT'))
+                    ? (count($request->input('ProgVehTipoEXT')) ? $request->input('ProgVehTipoEXT')[0] : null)
+                    : $request->input('ProgVehTipoEXT');
 				$programacion->ProgVehColor = '#FFFF00';
-				$programacion->ProgVehPrecintos = $request->input('ProgVehPrecintos');
+                // Normaliza precintos a JSON o null para evitar "Array to string conversion"
+                $precintos = $request->input('ProgVehPrecintos');
+                if (is_array($precintos)) {
+                    $precintos = array_values(array_filter($precintos, function ($v) { return $v !== null && $v !== ''; }));
+                    $programacion->ProgVehPrecintos = count($precintos) ? json_encode($precintos) : null;
+                } elseif (is_string($precintos) && trim($precintos) !== '') {
+                    $programacion->ProgVehPrecintos = json_encode([$precintos]);
+                } else {
+                    $programacion->ProgVehPrecintos = null;
+                }
 				if ($request->input('vehicalqui')!=null) {
-					$vehiculo = Vehiculo::select('VehicPlaca')->where('ID_Vehic', $request->input('vehicalqui'))->first()->VehicPlaca;
+					$vehiculoObj = Vehiculo::select('VehicPlaca')->where('ID_Vehic', $request->input('vehicalqui'))->first();
+					$vehiculo = $vehiculoObj ? $vehiculoObj->VehicPlaca : null;
 				}else{
 					$vehiculo = null;
 				}
@@ -277,11 +324,32 @@ public function index()
 			$vehiculo = null;
 			$programacion->ProgVehtipo = 0;
 		}
-		$programacion->FK_ProgServi = $request->input('FK_ProgServi');
+        $programacion->FK_ProgServi = is_array($request->input('FK_ProgServi'))
+            ? (count($request->input('FK_ProgServi')) ? $request->input('FK_ProgServi')[0] : null)
+            : $request->input('FK_ProgServi');
 		$programacion->ProgVehDelete = 0;
-		$programacion->ProgVehStatus = 'Autorizado';
-		$programacion->ProgVehExclusive = $request->input('ProgVehExclusive');
-		$programacion->save();
+        $programacion->ProgVehStatus = 'Autorizado';
+        $exclusiveInput = $request->input('ProgVehExclusive');
+        if (is_array($exclusiveInput)) {
+            $first = count($exclusiveInput) ? reset($exclusiveInput) : 0;
+            $programacion->ProgVehExclusive = (int) (bool) $first;
+        } else {
+            // soporta 'on', '1', true/false y null
+            $programacion->ProgVehExclusive = $request->boolean('ProgVehExclusive') ? 1 : ((is_null($exclusiveInput) || $exclusiveInput === '') ? 0 : (int) $exclusiveInput);
+        }
+        // Sanitiza cualquier atributo que accidentalmente sea array
+        foreach ($programacion->getAttributes() as $attrKey => $attrValue) {
+            if (is_array($attrValue)) {
+                if ($attrKey === 'ProgVehPrecintos') {
+                    $clean = array_values(array_filter($attrValue, function ($v) { return $v !== null && $v !== ''; }));
+                    $programacion->$attrKey = count($clean) ? json_encode($clean) : null;
+                } else {
+                    $programacion->$attrKey = count($attrValue) ? $attrValue[0] : null;
+                }
+            }
+        }
+
+        $programacion->save();
 		// return $request->input('FK_ProgServi');
 
 		$SolicitudServicio = SolicitudServicio::where('ID_SolSer', $programacion->FK_ProgServi)->first();
@@ -582,15 +650,15 @@ public function index()
 				break;
 		}
 
-		$SolicitudServicio->SolSerStatus = 'Programado';
-		if(!is_null($request->input('typetransportador'))){
-			$SolicitudServicio->SolSerConductor = $nomConduct;
-			$SolicitudServicio->SolSerVehiculo = $vehiculo;
-			$SolicitudServicio->SolSerNameTrans = $transportador->CliName;
-			$SolicitudServicio->SolSerNitTrans = $transportador->CliNit;
-			$SolicitudServicio->SolSerAdressTrans = $transportador->SedeAddress;
-			$SolicitudServicio->SolSerCityTrans = $transportador->ID_Mun;
-		}
+        $SolicitudServicio->SolSerStatus = 'Programado';
+        if(!is_null($request->input('typetransportador'))){
+            $SolicitudServicio->SolSerConductor = $nomConduct;
+            $SolicitudServicio->SolSerVehiculo = $vehiculo;
+            $SolicitudServicio->SolSerNameTrans = $transportador->CliName ?? null;
+            $SolicitudServicio->SolSerNitTrans = $transportador->CliNit ?? null;
+            $SolicitudServicio->SolSerAdressTrans = $transportador->SedeAddress ?? null;
+            $SolicitudServicio->SolSerCityTrans = $transportador->ID_Mun ?? null;
+        }
 		$SolicitudServicio->save();
 
 		// return redirect()->route('vehicle-programacion.create');
@@ -728,11 +796,28 @@ public function index()
 	 * @param  int  $programacion->FK_ProgServi
 	 * @return \Illuminate\Http\Response
 	 */
+/**
+	 * Show the form for editing the specified resource.
+	 *
+	 * @param  int  $programacion->FK_ProgServi
+	 * @return \Illuminate\Http\Response
+	 */
 	public function edit($id)
 	{
-		if(in_array(Auth::user()->UsRol, Permisos::ProgVehic2) || in_array(Auth::user()->UsRol2, Permisos::ProgVehic2)){
+	if(in_array(Auth::user()->UsRol, Permisos::ProgVehic2) || in_array(Auth::user()->UsRol2, Permisos::ProgVehic2)){
 
 			$programacion = ProgramacionVehiculo::where('ID_ProgVeh', $id)->with('servicio')->first();
+			// Normaliza precintos para que siempre sea array en la vista
+			if ($programacion && !is_null($programacion->ProgVehPrecintos)) {
+				if (is_string($programacion->ProgVehPrecintos)) {
+					$decodedPrecintos = json_decode($programacion->ProgVehPrecintos, true);
+					if (json_last_error() === JSON_ERROR_NONE && is_array($decodedPrecintos)) {
+						$programacion->ProgVehPrecintos = $decodedPrecintos;
+					} else {
+						$programacion->ProgVehPrecintos = [$programacion->ProgVehPrecintos];
+					}
+				}
+			}
 			if (!$programacion) {
 				abort(404);
 			}
@@ -846,7 +931,6 @@ public function index()
 			abort(403);
 		}
 	}
-
 	/**
 	 * Update the specified resource in storage.
 	 *

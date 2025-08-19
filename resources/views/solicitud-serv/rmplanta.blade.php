@@ -147,7 +147,7 @@ RM N° {{--{{$SolicitudServicio->ID_SolSer}}--}}
                 <td width=340 style='width:255.05pt;border:none;border-top:solid windowtext 1.0pt;
                 background:white;padding:0cm 5.4pt 0cm 5.4pt;height:26.85pt; border-bottom:solid windowtext 1.0pt; border-right:solid windowtext 1.0pt'>
                 <p class=MsoNormal style='margin-bottom:0cm;line-height:normal'>
-                    <span style='color:black'>{{$Programaciones->ProgVehFecha}}</span></p>
+                    <span style='color:black'>{{ optional($Programaciones->first())->ProgVehFecha ?? 'N/A' }}</span></p>
                 </td>
                 <td width=340 style='width:255.05pt;border:none;border-top:solid windowtext 1.0pt;
                 background:white;padding:0cm 5.4pt 0cm 5.4pt;height:26.85pt; border-bottom:solid windowtext 1.0pt'>

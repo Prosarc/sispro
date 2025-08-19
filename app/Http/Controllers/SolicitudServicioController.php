@@ -23,6 +23,7 @@ use App\Mail\SustanciaControladaProgramada;
 use App\Mail\AceiteUsadoProgramado;
 use App\Mail\SustanciaControladaCreada;
 use App\Mail\AceiteUsadoCreado;
+use Illuminate\Support\Str;
 use App\SolicitudServicio;
 use App\SolicitudResiduo;
 use App\audit;
@@ -669,12 +670,12 @@ class SolicitudServicioController extends Controller
 	
 		$Cliente = Cliente::select('CliName', 'ID_Cli', 'CliStatus')->where('ID_Cli', userController::IDClienteSegunUsuario())->first();
 	
-		foreach ($Servicios as $servicio) {
+				foreach ($Servicios as $servicio) {
 			if ($servicio->SolSerTypeCollect == 98) {
 				$Address = Sede::select('SedeAddress')->where('ID_Sede', $servicio->SolSerCollectAddress)->first();
-				$servicio->SolSerCollectAddress = $Address->SedeAddress;
+				$servicio->SolSerCollectAddress = $Address ? $Address->SedeAddress : 'Dirección no encontrada';
 			}
-	
+
 			// validación para encontrar la fecha de recepción en planta del servicio
 			$fechaRecepcion = SolicitudServicio::find($servicio->ID_SolSer)->programacionesrecibidas()->first();
 			if ($fechaRecepcion) {
@@ -3832,435 +3833,507 @@ foreach ($certificados as $certificado) {
 	 * @return \Illuminate\Http\Response
 	 */
 
-	 public function recibomaterial($id){
-
-        $users  = Auth::user()->id;
-        
-		$SolicitudServicio = DB::table('solicitud_servicios')
-			->join('personals', 'personals.ID_Pers', '=', 'solicitud_servicios.FK_SolSerPersona')
-			->join('cargos', 'personals.FK_PersCargo', '=', 'ID_Carg')
-			->select('solicitud_servicios.*','personals.PersFirstName','personals.PersLastName', 'personals.PersEmail', 'personals.PersCellphone', 'cargos.CargName')
-			->where('solicitud_servicios.SolSerSlug', $id)
-			->first();
-		if($SolicitudServicio->SolSerTypeCollect === null){
-
-			$SolSerConductor = $SolicitudServicio->SolSerConductor;
-
-			if($SolicitudServicio->SolSerTipo == 'Interno'){
-				$SolSerConductor = Personal::where('ID_Pers', $SolicitudServicio->SolSerConductor)->first();
-			}
-			if($SolicitudServicio->SolSerTypeCollect == 98){
-				$Address = Sede::select(['SedeAddress', 'SedeName'])->where('ID_Sede',$SolicitudServicio->SolSerCollectAddress)->first();
-				$SolSerCollectAddress = $Address->SedeName.' - '.$Address->SedeAddress;
-			}
-
-					$Programaciones = ProgramacionVehiculo::where('FK_ProgServi', $SolicitudServicio->ID_SolSer)
-					->where('ProgVehDelete', 0)
-					->get();
-
-					$ProgramacionesActivas = count(ProgramacionVehiculo::where('FK_ProgServi', $SolicitudServicio->ID_SolSer)
-					->where('ProgVehEntrada', null)
-					->where('ProgVehDelete', 0)
-					->get());
-
-			$Cliente = DB::table('clientes')
-				->join('sedes', 'clientes.ID_Cli', '=', 'sedes.FK_SedeCli')
-				->join('municipios', 'sedes.FK_SedeMun', '=', 'municipios.ID_Mun')
-				->select('clientes.CliNit', 'clientes.CliName', 'sedes.SedeAddress', 'municipios.MunName')
-				->where('clientes.ID_Cli', $SolicitudServicio->FK_SolSerCliente)
-				->first();
-
-			$GenerResiduos = DB::table('solicitud_residuos')
-			->distinct()
-			->join('residuos_geners', 'residuos_geners.ID_SGenerRes', '=', 'solicitud_residuos.FK_SolResRg')
-			->join('gener_sedes', 'gener_sedes.ID_GSede', '=', 'residuos_geners.FK_SGener')
-			->join('generadors' , 'generadors.ID_Gener', '=', 'gener_sedes.FK_GSede')
-			->join('sedes', 'sedes.ID_Sede', '=', 'generadors.FK_GenerCli')
-			->join('clientes', 'clientes.ID_Cli', '=', 'sedes.FK_SedeCli')
-			->join('firmas_servicio', 'firmas_servicio.FK_Gener', '=', 'clientes.ID_Cli')
-			->join('municipios', 'municipios.ID_Mun', '=', 'gener_sedes.FK_GSedeMun')
-			->select('gener_sedes.GSedeName', 'residuos_geners.FK_SGener','generadors.ID_Gener', 'generadors.FK_GenerCli', 'generadors.GenerName','gener_sedes.GSedeSlug', 'gener_sedes.GSedeAddress', 'gener_sedes.GSedeEmail', 'gener_sedes.GSedeCelular',  'firmas_servicio.SlugFirmas', 'municipios.MunName')
-			->where('firmas_servicio.FK_SolSer', $SolicitudServicio->ID_SolSer)
-			//->select('residuos_geners.*')
-			//->where('firmas_servicio.FK_SolSer', $SolicitudServicio->ID_SolSer)
-			->get();
-			//return $GenerResiduos;
-				
-			$Residuosoriginal = DB::table('solicitud_residuos')
-				->join('residuos_geners', 'residuos_geners.ID_SGenerRes', '=', 'solicitud_residuos.FK_SolResRg')
-				->join('respels' , 'respels.ID_Respel', '=', 'residuos_geners.FK_Respel')
-				->join('requerimientos' , 'solicitud_residuos.FK_SolResRequerimiento', '=', 'requerimientos.ID_Req')
-				->join('tratamientos' , 'requerimientos.FK_ReqTrata', '=', 'tratamientos.ID_Trat')
-				->join('sedes' , 'tratamientos.FK_TratProv', '=', 'sedes.ID_Sede')
-				->join('clientes' , 'sedes.FK_SedeCli', '=', 'clientes.ID_Cli')
-				->select('solicitud_residuos.*','residuos_geners.FK_SGener', 'respels.*', 'requerimientos.ID_Req', 'tratamientos.TratName', 'tratamientos.ID_Trat', 'clientes.CliShortName')
-				->where('solicitud_residuos.FK_SolResSolSer', $SolicitudServicio->ID_SolSer)
-				->get();
-            //return $Residuosoriginal;					
-
-			$Residuos = $Residuosoriginal->map(function ($item) {
-				$requerimientos = Requerimiento::with(['pretratamientosSelected', 'tarifa.rangos' => function($query){
-					$query->orderBy('TarifaDesde');
-				}])
-				->where('ID_Req', $item->FK_SolResRequerimiento)
-				->first();
-
-				$rm = SolicitudResiduo::with('SolicitudServicio')->where('SolResSlug', $item->SolResSlug)->first(['SolResRM', 'FK_SolResSolSer']);
-
-				$item->pretratamientosSelected = $requerimientos->pretratamientosSelected;
-				$item->tarifa = $requerimientos->tarifa;
-				if ($requerimientos->tarifa->TarifaSpecial === 1) {
-					switch ($item->SolResTypeUnidad) {
-						case 'Unidad':
-							$tarifatipo = 'Unid';
-							break;
-
-						case 'Litros':
-							$tarifatipo = 'Lt';
-							break;
-
-						default:
-							$tarifatipo = 'Kg';
-							break;
-					}
-
-					$tarifaResiduo = CTarifa::with('rangos')
-						->where('FK_Cliente', $rm->SolicitudServicio->FK_SolSerCliente)
-						->where('FK_Tratamiento', $requerimientos->FK_ReqTrata)
-						->where('Tarifatipo', $tarifatipo)
-						->first();
-
-					if ($tarifaResiduo === null) {
-						$item->ctarifa = null;
-					}else{
-						$item->ctarifa = $tarifaResiduo;
-					}
-				}else{
-					$item->ctarifa = null;
-				}
-				$item->SolResRM2 = $rm->SolResRM;
-				return $item;
-			});
-
-			$SolicitudServicio->Repetible = 0;
-
-			/* se convierte el tipo de dato a aray mediante la consulta en el modelo de la columna SolSerRMs usando eloquent*/
-			$rms = SolicitudServicio::where('SolSerSlug', $SolicitudServicio->SolSerSlug)->first('SolSerRMs');
-			$SolicitudServicio->SolSerRMs = $rms->SolSerRMs;
-
-			foreach ($Residuos as $residuo => $value) {
-				$requerimientos = Requerimiento::with(['pretratamientosSelected'])
-				->where('ID_Req', $value->FK_SolResRequerimiento)
-				->first();
-				$residuoSinTratamiento = Requerimiento::where('FK_ReqRespel', $requerimientos->FK_ReqRespel)
-				->where('ofertado', 1)
-				->where('forevaluation', 1)
-				->first();
-
-
-				if ($residuoSinTratamiento == null) {
-					$SolicitudServicio->Repetible++;
-				}
-			}
-
-			$SolicitudesServicioscount = SolicitudServicio::with(['Personal', 'cliente', 'municipio', 'SolicitudResiduo'])
-				->where('ID_SolSer', $SolicitudServicio->ID_SolSer)
-				->orderBy('created_at', 'desc')
-				->get();
-
-			/*se inicializan las variables para el calculo de totales */
-			$total['estimado'] = 0;
-			$total['recibido'] = 0;
-			$total['conciliado'] = 0;
-			$total['tratado'] = 0;
-			$cantidadesXtratamiento = [];
-
-
-			/* se itera sobre todos los residuos de las solicitudes de servicio */
-			foreach ($SolicitudesServicioscount as $servicio) {
-				foreach ($servicio->SolicitudResiduo as $residuo) {
-					$collection = collect($cantidadesXtratamiento);
-
-					/* si el tratamiento existe en la lista se suman las cantidadesxtratamiento y los totales correspondientes */
-					if ($collection->has($residuo->requerimiento->tratamiento->TratName)) {
-						$cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['estimado'] = $cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['estimado'] + $residuo->SolResKgEnviado;
-						$cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['recibido'] = $cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['recibido'] + $residuo->SolResKgRecibido;
-						$cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['conciliado'] = $cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['conciliado'] + $residuo->SolResKgConciliado;
-						$cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['tratado'] = $cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['tratado'] + $residuo->SolResKgTratado;
-						$total['estimado'] = $total['estimado'] + $residuo->SolResKgEnviado;
-						$total['recibido'] = $total['recibido'] + $residuo->SolResKgRecibido;
-						$total['conciliado'] = $total['conciliado'] + $residuo->SolResKgConciliado;
-						$total['tratado'] = $total['tratado'] + $residuo->SolResKgTratado;
-					}else{
-						$cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['estimado'] = $residuo->SolResKgEnviado;
-						$cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['recibido'] = $residuo->SolResKgRecibido;
-						$cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['conciliado'] = $residuo->SolResKgConciliado;
-						$cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['tratado'] = $residuo->SolResKgTratado;
-						$total['estimado'] = $total['estimado'] + $residuo->SolResKgEnviado;
-						$total['recibido'] = $total['recibido'] + $residuo->SolResKgRecibido;
-						$total['conciliado'] = $total['conciliado'] + $residuo->SolResKgConciliado;
-						$total['tratado'] = $total['tratado'] + $residuo->SolResKgTratado;
-					}
-				}
-			}
-			if (in_array(Auth::user()->UsRol, Permisos::SolSer1) || in_array(Auth::user()->UsRol, Permisos::SolSer1)) {
-				$tratamientos = Tratamiento::join('sedes', 'sedes.ID_Sede', '=', 'tratamientos.FK_TratProv')
-				->join('clientes', 'clientes.ID_Cli', '=', 'sedes.FK_SedeCli')
-				->select('*')
-				->get();
-			}else{
-				$tratamientos = 'NoAutorizado';
-			}
-
-			/* validacion para encontrar la fecha de recepción en planta del servicio */
-			$fechaRecepcion = SolicitudServicio::find($servicio->ID_SolSer)->programacionesrecibidas()->first();
-			if($fechaRecepcion){
-				$SolicitudServicio->recepcion = $fechaRecepcion->ProgVehSalida;
-			}else{
-				$SolicitudServicio->recepcion = null;
-			}
-			//Buscar corrientes del residuo
-			
-				$PublicRespels = DB::table('solicitud_residuos')
-				->join('residuos_geners', 'residuos_geners.ID_SGenerRes', '=', 'solicitud_residuos.FK_SolResRg')
-				->join('respels' , 'respels.ID_Respel', '=', 'residuos_geners.FK_Respel')
-				->select('respels.ID_Respel', 'respels.YRespelClasf4741', 'respels.ARespelClasf4741')
-				->where('solicitud_residuos.FK_SolResSolSer', $SolicitudServicio->ID_SolSer)
-				->distinct()
-				->get();
-				//return $GenerResiduos;
-			// adjuntar variables segun status del servicio
-			switch ($SolicitudServicio->SolSerStatus) {
-				case 'Residuo Faltante':
-				case 'Notificado':
-					return view('solicitud-serv.rmplanta', compact('SolicitudServicio','Residuos', 'GenerResiduos', 'Cliente', 'SolSerConductor', 'Programaciones', 'ProgramacionesActivas', 'total', 'cantidadesXtratamiento', 'tratamientos', 'PublicRespels'));
-					break;
-				case 'Programado':
-				return view('solicitud-serv.rmplanta', compact('SolicitudServicio','Residuos', 'GenerResiduos', 'Cliente', 'SolSerConductor', 'Programaciones', 'ProgramacionesActivas', 'total', 'cantidadesXtratamiento', 'tratamientos', 'PublicRespels'));
-					break;
-				case 'Corregido':
-				case 'Completado':
-				default:
-					break;
-			}
-		} else {
-
-			$SolicitudServicio = DB::table('solicitud_servicios')
-			->join('personals', 'personals.ID_Pers', '=', 'solicitud_servicios.FK_SolSerPersona')
-			->join('cargos', 'personals.FK_PersCargo', '=', 'ID_Carg')
-			->select('solicitud_servicios.*','personals.PersFirstName','personals.PersLastName', 'personals.PersEmail', 'personals.PersCellphone', 'cargos.CargName')
-			->where('solicitud_servicios.SolSerSlug', $id)
-			->first();
-		if (!$SolicitudServicio) {
-			abort(404);
-		}
-
-		$SolSerConductor = $SolicitudServicio->SolSerConductor;
-
-		if($SolicitudServicio->SolSerTipo == 'Interno'){
-			$SolSerConductor = Personal::where('ID_Pers', $SolicitudServicio->SolSerConductor)->first();
-		}
-		if($SolicitudServicio->SolSerTypeCollect == 98){
-			$Address = Sede::select(['SedeAddress', 'SedeName'])->where('ID_Sede',$SolicitudServicio->SolSerCollectAddress)->first();
-			$SolSerCollectAddress = $Address->SedeName.' - '.$Address->SedeAddress;
-		}
-
-				$Programaciones = ProgramacionVehiculo::where('FK_ProgServi', $SolicitudServicio->ID_SolSer)
-				->where('ProgVehDelete', 0)
-				->get();
-
-				$ProgramacionesActivas = count(ProgramacionVehiculo::where('FK_ProgServi', $SolicitudServicio->ID_SolSer)
-				->where('ProgVehEntrada', null)
-				->where('ProgVehDelete', 0)
-				->get());
-
-		$Cliente = DB::table('clientes')
-			->join('sedes', 'clientes.ID_Cli', '=', 'sedes.FK_SedeCli')
-			->join('municipios', 'sedes.FK_SedeMun', '=', 'municipios.ID_Mun')
-			->select('clientes.CliNit', 'clientes.CliName', 'sedes.SedeAddress', 'municipios.MunName')
-			->where('clientes.ID_Cli', $SolicitudServicio->FK_SolSerCliente)
-			->first();
-		
-		$GenerResiduos = DB::table('solicitud_residuos')
-			->distinct()
-			->join('residuos_geners', 'residuos_geners.ID_SGenerRes', '=', 'solicitud_residuos.FK_SolResRg')
-			->join('gener_sedes', 'gener_sedes.ID_GSede', '=', 'residuos_geners.FK_SGener')
-			->join('generadors' , 'generadors.ID_Gener', '=', 'gener_sedes.FK_GSede')
-			->join('firmas_servicio', 'firmas_servicio.FK_Gener', '=', 'generadors.ID_Gener')
-			->join('municipios', 'municipios.ID_Mun', '=', 'gener_sedes.FK_GSedeMun')
-			->select('gener_sedes.GSedeName', 'residuos_geners.FK_SGener','generadors.ID_Gener', 'generadors.GenerName','gener_sedes.GSedeSlug', 'gener_sedes.GSedeAddress', 'gener_sedes.GSedeEmail', 'gener_sedes.GSedeCelular', 'municipios.MunName', 'firmas_servicio.SlugFirmas', 'firmas_servicio.FK_SolSer', 'solicitud_residuos.SolResKgEnviado')
-			->where('firmas_servicio.FK_SolSer', $SolicitudServicio->ID_SolSer)
-			->where('solicitud_residuos.FK_SolResSolSer', $SolicitudServicio->ID_SolSer)
-			->groupBy('gener_sedes.ID_GSede', 'residuos_geners.FK_SGener')
-			->get();
-		//return $GenerResiduos;
-		$Residuosoriginal = DB::table('solicitud_residuos')
-			->join('residuos_geners', 'residuos_geners.ID_SGenerRes', '=', 'solicitud_residuos.FK_SolResRg')
-			->join('respels' , 'respels.ID_Respel', '=', 'residuos_geners.FK_Respel')
-			->join('requerimientos' , 'solicitud_residuos.FK_SolResRequerimiento', '=', 'requerimientos.ID_Req')
-			->join('tratamientos' , 'requerimientos.FK_ReqTrata', '=', 'tratamientos.ID_Trat')
-			->join('sedes' , 'tratamientos.FK_TratProv', '=', 'sedes.ID_Sede')
-			->join('clientes' , 'sedes.FK_SedeCli', '=', 'clientes.ID_Cli')
-			->select('solicitud_residuos.*','residuos_geners.FK_SGener', 'respels.*', 'requerimientos.ID_Req', 'tratamientos.TratName', 'tratamientos.ID_Trat', 'clientes.CliShortName')
-			->where('solicitud_residuos.FK_SolResSolSer', $SolicitudServicio->ID_SolSer)
-			// ->where('requerimientos.ofertado', 1)
-	        // ->where('forevaluation', 0)
-			->get();
-
-		$Residuos = $Residuosoriginal->map(function ($item) {
-			$requerimientos = Requerimiento::with(['pretratamientosSelected', 'tarifa.rangos' => function($query){
-				$query->orderBy('TarifaDesde');
-			}])
-			->where('ID_Req', $item->FK_SolResRequerimiento)
-			// ->where('forevaluation', 0)
-			->first();
-
-			$rm = SolicitudResiduo::with('SolicitudServicio')->where('SolResSlug', $item->SolResSlug)->first(['SolResRM', 'FK_SolResSolSer']);
-
-	        $item->pretratamientosSelected = $requerimientos->pretratamientosSelected;
-	        $item->tarifa = $requerimientos->tarifa;
-			if ($requerimientos->tarifa->TarifaSpecial === 1) {
-				switch ($item->SolResTypeUnidad) {
-					case 'Unidad':
-						$tarifatipo = 'Unid';
-						break;
-
-					case 'Litros':
-						$tarifatipo = 'Lt';
-						break;
-
-					default:
-						$tarifatipo = 'Kg';
-						break;
-				}
-
-				$tarifaResiduo = CTarifa::with('rangos')
-					->where('FK_Cliente', $rm->SolicitudServicio->FK_SolSerCliente)
-					->where('FK_Tratamiento', $requerimientos->FK_ReqTrata)
-					->where('Tarifatipo', $tarifatipo)
-					->first();
-
-				if ($tarifaResiduo === null) {
-					$item->ctarifa = null;
-				}else{
-					$item->ctarifa = $tarifaResiduo;
-				}
-			}else{
-				$item->ctarifa = null;
-			}
-	        $item->SolResRM2 = $rm->SolResRM;
-		  	return $item;
-		});
-
-		$SolicitudServicio->Repetible = 0;
-
-		/* se convierte el tipo de dato a aray mediante la consulta en el modelo de la columna SolSerRMs usando eloquent*/
-		$rms = SolicitudServicio::where('SolSerSlug', $SolicitudServicio->SolSerSlug)->first('SolSerRMs');
-		$SolicitudServicio->SolSerRMs = $rms->SolSerRMs;
-
-		// return $Residuos;
-
-		foreach ($Residuos as $residuo => $value) {
-			$requerimientos = Requerimiento::with(['pretratamientosSelected'])
-	        ->where('ID_Req', $value->FK_SolResRequerimiento)
-	        ->first();
-			$residuoSinTratamiento = Requerimiento::where('FK_ReqRespel', $requerimientos->FK_ReqRespel)
-			->where('ofertado', 1)
-			->where('forevaluation', 1)
-	        ->first();
-
-
-			if ($residuoSinTratamiento == null) {
-				$SolicitudServicio->Repetible++;
-			}
-		}
-
-		$SolicitudesServicioscount = SolicitudServicio::with(['Personal', 'cliente', 'municipio', 'SolicitudResiduo'])
-			->where('ID_SolSer', $SolicitudServicio->ID_SolSer)
-			->orderBy('created_at', 'desc')
-			->get();
-
-		/*se inicializan las variables para el calculo de totales */
-		$total['estimado'] = 0;
-		$total['recibido'] = 0;
-		$total['conciliado'] = 0;
-		$total['tratado'] = 0;
-		$cantidadesXtratamiento = [];
-
-
-		/* se itera sobre todos los residuos de las solicitudes de servicio */
-		foreach ($SolicitudesServicioscount as $servicio) {
-			foreach ($servicio->SolicitudResiduo as $residuo) {
-				$collection = collect($cantidadesXtratamiento);
-
-				/* si el tratamiento existe en la lista se suman las cantidadesxtratamiento y los totales correspondientes */
-				if ($collection->has($residuo->requerimiento->tratamiento->TratName)) {
-					$cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['estimado'] = $cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['estimado'] + $residuo->SolResKgEnviado;
-					$cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['recibido'] = $cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['recibido'] + $residuo->SolResKgRecibido;
-					$cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['conciliado'] = $cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['conciliado'] + $residuo->SolResKgConciliado;
-					$cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['tratado'] = $cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['tratado'] + $residuo->SolResKgTratado;
-					$total['estimado'] = $total['estimado'] + $residuo->SolResKgEnviado;
-					$total['recibido'] = $total['recibido'] + $residuo->SolResKgRecibido;
-					$total['conciliado'] = $total['conciliado'] + $residuo->SolResKgConciliado;
-					$total['tratado'] = $total['tratado'] + $residuo->SolResKgTratado;
-				}else{
-					$cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['estimado'] = $residuo->SolResKgEnviado;
-					$cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['recibido'] = $residuo->SolResKgRecibido;
-					$cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['conciliado'] = $residuo->SolResKgConciliado;
-					$cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['tratado'] = $residuo->SolResKgTratado;
-					$total['estimado'] = $total['estimado'] + $residuo->SolResKgEnviado;
-					$total['recibido'] = $total['recibido'] + $residuo->SolResKgRecibido;
-					$total['conciliado'] = $total['conciliado'] + $residuo->SolResKgConciliado;
-					$total['tratado'] = $total['tratado'] + $residuo->SolResKgTratado;
-				}
-			}
-		}
-		if (in_array(Auth::user()->UsRol, Permisos::SolSer1) || in_array(Auth::user()->UsRol, Permisos::SolSer1)) {
-			$tratamientos = Tratamiento::join('sedes', 'sedes.ID_Sede', '=', 'tratamientos.FK_TratProv')
-			->join('clientes', 'clientes.ID_Cli', '=', 'sedes.FK_SedeCli')
-			->select('*')
-			->get();
-		}else{
-			$tratamientos = 'NoAutorizado';
-		}
-
-		/* validacion para encontrar la fecha de recepción en planta del servicio */
-		$fechaRecepcion = SolicitudServicio::find($servicio->ID_SolSer)->programacionesrecibidas()->first();
-		if($fechaRecepcion){
-			$SolicitudServicio->recepcion = $fechaRecepcion->ProgVehSalida;
-		}else{
-			$SolicitudServicio->recepcion = null;
-		}
-
-		//Buscar corrientes del residuo
-		
-			$PublicRespels = DB::table('solicitud_residuos')
-			->join('residuos_geners', 'residuos_geners.ID_SGenerRes', '=', 'solicitud_residuos.FK_SolResRg')
-			->join('respels' , 'respels.ID_Respel', '=', 'residuos_geners.FK_Respel')
-			->select('respels.ID_Respel', 'respels.YRespelClasf4741', 'respels.ARespelClasf4741')
-			->where('solicitud_residuos.FK_SolResSolSer', $SolicitudServicio->ID_SolSer)
-			->distinct()
-			->get();
-
-        // adjuntar variables segun status del servicio
-        switch ($SolicitudServicio->SolSerStatus) {
-            case 'Residuo Faltante':
-            case 'Notificado':
-				return view('solicitud-serv.rm', compact('SolicitudServicio','Residuos', 'GenerResiduos', 'Cliente', 'SolSerConductor', 'Programaciones', 'ProgramacionesActivas', 'total', 'cantidadesXtratamiento', 'tratamientos', 'PublicRespels'));
-                break;
-            case 'Programado':
-		      return view('solicitud-serv.rm', compact('SolicitudServicio','Residuos', 'GenerResiduos', 'Cliente', 'SolSerConductor', 'Programaciones', 'ProgramacionesActivas', 'total', 'cantidadesXtratamiento', 'tratamientos', 'PublicRespels'));
-                break;
-            case 'Corregido':
-            case 'Completado':
-                break;
-            default:
-                break;
-
-		}
+	 public function recibomaterial($id)
+	 {
+		 $users = Auth::user()->id;
+	 
+		 // ===================== CARGA INICIAL DE LA SOLICITUD =====================
+		 $SolicitudServicio = DB::table('solicitud_servicios')
+			 ->join('personals', 'personals.ID_Pers', '=', 'solicitud_servicios.FK_SolSerPersona')
+			 ->join('cargos', 'personals.FK_PersCargo', '=', 'ID_Carg')
+			 ->select(
+				 'solicitud_servicios.*',
+				 'personals.PersFirstName', 'personals.PersLastName',
+				 'personals.PersEmail', 'personals.PersCellphone',
+				 'cargos.CargName'
+			 )
+			 ->where('solicitud_servicios.SolSerSlug', $id)
+			 ->first();
+	 
+		 if (!$SolicitudServicio) {
+			 abort(404);
+		 }
+	 
+		 // ===================== NUEVO: FIRMAS POR TIPO (NULL/97/98/99) =====================
+		 // Reglas:
+		 // - Recepción (NULL): una fila con FK_Gener = ID cliente, FK_SGener = 0
+		 // - Recolección (97/98/99): filas por cada (Generador, Sede del Generador) presente en la solicitud
+		 $tipo = $SolicitudServicio->SolSerTypeCollect; // NULL, 97, 98, 99
+	 
+		 if (is_null($tipo)) {
+			 // Recepción en planta
+			 DB::table('firmas_servicio')->updateOrInsert(
+				 [
+					 'FK_SolSer' => $SolicitudServicio->ID_SolSer,
+					 'FK_Gener'  => $SolicitudServicio->FK_SolSerCliente, // ID del cliente
+					 'FK_SGener' => 0,                                     // sede = 0
+				 ],
+				 [
+					 'SlugFirmas' => Str::uuid()->toString(),
+					 'updated_at' => now(),
+					 'created_at' => now(),
+				 ]
+			 );
+		 } else {
+			 // Recolección (97/98/99) -> pares (Generador, Sede del Generador)
+			 $pares = DB::table('solicitud_residuos')
+				 ->join('residuos_geners', 'residuos_geners.ID_SGenerRes', '=', 'solicitud_residuos.FK_SolResRg')
+				 ->join('gener_sedes', 'gener_sedes.ID_GSede', '=', 'residuos_geners.FK_SGener')
+				 ->join('generadors',  'generadors.ID_Gener',   '=', 'gener_sedes.FK_GSede')
+				 ->where('solicitud_residuos.FK_SolResSolSer', $SolicitudServicio->ID_SolSer)
+				 ->distinct()
+				 ->get([
+					 'generadors.ID_Gener  as id_gener',
+					 'gener_sedes.ID_GSede as id_sgener',
+				 ]);
+	 
+			 foreach ($pares as $p) {
+				 DB::table('firmas_servicio')->updateOrInsert(
+					 [
+						 'FK_SolSer' => $SolicitudServicio->ID_SolSer,
+						 'FK_Gener'  => $p->id_gener,   // ID del generador
+						 'FK_SGener' => $p->id_sgener,  // ID de la sede del generador
+					 ],
+					 [
+						 'SlugFirmas' => Str::uuid()->toString(),
+						 'updated_at' => now(),
+						 'created_at' => now(),
+					 ]
+				 );
+			 }
+		 }
+		 // ===================== FIN BLOQUE NUEVO =====================
+	 
+		 if ($SolicitudServicio->SolSerTypeCollect === null) {
+	 
+			 $SolSerConductor = $SolicitudServicio->SolSerConductor;
+	 
+			 if ($SolicitudServicio->SolSerTipo == 'Interno') {
+				 $SolSerConductor = Personal::where('ID_Pers', $SolicitudServicio->SolSerConductor)->first();
+			 }
+			 if ($SolicitudServicio->SolSerTypeCollect == 98) {
+				 $Address = Sede::select(['SedeAddress', 'SedeName'])
+					 ->where('ID_Sede', $SolicitudServicio->SolSerCollectAddress)
+					 ->first();
+				 $SolSerCollectAddress = $Address->SedeName . ' - ' . $Address->SedeAddress;
+			 }
+	 
+			 $Programaciones = ProgramacionVehiculo::where('FK_ProgServi', $SolicitudServicio->ID_SolSer)
+				 ->where('ProgVehDelete', 0)
+				 ->get();
+	 
+			 $ProgramacionesActivas = count(ProgramacionVehiculo::where('FK_ProgServi', $SolicitudServicio->ID_SolSer)
+				 ->where('ProgVehEntrada', null)
+				 ->where('ProgVehDelete', 0)
+				 ->get());
+	 
+			 $Cliente = DB::table('clientes')
+				 ->join('sedes', 'clientes.ID_Cli', '=', 'sedes.FK_SedeCli')
+				 ->join('municipios', 'sedes.FK_SedeMun', '=', 'municipios.ID_Mun')
+				 ->select('clientes.CliNit', 'clientes.CliName', 'sedes.SedeAddress', 'municipios.MunName')
+				 ->where('clientes.ID_Cli', $SolicitudServicio->FK_SolSerCliente)
+				 ->first();
+	 
+			 $GenerResiduos = DB::table('solicitud_residuos')
+				 ->distinct()
+				 ->join('residuos_geners', 'residuos_geners.ID_SGenerRes', '=', 'solicitud_residuos.FK_SolResRg')
+				 ->join('gener_sedes', 'gener_sedes.ID_GSede', '=', 'residuos_geners.FK_SGener')
+				 ->join('generadors', 'generadors.ID_Gener', '=', 'gener_sedes.FK_GSede')
+				 ->join('firmas_servicio', 'firmas_servicio.FK_Gener', '=', 'generadors.ID_Gener')
+				 ->join('municipios', 'municipios.ID_Mun', '=', 'gener_sedes.FK_GSedeMun')
+				 ->select(
+					 'gener_sedes.GSedeName', 'residuos_geners.FK_SGener', 'generadors.ID_Gener',
+					 'generadors.FK_GenerCli', 'generadors.GenerName', 'gener_sedes.GSedeSlug',
+					 'gener_sedes.GSedeAddress', 'gener_sedes.GSedeEmail', 'gener_sedes.GSedeCelular',
+					 'firmas_servicio.SlugFirmas', 'municipios.MunName'
+				 )
+				 ->where('firmas_servicio.FK_SolSer', $SolicitudServicio->ID_SolSer)
+				 ->get();
+	 
+			 $Residuosoriginal = DB::table('solicitud_residuos')
+				 ->join('residuos_geners', 'residuos_geners.ID_SGenerRes', '=', 'solicitud_residuos.FK_SolResRg')
+				 ->join('respels', 'respels.ID_Respel', '=', 'residuos_geners.FK_Respel')
+				 ->join('requerimientos', 'solicitud_residuos.FK_SolResRequerimiento', '=', 'requerimientos.ID_Req')
+				 ->join('tratamientos', 'requerimientos.FK_ReqTrata', '=', 'tratamientos.ID_Trat')
+				 ->join('sedes', 'tratamientos.FK_TratProv', '=', 'sedes.ID_Sede')
+				 ->join('clientes', 'sedes.FK_SedeCli', '=', 'clientes.ID_Cli')
+				 ->select(
+					 'solicitud_residuos.*', 'residuos_geners.FK_SGener', 'respels.*',
+					 'requerimientos.ID_Req', 'tratamientos.TratName', 'tratamientos.ID_Trat', 'clientes.CliShortName'
+				 )
+				 ->where('solicitud_residuos.FK_SolResSolSer', $SolicitudServicio->ID_SolSer)
+				 ->get();
+	 
+			 $Residuos = $Residuosoriginal->map(function ($item) {
+				 $requerimientos = Requerimiento::with([
+					 'pretratamientosSelected',
+					 'tarifa.rangos' => function ($query) {
+						 $query->orderBy('TarifaDesde');
+					 }
+				 ])
+					 ->where('ID_Req', $item->FK_SolResRequerimiento)
+					 ->first();
+	 
+				 $rm = SolicitudResiduo::with('SolicitudServicio')
+					 ->where('SolResSlug', $item->SolResSlug)
+					 ->first(['SolResRM', 'FK_SolResSolSer']);
+	 
+				 $item->pretratamientosSelected = $requerimientos->pretratamientosSelected;
+				 $item->tarifa = $requerimientos->tarifa;
+	 
+				 if ($requerimientos->tarifa->TarifaSpecial === 1) {
+					 switch ($item->SolResTypeUnidad) {
+						 case 'Unidad': $tarifatipo = 'Unid'; break;
+						 case 'Litros': $tarifatipo = 'Lt'; break;
+						 default:       $tarifatipo = 'Kg'; break;
+					 }
+	 
+					 $tarifaResiduo = CTarifa::with('rangos')
+						 ->where('FK_Cliente', $rm->SolicitudServicio->FK_SolSerCliente)
+						 ->where('FK_Tratamiento', $requerimientos->FK_ReqTrata)
+						 ->where('Tarifatipo', $tarifatipo)
+						 ->first();
+	 
+					 $item->ctarifa = $tarifaResiduo ?? null;
+				 } else {
+					 $item->ctarifa = null;
+				 }
+	 
+				 $item->SolResRM2 = $rm->SolResRM;
+				 return $item;
+			 });
+	 
+			 $SolicitudServicio->Repetible = 0;
+	 
+			 $rms = SolicitudServicio::where('SolSerSlug', $SolicitudServicio->SolSerSlug)->first('SolSerRMs');
+			 $SolicitudServicio->SolSerRMs = $rms->SolSerRMs;
+	 
+			 foreach ($Residuos as $residuo => $value) {
+				 $requerimientos = Requerimiento::with(['pretratamientosSelected'])
+					 ->where('ID_Req', $value->FK_SolResRequerimiento)
+					 ->first();
+	 
+				 $residuoSinTratamiento = Requerimiento::where('FK_ReqRespel', $requerimientos->FK_ReqRespel)
+					 ->where('ofertado', 1)
+					 ->where('forevaluation', 1)
+					 ->first();
+	 
+				 if ($residuoSinTratamiento == null) {
+					 $SolicitudServicio->Repetible++;
+				 }
+			 }
+	 
+			 $SolicitudesServicioscount = SolicitudServicio::with(['Personal', 'cliente', 'municipio', 'SolicitudResiduo'])
+				 ->where('ID_SolSer', $SolicitudServicio->ID_SolSer)
+				 ->orderBy('created_at', 'desc')
+				 ->get();
+	 
+			 $total['estimado'] = 0;
+			 $total['recibido'] = 0;
+			 $total['conciliado'] = 0;
+			 $total['tratado'] = 0;
+			 $cantidadesXtratamiento = [];
+	 
+			 foreach ($SolicitudesServicioscount as $servicio) {
+				 foreach ($servicio->SolicitudResiduo as $residuo) {
+					 $collection = collect($cantidadesXtratamiento);
+	 
+					 if ($collection->has($residuo->requerimiento->tratamiento->TratName)) {
+						 $cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['estimado']   += $residuo->SolResKgEnviado;
+						 $cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['recibido']   += $residuo->SolResKgRecibido;
+						 $cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['conciliado'] += $residuo->SolResKgConciliado;
+						 $cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['tratado']    += $residuo->SolResKgTratado;
+					 } else {
+						 $cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName] = [
+							 'estimado'   => $residuo->SolResKgEnviado,
+							 'recibido'   => $residuo->SolResKgRecibido,
+							 'conciliado' => $residuo->SolResKgConciliado,
+							 'tratado'    => $residuo->SolResKgTratado,
+						 ];
+					 }
+	 
+					 $total['estimado']   += $residuo->SolResKgEnviado;
+					 $total['recibido']   += $residio->SolResKgRecibido ?? 0;
+					 $total['conciliado'] += $residuo->SolResKgConciliado ?? 0;
+					 $total['tratado']    += $residuo->SolResKgTratado ?? 0;
+				 }
+			 }
+	 
+			 if (in_array(Auth::user()->UsRol, Permisos::SolSer1) || in_array(Auth::user()->UsRol, Permisos::SolSer1)) {
+				 $tratamientos = Tratamiento::join('sedes', 'sedes.ID_Sede', '=', 'tratamientos.FK_TratProv')
+					 ->join('clientes', 'clientes.ID_Cli', '=', 'sedes.FK_SedeCli')
+					 ->select('*')
+					 ->get();
+			 } else {
+				 $tratamientos = 'NoAutorizado';
+			 }
+	 
+			 // validación de fecha de recepción (usamos el ID actual de la solicitud)
+			 $fechaRecepcion = SolicitudServicio::find($SolicitudServicio->ID_SolSer)
+				 ->programacionesrecibidas()
+				 ->first();
+	 
+			 if ($fechaRecepcion) {
+				 $SolicitudServicio->recepcion = $fechaRecepcion->ProgVehSalida;
+			 } else {
+				 $SolicitudServicio->recepcion = null;
+			 }
+	 
+			 $PublicRespels = DB::table('solicitud_residuos')
+				 ->join('residuos_geners', 'residuos_geners.ID_SGenerRes', '=', 'solicitud_residuos.FK_SolResRg')
+				 ->join('respels', 'respels.ID_Respel', '=', 'residuos_geners.FK_Respel')
+				 ->select('respels.ID_Respel', 'respels.YRespelClasf4741', 'respels.ARespelClasf4741')
+				 ->where('solicitud_residuos.FK_SolResSolSer', $SolicitudServicio->ID_SolSer)
+				 ->distinct()
+				 ->get();
+	 
+			 switch ($SolicitudServicio->SolSerStatus) {
+				 case 'Residuo Faltante':
+				 case 'Notificado':
+					 return view('solicitud-serv.rmplanta', compact(
+						 'SolicitudServicio', 'Residuos', 'GenerResiduos', 'Cliente',
+						 'SolSerConductor', 'Programaciones', 'ProgramacionesActivas',
+						 'total', 'cantidadesXtratamiento', 'tratamientos', 'PublicRespels'
+					 ));
+					 break;
+				 case 'Programado':
+					 return view('solicitud-serv.rmplanta', compact(
+						 'SolicitudServicio', 'Residuos', 'GenerResiduos', 'Cliente',
+						 'SolSerConductor', 'Programaciones', 'ProgramacionesActivas',
+						 'total', 'cantidadesXtratamiento', 'tratamientos', 'PublicRespels'
+					 ));
+					 break;
+				 case 'Corregido':
+				 case 'Completado':
+				 default:
+					 break;
+			 }
+		 } else {
+	 
+			 // ===================== RAMA ELSE (recolecciones) =====================
+			 $SolicitudServicio = DB::table('solicitud_servicios')
+				 ->join('personals', 'personals.ID_Pers', '=', 'solicitud_servicios.FK_SolSerPersona')
+				 ->join('cargos', 'personals.FK_PersCargo', '=', 'ID_Carg')
+				 ->select(
+					 'solicitud_servicios.*',
+					 'personals.PersFirstName', 'personals.PersLastName',
+					 'personals.PersEmail', 'personals.PersCellphone',
+					 'cargos.CargName'
+				 )
+				 ->where('solicitud_servicios.SolSerSlug', $id)
+				 ->first();
+	 
+			 if (!$SolicitudServicio) {
+				 abort(404);
+			 }
+	 
+			 $SolSerConductor = $SolicitudServicio->SolSerConductor;
+	 
+			 if ($SolicitudServicio->SolSerTipo == 'Interno') {
+				 $SolSerConductor = Personal::where('ID_Pers', $SolicitudServicio->SolSerConductor)->first();
+			 }
+			 if ($SolicitudServicio->SolSerTypeCollect == 98) {
+				 $Address = Sede::select(['SedeAddress', 'SedeName'])
+					 ->where('ID_Sede', $SolicitudServicio->SolSerCollectAddress)
+					 ->first();
+				 $SolSerCollectAddress = $Address->SedeName . ' - ' . $Address->SedeAddress;
+			 }
+	 
+			 $Programaciones = ProgramacionVehiculo::where('FK_ProgServi', $SolicitudServicio->ID_SolSer)
+				 ->where('ProgVehDelete', 0)
+				 ->get();
+	 
+			 $ProgramacionesActivas = count(ProgramacionVehiculo::where('FK_ProgServi', $SolicitudServicio->ID_SolSer)
+				 ->where('ProgVehEntrada', null)
+				 ->where('ProgVehDelete', 0)
+				 ->get());
+	 
+			 $Cliente = DB::table('clientes')
+				 ->join('sedes', 'clientes.ID_Cli', '=', 'sedes.FK_SedeCli')
+				 ->join('municipios', 'sedes.FK_SedeMun', '=', 'municipios.ID_Mun')
+				 ->select('clientes.CliNit', 'clientes.CliName', 'sedes.SedeAddress', 'municipios.MunName')
+				 ->where('clientes.ID_Cli', $SolicitudServicio->FK_SolSerCliente)
+				 ->first();
+	 
+			 $GenerResiduos = DB::table('solicitud_residuos')
+				 ->distinct()
+				 ->join('residuos_geners', 'residuos_geners.ID_SGenerRes', '=', 'solicitud_residuos.FK_SolResRg')
+				 ->join('gener_sedes', 'gener_sedes.ID_GSede', '=', 'residuos_geners.FK_SGener')
+				 ->join('generadors', 'generadors.ID_Gener', '=', 'gener_sedes.FK_GSede')
+				 ->join('firmas_servicio', 'firmas_servicio.FK_Gener', '=', 'generadors.ID_Gener')
+				 ->join('municipios', 'municipios.ID_Mun', '=', 'gener_sedes.FK_GSedeMun')
+				 ->select(
+					 'gener_sedes.GSedeName', 'residuos_geners.FK_SGener', 'generadors.ID_Gener',
+					 'generadors.GenerName', 'gener_sedes.GSedeSlug', 'gener_sedes.GSedeAddress',
+					 'gener_sedes.GSedeEmail', 'gener_sedes.GSedeCelular',
+					 'municipios.MunName', 'firmas_servicio.SlugFirmas',
+					 'firmas_servicio.FK_SolSer', 'solicitud_residuos.SolResKgEnviado'
+				 )
+				 ->where('firmas_servicio.FK_SolSer', $SolicitudServicio->ID_SolSer)
+				 ->where('solicitud_residuos.FK_SolResSolSer', $SolicitudServicio->ID_SolSer)
+				 ->groupBy('gener_sedes.ID_GSede', 'residuos_geners.FK_SGener')
+				 ->get();
+	 
+			 $Residuosoriginal = DB::table('solicitud_residuos')
+				 ->join('residuos_geners', 'residuos_geners.ID_SGenerRes', '=', 'solicitud_residuos.FK_SolResRg')
+				 ->join('respels', 'respels.ID_Respel', '=', 'residuos_geners.FK_Respel')
+				 ->join('requerimientos', 'solicitud_residuos.FK_SolResRequerimiento', '=', 'requerimientos.ID_Req')
+				 ->join('tratamientos', 'requerimientos.FK_ReqTrata', '=', 'tratamientos.ID_Trat')
+				 ->join('sedes', 'tratamientos.FK_TratProv', '=', 'sedes.ID_Sede')
+				 ->join('clientes', 'sedes.FK_SedeCli', '=', 'clientes.ID_Cli')
+				 ->select(
+					 'solicitud_residuos.*', 'residuos_geners.FK_SGener', 'respels.*',
+					 'requerimientos.ID_Req', 'tratamientos.TratName', 'tratamientos.ID_Trat', 'clientes.CliShortName'
+				 )
+				 ->where('solicitud_residuos.FK_SolResSolSer', $SolicitudServicio->ID_SolSer)
+				 ->get();
+	 
+			 $Residuos = $Residuosoriginal->map(function ($item) {
+				 $requerimientos = Requerimiento::with([
+					 'pretratamientosSelected',
+					 'tarifa.rangos' => function ($query) {
+						 $query->orderBy('TarifaDesde');
+					 }
+				 ])
+					 ->where('ID_Req', $item->FK_SolResRequerimiento)
+					 ->first();
+	 
+				 $rm = SolicitudResiduo::with('SolicitudServicio')
+					 ->where('SolResSlug', $item->SolResSlug)
+					 ->first(['SolResRM', 'FK_SolResSolSer']);
+	 
+				 $item->pretratamientosSelected = $requerimientos->pretratamientosSelected;
+				 $item->tarifa = $requerimientos->tarifa;
+	 
+				 if ($requerimientos->tarifa->TarifaSpecial === 1) {
+					 switch ($item->SolResTypeUnidad) {
+						 case 'Unidad': $tarifatipo = 'Unid'; break;
+						 case 'Litros': $tarifatipo = 'Lt'; break;
+						 default:       $tarifatipo = 'Kg'; break;
+					 }
+	 
+					 $tarifaResiduo = CTarifa::with('rangos')
+						 ->where('FK_Cliente', $rm->SolicitudServicio->FK_SolSerCliente)
+						 ->where('FK_Tratamiento', $requerimientos->FK_ReqTrata)
+						 ->where('Tarifatipo', $tarifatipo)
+						 ->first();
+	 
+					 $item->ctarifa = $tarifaResiduo ?? null;
+				 } else {
+					 $item->ctarifa = null;
+				 }
+	 
+				 $item->SolResRM2 = $rm->SolResRM;
+				 return $item;
+			 });
+	 
+			 $SolicitudServicio->Repetible = 0;
+	 
+			 $rms = SolicitudServicio::where('SolSerSlug', $SolicitudServicio->SolSerSlug)->first('SolSerRMs');
+			 $SolicitudServicio->SolSerRMs = $rms->SolSerRMs;
+	 
+			 foreach ($Residuos as $residuo => $value) {
+				 $requerimientos = Requerimiento::with(['pretratamientosSelected'])
+					 ->where('ID_Req', $value->FK_SolResRequerimiento)
+					 ->first();
+	 
+				 $residuoSinTratamiento = Requerimiento::where('FK_ReqRespel', $requerimientos->FK_ReqRespel)
+					 ->where('ofertado', 1)
+					 ->where('forevaluation', 1)
+					 ->first();
+	 
+				 if ($residuoSinTratamiento == null) {
+					 $SolicitudServicio->Repetible++;
+				 }
+			 }
+	 
+			 $SolicitudesServicioscount = SolicitudServicio::with(['Personal', 'cliente', 'municipio', 'SolicitudResiduo'])
+				 ->where('ID_SolSer', $SolicitudServicio->ID_SolSer)
+				 ->orderBy('created_at', 'desc')
+				 ->get();
+	 
+			 $total['estimado'] = 0;
+			 $total['recibido'] = 0;
+			 $total['conciliado'] = 0;
+			 $total['tratado'] = 0;
+			 $cantidadesXtratamiento = [];
+	 
+			 foreach ($SolicitudesServicioscount as $servicio) {
+				 foreach ($servicio->SolicitudResiduo as $residuo) {
+					 $collection = collect($cantidadesXtratamiento);
+	 
+					 if ($collection->has($residuo->requerimiento->tratamiento->TratName)) {
+						 $cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['estimado']   += $residuo->SolResKgEnviado;
+						 $cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['recibido']   += $residuo->SolResKgRecibido;
+						 $cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['conciliado'] += $residuo->SolResKgConciliado;
+						 $cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName]['tratado']    += $residuo->SolResKgTratado;
+					 } else {
+						 $cantidadesXtratamiento[$residuo->requerimiento->tratamiento->TratName] = [
+							 'estimado'   => $residuo->SolResKgEnviado,
+							 'recibido'   => $residuo->SolResKgRecibido,
+							 'conciliado' => $residuo->SolResKgConciliado,
+							 'tratado'    => $residuo->SolResKgTratado,
+						 ];
+					 }
+	 
+					 $total['estimado']   += $residuo->SolResKgEnviado;
+					 $total['recibido']   += $residuo->SolResKgRecibido ?? 0;
+					 $total['conciliado'] += $residuo->SolResKgConciliado ?? 0;
+					 $total['tratado']    += $residuo->SolResKgTratado ?? 0;
+				 }
+			 }
+	 
+			 if (in_array(Auth::user()->UsRol, Permisos::SolSer1) || in_array(Auth::user()->UsRol, Permisos::SolSer1)) {
+				 $tratamientos = Tratamiento::join('sedes', 'sedes.ID_Sede', '=', 'tratamientos.FK_TratProv')
+					 ->join('clientes', 'clientes.ID_Cli', '=', 'sedes.FK_SedeCli')
+					 ->select('*')
+					 ->get();
+			 } else {
+				 $tratamientos = 'NoAutorizado';
+			 }
+	 
+			 $fechaRecepcion = SolicitudServicio::find($SolicitudServicio->ID_SolSer)
+				 ->programacionesrecibidas()
+				 ->first();
+	 
+			 if ($fechaRecepcion) {
+				 $SolicitudServicio->recepcion = $fechaRecepcion->ProgVehSalida;
+			 } else {
+				 $SolicitudServicio->recepcion = null;
+			 }
+	 
+			 $PublicRespels = DB::table('solicitud_residuos')
+				 ->join('residuos_geners', 'residuos_geners.ID_SGenerRes', '=', 'solicitud_residuos.FK_SolResRg')
+				 ->join('respels', 'respels.ID_Respel', '=', 'residuos_geners.FK_Respel')
+				 ->select('respels.ID_Respel', 'respels.YRespelClasf4741', 'respels.ARespelClasf4741')
+				 ->where('solicitud_residuos.FK_SolResSolSer', $SolicitudServicio->ID_SolSer)
+				 ->distinct()
+				 ->get();
+	 
+			 switch ($SolicitudServicio->SolSerStatus) {
+				 case 'Residuo Faltante':
+				 case 'Notificado':
+					 return view('solicitud-serv.rm', compact(
+						 'SolicitudServicio', 'Residuos', 'GenerResiduos', 'Cliente',
+						 'SolSerConductor', 'Programaciones', 'ProgramacionesActivas',
+						 'total', 'cantidadesXtratamiento', 'tratamientos', 'PublicRespels'
+					 ));
+					 break;
+				 case 'Programado':
+					 return view('solicitud-serv.rm', compact(
+						 'SolicitudServicio', 'Residuos', 'GenerResiduos', 'Cliente',
+						 'SolSerConductor', 'Programaciones', 'ProgramacionesActivas',
+						 'total', 'cantidadesXtratamiento', 'tratamientos', 'PublicRespels'
+					 ));
+					 break;
+				 case 'Corregido':
+				 case 'Completado':
+				 default:
+					 break;
+			 }
+		 }
 	 }
-	}
-
+	 
 	 /**
 	 * ingresa el numero de factura a la base de datos.
 	 *

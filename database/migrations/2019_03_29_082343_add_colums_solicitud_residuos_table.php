@@ -17,9 +17,9 @@ class AddColumsSolicitudResiduosTable extends Migration
             $table->string('SolResTypeUnidad')->nullable();
             $table->decimal('SolResCantiUnidad', 8, 2)->nullable();
             $table->string('SolResEmbalaje')->nullable();
-            $table->unsignedDecimal('SolResAlto', 3, 2)->nullable();
-            $table->unsignedDecimal('SolResAncho', 3, 2)->nullable();
-            $table->unsignedDecimal('SolResProfundo', 3, 2)->nullable();
+            $table->decimal('SolResAlto', 3, 2)->unsigned()->nullable();
+            $table->decimal('SolResAncho', 3, 2)->unsigned()->nullable();
+            $table->decimal('SolResProfundo', 3, 2)->unsigned()->nullable();
             $table->boolean('SolResFotoDescargue_Pesaje')->nullable();
             $table->boolean('SolResFotoTratamiento')->nullable();
             $table->boolean('SolResVideoDescargue_Pesaje')->nullable();
