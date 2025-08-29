@@ -181,9 +181,11 @@ RM N° {{--{{$SolicitudServicio->ID_SolSer}}--}}
                                     <th>Tratamiento</th>
                                     <th>Corriente</th>
                                     <th>Embalaje</th> 
+                                    <th>Cantidad <br> Embalaje</th>
 									<th>Generador</th>
                                     <th>Cantidad <br> Declarada</th>
                                     <th>Cantidad <br> Recibida</th>
+                                    
                                 </tr>
                             </thead>
                             <tbody>
@@ -231,6 +233,13 @@ RM N° {{--{{$SolicitudServicio->ID_SolSer}}--}}
                                         @endif	
                                         @endforeach
                                         <td>{{$Residuo->SolResEmbalaje}}</td>
+                                        <td style="text-align: center;">@if(in_array(Auth::user()->UsRol, Permisos::SolSer1) || in_array(Auth::user()->UsRol2, Permisos::SolSer1))
+    									<a onclick="editEmbalaje('{{$Residuo->SolResSlug}}','{{$Residuo->SolResCantEmbalaje}}')">
+      									<i class="fas fa-marker"></i>
+    									</a>
+  										@endif
+  										{{$Residuo->SolResCantEmbalaje ?? 'N/A'}}
+									    </td>
 										<td>{{$generadores->GenerName}}</td>
                                         <td style="text-align: center;">{{number_format($Residuo->SolResKgEnviado, $decimals = 2, $dec_point = ',', $thousands_sep = '.')}} Kilogramos</td>
                                         <td style="text-align: center;">
@@ -258,6 +267,7 @@ RM N° {{--{{$SolicitudServicio->ID_SolSer}}--}}
                                     
                                 @endforeach
 							@endforeach	
+                            
                             </tbody>
                         </table>
                         <a onclick="ModalStatusFirmaCliente('{{$SolicitudServicio->SolSerSlug}}', '{{$generadores->ID_Gener}}')" style="margin: 10px 10px;" class='btn btn-info float-left'>
@@ -276,13 +286,47 @@ RM N° {{--{{$SolicitudServicio->ID_SolSer}}--}}
                         <div id="addkgmodal"></div>
                         <div id="ModalStatusFirmaCliente"></div>
                         {{--<div id="ModalStatusFirmaConductor"></div>--}}
-
+                        <div id="editEmbalajeModal"></div>
             </main>
        
         
 </div>        
 @endsection
-
+<script>
+	function editEmbalaje(slug, cant){
+		document.getElementById('editEmbalajeModal').innerHTML = `
+			<form role="form" action="/solicitud-residuo/${slug}/Update" method="POST" id="FormEmbalaje" data-toggle="validator">
+				@csrf
+				@method('PUT')
+				<div class="modal modal-default fade in" id="modalEditEmbalaje" tabindex="-1">
+					<div class="modal-dialog"><div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<div style="font-size: 2em; color: #00a65a; text-align:center;">
+								<i class="fas fa-box-open"></i>
+								<span style="font-size:.5em;"><p>Cantidad de embalaje</p></span>
+							</div>
+						</div>
+						<div class="modal-body">
+							<div class="form-group col-md-12">
+								<label for="SolResCantEmbalaje">Cantidad de embalaje</label>
+								<small class="help-block with-errors">*</small>
+								<input type="number" min="0" class="form-control" id="SolResCantEmbalaje"
+									name="SolResCantEmbalaje" value="${cant ?? ''}" required>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-primary pull-right">Guardar</button>
+						</div>
+					</div></div>
+				</div>
+			</form>
+		`;
+		$('#modalEditEmbalaje').modal();
+		$('#FormEmbalaje').validator('update');
+		$('#FormEmbalaje').validator('validate');		
+	}
+</script>
 <script>
     function addkg(slug, cantidad, cantidadmax, tipo, cantidadKG, KgConciliado, SolResRM){
         console.log('solresRM = '+SolResRM);
@@ -451,10 +495,6 @@ RM N° {{--{{$SolicitudServicio->ID_SolSer}}--}}
 								<br>
 								<br>
 								<div class="form-group col-md-12">
-									<label  color: black; text-align: left;" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>Observación</b>" data-content="Describa la observación del servicio"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>Observación</label>					
-									<textarea id="Observacion" rows ="1" style="resize: vertical;" maxlength="4000" class="form-control col-xs-12" name="Observacion"></textarea>
-								</div>
-								<div class="form-group col-md-12">
 									<label  color: black; text-align: left;" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>Funcionario</b>" data-content="Ingrese el nombre de la persona que entrega los residuos"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>Nombre del Funcionario</label>					
 									<textarea id="NombreFuncionario" rows ="1" style="resize: vertical;" maxlength="4000" class="form-control col-xs-12" name="NombreFuncionario"></textarea>
 								</div>
@@ -493,6 +533,7 @@ RM N° {{--{{$SolicitudServicio->ID_SolSer}}--}}
 		window.onresize = resizeCanvas;
 		resizeCanvas();
 
+        // Firma cliente
 		function download(dataURL, filename) {
 			if (navigator.userAgent.indexOf("Safari") > -1 && navigator.userAgent.indexOf("Chrome") === -1) {
 				window.open(dataURL);

@@ -66,6 +66,30 @@ use Endroid\QrCode\Response\QrCodeResponse;
 
 class SolicitudServicioController extends Controller
 {
+    /**
+     * Construye cadena de observación combinando cantidades de contenedores opcionales.
+     */
+    private function buildContenedoresObservacion(array $data)
+    {
+        $partes = [];
+        // Nuevo: soporta múltiples filas dinámicas ContTipo[] + ContCantidad[]
+        if (isset($data['ContTipo']) && isset($data['ContCantidad']) && is_array($data['ContTipo']) && is_array($data['ContCantidad'])) {
+            $num = min(count($data['ContTipo']), count($data['ContCantidad']));
+            for ($i = 0; $i < $num; $i++) {
+                $tipo = trim((string) $data['ContTipo'][$i]);
+                $cant = (int) ($data['ContCantidad'][$i] ?? 0);
+                if ($tipo !== '' && $cant > 0) {
+                    $partes[] = $tipo . ': ' . $cant;
+                }
+            }
+        }
+        $prefijo = count($partes) ? 'Contenedores — ' . implode(' | ', $partes) : '';
+        $obsLibre = isset($data['Observacion']) ? trim((string) $data['Observacion']) : '';
+        if ($prefijo && $obsLibre) {
+            return $prefijo . ' — ' . $obsLibre;
+        }
+        return $prefijo ?: $obsLibre;
+    }
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -813,8 +837,6 @@ class SolicitudServicioController extends Controller
 		return view('solicitud-serv.Inventario.almacenamientogeneral', compact('solicitudservicios', 'gestor', 'cantidadesXtratamiento', 'total', 'cantidadesXgestor', 'totalgestor', 'cantidadesXgestor', 'totalgestor'));
 	
 }
-
-	
 	public function indexalmacenados()
 	{
 		$SolicitudesServicios = SolicitudServicio::with(['Personal', 'cliente', 'municipio', 'SolicitudResiduo' => function ($query) {
@@ -1247,8 +1269,6 @@ class SolicitudServicioController extends Controller
 		
  
 	}
-
-
 	/*
 	*
 	* Create from solicitud de residuo
@@ -1332,6 +1352,10 @@ class SolicitudServicioController extends Controller
 					case 86:
 						$SolicitudResiduo->SolResEmbalaje = "Canecas 05 gal.";
 						break;
+				}
+				// cantidad de embalaje opcional
+				if (isset($request['SolResCantEmbalaje'][$Generador][$y])) {
+					$SolicitudResiduo->SolResCantEmbalaje = $request['SolResCantEmbalaje'][$Generador][$y];
 				}
 		 		$SolicitudResiduo->SolResAlto = $request['SolResAlto'][$Generador][$y];
 				$SolicitudResiduo->SolResAncho = $request['SolResAncho'][$Generador][$y];
@@ -1538,6 +1562,7 @@ class SolicitudServicioController extends Controller
 			$Address = Sede::select(['SedeAddress', 'SedeName'])->where('ID_Sede',$SolicitudServicio->SolSerCollectAddress)->first();
 			$SolSerCollectAddress = $Address->SedeName.' - '.$Address->SedeAddress;
 		}
+		$Municipio = null;
 		if($SolicitudServicio->SolSerCityTrans <> null){
 			$Municipio1 = DB::table('municipios')
 				->select('MunName')
@@ -1686,7 +1711,6 @@ class SolicitudServicioController extends Controller
 			/* se convierte el tipo de dato a aray mediante la consulta en el modelo de la columna SolSerRMs usando eloquent*/
 	$rms = SolicitudServicio::where('SolSerSlug', $SolicitudServicio->SolSerSlug)->first('SolSerRMs');
 	$SolicitudServicio->SolSerRMs = $rms->SolSerRMs;
-
 	/* se convierte el tipo de dato a aray mediante la consulta en el modelo de la columna SolSerVehiculo usando eloquent*/
 	$vehiculo = SolicitudServicio::where('SolSerSlug', $SolicitudServicio->SolSerSlug)->first('SolSerVehiculo');
 	$SolicitudServicio->SolSerVehiculo = $vehiculo->SolSerVehiculo;
@@ -2499,8 +2523,22 @@ foreach ($certificados as $certificado) {
 		else{
 			abort(404, 'la solicitud que esta tratando de repetir no se encuentra en la base de datos');
 		}
-	}
+	
+    $sol = SolicitudServicio::where('SolSerSlug', $request->solserslug)->firstOrFail();
+    $nuevo = $request->solserstatus;
 
+    $estadosPostConciliacion = ['Conciliado', 'Certificacion', 'Facturado', 'Completado', 'No Conciliado'];
+
+    // Ejemplo: si estabas en "Conciliado/Certificación/Facturado" y vuelves a "Programado/Notificado/…"
+    if (in_array($sol->SolSerStatus, $estadosPostConciliacion) && !in_array($nuevo, $estadosPostConciliacion)) {
+        $this->reversarPostConciliacion($sol->ID_SolSer);
+    }
+
+    $sol->SolSerStatus = $nuevo;
+    $sol->save();
+
+    return back()->with('success', 'Solicitud revertida. Se limpiaron certificados y manifiestos para regeneración.');
+}
 	/**
 	 * Show the form for editing the specified resource.
 	 *
@@ -2980,7 +3018,6 @@ foreach ($certificados as $certificado) {
 
 		return redirect()->route('solicitud-servicio.show', ['id' => $id]);
 	}
-
 	public function updateRms(Request $request, $id)
 	{
 		$Solicitud = SolicitudServicio::where('SolSerSlug', $id)->first();
@@ -3001,7 +3038,6 @@ foreach ($certificados as $certificado) {
 
 		return redirect()->route('solicitud-servicio.show', ['solicitud_servicio' => $id]);
 	}
-
 	public function solservdocstore($id)
 	{
 
@@ -3120,107 +3156,77 @@ foreach ($certificados as $certificado) {
 
 								break;
 
-							case 1:
-								// "tratamiento tipo: externo ; manifiesto";
-								/*se verifica si ya existe un documento con ese tratamiento para esa solicitud de servicio*/
-								$manifiestoprevio = Manifiesto::where('FK_ManifTrat', $key->requerimiento->tratamiento->ID_Trat)
-								->where('FK_ManifSolser', $id)
-								->first();
-
-								if ((isset($manifiestoprevio))&&($manifiestoprevio->FK_ManifTrat == $key->requerimiento->tratamiento->ID_Trat)) {
-
-									$dato = new Manifdato;
-									$dato->FK_DatoManif = $manifiestoprevio->ID_Manif;
-									$dato->FK_DatoManifSolRes = $key->ID_SolRes;
-									$dato->save();
-
-								}else{
-
-									$manifiesto = new Manifiesto;
-									$manifiesto->ManifNumero = "";
-									$manifiesto->ManifiEspName = "";
-									$manifiesto->ManifiEspValue = "";
-									$manifiesto->ManifObservacion = "manifiesto con observacion generica";
-									$manifiesto->ManifSlug = hash('sha256', rand().time());
-									$manifiesto->ManifSrc = 'ManifiestoDefault.pdf';
-									$manifiesto->ManifNumRm = "M-16";
-									$manifiesto->ManifAuthHseq = 0;
-									$manifiesto->ManifAuthJl = 0;
-									$manifiesto->ManifAuthDp = 0;
-									$manifiesto->ManifAuthJo = 0;
-									$manifiesto->ManifAnexo = "anexo de manifiesto ".$key->requerimiento->tratamiento->TratName.$key->requerimiento->tratamiento->FK_TratProv;
-									$manifiesto->FK_ManifSolser = $id;
-									$manifiesto->FK_ManifCliente = $cliente->ID_Cli;
-									$manifiesto->FK_ManifGenerSede = $genersede->ID_GSede;
-									$manifiesto->FK_ManifGestor = $key->requerimiento->tratamiento->gestor->FK_SedeCli;
-									$manifiesto->FK_ManifTrat = $key->requerimiento->tratamiento->ID_Trat;
-									switch ($SolicitudServicio->SolSerTipo) {
-										case 'Externo':
-											$manifiesto->FK_ManifTransp = $cliente->ID_Cli;
-
-											break;
-
-										case 'Cliente':
-											$manifiesto->FK_ManifTransp = $cliente->ID_Cli;
-
-											break;
-
-										case 'Generador':
-											$manifiesto->FK_ManifTransp = $genersede->ID_GSede;
-
-											break;
-
-										case 'Interno':
-											$manifiesto->FK_ManifTransp = 1;
-											break;
-
-										default:
-											$manifiesto->FK_ManifTransp = 1;
-											break;
-									}
-									$manifiesto->save();
-
-									// Generar PDF inmediatamente para manifiestos de aprovechamiento
-									if (stripos($key->requerimiento->tratamiento->TratName, 'APROVECHAMIENTO') !== false) {
-										try {
-											// Generar QR Code
-											$qrCode = new QrCode(route('manifiestos.show', ['manifiesto' => $manifiesto->ManifSlug]));
-											$qrCode->setLogoPath(asset('img/LogoQR.png'));
-											$qrCode->setLogoSize(60, 60);
-											$qrCode->setSize(300);
-											$qrCode->setMargin(0);
-											$qrCode->setRoundBlockSize(true, QrCode::ROUND_BLOCK_SIZE_MODE_SHRINK);
-
-											// Generar PDF - usar plantilla específica para aprovechamiento
-											$view = (stripos($key->requerimiento->tratamiento->TratName, 'APROVECHAMIENTO') !== false) 
-												? 'certificados.topdfmanifiesto-aprovechamiento' 
-												: 'certificados.topdfmanifiesto';
-											$pdf = PDF::setPaper('letter', 'portrait')->loadView($view, compact(['manifiesto', 'qrCode']));
-											$nombre = $manifiesto->ManifSlug . '.pdf';
-											$path = 'public/manifiestosRegular/' . $nombre;
-
-											Storage::put($path, $pdf->output(), 'public');
-
-											// Actualizar ManifSrc
-											$manifiesto->update(['ManifSrc' => $nombre]);
-
-										} catch (Exception $e) {
-											// Log error but continue
-											Log::error('Error generando PDF para manifiesto ID: ' . $manifiesto->ID_Manif . ' - ' . $e->getMessage());
+								case 1:
+									// "tratamiento tipo: externo ; manifiesto";
+									/*se verifica si ya existe un documento con ese tratamiento para esa solicitud de servicio*/
+									$manifiestoprevio = Manifiesto::where('FK_ManifTrat', $key->requerimiento->tratamiento->ID_Trat)
+									->where('FK_ManifSolser', $id)
+									->first();
+	
+									if ((isset($manifiestoprevio))&&($manifiestoprevio->FK_ManifTrat == $key->requerimiento->tratamiento->ID_Trat)) {
+	
+										$dato = new Manifdato;
+										$dato->FK_DatoManif = $manifiestoprevio->ID_Manif;
+										$dato->FK_DatoManifSolRes = $key->ID_SolRes;
+										$dato->save();
+	
+									}else{
+	
+										$manifiesto = new Manifiesto;
+										$manifiesto->ManifNumero = "";
+										$manifiesto->ManifiEspName = "";
+										$manifiesto->ManifiEspValue = "";
+										$manifiesto->ManifObservacion = "manifiesto con observacion generica";
+										$manifiesto->ManifSlug = hash('sha256', rand().time());
+										$manifiesto->ManifSrc = 'ManifiestoDefault.pdf';
+										$manifiesto->ManifNumRm = "M-16";
+										$manifiesto->ManifAuthHseq = 0;
+										$manifiesto->ManifAuthJl = 0;
+										$manifiesto->ManifAuthDp = 0;
+										$manifiesto->ManifAuthJo = 0;
+										$manifiesto->ManifAnexo = "anexo de manifiesto ".$key->requerimiento->tratamiento->TratName.$key->requerimiento->tratamiento->FK_TratProv;
+										$manifiesto->FK_ManifSolser = $id;
+										$manifiesto->FK_ManifCliente = $cliente->ID_Cli;
+										$manifiesto->FK_ManifGenerSede = $genersede->ID_GSede;
+										$manifiesto->FK_ManifGestor = $key->requerimiento->tratamiento->gestor->FK_SedeCli;
+										$manifiesto->FK_ManifTrat = $key->requerimiento->tratamiento->ID_Trat;
+										switch ($SolicitudServicio->SolSerTipo) {
+											case 'Externo':
+												$manifiesto->FK_ManifTransp = $cliente->ID_Cli;
+	
+												break;
+	
+											case 'Cliente':
+												$manifiesto->FK_ManifTransp = $cliente->ID_Cli;
+	
+												break;
+	
+											case 'Generador':
+												$manifiesto->FK_ManifTransp = $genersede->ID_GSede;
+	
+												break;
+	
+											case 'Interno':
+												$manifiesto->FK_ManifTransp = 1;
+												break;
+	
+											default:
+												$manifiesto->FK_ManifTransp = 1;
+												break;
 										}
+										$manifiesto->save();
+	
+										$dato = new Manifdato;
+										$dato->FK_DatoManif = $manifiesto->ID_Manif;
+										$dato->FK_DatoManifSolRes = $key->ID_SolRes;
+										$dato->save();
 									}
-
-									$dato = new Manifdato;
-									$dato->FK_DatoManif = $manifiesto->ID_Manif;
-									$dato->FK_DatoManifSolRes = $key->ID_SolRes;
-									$dato->save();
-								}
-
-								break;
-
-							default:
-								return back()->withErrors(['msg' => ['alguno de los residuos no posee tratamiento asignado favor verifica que su asesor comercial la evaluacion de los residuos.']]);
-								break;
+	
+									break;
+	
+								default:
+									return back()->withErrors(['msg' => ['alguno de los residuos no posee tratamiento asignado favor verifica que su asesor comercial la evaluacion de los residuos.']]);
+									break;
 						}
 					}
 				}
@@ -3527,7 +3533,6 @@ foreach ($certificados as $certificado) {
 			return redirect()->route('solicitud-servicio.show', ['solicitud_servicio' => $id]);
 		}
 	}
-
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -3604,6 +3609,62 @@ foreach ($certificados as $certificado) {
 		$Solicitud = SolicitudServicio::with('SolicitudResiduo')->where('SolSerSlug', $request->input('solserslug'))->first();
 		if (!$Solicitud) {
 			abort(404);
+		}
+		// Respaldo de firmas antes de cualquier cambio
+		try {
+			$firmasServicio = DB::table('firmas_servicio')
+				->where('FK_SolSer', $Solicitud->ID_SolSer)
+				->get();
+			$backupNotes = [];
+			$baseBackupDir = 'public/FirmasBackup/' . $Solicitud->ID_SolSer;
+			if (!Storage::exists($baseBackupDir)) {
+				Storage::makeDirectory($baseBackupDir);
+			}
+			$timestamp = date('YmdHis');
+			foreach ($firmasServicio as $row) {
+				// Firma Cliente
+				if (!empty($row->FirmaCliente) && $row->FirmaCliente !== '0') {
+					$src = 'public/FirmasClientesRegulares/' . $row->FirmaCliente . '.png';
+					$dst = $baseBackupDir . '/cliente_' . ($row->FK_SGener ?? '0') . '_' . $timestamp . '.png';
+					if (Storage::exists($src)) {
+						Storage::copy($src, $dst);
+						$backupNotes[] = 'Cliente(FK_SGener ' . ($row->FK_SGener ?? '0') . '): ' . basename($dst);
+					}
+				}
+				// Firma Conductor
+				if (!empty($row->FirmaConductor) && $row->FirmaConductor !== '0') {
+					$src = 'public/FirmaConductor/' . $row->FirmaConductor . '.png';
+					$dst = $baseBackupDir . '/conductor_' . ($row->FK_SGener ?? '0') . '_' . $timestamp . '.png';
+					if (Storage::exists($src)) {
+						Storage::copy($src, $dst);
+						$backupNotes[] = 'Conductor(FK_SGener ' . ($row->FK_SGener ?? '0') . '): ' . basename($dst);
+					}
+				}
+				// Firma PDA
+				if (!empty($row->FirmaPDA) && $row->FirmaPDA !== '0') {
+					$src = 'public/FirmaPDA/' . $row->FirmaPDA . '.png';
+					$dst = $baseBackupDir . '/pda_' . ($row->FK_SGener ?? '0') . '_' . $timestamp . '.png';
+					if (Storage::exists($src)) {
+						Storage::copy($src, $dst);
+						$backupNotes[] = 'PDA(FK_SGener ' . ($row->FK_SGener ?? '0') . '): ' . basename($dst);
+					}
+				}
+			}
+			if (count($backupNotes)) {
+				$Obs = new Observacion();
+				$Obs->ObsStatus = 'Backup Firmas';
+				$Obs->ObsMensaje = 'Copias en ' . $baseBackupDir . ' => ' . implode(' | ', $backupNotes);
+				$Obs->ObsTipo = 'prosarc';
+				$Obs->ObsRepeat = 1;
+				$Obs->ObsDate = now();
+				$Obs->ObsUser = Auth::user()->email;
+				$Obs->ObsRol = Auth::user()->UsRol;
+				$Obs->FK_ObsSolSer = $Solicitud->ID_SolSer;
+				$Obs->save();
+			}
+		} catch (\Throwable $e) {
+			// En caso de falla, se registra pero no bloquea la reversión
+			\Log::warning('No se pudo respaldar firmas del servicio ' . $Solicitud->ID_SolSer . ': ' . $e->getMessage());
 		}
 		if ($Solicitud->SolSerStatus == 'Certificacion') {
 			if (!in_array(Auth::user()->UsRol, Permisos::REVERSARADMIN) && !in_array(Auth::user()->UsRol2, Permisos::REVERSARADMIN)) {
@@ -3824,7 +3885,6 @@ foreach ($certificados as $certificado) {
 		return redirect()->route('solicitud-servicio.show', ['solicitud_servicio' => $id]);
 		
 	}
-
 	/**
 	 * ingresa el numero de factura a la base de datos.
 	 *
@@ -3856,24 +3916,36 @@ foreach ($certificados as $certificado) {
 	 
 		 // ===================== NUEVO: FIRMAS POR TIPO (NULL/97/98/99) =====================
 		 // Reglas:
-		 // - Recepción (NULL): una fila con FK_Gener = ID cliente, FK_SGener = 0
+		 // - Recepción (NULL): una fila con FK_Gener = ID_Gener, FK_SGener = 0
 		 // - Recolección (97/98/99): filas por cada (Generador, Sede del Generador) presente en la solicitud
 		 $tipo = $SolicitudServicio->SolSerTypeCollect; // NULL, 97, 98, 99
 	 
 		 if (is_null($tipo)) {
-			 // Recepción en planta
-			 DB::table('firmas_servicio')->updateOrInsert(
-				 [
+			$pares = DB::table('solicitud_residuos')
+				 ->join('residuos_geners', 'residuos_geners.ID_SGenerRes', '=', 'solicitud_residuos.FK_SolResRg')
+				 ->join('gener_sedes', 'gener_sedes.ID_GSede', '=', 'residuos_geners.FK_SGener')
+				 ->join('generadors',  'generadors.ID_Gener',   '=', 'gener_sedes.FK_GSede')
+				 ->where('solicitud_residuos.FK_SolResSolSer', $SolicitudServicio->ID_SolSer)
+				 ->distinct()
+				 ->get([
+					 'generadors.ID_Gener  as id_gener',
+				 ]);
+	 
+			 foreach ($pares as $p) {
+				 $keys = [
 					 'FK_SolSer' => $SolicitudServicio->ID_SolSer,
-					 'FK_Gener'  => $SolicitudServicio->FK_SolSerCliente, // ID del cliente
-					 'FK_SGener' => 0,                                     // sede = 0
-				 ],
-				 [
-					 'SlugFirmas' => Str::uuid()->toString(),
-					 'updated_at' => now(),
-					 'created_at' => now(),
-				 ]
-			 );
+					 'FK_Gener'  => $p->id_gener,
+					 'FK_SGener' => 0,
+				 ];
+				 $exists = DB::table('firmas_servicio')->where($keys)->exists();
+				 if (!$exists) {
+					 DB::table('firmas_servicio')->insert($keys + [
+						 'SlugFirmas' => Str::uuid()->toString(),
+						 'created_at' => now(),
+						 'updated_at' => now(),
+					 ]);
+				 }
+			 }
 		 } else {
 			 // Recolección (97/98/99) -> pares (Generador, Sede del Generador)
 			 $pares = DB::table('solicitud_residuos')
@@ -3888,18 +3960,19 @@ foreach ($certificados as $certificado) {
 				 ]);
 	 
 			 foreach ($pares as $p) {
-				 DB::table('firmas_servicio')->updateOrInsert(
-					 [
-						 'FK_SolSer' => $SolicitudServicio->ID_SolSer,
-						 'FK_Gener'  => $p->id_gener,   // ID del generador
-						 'FK_SGener' => $p->id_sgener,  // ID de la sede del generador
-					 ],
-					 [
+				 $keys = [
+					 'FK_SolSer' => $SolicitudServicio->ID_SolSer,
+					 'FK_Gener'  => $p->id_gener,
+					 'FK_SGener' => $p->id_sgener,
+				 ];
+				 $exists = DB::table('firmas_servicio')->where($keys)->exists();
+				 if (!$exists) {
+					 DB::table('firmas_servicio')->insert($keys + [
 						 'SlugFirmas' => Str::uuid()->toString(),
-						 'updated_at' => now(),
 						 'created_at' => now(),
-					 ]
-				 );
+						 'updated_at' => now(),
+					 ]);
+				 }
 			 }
 		 }
 		 // ===================== FIN BLOQUE NUEVO =====================
@@ -4053,7 +4126,7 @@ foreach ($certificados as $certificado) {
 					 }
 	 
 					 $total['estimado']   += $residuo->SolResKgEnviado;
-					 $total['recibido']   += $residio->SolResKgRecibido ?? 0;
+					 $total['recibido']   += $residuo->SolResKgRecibido ?? 0;
 					 $total['conciliado'] += $residuo->SolResKgConciliado ?? 0;
 					 $total['tratado']    += $residuo->SolResKgTratado ?? 0;
 				 }
@@ -4301,7 +4374,6 @@ foreach ($certificados as $certificado) {
 			 } else {
 				 $SolicitudServicio->recepcion = null;
 			 }
-	 
 			 $PublicRespels = DB::table('solicitud_residuos')
 				 ->join('residuos_geners', 'residuos_geners.ID_SGenerRes', '=', 'solicitud_residuos.FK_SolResRg')
 				 ->join('respels', 'respels.ID_Respel', '=', 'residuos_geners.FK_Respel')
@@ -4384,7 +4456,7 @@ foreach ($certificados as $certificado) {
 						'FirmaCliente' => $nombreDeFirma,
 						'NombreFuncionario' =>$request->input('NombreFuncionario'),
 						'Cedula' => $request->input('CedulaFuncionario'),
-						'Observaciones' => $request->input('Observacion'),
+						'Observaciones' => $this->buildContenedoresObservacion($request->all()),
 					]);
 			}else{
 				DB::table('firmas_servicio')
@@ -4394,7 +4466,7 @@ foreach ($certificados as $certificado) {
 						'FirmaCliente' => $nombreDeFirma,
 						'NombreFuncionario' =>$request->input('NombreFuncionario'),
 						'Cedula' => $request->input('CedulaFuncionario'),
-						'Observaciones' => $request->input('Observacion'),
+						'Observaciones' => $this->buildContenedoresObservacion($request->all()),
 					]);
 
 		 }
@@ -4515,25 +4587,28 @@ foreach ($certificados as $certificado) {
 	 */
 	public function rmtemplate($id, $slug)
 	{
-		if(in_array(Auth::user()->UsRol, Permisos::JefeOperaciones) || in_array(Auth::user()->UsRol, Permisos::SUPERVISOR)){
 		$firmas = DB::table('firmas_servicio')
 			->join('solicitud_servicios', 'solicitud_servicios.ID_SolSer', '=', 'firmas_servicio.FK_SolSer')
 			->join('clientes', 'clientes.ID_Cli', '=', 'solicitud_servicios.FK_SolSerCliente')
 			->join('generadors' , 'generadors.ID_Gener', '=', 'firmas_servicio.FK_Gener')
-    			//->where('firmas_servicio.FK_SGener', $id)
+			->where('firmas_servicio.SlugFirmas', $id)
 			->where('solicitud_servicios.SolSerSlug',$slug )
-			->select('firmas_servicio.*', 'clientes.CliName', 'generadors.ID_Gener', 'generadors.GenerNit', 'generadors.GenerName', 'generadors.GenerShortname', 'generadors.GenerCode', 'generadors.GenerType', 'generadors.GenerSlug', 'generadors.FK_GenerCli', 'generadors.GenerDelete')
+			->select('firmas_servicio.*', 'clientes.CliName', 'generadors.*')
 			->first();
-
-		}else{
+		// Si no se encontró por SlugFirmas, intentar cuando $id sea FK_SGener (algunas vistas envían FK_SGener)
+		if (!$firmas) {
 			$firmas = DB::table('firmas_servicio')
 				->join('solicitud_servicios', 'solicitud_servicios.ID_SolSer', '=', 'firmas_servicio.FK_SolSer')
 				->join('clientes', 'clientes.ID_Cli', '=', 'solicitud_servicios.FK_SolSerCliente')
-				->join('generadors' , 'generadors.ID_Gener', '=', 'firmas_servicio.FK_Gener')
-    			->where('firmas_servicio.FK_SGener', $id)
-				->where('solicitud_servicios.SolSerSlug',$slug )
-    			->select('firmas_servicio.*', 'clientes.CliName', 'generadors.*')
+				->leftJoin('generadors' , 'generadors.ID_Gener', '=', 'firmas_servicio.FK_Gener')
+				->where('firmas_servicio.FK_SGener', $id)
+				->where('solicitud_servicios.SolSerSlug', $slug)
+				->select('firmas_servicio.*', 'clientes.CliName', 'generadors.*')
 				->first();
+		}
+		// Si aún no se encuentra, abortar claramente
+		if (!$firmas) {
+			abort(404, 'Registro de firmas no encontrado para los parámetros suministrados');
 		}
 		//return $firmas;
 		$SolicitudServicio = DB::table('solicitud_servicios')
@@ -4742,15 +4817,10 @@ foreach ($certificados as $certificado) {
 
 			Mail::to($SolicitudServicio->PersEmail)->cc($destinatarios)->send(new SolSerRM($pdf, $pdfPath, $Cliente, $GenerResiduos, $firmas));
 		
-			// Si el usuario es conductor, abrir el PDF en una nueva pestaña
-			if (Auth::user()->UsRol == 'Conductor') {
-				return response($pdf->output(), 200, [
-					'Content-Type' => 'application/pdf',
-					'Content-Disposition' => 'inline; filename="Recibo_Material_' . $SolicitudServicio->ID_SolSer . '.pdf"'
-				]);
-			}
-			
-			return redirect()->route('recibo.material', ['id' => $SolicitudServicio->SolSerSlug]);
+			return response($pdf->output(), 200, [
+				'Content-Type' => 'application/pdf',
+				'Content-Disposition' => 'inline; filename="Recibo_Material_' . $SolicitudServicio->ID_SolSer . '.pdf"'
+			]);
 			//return view ('solicitud-serv.rmtemplate', compact('SolicitudServicio','Residuos', 'GenerResiduos', 'Cliente',  'SolSerConductor',  'Programaciones', 'totales', 'tratamientos', 'PublicRespels', 'precintosString', 'firmas'));
 
 		} else {
@@ -4795,8 +4865,6 @@ foreach ($certificados as $certificado) {
     		    $precintosString = 'No se asigno precinto';
     		}
 		}
-
-
 		$Cliente = DB::table('clientes')
 			->join('sedes', 'clientes.ID_Cli', '=', 'sedes.FK_SedeCli')
 			->join('municipios', 'sedes.FK_SedeMun', '=', 'municipios.ID_Mun')
@@ -4915,7 +4983,7 @@ foreach ($certificados as $certificado) {
 			  ->join('gener_sedes', 'gener_sedes.ID_GSede', '=', 'residuos_geners.FK_SGener')
 			  ->join('generadors' , 'generadors.ID_Gener', '=', 'gener_sedes.FK_GSede')
 			  ->where('ID_SolSer', $SolicitudServicio->ID_SolSer)
-			  ->where('gener_sedes.ID_GSede', $firmas->FK_SGener)
+			  ->where('gener_sedes.ID_GSede', $firmas->FK_GSede)
 			  //->where('generadors.ID_Gener', $firmas->FK_Gener)
 			  ->select('solicitud_residuos.*', 'generadors.*')
 			  ->get();
@@ -4973,15 +5041,10 @@ foreach ($certificados as $certificado) {
 
 		Mail::to($SolicitudServicio->PersEmail)->cc($destinatarios)->send(new SolSerRM($pdf, $pdfPath, $Cliente, $GenerResiduos, $firmas));
 	
-		// Si el usuario es conductor, abrir el PDF en una nueva pestaña
-		if (Auth::user()->UsRol == 'Conductor') {
-			return response($pdf->output(), 200, [
-				'Content-Type' => 'application/pdf',
-				'Content-Disposition' => 'inline; filename="Recibo_Material_' . $SolicitudServicio->ID_SolSer . '.pdf"'
-			]);
-		}
-		
-		return redirect()->route('recibo.material', ['id' => $SolicitudServicio->SolSerSlug]);
+		return response($pdf->output(), 200, [
+			'Content-Type' => 'application/pdf',
+			'Content-Disposition' => 'inline; filename="Recibo_Material_' . $SolicitudServicio->ID_SolSer . '.pdf"'
+		]);
 		//return view ('solicitud-serv.rmtemplate', compact('SolicitudServicio','Residuos', 'GenerResiduos', 'Cliente',  'SolSerConductor',  'Programaciones', 'totales', 'tratamientos', 'PublicRespels', 'precintosString', 'firmas'));
 		}
 	}
@@ -5080,6 +5143,8 @@ foreach ($certificados as $certificado) {
 							$SolicitudResiduo->SolResEmbalaje = "Canecas 05 gal.";
 							break;
 					}
+					// cantidad de embalaje opcional en este flujo
+					$SolicitudResiduo->SolResCantEmbalaje = $request->input('SolResCantEmbalaje');
 					$SolicitudResiduo->SolResAlto = "";
 					$SolicitudResiduo->SolResAncho = "";
 					$SolicitudResiduo->SolResProfundo = "";
@@ -5157,4 +5222,74 @@ foreach ($certificados as $certificado) {
 		return $this->recibomaterial($id);
 
 	 }
+	 private function reversarPostConciliacion(int $solSerId): void
+{
+    DB::transaction(function () use ($solSerId) {
+
+        /* ================== 1) MANIFIESTOS ================== */
+        // Ajusta nombres de tablas/campos si difieren
+        $maniIds = DB::table('manifiestos')
+            ->where('FK_ManiSolSer', $solSerId)
+            ->pluck('ID_Mani');
+
+        if ($maniIds->isNotEmpty()) {
+            // Si tienes tabla de detalle del manifiesto, límpiala primero
+            if (Schema::hasTable('manifiestos_detalle')) {
+                DB::table('manifiestos_detalle')
+                    ->whereIn('FK_Mani', $maniIds)
+                    ->delete();
+            }
+            // Si guardas "datos" adicionales del manifiesto en otra tabla, límpiala aquí
+            if (Schema::hasTable('manidato')) {
+                DB::table('manidato')
+                    ->whereIn('FK_Mani', $maniIds)
+                    ->delete();
+            }
+
+            // Borra los manifiestos
+            DB::table('manifiestos')
+                ->whereIn('ID_Mani', $maniIds)
+                ->delete();
+
+            // (Opcional) borra PDFs o archivos generados de manifiestos
+            foreach ($maniIds as $id) {
+                Storage::disk('public')->deleteDirectory("manifiestos/{$id}");
+            }
+        }
+
+        /* ================== 2) CERTIFICADOS ================== */
+        // Muchos proyectos solo borraban cerdato; aquí borramos también el maestro
+        $certIds = DB::table('certificados')
+            ->where('FK_CertSolSer', $solSerId)
+            ->pluck('ID_Cert');
+
+        if ($certIds->isNotEmpty()) {
+            // Detalle / data del certificado (cerdato)
+            if (Schema::hasTable('cerdato')) {
+                DB::table('cerdato')
+                    ->whereIn('FK_Cert', $certIds)
+                    ->delete();
+            }
+
+            // Borra los certificados maestros
+            DB::table('certificados')
+                ->whereIn('ID_Cert', $certIds)
+                ->delete();
+
+            // (Opcional) borra PDFs o archivos generados de certificados
+            foreach ($certIds as $id) {
+                Storage::disk('public')->deleteDirectory("certificados/{$id}");
+            }
+        }
+
+        /* ================== 3) (Opcional) RESETEOS ================== */
+        // Si quieres "desconciliar" cantidades para forzar recálculos
+        DB::table('solicitud_residuos')
+            ->where('FK_SolResSolSer', $solSerId)
+            ->update([
+                'SolResKgConciliado' => 0,
+                'SolResKgTratado'    => 0,
+            ]);
+    });
+}
  }

@@ -188,6 +188,7 @@ Route::middleware(['web', 'auth', 'verified', 'bindings'])->group(function () {
 	Route::get('/solicitud-serv/{id}/AñadirRespel', 'SolicitudResiduoController@Respelcliente') ->name('solicitud-serv.AñadirRespel');
 	//Rutas para reportes
 	//Route::get('/reportes.indextemp', 'SolicitudResiduoController@reportes');
+	Route::get('/reportes/regular', ['as'=> 'reportes.regular', 'uses' => 'SolicitudResiduoController@reportesreg']);
 	Route::get('/reportes.indextemp',  ['as'=> 'reportes.indextemp', 'uses' =>'SolicitudResiduoController@reportes']);	
 	Route::get('/reportes.ReporteRegular', ['as'=> 'reportes.ReporteRegular', 'uses' => 'SolicitudResiduoController@reportesreg']);
 	Route::get('/reportes.ReporteExpress', ['as'=> 'reportes.ReporteExpress', 'uses' => 'SolicitudResiduoController@reportesexpress']);
@@ -198,6 +199,10 @@ Route::middleware(['web', 'auth', 'verified', 'bindings'])->group(function () {
 	Route::get('/reportes.ventasfechas', ['as'=> 'reportes.ventasfechas', 'uses' => 'SolicitudResiduoController@ventasfechas']);
 	Route::post('/reportes/registroentrada', 'SolicitudResiduoController@registroentrada');
 	Route::post('/reportes/ventas', 'SolicitudResiduoController@ventas');
+	// Rutas para reportes de clientes
+	Route::get('/reportes/cliente', ['as'=> 'reportes.cliente', 'uses' => 'SolicitudResiduoController@reportesCliente']);
+	Route::post('/reportes/cliente/generar', ['as'=> 'reportes.cliente.generar', 'uses' => 'SolicitudResiduoController@reportesClienteGenerar']);
+	Route::post('/reportes/cliente/excel', ['as'=> 'reportes.cliente.excel', 'uses' => 'SolicitudResiduoController@exportToExcel']);
 	
 	//Rutas para Cotizaciones
 	Route::resource('/cotizacion', 'CotizacionController');
@@ -230,7 +235,6 @@ Route::middleware(['web', 'auth', 'verified', 'bindings'])->group(function () {
 
 	//Route::post('/solicitud-servicio/{id}/NumFactura', [SolicitudServicioController::class, 'NumFactura'])->name('NumFactura.dato');
 	Route::put('/solicitud-servicio/{id}/NumFactura', 'SolicitudServicioController@NumFactura');
-	
 	Route::get('/reportes.ReporteDatos', ['as'=> 'reportes.ReporteDatos', 'uses' => 'SolicitudResiduoController@reportesRegularesDatos']);	
 	Route::resource('/solicitud-servicio', 'SolicitudServicioController');	
 	Route::post('/solicitud-servicio/changestatus', 'SolicitudServicioController@changestatus');

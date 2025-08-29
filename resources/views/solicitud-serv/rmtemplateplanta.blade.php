@@ -337,6 +337,12 @@ footer {
                                 <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center; line-height:normal'><b><span style='font-size:7.0pt;font-family:"Arial",sans-serif'>GENERADOR</span></b></p>
                             </td>
                             <td style='border:solid windowtext 1.0pt; border-top:none;padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
+                                <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center; line-height:normal'><b><span style='font-size:7.0pt;font-family:"Arial",sans-serif'>EMBALAJE</span></b></p>
+                            </td>
+                            <td style='border:solid windowtext 1.0pt; border-top:none;padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
+                                <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center; line-height:normal'><b><span style='font-size:7.0pt;font-family:"Arial",sans-serif'>CANTIDAD (EMBALAJE)</span></b></p>
+                            </td>
+                            <td style='border:solid windowtext 1.0pt; border-top:none;padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
                                 <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center; line-height:normal'><b><span style='font-size:7.0pt;font-family:"Arial",sans-serif'>CANTIDAD (KG)</span></b></p>
                             </td>
                             <td style='border-top:none; border-left:solid windowtext 1.0pt;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt; padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
@@ -360,6 +366,12 @@ footer {
                                 </td>
                                 <td style='border:solid windowtext 1.0pt; border-top:none;padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
                                     <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center; line-height:normal'><b><span style='font-size:7.0pt;font-family:"Arial",sans-serif'>{{$Residuo->GenerName}}</span></b></p>
+                                </td>
+                                <td style='border:solid windowtext 1.0pt; border-top:none;padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
+                                    <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center; line-height:normal'><b><span style='font-size:7.0pt;font-family:"Arial",sans-serif'>{{$Residuo->SolResEmbalaje}}</span></b></p>
+                                </td>
+                                <td style='border:solid windowtext 1.0pt; border-top:none;padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
+                                    <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center; line-height:normal'><b><span style='font-size:7.0pt;font-family:"Arial",sans-serif'>{{$Residuo->SolResCantEmbalaje ?? 'N/A'}}</span></b></p>
                                 </td>
                                 <td style='border:solid windowtext 1.0pt; border-top:none;padding:0cm 1.4pt 0cm 1.4pt;height:22.8pt'>
                                     <p class=MsoNormal align=center style='margin-bottom:0cm;text-align:center; line-height:normal'><b><span style='font-size:7.0pt;font-family:"Arial",sans-serif'>{{number_format($Residuo->SolResKgRecibido, $decimals = 2, $dec_point = ",", $thousands_sep = "." )}} Kilogramos</span></b></p>

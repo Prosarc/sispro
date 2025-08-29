@@ -191,7 +191,21 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 												@if(empty($SolicitudServicio->SolSerConductor))
 													{{ __('adminlte::message.solsernullprogram') }}
 												@else
-													@foreach($SolicitudServicio->SolSerConductor as $conductor)
+													@php
+														$__conductores = $SolicitudServicio->SolSerConductor;
+														if (is_string($__conductores)) {
+															$__decoded = json_decode($__conductores, true);
+															if (json_last_error() === JSON_ERROR_NONE && is_array($__decoded)) {
+																$__conductores = $__decoded;
+															} else {
+																$__conductores = [ $__conductores ];
+															}
+														}
+														if ($__conductores instanceof \Illuminate\Support\Collection) {
+															$__conductores = $__conductores->all();
+														}
+													@endphp
+													@foreach($__conductores as $conductor)
 														{{ trim($conductor) }}{{ $loop->last ? '' : ', ' }}
 													@endforeach
 												@endif
@@ -203,7 +217,21 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 												@if(empty($SolicitudServicio->SolSerVehiculo))
 													{{ __('adminlte::message.solsernullprogram') }}
 												@else
-													@foreach($SolicitudServicio->SolSerVehiculo as $placa)
+													@php
+														$__vehiculos = $SolicitudServicio->SolSerVehiculo;
+														if (is_string($__vehiculos)) {
+															$__decodedV = json_decode($__vehiculos, true);
+															if (json_last_error() === JSON_ERROR_NONE && is_array($__decodedV)) {
+																$__vehiculos = $__decodedV;
+															} else {
+																$__vehiculos = [ $__vehiculos ];
+															}
+														}
+														if ($__vehiculos instanceof \Illuminate\Support\Collection) {
+															$__vehiculos = $__vehiculos->all();
+														}
+													@endphp
+													@foreach($__vehiculos as $placa)
 														{{ trim($placa) }}{{ $loop->last ? '' : ', ' }}
 													@endforeach
 												@endif
@@ -220,7 +248,21 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 											@if($SolicitudServicio->SolSerVehiculo == null)
 												{{ __('adminlte::message.solsernullprogram') }}
 											@else
-												@foreach($SolicitudServicio->SolSerVehiculo as $key => $placa)
+												@php
+													$__vehiculos2 = $SolicitudServicio->SolSerVehiculo;
+													if (is_string($__vehiculos2)) {
+														$__decodedV2 = json_decode($__vehiculos2, true);
+														if (json_last_error() === JSON_ERROR_NONE && is_array($__decodedV2)) {
+															$__vehiculos2 = $__decodedV2;
+														} else {
+															$__vehiculos2 = [ $__vehiculos2 ];
+														}
+													}
+													if ($__vehiculos2 instanceof \Illuminate\Support\Collection) {
+														$__vehiculos2 = $__vehiculos2->all();
+													}
+												@endphp
+												@foreach($__vehiculos2 as $key => $placa)
 													{{ $placa }}{{ $loop->last ? '' : ', ' }}
 												@endforeach
 											@endif
@@ -455,6 +497,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 											<th>Corriente</th>
 											{{-- <th>Pretratamientos</th> --}}
 											<th>{{__('adminlte::message.solserembaja')}}</th> 
+											<th>Cantidad <br> Embalaje</th>
 											<th>{{__('adminlte::message.gener')}}</th>
 											@if(in_array(Auth::user()->UsRol, Permisos::TODOPROSARC)||in_array(Auth::user()->UsRol2, Permisos::TODOPROSARC))
 											<th>Gestor</th>
@@ -566,6 +609,7 @@ Solicitud de servicio N° {{$SolicitudServicio->ID_SolSer}}
 												@endif	
 												@endforeach
 												<td>{{$Residuo->SolResEmbalaje}}</td>
+												<td>{{$Residuo->SolResCantEmbalaje}}</td>
 												<td><a title="Ver Generador" href="/sgeneradores/{{$GenerResiduo->GSedeSlug}}" target="_blank"><i class="fas fa-external-link-alt"></i></a> {{$GenerResiduo->GenerName.' ('.$GenerResiduo->GSedeName.')'}}</td>
 												@if(in_array(Auth::user()->UsRol, Permisos::TODOPROSARC)||in_array(Auth::user()->UsRol2, Permisos::TODOPROSARC))
 												<td>{{$Residuo->CliShortName}} </td>

@@ -50,6 +50,10 @@
 				<option value="86">{{ __('adminlte::message.solserembaja14') }}</option>
 			</select>
 		</div>
+		<div class="form-group col-md-6 collapse in ContentRespel`+id_div+contadorRespel[id_div]+`">			
+			<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>Cantidad de embalaje</b>" data-content="Cantidad de unidades de embalaje declaradas (canecas, bolsas, cajas, etc.)."><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>Cantidad de embalaje</label>
+			<input type="number" min="0" class="form-control" id="SolResCantEmbalaje`+id_div+contadorRespel[id_div]+`" name="SolResCantEmbalaje[`+id_div+`][]">
+		</div>
 		<div class="form-group col-md-16 collapse in ContentRespel`+id_div+contadorRespel[id_div]+`" style="text-align: center;">
 			<div class="form-group col-md-12">
 				<label data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>{{ __('adminlte::message.solserdimension') }}</b>" data-content="{{ __('adminlte::message.solserdimensiondescrit') }}"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>{{ __('adminlte::message.solserdimension') }}</label>

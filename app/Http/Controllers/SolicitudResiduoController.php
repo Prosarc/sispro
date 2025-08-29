@@ -24,6 +24,9 @@ use App\Generador;
 use App\Certificado;
 use App\incineracion;
 use Permisos;
+use App\Http\Controllers\userController;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ServiciosExport;
 
 class SolicitudResiduoController extends Controller
 {
@@ -129,6 +132,32 @@ class SolicitudResiduoController extends Controller
 			abort(404);
 		}
 		$SolSer = SolicitudServicio::where('ID_SolSer', $SolRes->FK_SolResSolSer)->first();
+
+		// Actualizar cantidad de embalaje si viene desde el modal del "lapicito"
+		if ($request->has('SolResCantEmbalaje') && !$request->has('SolResKg')) {
+			$SolRes->SolResCantEmbalaje = $request->input('SolResCantEmbalaje');
+			$SolRes->save();
+
+			$log = new audit();
+			$log->AuditTabla = "solicitud_residuos";
+			$log->AuditType = "Modificado Cant. Embalaje";
+			$log->AuditRegistro = $SolRes->ID_SolRes;
+			$log->AuditUser = Auth::user()->email;
+			$log->Auditlog = json_encode($request->only('SolResCantEmbalaje'));
+			$log->save();
+
+			$Cliente = Cliente::where('ID_Cli', $SolSer->FK_SolSerCliente)->first();
+			$id = $SolSer->SolSerSlug;
+			if ($Cliente && $Cliente->CliCategoria == 'ClientePrepago') {
+				return redirect()->route('serviciosexpress.show', ['serviciosexpress' => $id]);
+			} else if (in_array(Auth::user()->UsRol, Permisos::RECIBOMATERIAL) || in_array(Auth::user()->UsRol, Permisos::RECIBOMATERIAL)) {
+				return redirect()->route('recibo.material', ['id' => $id]);
+			} else if (in_array(Auth::user()->UsRol, Permisos::SUPERVISOR) || in_array(Auth::user()->UsRol, Permisos::SUPERVISOR)) {
+				return redirect()->route('informe');
+			} else {
+				return redirect()->route('solicitud-servicio.show', ['solicitud_servicio' => $id]);
+			}
+		}
 
 
 		$Cliente = Cliente::where('ID_Cli', $SolSer->FK_SolSerCliente)->first();
@@ -451,6 +480,7 @@ class SolicitudResiduoController extends Controller
 			default:
 				abort(500);
 		}
+		$SolRes->SolResCantEmbalaje = $request->input('SolResCantEmbalaje');
 		$SolRes->save();
 
 		$log = new audit();
@@ -632,9 +662,134 @@ class SolicitudResiduoController extends Controller
 				->get();
 		}
 		return view('reportes.ReportRegular', compact('clientes'));
-
 	}
 
+	public function reportesRegulares(Request $request)
+	{
+
+		$FechaInicial = $request->input('Fecha_Inicio');
+		$FechaFinal = $request->input('Fecha_Fin');
+		$cliente_id = $request->input('cliente_id');
+
+		$query = SolicitudServicio::with([
+			'SolicitudResiduo.generespel.respels',
+			'SolicitudResiduo.generespel.gener_sedes.generadors',
+			'SolicitudResiduo.certdatoexpress.certificado',
+			'cliente.comercialAsignado',
+			'SolicitudResiduo.requerimiento.tratamiento',
+			'SolicitudResiduo.requerimiento.tratamiento.gestor.clientes',
+			'programacionesrecibidas',
+			'programacionesrealizadas',
+		])
+		->join('progvehiculos', 'solicitud_servicios.ID_SolSer', '=', 'progvehiculos.FK_ProgServi')
+		->join('clientes', 'clientes.ID_Cli', '=', 'solicitud_servicios.FK_SolSerCliente')
+		->whereBetween('progvehiculos.ProgVehSalida',[$FechaInicial, $FechaFinal])
+		->where('CliCategoria', 'Cliente')
+		->where('progvehiculos.ProgVehDelete', '=', 0);
+
+		// Si es un cliente, solo puede ver sus propias solicitudes
+		if (in_array(Auth::user()->UsRol, Permisos::CLIENTE)) {
+			$cliente_id = userController::IDClienteSegunUsuario();
+			$query->where('clientes.ID_Cli', $cliente_id);
+		} else if ($cliente_id) {
+			// Si es otro tipo de usuario y seleccionó un cliente específico
+			$query->where('clientes.ID_Cli', $cliente_id);
+		}
+		$servicios = $query->get();
+		$Residuosoriginal = null;
+
+		return view('reportes.Regular', compact('servicios', 'Residuosoriginal'));
+	}
+	
+public function reportesCliente()
+	 {
+		 if (!in_array(Auth::user()->UsRol, Permisos::CLIENTE)) {
+			 return redirect()->route('home')->with('error', 'No tiene permisos para acceder a esta sección');
+		 }
+
+		 return view('reportes.ReportCliente');
+	 }
+
+	 public function reportesClienteGenerar(Request $request)
+	 {
+		 if (!in_array(Auth::user()->UsRol, Permisos::CLIENTE)) {
+			 return redirect()->route('home')->with('error', 'No tiene permisos para acceder a esta sección');
+		 }
+
+		 $fecha_inicio = $request->input('Fecha_Inicio');
+		 $fecha_fin = $request->input('Fecha_Fin');
+		 $cliente_id = userController::IDClienteSegunUsuario();
+
+		 // Validar que el cliente_id no sea nulo
+		 if (!$cliente_id) {
+			 return redirect()->route('home')->with('error', 'No se pudo identificar su cuenta de cliente');
+		 }
+
+		 $servicios = SolicitudServicio::with([
+			 'SolicitudResiduo.generespel.respels',
+			 'SolicitudResiduo.generespel.gener_sedes.generadors',
+			 'SolicitudResiduo.certdatoexpress.certificado',
+			 'cliente.comercialAsignado',
+			 'SolicitudResiduo.requerimiento.tratamiento',
+			 'SolicitudResiduo.requerimiento.tratamiento.gestor.clientes',
+			 'programacionesrecibidas',
+			 'programacionesrealizadas',
+		 ])
+		 ->join('progvehiculos', 'solicitud_servicios.ID_SolSer', '=', 'progvehiculos.FK_ProgServi')
+		 ->join('clientes', 'clientes.ID_Cli', '=', 'solicitud_servicios.FK_SolSerCliente')
+		 ->whereBetween('progvehiculos.ProgVehSalida', [$fecha_inicio, $fecha_fin])
+		 ->where('clientes.ID_Cli', $cliente_id)
+		 ->where('progvehiculos.ProgVehDelete', '=', 0)
+		 ->where('solicitud_servicios.FK_SolSerCliente', $cliente_id)
+		 ->get();
+
+		 return view('reportes.ReportCliente', compact('servicios', 'request'));
+	 }
+
+	 public function exportToExcel(Request $request)
+	 {
+		 if (!in_array(Auth::user()->UsRol, Permisos::CLIENTE)) {
+			 return redirect()->route('home')->with('error', 'No tiene permisos para acceder a esta sección');
+		 }
+
+		 $fecha_inicio = $request->input('Fecha_Inicio');
+		 $fecha_fin = $request->input('Fecha_Fin');
+		 $cliente_id = userController::IDClienteSegunUsuario();
+
+		 // Validar que el cliente_id no sea nulo
+		 if (!$cliente_id) {
+			 return redirect()->route('home')->with('error', 'No se pudo identificar su cuenta de cliente');
+		 }
+
+		 $servicios = SolicitudServicio::with([
+			 'SolicitudResiduo.generespel.respels',
+			 'SolicitudResiduo.generespel.gener_sedes.generadors',
+			 'SolicitudResiduo.certdatoexpress.certificado',
+			 'cliente.comercialAsignado',
+			 'SolicitudResiduo.requerimiento.tratamiento',
+			 'SolicitudResiduo.requerimiento.tratamiento.gestor.clientes',
+			 'programacionesrecibidas',
+			 'programacionesrealizadas',
+		 ])
+		 ->join('progvehiculos', 'solicitud_servicios.ID_SolSer', '=', 'progvehiculos.FK_ProgServi')
+		 ->join('clientes', 'clientes.ID_Cli', '=', 'solicitud_servicios.FK_SolSerCliente')
+		 ->whereBetween('progvehiculos.ProgVehSalida', [$fecha_inicio, $fecha_fin])
+		 ->where('clientes.ID_Cli', $cliente_id)
+		 ->where('progvehiculos.ProgVehDelete', '=', 0)
+		 ->where('solicitud_servicios.FK_SolSerCliente', $cliente_id)
+		 ->get();
+
+		 // Generar el contenido HTML
+		 $html = view('reportes.excel', compact('servicios'))->render();
+
+		 // Configurar los headers para forzar la descarga
+		 $headers = [
+			 'Content-Type' => 'application/vnd.ms-excel',
+			 'Content-Disposition' => 'attachment; filename="Reporte_Servicios_'.date('Y-m-d').'.xls"',
+		 ];
+
+		 return response($html, 200, $headers);
+	 }
 	/**
 	 * Display a listing of the resource.
 	 *

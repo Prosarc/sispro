@@ -228,6 +228,7 @@ RM N° {{--{{$SolicitudServicio->ID_SolSer}}--}}
                                     <th>Tratamiento</th>
                                     <th>Corriente</th>
                                     <th>Embalaje</th> 
+									<th>Cantidad <br> Embalaje</th>
                                     <th>Cantidad <br> Declarada</th>
                                     <th>Cantidad <br> Recibida</th>
                                 </tr>
@@ -240,6 +241,7 @@ RM N° {{--{{$SolicitudServicio->ID_SolSer}}--}}
                                             // $TotalRec = $Residuo->SolResKgRecibido+$TotalRec;
                                             // $TotalCons = $Residuo->SolResKgConciliado+$TotalCons;
                                             // $TotalTrat = $Residuo->SolResKgTratado+$TotalTrat;
+											// $SolResCantEmbalaje = $Residuo->SolResCantEmbalaje;
                                             switch ($Residuo->SolResTypeUnidad) {
                                                 case 'Unidad':
                                                     $TypeUnidad = 'Unidades';
@@ -276,6 +278,13 @@ RM N° {{--{{$SolicitudServicio->ID_SolSer}}--}}
                                         @endif	
                                         @endforeach
                                         <td>{{$Residuo->SolResEmbalaje}}</td>
+                                        <td style="text-align: center;">@if(in_array(Auth::user()->UsRol, Permisos::SolSer1) || in_array(Auth::user()->UsRol2, Permisos::SolSer1))
+    									<a onclick="editEmbalaje('{{$Residuo->SolResSlug}}','{{$Residuo->SolResCantEmbalaje}}')">
+      									<i class="fas fa-marker"></i>
+    									</a>
+  										@endif
+  										{{$Residuo->SolResCantEmbalaje ?? 'N/A'}}
+									    </td>
                                         <td style="text-align: center;">{{number_format($Residuo->SolResKgEnviado, $decimals = 2, $dec_point = ',', $thousands_sep = '.')}} Kilogramos</td>
                                         <td style="text-align: center;">
                                             @if(in_array(Auth::user()->UsRol, Permisos::SolSer1) || in_array(Auth::user()->UsRol2, Permisos::RECIBOMATERIAL))
@@ -317,6 +326,7 @@ RM N° {{--{{$SolicitudServicio->ID_SolSer}}--}}
                         <div id="addkgmodal"></div>
                         <div id="ModalStatusFirmaCliente"></div>
                         <div id="ModalStatusFirmaConductor"></div>
+                        <div id="editEmbalajeModal"></div>
 
             </main>
         @endforeach
@@ -333,6 +343,42 @@ RM N° {{--{{$SolicitudServicio->ID_SolSer}}--}}
         
 </div>        
 @endsection
+
+<script>
+	function editEmbalaje(slug, cant){
+		document.getElementById('editEmbalajeModal').innerHTML = `
+			<form role="form" action="/solicitud-residuo/${slug}/Update" method="POST" id="FormEmbalaje" data-toggle="validator">
+				@csrf
+				@method('PUT')
+				<div class="modal modal-default fade in" id="modalEditEmbalaje" tabindex="-1">
+					<div class="modal-dialog"><div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<div style="font-size: 2em; color: #00a65a; text-align:center;">
+								<i class="fas fa-box-open"></i>
+								<span style="font-size:.5em;"><p>Cantidad de embalaje</p></span>
+							</div>
+						</div>
+						<div class="modal-body">
+							<div class="form-group col-md-12">
+								<label for="SolResCantEmbalaje">Cantidad de embalaje</label>
+								<small class="help-block with-errors">*</small>
+								<input type="number" min="0" class="form-control" id="SolResCantEmbalaje"
+									name="SolResCantEmbalaje" value="${cant ?? ''}" required>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-primary pull-right">Guardar</button>
+						</div>
+					</div></div>
+				</div>
+			</form>
+		`;
+		$('#modalEditEmbalaje').modal();
+		$('#FormEmbalaje').validator('update');
+		$('#FormEmbalaje').validator('validate');		
+	}
+</script>
 
 <script>
     function addkg(slug, cantidad, cantidadmax, tipo, cantidadKG, KgConciliado, SolResRM){
@@ -458,6 +504,7 @@ RM N° {{--{{$SolicitudServicio->ID_SolSer}}--}}
         SelectsMultiple();
         $('#FormKg').validator('update');
     };
+	
 
     function ModalStatusFirmaCliente(slug, FK_SGener){
 		$('#ModalStatusFirmaCliente').empty();
@@ -499,7 +546,6 @@ RM N° {{--{{$SolicitudServicio->ID_SolSer}}--}}
                                 <input type="hidden" name="ID_Gener" value="${FK_SGener}"/>
 								<input type="submit" id="Cambiar`+slug+`" style="display: none;">
 								<input type="text" name="solserslug" value="`+slug+`" style="display: none;">
-								<br>
 								<br>
 								<div class="form-group col-md-12">
 									<label  color: black; text-align: left;" data-placement="auto" data-trigger="hover" data-html="true" data-toggle="popover" title="<b>Observación</b>" data-content="Describa la observación del servicio"><i style="font-size: 1.8rem; color: Dodgerblue;" class="fas fa-info-circle fa-2x fa-spin"></i>Observación</label>					
@@ -626,7 +672,6 @@ RM N° {{--{{$SolicitudServicio->ID_SolSer}}--}}
 					return false;
 				}
   				input.value = data;
-
 				var buttonsubmit = $(this).find('[type="submit"]');
 				var idbutton = buttonsubmit[0].id;
 				if(buttonsubmit.hasClass('disabled')){
